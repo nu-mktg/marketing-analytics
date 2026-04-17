@@ -4,633 +4,579 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Marketing Analytics — Course Materials</title>
+<title>Marketing Analytics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  /* ── Design tokens ──────────────────────────────────────────── */
-  :root {
-    --bg:        #0d0f12;
-    --surface:   #13161b;
-    --surface2:  #1a1e25;
-    --border:    rgba(255,255,255,0.07);
-    --border-hi: rgba(255,255,255,0.14);
-    --accent:    #f5a623;
-    --accent2:   #5b8dee;
-    --green:     #3ecf8e;
-    --red:       #e05c65;
-    --muted:     #7a8394;
-    --text:      #dce3ed;
-    --text-hi:   #f0f4f9;
-  }
+:root {
+  --ink:      #1a1a1a;
+  --ink2:     #444;
+  --ink3:     #888;
+  --paper:    #fafaf7;
+  --rule:     #e0ddd6;
+  --accent:   #c0392b;
+  --accent-s: rgba(192,57,43,0.08);
+  --mono-bg:  #f0ede8;
+  --green:    #1a6640;
+  --blue:     #1a4466;
+  --gold:     #8a6200;
+  --col:      640px;
+}
 
-  /* ── Reset ──────────────────────────────────────────────────── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', system-ui, sans-serif;
-    font-size: 15px;
-    line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; text-decoration: none; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
 
-  /* ── Layout ─────────────────────────────────────────────────── */
-  .page { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
 
-  /* ── Header ─────────────────────────────────────────────────── */
-  header {
-    padding: 3.5rem 0 2.5rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-  .header-eyebrow {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-  .header-title {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    color: var(--text-hi);
-    line-height: 1.1;
-    font-weight: 400;
-  }
-  .header-title em {
-    font-style: normal;
-    color: var(--accent);
-  }
-  .header-meta {
-    font-size: 0.85rem;
-    color: var(--muted);
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    margin-top: 0.3rem;
-  }
-  .header-meta span::before { content: "· "; }
-  .header-meta span:first-child::before { content: ""; }
+a { color: inherit; text-decoration: none; }
 
-  /* ── Getting started callout ─────────────────────────────────── */
-  .callout {
-    background: linear-gradient(135deg, rgba(91,141,238,0.08), rgba(91,141,238,0.04));
-    border: 1px solid rgba(91,141,238,0.25);
-    border-radius: 10px;
-    padding: 1.1rem 1.4rem;
-    margin-bottom: 2.5rem;
-    font-size: 0.875rem;
-    color: var(--text);
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.6rem 1rem;
-    align-items: start;
-  }
-  .callout-icon {
-    font-size: 1.2rem;
-    padding-top: 0.05rem;
-  }
-  .callout strong { color: var(--text-hi); }
-  .callout code {
-    background: rgba(255,255,255,0.08);
-    border-radius: 4px;
-    padding: 0.1em 0.45em;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.85em;
-  }
+/* ── Page shell ── */
+.page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
 
-  /* ── Launch card ─────────────────────────────────────────────── */
-  .launch-card {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    background: linear-gradient(135deg, rgba(62,207,142,0.1), rgba(62,207,142,0.04));
-    border: 1px solid rgba(62,207,142,0.3);
-    border-radius: 12px;
-    padding: 1.2rem 1.6rem;
-    margin-bottom: 3rem;
-    transition: border-color 0.2s, background 0.2s;
-    cursor: pointer;
-  }
-  .launch-card:hover {
-    border-color: rgba(62,207,142,0.6);
-    background: linear-gradient(135deg, rgba(62,207,142,0.15), rgba(62,207,142,0.07));
-  }
-  .launch-icon {
-    width: 44px; height: 44px;
-    background: rgba(62,207,142,0.15);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem;
-    flex-shrink: 0;
-  }
-  .launch-text strong { color: var(--text-hi); font-size: 0.95rem; display: block; margin-bottom: 0.15rem; }
-  .launch-text span { color: var(--muted); font-size: 0.82rem; }
+/* ── Masthead ── */
+.masthead {
+  padding: 4rem 0 3rem;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 3.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 1rem;
+}
+.masthead-left {}
+.course-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+.course-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.course-sub {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--ink2);
+  margin-top: 0.5rem;
+}
+.masthead-meta {
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--ink3);
+  line-height: 1.9;
+  font-family: 'IBM Plex Mono', monospace;
+}
 
-  /* ── Section headers ─────────────────────────────────────────── */
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    gap: 0.8rem;
-    margin: 2.8rem 0 1.1rem;
-  }
-  .section-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 0.2em 0.7em;
-    border-radius: 4px;
-  }
-  h2 {
-    font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.35rem;
-    font-weight: 400;
-    color: var(--text-hi);
-  }
+/* ── Getting started box ── */
+.notice {
+  background: white;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 3.5rem;
+  font-size: 0.875rem;
+  color: var(--ink2);
+}
+.notice strong { color: var(--ink); font-weight: 500; }
+.notice code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82em;
+  background: var(--mono-bg);
+  padding: 0.1em 0.4em;
+  border-radius: 2px;
+}
 
-  /* ── Module table ────────────────────────────────────────────── */
-  .module-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 0.5rem;
-  }
-  .module-table thead tr {
-    border-bottom: 1px solid var(--border-hi);
-  }
-  .module-table th {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.64rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    padding: 0.5rem 0.8rem 0.5rem 0;
-    text-align: left;
-    font-weight: 500;
-  }
-  .module-table tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.12s;
-  }
-  .module-table tbody tr:hover { background: var(--surface2); }
-  .module-table tbody tr:last-child { border-bottom: none; }
-  .module-table td {
-    padding: 0.7rem 0.8rem 0.7rem 0;
-    vertical-align: middle;
-  }
-  .module-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--muted);
-    white-space: nowrap;
-    width: 2.5rem;
-  }
-  .module-topic {
-    font-weight: 500;
-    color: var(--text-hi);
-    font-size: 0.9rem;
-  }
-  .module-sub {
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-top: 0.1rem;
-  }
-  .module-links {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-  .pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3em;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    font-weight: 500;
-    padding: 0.22em 0.65em;
-    border-radius: 20px;
-    border: 1px solid transparent;
-    white-space: nowrap;
-    transition: opacity 0.15s;
-  }
-  .pill:hover { opacity: 0.75; }
-  .pill-nb  { background: rgba(245,166,35,0.12);  border-color: rgba(245,166,35,0.3);  color: #f5a623; }
-  .pill-txt { background: rgba(91,141,238,0.12);  border-color: rgba(91,141,238,0.3);  color: #5b8dee; }
-  .pill-csv { background: rgba(62,207,142,0.10);  border-color: rgba(62,207,142,0.25); color: #3ecf8e; }
-  .pill-qmd { background: rgba(168,118,255,0.10); border-color: rgba(168,118,255,0.25);color: #b07fff; }
+/* ── Launch button ── */
+.launch-wrap { margin-bottom: 3.5rem; }
+.launch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--ink);
+  color: white;
+  padding: 0.8rem 1.6rem;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: background 0.15s;
+}
+.launch-btn:hover { background: #333; }
+.launch-btn .arr { font-size: 1.1em; }
 
-  /* ── Grid cards (reference materials) ────────────────────────── */
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 0.7rem;
-    margin-bottom: 0.5rem;
-  }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1rem 1.2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    transition: border-color 0.15s, background 0.15s;
-  }
-  .card:hover {
-    border-color: var(--border-hi);
-    background: var(--surface2);
-  }
-  .card-title {
-    font-weight: 600;
-    font-size: 0.88rem;
-    color: var(--text-hi);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .card-sub { font-size: 0.77rem; color: var(--muted); }
+/* ── Section heading ── */
+.sec {
+  margin: 3.5rem 0 1.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.5rem;
+}
+.sec h2 {
+  font-family: 'Lora', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.sec-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--ink3);
+  letter-spacing: 0.08em;
+}
 
-  /* ── Divider ──────────────────────────────────────────────────── */
-  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+/* ── Module rows ── */
+.module-list { display: flex; flex-direction: column; }
+.module-row {
+  display: grid;
+  grid-template-columns: 2.8rem 1fr auto;
+  align-items: baseline;
+  gap: 0 1.2rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--rule);
+  transition: background 0.1s;
+}
+.module-row:last-child { border-bottom: none; }
+.module-row:hover { background: white; margin: 0 -1rem; padding-left: 1rem; padding-right: 1rem; }
 
-  /* ── Footer ─────────────────────────────────────────────────── */
-  footer {
-    margin-top: 4rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-    font-size: 0.78rem;
-    color: var(--muted);
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
+.mod-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--ink3);
+  padding-top: 0.15rem;
+}
+.mod-body {}
+.mod-title {
+  font-weight: 500;
+  font-size: 0.925rem;
+  color: var(--ink);
+  margin-bottom: 0.15rem;
+}
+.mod-sub {
+  font-size: 0.78rem;
+  color: var(--ink3);
+}
+.mod-links {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+}
 
-  /* ── Responsive ─────────────────────────────────────────────── */
-  @media (max-width: 680px) {
-    .module-table th:nth-child(3),
-    .module-table td:nth-child(3) { display: none; }
-    .module-links { justify-content: flex-start; }
-  }
+/* ── Link chips ── */
+.chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 0.18em 0.6em;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  white-space: nowrap;
+  opacity: 0.75;
+  transition: opacity 0.12s;
+}
+.chip:hover { opacity: 1; }
+.chip-hw   { color: var(--accent); }
+.chip-txt  { color: var(--blue); }
+.chip-csv  { color: var(--green); }
+
+/* ── Reference grid ── */
+.ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-bottom: 0.5rem;
+}
+.ref-card {
+  background: var(--paper);
+  padding: 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  transition: background 0.12s;
+}
+.ref-card:hover { background: white; }
+.ref-card-title {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--ink);
+}
+.ref-card-sub {
+  font-size: 0.77rem;
+  color: var(--ink3);
+  line-height: 1.45;
+}
+
+/* ── Footer ── */
+footer {
+  margin-top: 5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--ink3);
+}
+
+@media (max-width: 600px) {
+  .masthead { grid-template-columns: 1fr; }
+  .masthead-meta { text-align: left; }
+  .module-row { grid-template-columns: 2rem 1fr; }
+  .mod-links { display: none; }
+}
 </style>
 </head>
 <body>
 <div class="page">
 
-<!-- ── HEADER ──────────────────────────────────────────────────── -->
-<header>
-  <div class="header-eyebrow">Course Materials Portal</div>
-  <h1 class="header-title">Marketing <em>Analytics</em></h1>
-  <div class="header-meta">
-    <span>[Institution] · [Term Year]</span>
-    <span>14 Modules</span>
-    <span>Questions? Post to Canvas or email [address]</span>
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-left">
+    <div class="course-tag">Course Materials</div>
+    <h1 class="course-title">Marketing Analytics</h1>
+    <div class="course-sub">Quantitative models for marketing decisions</div>
+  </div>
+  <div class="masthead-meta">
+    [Institution]<br>
+    [Term Year]<br>
+    14 modules
   </div>
 </header>
 
-<!-- ── GETTING STARTED ─────────────────────────────────────────── -->
-<div class="callout">
-  <div class="callout-icon">💡</div>
-  <div>
-    <strong>Getting started:</strong>
-    Accept your assignment invitation from Canvas to create your personal GitHub repo.
-    Then click <strong>Open Codespace</strong> below — Python 3.11, Jupyter, and all libraries are pre-installed.
-    Submit by pushing to your repo: <code>git add . && git commit -m "submit" && git push</code>
-    then check the <strong>Actions</strong> tab for your autograder score.
+<!-- NOTICE -->
+<div class="notice">
+  <strong>Getting started:</strong> Accept your assignment invitation from Canvas, then open your Codespace below.
+  Submit by running <code>git add . &amp;&amp; git commit -m "submit" &amp;&amp; git push</code>
+  and checking the <strong>Actions</strong> tab for your autograder score.
+</div>
+
+<!-- LAUNCH -->
+<div class="launch-wrap">
+  <a class="launch-btn" href="[CODESPACE_TEMPLATE_URL]" target="_blank">
+    <span class="arr">▶</span> Open Codespace — Python 3.11 · Jupyter · Copilot pre-installed
+  </a>
+</div>
+
+<!-- MODULES -->
+<div class="sec">
+  <span class="sec-num">01</span>
+  <h2>Weekly Modules</h2>
+</div>
+
+<div class="module-list">
+
+  <div class="module-row">
+    <span class="mod-num">L00</span>
+    <div class="mod-body">
+      <div class="mod-title">Introduction &amp; Setup</div>
+      <div class="mod-sub">Course overview · GitHub setup · Jupyter tutorial</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw" href="homework_notebooks/homework_00_introduction.ipynb">HW00</a>
+    </div>
   </div>
-</div>
 
-<!-- ── LAUNCH CODESPACE ────────────────────────────────────────── -->
-<div class="section-header">
-  <span class="section-label">Environment</span>
-  <h2>Your Workspace</h2>
-</div>
-
-<a class="launch-card" href="[CODESPACE_TEMPLATE_URL]" target="_blank">
-  <div class="launch-icon">▶</div>
-  <div class="launch-text">
-    <strong>Open Codespace</strong>
-    <span>Python 3.11 · Jupyter · Copilot Chat pre-installed · No local setup required</span>
+  <div class="module-row">
+    <span class="mod-num">L01</span>
+    <div class="mod-body">
+      <div class="mod-title">Bayesian A/B Testing</div>
+      <div class="mod-sub">Beta distribution · Conjugate update · P(B&gt;A) · Credible intervals</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_01_bayesian_ab.ipynb">HW01</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_01_bayesian_ab_testing.md">Ch.01</a>
+    </div>
   </div>
-</a>
 
-<!-- ── MODULES ─────────────────────────────────────────────────── -->
-<div class="section-header">
-  <span class="section-label">Weekly Materials</span>
-  <h2>Lecture Modules</h2>
+  <div class="module-row">
+    <span class="mod-num">L02</span>
+    <div class="mod-body">
+      <div class="mod-title">Price Elasticity &amp; OLS</div>
+      <div class="mod-sub">OLS derivation · Log-log model · Revenue maximisation · Endogeneity</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_02_price_elasticity.ipynb">HW02</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_02_price_elasticity_ols.md">Ch.02</a>
+      <a class="chip chip-csv" href="homework_datasets/pricing_data.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L03</span>
+    <div class="mod-body">
+      <div class="mod-title">Marketing Mix Modelling</div>
+      <div class="mod-sub">Adstock recursion · Hill function · Marginal ROI · Budget reallocation</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_03_mmm.ipynb">HW03</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_03_mmm.md">Ch.03</a>
+      <a class="chip chip-csv" href="homework_datasets/mmm_data.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L04</span>
+    <div class="mod-body">
+      <div class="mod-title">Survival Analysis</div>
+      <div class="mod-sub">Kaplan-Meier · Censoring · Hazard function · Cox proportional hazards</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_04_survival_analysis.ipynb">HW04</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_04_survival_analysis_and_churn_prediction.md">Ch.04</a>
+      <a class="chip chip-csv" href="homework_datasets/survival_data.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L05</span>
+    <div class="mod-body">
+      <div class="mod-title">Markov Chains</div>
+      <div class="mod-sub">Transition matrix · Steady state · Absorbing states · Intervention effects</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_05_markov_chains.ipynb">HW05</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_05_markov_chains.md">Ch.05</a>
+      <a class="chip chip-csv" href="homework_datasets/engagement_data.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L06</span>
+    <div class="mod-body">
+      <div class="mod-title">Multi-Touch Attribution</div>
+      <div class="mod-sub">Shapley values · n! enumeration · Efficiency axiom · Last-touch comparison</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_06_attribution.ipynb">HW06</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_06_multi-touch_attribution_shapley_values.md">Ch.06</a>
+      <a class="chip chip-csv" href="homework_datasets/attribution_data.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L07</span>
+    <div class="mod-body">
+      <div class="mod-title">Uplift Modelling</div>
+      <div class="mod-sub">Potential outcomes · T-learner · CATE · Qini coefficient · Sleeping dogs</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_07_uplift_modeling.ipynb">HW07</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_07_uplift_modeling.md">Ch.07</a>
+      <a class="chip chip-csv" href="homework_datasets/uplift_experiment.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L08</span>
+    <div class="mod-body">
+      <div class="mod-title">Customer Lifetime Value (BG/NBD)</div>
+      <div class="mod-sub">BG/NBD model · P(alive) · Gamma-Gamma · LTV:CAC ratio</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_08_clv_bgnbd.ipynb">HW08</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_08_clv_bgnbd.md">Ch.08</a>
+      <a class="chip chip-csv" href="homework_datasets/transactions.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L09</span>
+    <div class="mod-body">
+      <div class="mod-title">Conjoint Analysis</div>
+      <div class="mod-sub">Random utility · MNL · WTP derivation · IIA · Market simulation</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_09_conjoint_analysis.ipynb">HW09</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_09_conjoint_mnlogit.md">Ch.09</a>
+      <a class="chip chip-csv" href="homework_datasets/conjoint_survey.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L10</span>
+    <div class="mod-body">
+      <div class="mod-title">Demand Forecasting (Prophet)</div>
+      <div class="mod-sub">Fourier decomposition · Changepoints · MAPE · Holiday effects</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_10_prophet_forecasting.ipynb">HW10</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_10_prophet_forecasting.md">Ch.10</a>
+      <a class="chip chip-csv" href="homework_datasets/revenue_weekly.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L11</span>
+    <div class="mod-body">
+      <div class="mod-title">Synthesis &amp; Capstone</div>
+      <div class="mod-sub">Connects all 10 models · Intensive Day preparation · Decision framework</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw" href="homework_notebooks/homework_11_capstone.ipynb">HW11</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L12</span>
+    <div class="mod-body">
+      <div class="mod-title">Difference-in-Differences</div>
+      <div class="mod-sub">DiD estimator · Parallel trends · Regression form · Geographic experiments</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_12_did.ipynb">HW12</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_12_difference_in_differences.md">Ch.12</a>
+      <a class="chip chip-csv" href="homework_datasets/geo_experiment.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L13</span>
+    <div class="mod-body">
+      <div class="mod-title">Customer Segmentation</div>
+      <div class="mod-sub">k-means · Lloyd's algorithm · Silhouette score · Segment-level strategy</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_13_segmentation.ipynb">HW13</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_13_customer_segmentation.md">Ch.13</a>
+      <a class="chip chip-csv" href="homework_datasets/customer_features.csv">CSV</a>
+    </div>
+  </div>
+
+  <div class="module-row">
+    <span class="mod-num">L14</span>
+    <div class="mod-body">
+      <div class="mod-title">CausalImpact</div>
+      <div class="mod-sub">BSTS counterfactual · Bayesian credible bands · Incrementality measurement</div>
+    </div>
+    <div class="mod-links">
+      <a class="chip chip-hw"  href="homework_notebooks/homework_14_causalimpact.ipynb">HW14</a>
+      <a class="chip chip-txt" href="md-viewer.html?file=textbook/chapter_14_causalimpact.md">Ch.14</a>
+      <a class="chip chip-csv" href="homework_datasets/campaign_timeseries.csv">CSV</a>
+    </div>
+  </div>
+
 </div>
 
-<table class="module-table">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Topic</th>
-      <th>Dataset</th>
-      <th style="text-align:right">Materials</th>
-    </tr>
-  </thead>
-  <tbody>
-
-    <tr>
-      <td class="module-num">L00</td>
-      <td>
-        <div class="module-topic">Introduction &amp; Setup</div>
-        <div class="module-sub">Course overview · GitHub setup · Jupyter tutorial</div>
-      </td>
-      <td>—</td>
-      <td><div class="module-links">
-        <a class="pill pill-nb" href="homework_notebooks/homework_00_introduction.ipynb">ipynb HW00</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L01</td>
-      <td>
-        <div class="module-topic">Bayesian A/B Testing</div>
-        <div class="module-sub">Beta distribution · Conjugate update · P(B&gt;A) · Credible intervals</div>
-      </td>
-      <td>—</td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_01_bayesian_ab.ipynb">ipynb HW01</a>
-        <a class="pill pill-txt" href="textbook/chapter_01_bayesian_ab_testing.md">txt Ch.01</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L02</td>
-      <td>
-        <div class="module-topic">Price Elasticity &amp; OLS</div>
-        <div class="module-sub">OLS derivation · Log-log model · Revenue maximisation · Endogeneity</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/pricing_data.csv">csv pricing</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_02_price_elasticity.ipynb">ipynb HW02</a>
-        <a class="pill pill-txt" href="textbook/chapter_02_price_elasticity_ols.md">txt Ch.02</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L03</td>
-      <td>
-        <div class="module-topic">Marketing Mix Modelling</div>
-        <div class="module-sub">Adstock recursion · Hill function · Marginal ROI · Budget reallocation</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/mmm_data.csv">csv mmm</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_03_mmm.ipynb">ipynb HW03</a>
-        <a class="pill pill-txt" href="textbook/chapter_03_mmm.md">txt Ch.03</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L04</td>
-      <td>
-        <div class="module-topic">Survival Analysis</div>
-        <div class="module-sub">Kaplan-Meier · Censoring · Hazard function · Cox proportional hazards</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/survival_data.csv">csv survival</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_04_survival_analysis.ipynb">ipynb HW04</a>
-        <a class="pill pill-txt" href="textbook/chapter_04_survival_analysis_and_churn_prediction.md">txt Ch.04</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L05</td>
-      <td>
-        <div class="module-topic">Markov Chains</div>
-        <div class="module-sub">Transition matrix · Steady state · Absorbing states · Intervention effects</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/engagement_data.csv">csv engagement</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_05_markov_chains.ipynb">ipynb HW05</a>
-        <a class="pill pill-txt" href="textbook/chapter_05_markov_chains.md">txt Ch.05</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L06</td>
-      <td>
-        <div class="module-topic">Multi-Touch Attribution</div>
-        <div class="module-sub">Shapley values · n! enumeration · Efficiency axiom · Last-touch comparison</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/attribution_data.csv">csv attribution</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_06_attribution.ipynb">ipynb HW06</a>
-        <a class="pill pill-txt" href="textbook/chapter_06_multi-touch_attribution_shapley_values.md">txt Ch.06</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L07</td>
-      <td>
-        <div class="module-topic">Uplift Modelling</div>
-        <div class="module-sub">Potential outcomes · T-learner · CATE · Qini coefficient · Sleeping dogs</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/uplift_experiment.csv">csv uplift</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_07_uplift_modeling.ipynb">ipynb HW07</a>
-        <a class="pill pill-txt" href="textbook/chapter_07_uplift_modeling.md">txt Ch.07</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L08</td>
-      <td>
-        <div class="module-topic">Customer Lifetime Value (BG/NBD)</div>
-        <div class="module-sub">BG/NBD model · P(alive) · Gamma-Gamma · LTV:CAC ratio</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/transactions.csv">csv transactions</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_08_clv_bgnbd.ipynb">ipynb HW08</a>
-        <a class="pill pill-txt" href="textbook/chapter_08_clv_bgnbd.md">txt Ch.08</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L09</td>
-      <td>
-        <div class="module-topic">Conjoint Analysis</div>
-        <div class="module-sub">Random utility · MNL · WTP derivation · IIA · Market simulation</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/conjoint_survey.csv">csv conjoint</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_09_conjoint_analysis.ipynb">ipynb HW09</a>
-        <a class="pill pill-txt" href="textbook/chapter_09_conjoint_mnlogit.md">txt Ch.09</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L10</td>
-      <td>
-        <div class="module-topic">Demand Forecasting (Prophet)</div>
-        <div class="module-sub">Fourier decomposition · Changepoints · MAPE · Holiday effects</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/revenue_weekly.csv">csv revenue</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_10_prophet_forecasting.ipynb">ipynb HW10</a>
-        <a class="pill pill-txt" href="textbook/chapter_10_prophet_forecasting.md">txt Ch.10</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L11</td>
-      <td>
-        <div class="module-topic">Synthesis &amp; Capstone</div>
-        <div class="module-sub">Connects all 10 models · Intensive Day preparation · Decision framework</div>
-      </td>
-      <td>—</td>
-      <td><div class="module-links">
-        <a class="pill pill-nb" href="homework_notebooks/homework_11_capstone.ipynb">ipynb HW11</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L12</td>
-      <td>
-        <div class="module-topic">Difference-in-Differences</div>
-        <div class="module-sub">DiD estimator · Parallel trends · Regression form · Geographic experiments</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/geo_experiment.csv">csv geo_exp</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_12_did.ipynb">ipynb HW12</a>
-        <a class="pill pill-txt" href="textbook/chapter_12_difference_in_differences.md">txt Ch.12</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L13</td>
-      <td>
-        <div class="module-topic">Customer Segmentation</div>
-        <div class="module-sub">k-means · Lloyd's algorithm · Silhouette score · Segment-level strategy</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/customer_features.csv">csv customers</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_13_segmentation.ipynb">ipynb HW13</a>
-        <a class="pill pill-txt" href="textbook/chapter_13_customer_segmentation.md">txt Ch.13</a>
-      </div></td>
-    </tr>
-
-    <tr>
-      <td class="module-num">L14</td>
-      <td>
-        <div class="module-topic">CausalImpact</div>
-        <div class="module-sub">BSTS counterfactual · Bayesian credible bands · Incrementality measurement</div>
-      </td>
-      <td><a class="pill pill-csv" href="homework_datasets/campaign_timeseries.csv">csv campaign</a></td>
-      <td><div class="module-links">
-        <a class="pill pill-nb"  href="homework_notebooks/homework_14_causalimpact.ipynb">ipynb HW14</a>
-        <a class="pill pill-txt" href="textbook/chapter_14_causalimpact.md">txt Ch.14</a>
-      </div></td>
-    </tr>
-
-  </tbody>
-</table>
-
-<!-- ── REFERENCE MATERIALS ─────────────────────────────────────── -->
-<div class="section-header">
-  <span class="section-label">Reference</span>
-  <h2>Student Handouts</h2>
+<!-- REFERENCE -->
+<div class="sec">
+  <span class="sec-num">02</span>
+  <h2>Reference Materials</h2>
 </div>
 
-<div class="card-grid">
-  <a class="card" href="student/model_reference_card.md">
-    <div class="card-title">📋 Model Reference Card</div>
-    <div class="card-sub">All 14 models: estimand, formula, assumptions, decision tree. Keep this open during quizzes.</div>
+<div class="ref-grid">
+  <a class="ref-card" href="md-viewer.html?file=student/model_reference_card.md">
+    <div class="ref-card-title">Model Reference Card</div>
+    <div class="ref-card-sub">All 14 models: estimand, formula, assumptions, decision tree</div>
   </a>
-  <a class="card" href="student/quick_start_card.md">
-    <div class="card-title">⚡ Quick Start Card</div>
-    <div class="card-sub">5-step Codespace submission guide · Keyboard shortcuts · Common errors</div>
+  <a class="ref-card" href="md-viewer.html?file=student/quick_start_card.md">
+    <div class="ref-card-title">Quick Start Card</div>
+    <div class="ref-card-sub">5-step submission guide · Keyboard shortcuts · Troubleshooting</div>
   </a>
-  <a class="card" href="student/ai_agent_usage_guide.md">
-    <div class="card-title">🤖 AI Agent Usage Guide</div>
-    <div class="card-sub">What agents can do · Model-by-model error catalogue · Verification habits</div>
+  <a class="ref-card" href="md-viewer.html?file=student/ai_agent_usage_guide.md">
+    <div class="ref-card-title">AI Agent Usage Guide</div>
+    <div class="ref-card-sub">What agents can do · Common errors by model · Verification habits</div>
   </a>
-  <a class="card" href="student/agentic_prompts_14_models.md">
-    <div class="card-title">💬 Agentic Prompts — All 14 Models</div>
-    <div class="card-sub">Context · Build · Validation prompts for every homework. Use these in Copilot Chat.</div>
+  <a class="ref-card" href="md-viewer.html?file=student/agentic_prompts_14_models.md">
+    <div class="ref-card-title">Agentic Prompts — All 14 Models</div>
+    <div class="ref-card-sub">Context · Build · Validation prompts for every homework</div>
   </a>
 </div>
 
-<!-- ── TEXTBOOK INDEX ──────────────────────────────────────────── -->
-<div class="section-header">
-  <span class="section-label">Reading</span>
-  <h2>Textbook Chapters</h2>
+<!-- TEXTBOOK -->
+<div class="sec">
+  <span class="sec-num">03</span>
+  <h2>Textbook</h2>
 </div>
 
-<div class="card-grid">
-  <a class="card" href="textbook/00_index.md">
-    <div class="card-title">📖 Textbook Index</div>
-    <div class="card-sub">Overview of all chapters, prerequisites, and reading schedule</div>
+<div class="ref-grid">
+  <a class="ref-card" href="md-viewer.html?file=textbook/00_index.md">
+    <div class="ref-card-title">Index &amp; Reading Schedule</div>
+    <div class="ref-card-sub">Chapter overview, prerequisites, and weekly reading plan</div>
   </a>
-  <a class="card" href="textbook/chapter_01_bayesian_ab_testing.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.01</span> Bayesian A/B Testing</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_01_bayesian_ab_testing.md">
+    <div class="ref-card-title">Ch.01 — Bayesian A/B Testing</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_02_price_elasticity_ols.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.02</span> Price Elasticity &amp; OLS</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_02_price_elasticity_ols.md">
+    <div class="ref-card-title">Ch.02 — Price Elasticity &amp; OLS</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_03_mmm.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.03</span> Marketing Mix Modelling</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_03_mmm.md">
+    <div class="ref-card-title">Ch.03 — Marketing Mix Modelling</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_04_survival_analysis_and_churn_prediction.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.04</span> Survival Analysis</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_04_survival_analysis_and_churn_prediction.md">
+    <div class="ref-card-title">Ch.04 — Survival Analysis</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_05_markov_chains.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.05</span> Markov Chains</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_05_markov_chains.md">
+    <div class="ref-card-title">Ch.05 — Markov Chains</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_06_multi-touch_attribution_shapley_values.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.06</span> Multi-Touch Attribution</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_06_multi-touch_attribution_shapley_values.md">
+    <div class="ref-card-title">Ch.06 — Multi-Touch Attribution</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_07_uplift_modeling.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.07</span> Uplift Modelling</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_07_uplift_modeling.md">
+    <div class="ref-card-title">Ch.07 — Uplift Modelling</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_08_clv_bgnbd.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.08</span> Customer Lifetime Value</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_08_clv_bgnbd.md">
+    <div class="ref-card-title">Ch.08 — Customer Lifetime Value</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_09_conjoint_mnlogit.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.09</span> Conjoint Analysis</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_09_conjoint_mnlogit.md">
+    <div class="ref-card-title">Ch.09 — Conjoint Analysis</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_10_prophet_forecasting.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.10</span> Demand Forecasting</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_10_prophet_forecasting.md">
+    <div class="ref-card-title">Ch.10 — Demand Forecasting</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_12_difference_in_differences.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.12</span> Difference-in-Differences</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_12_difference_in_differences.md">
+    <div class="ref-card-title">Ch.12 — Difference-in-Differences</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_13_customer_segmentation.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.13</span> Customer Segmentation</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_13_customer_segmentation.md">
+    <div class="ref-card-title">Ch.13 — Customer Segmentation</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
-  <a class="card" href="textbook/chapter_14_causalimpact.md">
-    <div class="card-title"><span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75em">Ch.14</span> CausalImpact</div>
-    <div class="card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
+  <a class="ref-card" href="md-viewer.html?file=textbook/chapter_14_causalimpact.md">
+    <div class="ref-card-title">Ch.14 — CausalImpact</div>
+    <div class="ref-card-sub">Full derivation · Practitioner Checkpoint · Bibliography</div>
   </a>
 </div>
 
-<!-- ── FOOTER ──────────────────────────────────────────────────── -->
 <footer>
   <span>Marketing Analytics · [Institution] · [Term Year]</span>
-  <span>Questions? Post to Canvas or email [address]</span>
+  <span>Questions → Canvas or [address]</span>
 </footer>
 
 </div>
