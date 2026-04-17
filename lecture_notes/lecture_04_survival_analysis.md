@@ -178,7 +178,6 @@ $$h(t | X) = h_0(t) \times e^{\beta_1 X_1 + \beta_2 X_2 + ...}$$
 ### Section 2.1 — Worked Example
 #### (~30 minutes | Hybrid: attempt Part A first, then reveal; work through Part B together)
 
-**[INSTRUCTOR NOTE]** Give students 10 minutes to attempt Part A independently. Then reveal and discuss. Work through Part B together, computing hazard ratios as a group.
 
 ---
 
@@ -242,7 +241,6 @@ $$e^{-0.052} \approx 0.949, \qquad e^{0.148} \approx 1.160, \qquad e^{-0.002} \a
 
 **Monthly spend (HR = 0.998):** "Customers who spend \$1 more per month have a churn hazard approximately 0.2% lower — a small but consistent protective effect; a \$100 increase in monthly spend reduces hazard by about 18%."
 
-**[INSTRUCTOR NOTE]** The 95% CI for login frequency [0.903, 0.997] does not include 1.0 → statistically significant. The CI for monthly spend [0.996, 1.001] *does* include 1.0 → not statistically significant at 5% level. This is a good discussion point: the effect might be real but the data may be insufficient to confirm it.
 
 ---
 
@@ -289,62 +287,52 @@ $$e^{-0.052} \approx 0.949, \qquad e^{0.148} \approx 1.160, \qquad e^{-0.002} \a
 ```python
 q1_n_at_t1 = None
 ```
-`[ANSWER KEY: 6]`
 
 **Q2.** How many churn events occur at t = 1?
 ```python
 q2_d_at_t1 = None
 ```
-`[ANSWER KEY: 1]`
 
 **Q3.** What is $\hat{S}(1)$? Express as a decimal, 4 decimal places.
 ```python
 q3_S_t1 = None
 ```
-`[ANSWER KEY: 5/6 = 0.8333]`
 
 **Q4.** How many customers are at risk at t = 3?
 ```python
 q4_n_at_t3 = None
 ```
-`[ANSWER KEY: 5 — A churned at t=1, 5 remain]`
 
 **Q5.** What is $\hat{S}(3)$?
 ```python
 q5_S_t3 = None
 ```
-`[ANSWER KEY: 5/6 × 4/5 = 4/6 = 0.6667]`
 
 **Q6.** Customer C is censored at t = 4. Does this change $\hat{S}(3)$? Enter True or False.
 ```python
 q6_censoring_changes_S3 = None
 ```
-`[ANSWER KEY: False — censoring at t=4 does not change any previous KM estimates]`
 
 **Q7.** How many customers are at risk at t = 6? (A churned at t=1, B at t=3, C censored at t=4.)
 ```python
 q7_n_at_t6 = None
 ```
-`[ANSWER KEY: 3 — D, E, F remain]`
 
 **Q8.** What is $\hat{S}(6)$? Round to 4 decimal places.
 ```python
 q8_S_t6 = None
 ```
-`[ANSWER KEY: 4/6 × 2/3 = 8/18 = 4/9 = 0.4444]`
 
 **Q9.** A Cox model reports β = 0.18 for "complaints_last_30d." Compute e^0.18. Use the approximation e^0.18 ≈ 1.197. Round to 3 decimal places.
 ```python
 q9_hazard_ratio = None
 ```
-`[ANSWER KEY: 1.197]`
 
 **Q10.** Using the hazard ratio from Q9: a customer who files 2 more complaints per month than another customer has a churn hazard that is what percentage higher? (Hint: the hazard ratio for a 2-unit increase is e^(0.18×2).)
 Use approximation: e^0.36 ≈ 1.433.
 ```python
 q10_pct_increase_2_units = None  # enter as a percentage, e.g., 43.3 for 43.3%
 ```
-`[ANSWER KEY: 43.3]`
 
 ---
 
@@ -380,25 +368,21 @@ Use random seed 42.
 ```python
 q11_best_plan = None  # "basic", "pro", or "enterprise"
 ```
-`[ANSWER KEY: pre-run to determine; expected "enterprise"]`
 
 **Q12.** What is the concordance index? Round to 2 decimal places.
 ```python
 q12_c_index = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q13.** What is the hazard ratio for login_frequency_last_30d? Round to 3 decimal places.
 ```python
 q13_hr_login = None
 ```
-`[ANSWER KEY: pre-run to determine; expected < 1]`
 
 **Q14.** Is the hazard ratio for support_tickets_last_90d statistically significant at 5%?
 ```python
 q14_tickets_significant = None  # True or False
 ```
-`[ANSWER KEY: pre-run to determine; expected True]`
 
 ---
 
@@ -412,7 +396,6 @@ q14_tickets_significant = None  # True or False
 ```python
 q15 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "a"]`
 
 **Q16.** The concordance index is 0.71. Which interpretation is correct?
 - (a) The model correctly predicts 71% of all churn events
@@ -422,7 +405,6 @@ q15 = None  # "a", "b", "c", or "d"
 ```python
 q16 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 **Q17.** A manager wants to flag all customers with more than 3 support tickets in the past 90 days for a retention call. Based on the Cox output, is this reasonable?
 - (a) No — tickets are not related to churn
@@ -432,7 +414,6 @@ q16 = None  # "a", "b", "c", or "d"
 ```python
 q17 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 ---
 

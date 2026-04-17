@@ -173,7 +173,6 @@ A customer who would have converted through paid search even without seeing the 
 ### Section 2.1 — Worked Example
 #### (~30 minutes | Hybrid: attempt Part A first, then reveal)
 
-**[INSTRUCTOR NOTE]** Give students 12 minutes to attempt Part A: compute $\phi_P$ and $\phi_S$ using the value function below. Reveal and discuss, then complete $\phi_E$ together.
 
 ---
 
@@ -300,25 +299,21 @@ Use the following value function for 3 channels: Display (D), Affiliate (A), Ret
 ```python
 q1_num_orderings = None
 ```
-`[ANSWER KEY: 6]`
 
 **Q2.** In ordering (D, A, R), what is D's marginal contribution? (Coalition before D is empty.)
 ```python
 q2_d_marginal_ordering1 = None
 ```
-`[ANSWER KEY: v({D}) - v({}) = 0.08 - 0 = 0.08]`
 
 **Q3.** In ordering (A, D, R), what is D's marginal contribution? (Coalition before D is {A}.)
 ```python
 q3_d_marginal_ordering3 = None
 ```
-`[ANSWER KEY: v({D,A}) - v({A}) = 0.22 - 0.12 = 0.10]`
 
 **Q4.** In ordering (A, R, D), what is D's marginal contribution? (Coalition before D is {A,R}.)
 ```python
 q4_d_marginal_ordering4 = None
 ```
-`[ANSWER KEY: v({D,A,R}) - v({A,R}) = 0.42 - 0.35 = 0.07]`
 
 **Q5.** The 6 orderings and D's marginal contributions are:
 (D,A,R): 0.08; (D,R,A): 0.08; (A,D,R): 0.10; (A,R,D): 0.07; (R,D,A): 0.10; (R,A,D): 0.07.
@@ -326,26 +321,22 @@ Compute $\phi_D$.
 ```python
 q5_shapley_d = None
 ```
-`[ANSWER KEY: (0.08+0.08+0.10+0.07+0.10+0.07)/6 = 0.50/6 = 0.0833]`
 
 **Q6.** The Shapley values are $\phi_D = 0.083$, $\phi_A = 0.127$, $\phi_R = 0.210$. Verify the efficiency condition: do these sum to $v(\{D,A,R\})$?
 ```python
 q6_efficiency_check = None  # True if sum ≈ 0.42, False otherwise
 ```
-`[ANSWER KEY: True — 0.083 + 0.127 + 0.210 = 0.420]`
 
 **Q7.** Under last-touch attribution (assume R is almost always last), Retargeting would receive nearly 100% of credit. Under Shapley, what percentage does Retargeting receive?
 ```python
 # Enter as a percentage, e.g., 50.0 for 50%
 q7_retargeting_shapley_pct = None
 ```
-`[ANSWER KEY: 0.210/0.420 = 50.0%]`
 
 **Q8.** True or False: In this example, Display's Shapley value (0.083) is lower than its standalone conversion rate (0.08). Since the Shapley value is only slightly above Display's standalone rate, Display contributes relatively little incremental value when combined with other channels.
 ```python
 q8_display_incremental = None  # True or False
 ```
-`[ANSWER KEY: True — Display's marginal contribution when joining an existing coalition is small, suggesting limited synergy]`
 
 ---
 
@@ -377,25 +368,21 @@ via coalition enumeration with random seed 42.
 ```python
 q9_shapley_paid_search_pct = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q10.** What is the last-touch attribution share for email? Round to 1 decimal place.
 ```python
 q10_lastouch_email_pct = None
 ```
-`[ANSWER KEY: pre-run to determine; expected to be high since email often closes sales]`
 
 **Q11.** Which channel has the largest difference between Shapley and last-touch attribution?
 ```python
 q11_biggest_divergence_channel = None  # channel name as string
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q12.** What is the Markov removal effect for social? Round to 2 decimal places.
 ```python
 q12_removal_effect_social = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 ---
 
@@ -409,7 +396,6 @@ q12_removal_effect_social = None
 ```python
 q13 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 **Q14.** Email has Shapley share = 12% but last-touch share = 55%. A budget analyst proposes cutting Paid Search and tripling Email spend. Based on the attribution analysis, what is the main risk?
 - (a) Email campaigns are always cheaper than Paid Search
@@ -419,7 +405,6 @@ q13 = None  # "a", "b", "c", or "d"
 ```python
 q14 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 **Q15.** The Shapley and Markov methods give very similar channel rankings for your data. What does this convergence tell you about the reliability of the results?
 - (a) Nothing — two methods agreeing is always suspicious
@@ -429,7 +414,6 @@ q14 = None  # "a", "b", "c", or "d"
 ```python
 q15 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 ---
 

@@ -128,7 +128,7 @@ mjx-container[display="true"] { margin: 1.2rem 0 !important; }
 <body>
 
 <div class="topbar">
-  <a href="index.html">← Course Home</a>
+  <a id="back-link" href="index.html">← Back</a>
   <span class="sep">|</span>
   <span id="filename">Loading…</span>
 </div>
@@ -143,6 +143,9 @@ mjx-container[display="true"] { margin: 1.2rem 0 !important; }
 (async () => {
   const params     = new URLSearchParams(window.location.search);
   const file       = params.get('file');
+  // Resolve back link: ?back= lets the instructor portal set its own return URL
+  const back = params.get('back') || 'index.html';
+  document.getElementById('back-link').href = back;
   const loading    = document.getElementById('loading');
   const errorDiv   = document.getElementById('error');
   const content    = document.getElementById('content');

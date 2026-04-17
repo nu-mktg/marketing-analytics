@@ -179,7 +179,6 @@ v₂ ≈ [0.528, 0.206, 0.267]. Sum ≈ 1.00 ✓
 ### Section 2.1 — Worked Example
 #### (~30 minutes | Hybrid: attempt Part A first, then reveal; work Part B together)
 
-**[INSTRUCTOR NOTE]** Students attempt Part A (5 minutes). Reveal and discuss. Then work through Part B (steady-state derivation) together at the board.
 
 ---
 
@@ -283,52 +282,44 @@ Use this transition count matrix for all calculations:
 ```python
 q1_active_row_sum = None
 ```
-`[ANSWER KEY: 480 + 120 + 0 = 600]`
 
 **Q2.** What is the transition probability $P_{Active, At-Risk}$ (Active → At-Risk)?
 ```python
 q2_p_active_atrisk = None
 ```
-`[ANSWER KEY: 120/600 = 0.2]`
 
 **Q3.** What is the transition probability $P_{At-Risk, Churned}$?
 ```python
 q3_p_atrisk_churned = None
 ```
-`[ANSWER KEY: 200/500 = 0.4]`
 
 **Q4.** Is Churned an absorbing state? Enter True or False.
 ```python
 q4_churned_absorbing = None
 ```
-`[ANSWER KEY: True — the Churned row is [0, 0, 0, 600] → P_Churned,Churned = 1.0]`
 
 **Q5.** Starting from At-Risk, compute $(P^2)_{At-Risk, Churned}$ — the 2-step probability of reaching Churned starting from At-Risk. Use $P_{At-Risk} = [0, 0.40, 0.20, 0.40]$ and the column of Churned transitions $[0.10, 0, 0.40, 1.00]$. (Hint: dot product of the At-Risk row with the Churned column.)
 
 ```python
 q5_p2_atrisk_churned = None
 ```
-`[ANSWER KEY: 0×0.10 + 0.40×0 + 0.20×0.40 + 0.40×1.00 = 0 + 0 + 0.08 + 0.40 = 0.48]`
 
 **Q6.** Is $(P^2)_{At-Risk, Churned}$ higher or lower than the 1-step probability $P_{At-Risk, Churned} = 0.40$?
 ```python
 # Enter "higher" or "lower"
 q6_comparison = None
 ```
-`[ANSWER KEY: "higher" — 0.48 > 0.40, because At-Risk customers who don't immediately churn often flow back to At-Risk before churning in the next step]`
 
 **Q7.** True or False: The steady-state distribution for this 4-state chain (with Churned absorbing) is $\pi = [0, 0, 0, 1]$.
 ```python
 q7_steady_state = None
 ```
-`[ANSWER KEY: True — with an absorbing state, all customers eventually end up in Churned]`
 
 **Q8.** Given the matrix above, which transition represents the biggest "leak" — the transition with the highest probability that moves customers toward Churned?
 ```python
 # Enter the transition as a string, e.g., "Active_to_AtRisk"
 q8_biggest_leak = None
 ```
-`[ANSWER KEY: "AtRisk_to_Churned" — probability 0.40, higher than any other transition toward Churned]`
 
 ---
 
@@ -360,19 +351,16 @@ Use random seed 42.
 ```python
 q9_p_atrisk_churned = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q10.** After 12 months starting from "active", what fraction of customers are still active (not churned)? Round to 2 decimal places.
 ```python
 q10_active_survival_12m = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q11.** Which state has the highest transition probability to "churned"?
 ```python
 q11_highest_churn_state = None  # e.g., "dormant", "at_risk", etc.
 ```
-`[ANSWER KEY: pre-run to determine; expected "dormant" or "at_risk"]`
 
 ---
 
@@ -386,7 +374,6 @@ q11_highest_churn_state = None  # e.g., "dormant", "at_risk", etc.
 ```python
 q12 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "a"]`
 
 **Q13.** The simulation shows a "spike" in the At-Risk fraction at month 3 before it decreases. What business interpretation would you give for this pattern?
 - (a) The simulation has a bug — at-risk should decrease monotonically
@@ -396,7 +383,6 @@ q12 = None  # "a", "b", "c", or "d"
 ```python
 q13 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 **Q14.** You are designing a retention campaign. Based on the transition matrix, which customers should you prioritize targeting: Active customers who might become At-Risk, or At-Risk customers who might churn?
 - (a) Active customers — there are more of them
@@ -406,7 +392,6 @@ q13 = None  # "a", "b", "c", or "d"
 ```python
 q14 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b" — though a full answer would consider both the churn probability and the cost of targeting; At-Risk has the highest marginal impact per intervention]`
 
 ---
 

@@ -180,7 +180,6 @@ The β coefficients capture the maximum revenue each channel can generate (the p
 ### Section 2.1 — Worked Example
 #### (~30 minutes | Hybrid: attempt Parts A–B first, then reveal)
 
-**[INSTRUCTOR NOTE]** Give students 10 minutes to attempt Parts A and B. Reveal, then work through Part C together.
 
 ---
 
@@ -269,61 +268,51 @@ Use $\lambda = 0.7$ and the spend sequence $S_1 = 200$, $S_2 = 100$, $S_3 = 0$, 
 ```python
 q1_adstock_1 = None
 ```
-`[ANSWER KEY: 200.0]`
 
 **Q2.** Compute $A_2$.
 ```python
 q2_adstock_2 = None
 ```
-`[ANSWER KEY: 100 + 0.7 × 200 = 240.0]`
 
 **Q3.** Compute $A_3$.
 ```python
 q3_adstock_3 = None
 ```
-`[ANSWER KEY: 0 + 0.7 × 240 = 168.0]`
 
 **Q4.** Compute $A_4$.
 ```python
 q4_adstock_4 = None
 ```
-`[ANSWER KEY: 150 + 0.7 × 168 = 267.6]`
 
 **Q5.** For a Hill function with EC50 = 200 and $\alpha = 2$, compute $H(200)$.
 ```python
 q5_hill_at_ec50 = None
 ```
-`[ANSWER KEY: 200²/(200²+200²) = 0.5]`
 
 **Q6.** Compute $H(100)$ with EC50 = 200, $\alpha = 2$. Round to 4 decimal places.
 ```python
 q6_hill_at_100 = None
 ```
-`[ANSWER KEY: 10000/50000 = 0.2000]`
 
 **Q7.** Compute $H(400)$ with EC50 = 200, $\alpha = 2$. Round to 4 decimal places.
 ```python
 q7_hill_at_400 = None
 ```
-`[ANSWER KEY: 160000/200000 = 0.8000]`
 
 **Q8.** Going from $s = 0$ to $s = 100$ (EC50=200, $\alpha$=2): gain = $H(100) - H(0) = 0.2 - 0 = 0.2$. Going from $s = 100$ to $s = 200$: gain = $H(200) - H(100) = 0.5 - 0.2 = ?$. Is the gain larger or smaller for the second \$100 of spend?
 ```python
 q8_second_gain = None  # numerical value of H(200)-H(100)
 ```
-`[ANSWER KEY: 0.3 — the second $100 gives more gain because it crosses EC50; but from $200 to $300 the gain would be only H(300)-H(200) = 0.692-0.5 = 0.192, confirming eventual diminishing returns]`
 
 **Q9.** True or False: $\lambda = 0.9$ produces higher week-3 adstock than $\lambda = 0.3$, given the same single spend of \$100 in week 1 and no spend afterward.
 ```python
 q9_decay_comparison = None  # True or False
 ```
-`[ANSWER KEY: True — 100×0.9² = 81 vs 100×0.3² = 9]`
 
 **Q10.** Channel A's marginal ROI = \$4.00. Channel B's marginal ROI = \$1.50. You have \$1,000 to move from one channel to the other. How much additional revenue do you gain by moving from B to A vs. leaving it in B?
 ```python
 q10_revenue_gain = None  # in dollars
 ```
-`[ANSWER KEY: moving $1000 from B to A: gain from A = $4000, lost from B = $1500, net gain = $2500]`
 
 ---
 
@@ -357,25 +346,21 @@ Use scipy.optimize with seed=42. Print:
 ```python
 q11_lambda_tv = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q12.** What is the fitted EC50 for Digital (\$000s)? Round to 1 decimal place.
 ```python
 q12_ec50_digital = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q13.** According to the budget optimization, should TV spend increase or decrease?
 ```python
 q13_tv_direction = None  # "increase" or "decrease"
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q14.** What is the predicted revenue uplift (%) from the optimal reallocation? Round to 1 decimal place.
 ```python
 q14_revenue_uplift_pct = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 ---
 
@@ -389,13 +374,11 @@ q14_revenue_uplift_pct = None
 ```python
 q15_tv_saturation = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "c"]`
 
 **Q16.** True or False: A decay parameter of λ = 0 means advertising has no effect on sales.
 ```python
 q16_lambda_zero = None  # True or False
 ```
-`[ANSWER KEY: False — λ=0 means no carryover (current week only), but advertising still generates revenue in that week]`
 
 **Q17.** The budget optimization recommends tripling Social spend and cutting TV to near zero. Before acting on this, which check is most important?
 - (a) Whether TV's λ is higher than Social's λ
@@ -405,7 +388,6 @@ q16_lambda_zero = None  # True or False
 ```python
 q17_trust_check = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 ---
 

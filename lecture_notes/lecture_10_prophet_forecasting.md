@@ -185,7 +185,6 @@ Always validate on a held-out period before using a forecast for decisions.
 ### Section 2.1 — Worked Example
 #### (~30 minutes | Hybrid: attempt Part A first, then reveal)
 
-**[INSTRUCTOR NOTE]** Give students 10 minutes for Part A. Reveal, then work through Parts B and C together.
 
 ---
 
@@ -301,61 +300,51 @@ Use the quarterly dataset from the worked example for all calculations.
 ```python
 q1_seasonal_q4 = None
 ```
-`[ANSWER KEY: 58.1]`
 
 **Q2.** What is the seasonal index for Q2?
 ```python
 q2_seasonal_q2 = None
 ```
-`[ANSWER KEY: -34.4]`
 
 **Q3.** Do the four seasonal indices sum to approximately 0? (Enter True or False)
 ```python
 q3_sum_to_zero = None
 ```
-`[ANSWER KEY: True — sum = -6.9 - 34.4 - 16.9 + 58.1 = -0.1 ≈ 0]`
 
 **Q4.** Using the naive seasonal forecast (last year's same quarter), what is the % error for Q4 2023? (Forecast=180, Actual=200)
 ```python
 q4_q4_pct_error = None
 ```
-`[ANSWER KEY: |200-180|/200 = 10.0]`
 
 **Q5.** Using the trend-adjusted forecast (add 10 units), what is the Q4 2023 forecast?
 ```python
 q5_q4_trend_forecast = None
 ```
-`[ANSWER KEY: 180 + 10 = 190]`
 
 **Q6.** What is the % error for Q4 2023 using the trend-adjusted forecast?
 ```python
 q6_q4_trend_error = None
 ```
-`[ANSWER KEY: |200-190|/200 = 5.0]`
 
 **Q7.** With quarterly data ($P = 4$) and $N = 1$, the Fourier seasonality has how many parameters (coefficients to estimate)?
 ```python
 q7_fourier_params = None
 ```
-`[ANSWER KEY: 2 — one a_1 and one b_1]`
 
 **Q8.** With $N = 2$, how many parameters does the Fourier seasonal component have?
 ```python
 q8_fourier_params_n2 = None
 ```
-`[ANSWER KEY: 4 — a_1, b_1, a_2, b_2]`
 
 **Q9.** Evaluate the Fourier term $\cos(2\pi \times 4 / 4)$. (This is the Q4 value of the n=1 cosine term with P=4.)
 ```python
 q9_cos_q4 = None
 ```
-`[ANSWER KEY: cos(2π) = 1]`
 
 **Q10.** True or False: For standard k-fold cross-validation on weekly time series data, it is acceptable for a training fold to contain data from weeks after the test fold.
 ```python
 q10_kfold_acceptable = None
 ```
-`[ANSWER KEY: False — this is data leakage; training on future data and testing on past data produces over-optimistic performance estimates]`
 
 ---
 
@@ -396,25 +385,21 @@ Use random seed 42.
 ```python
 q11_mape_13wk = None
 ```
-`[ANSWER KEY: pre-run to determine; expected range 5–20% for weekly consumer goods]`
 
 **Q12.** According to the forecast, which week has the highest predicted demand? (Enter as a date string, e.g., "2024-12-22")
 ```python
 q12_peak_week = None
 ```
-`[ANSWER KEY: pre-run to determine; expected: a week in mid-to-late December]`
 
 **Q13.** What is the estimated % lift from the Holiday Season event (the holiday coefficient, approximately)? Round to 1 decimal place.
 ```python
 q13_holiday_lift_pct = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q14.** Does the trend component show an upward or downward direction over the full historical period?
 ```python
 q14_trend_direction = None  # "upward" or "downward"
 ```
-`[ANSWER KEY: pre-run to determine; dataset is designed with upward trend]`
 
 ---
 
@@ -428,7 +413,6 @@ q14_trend_direction = None  # "upward" or "downward"
 ```python
 q15 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b" — more data, better holiday specifications, and hyperparameter tuning are all evidence-based improvements]`
 
 **Q16.** The forecast plot shows a very steep trend upward for the next 6 months based on a recent sharp growth period. You know this growth was caused by a temporary promotion that has ended. What should you do?
 - (a) Trust the model — it learned from the data
@@ -438,7 +422,6 @@ q15 = None  # "a", "b", "c", or "d"
 ```python
 q16 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b" — you can manually specify changepoint locations in Prophet via the changepoints parameter; domain knowledge should override the model when you know the data-generating process changed]`
 
 **Q17.** Prophet's uncertainty interval at 26 weeks is ±35% of the point forecast. A manager says: "That's too wide to be useful — we need a precise forecast." What is the correct response?
 - (a) Agree — a 35% interval is always a sign of a bad model
@@ -448,7 +431,6 @@ q16 = None  # "a", "b", "c", or "d"
 ```python
 q17 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b" — wide intervals at long horizons reflect genuine uncertainty, not model failure. A model with artificially narrow intervals is more dangerous than an honest one with wide intervals.]`
 
 ---
 

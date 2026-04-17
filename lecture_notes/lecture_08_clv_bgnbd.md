@@ -169,7 +169,6 @@ The Gamma-Gamma model for spend assumes that a customer's average order value is
 ### Section 2.1 — Worked Example
 #### (~30 minutes | Hybrid: attempt Part A first, then reveal; work through Parts B–C together)
 
-**[INSTRUCTOR NOTE]** Give students 8 minutes for Part A. Reveal, then work through B and C as a group — these require understanding the model output rather than computation.
 
 ---
 
@@ -284,51 +283,43 @@ For Marcus: threshold = 15/19 = 0.789 (not exceeded — P(alive) = 0.11)
 ```python
 q1_expected_purchases = None
 ```
-`[ANSWER KEY: λt = 0.4 × 6 = 2.4]`
 
 **Q2.** Under the geometric dropout model, a customer remains active after each purchase with probability $p = 0.80$. What is the probability they survive (remain active) through 4 consecutive purchase opportunities?
 ```python
 q2_survive_4 = None
 ```
-`[ANSWER KEY: 0.80^4 = 0.4096]`
 
 **Q3.** The BG/NBD model has parameters $r = 1.2$ and $\alpha = 6.0$. What is the mean purchase rate across all customers?
 ```python
 q3_mean_rate = None
 ```
-`[ANSWER KEY: r/α = 1.2/6.0 = 0.2 purchases per month]`
 
 **Q4.** A customer has E[transactions next 12 months] = 3.2 and expected order value = $55. What is their predicted 12-month CLV (ignoring discounting)?
 ```python
 q4_clv_no_discount = None
 ```
-`[ANSWER KEY: 3.2 × 55 = $176]`
 
 **Q5.** With a 2% monthly discount rate, what is the present value of a $100 payment received 12 months from now? Use the formula PV = 100/(1.02)^12. Note: (1.02)^12 ≈ 1.268.
 ```python
 q5_present_value = None
 ```
-`[ANSWER KEY: 100/1.268 ≈ $78.86]`
 
 **Q6.** Customer X made 3 purchases in 24 months, last purchase was 2 months ago. Customer Y made 3 purchases in 24 months, last purchase was 22 months ago. Without running any model, which customer has a higher probability of being alive? Explain in one sentence.
 ```python
 # Enter "X" or "Y"
 q6_higher_p_alive = None
 ```
-`[ANSWER KEY: "X" — recent purchase is strong evidence of continued activity; Y's 22 months of silence suggests likely dropout]`
 
 **Q7.** True or False: The BG/NBD model requires detailed demographic data (age, gender, income) to compute predicted CLV.
 ```python
 q7_needs_demographics = None
 ```
-`[ANSWER KEY: False — BG/NBD only requires transaction history: purchase count x, last purchase time t_x, and observation period T]`
 
 **Q8.** A company's Gamma-Gamma model shows that customers who purchase 10+ times per year have average order values of $20, while customers who purchase 1–2 times per year have average order values of $80. Should the Gamma-Gamma model be applied to this data?
 ```python
 # Enter "yes" or "no" and briefly explain
 q8_gamma_gamma_applicable = None  # "yes" or "no"
 ```
-`[ANSWER KEY: "no" — the key independence assumption is violated: spend per transaction is negatively correlated with purchase frequency. The Gamma-Gamma model will produce biased estimates for high-frequency customers]`
 
 ---
 
@@ -364,31 +355,26 @@ Use random seed 42 where applicable.
 ```python
 q9_param_r = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q10.** What is the fitted BG/NBD parameter $\alpha$? Round to 2 decimal places.
 ```python
 q10_param_alpha = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q11.** What is the median predicted 12-month CLV across all customers? Round to 2 decimal places.
 ```python
 q11_median_clv = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q12.** What is the 99th percentile predicted CLV? Round to 2 decimal places.
 ```python
 q12_p99_clv = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q13.** What is the Pearson correlation between average order value and purchase frequency? Round to 2 decimal places. (This tests the Gamma-Gamma independence assumption.)
 ```python
 q13_spend_freq_correlation = None
 ```
-`[ANSWER KEY: pre-run to determine; if |correlation| < 0.1, independence assumption holds reasonably]`
 
 ---
 
@@ -402,7 +388,6 @@ q13_spend_freq_correlation = None
 ```python
 q14 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "c"]`
 
 **Q15.** Customer K made 15 purchases with their last purchase 3 months ago. Their predicted CLV is $310. Customer L made 2 purchases with their last purchase 1 month ago. Their predicted CLV is $45. A marketing manager proposes spending $50 on retention for Customer K and $5 for Customer L, proportional to CLV. Is this reasonable?
 - (a) Yes — spending proportional to CLV is always optimal
@@ -412,7 +397,6 @@ q14 = None  # "a", "b", "c", or "d"
 ```python
 q15 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 **Q16.** The Gamma-Gamma correlation is −0.47. This is a strong negative correlation between spend per order and purchase frequency. Should you use the Gamma-Gamma model as-is?
 - (a) Yes — a correlation of −0.47 is always acceptable for Gamma-Gamma
@@ -422,7 +406,6 @@ q15 = None  # "a", "b", "c", or "d"
 ```python
 q16 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 ---
 

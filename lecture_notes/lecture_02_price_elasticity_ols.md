@@ -258,7 +258,6 @@ Denominator = 4 + 1 + 0 + 1 + 4 = 10. β₁ = −135/10 = **−13.5 units per do
 ### Section 2.1 — Worked Example
 #### (~30 minutes | Hybrid: attempt Steps 1–3 first, then reveal full solution)
 
-**[INSTRUCTOR NOTE]** Distribute the problem. Give students 10 minutes to attempt Parts (a)–(d) individually. These are all hand-calculations using the formulas from Part 1. Then work through the solution together.
 
 ---
 
@@ -418,71 +417,60 @@ Use this small dataset for all math questions:
 ```python
 q1_mean_price = None
 ```
-`[ANSWER KEY: 7.00]`
 
 **Q2.** Compute the mean units sold $\bar{y}$. Round to 2 decimal places.
 ```python
 q2_mean_units = None
 ```
-`[ANSWER KEY: 140.0]`
 
 **Q3.** Compute $\sum(x_i - \bar{x})(y_i - \bar{y})$. (Build the deviation table as in the worked example.)
 ```python
 q3_cov_numerator = None
 ```
-`[ANSWER KEY: -200.0]`
 
 **Q4.** Compute $\sum(x_i - \bar{x})^2$.
 ```python
 q4_var_denominator = None
 ```
-`[ANSWER KEY: 10.0]`
 
 **Q5.** Compute the OLS slope β_1.
 ```python
 q5_beta1 = None
 ```
-`[ANSWER KEY: -20.0]`
 
 **Q6.** Compute the OLS intercept β_0.
 ```python
 q6_beta0 = None
 ```
-`[ANSWER KEY: 140 - (-20)(7) = 140 + 140 = 280.0]`
 
 **Q7.** Using your regression line, what is the predicted units sold when price = $7.50?
 ```python
 q7_prediction = None
 ```
-`[ANSWER KEY: 329 - 27(7.50) = 329 - 202.5 = 126.5]`
 
 **Q8.** The natural log of 5.00 is approximately 1.6094, and the natural log of 200 is approximately 5.2983. In the log-log model, which of these would be used as the x-variable (predictor)?
 ```python
 # Enter "log_price" or "log_units"
 q8_log_predictor = None
 ```
-`[ANSWER KEY: "log_price"]`
 
 **Q9.** In a log-log regression of log(units) on log(price), you estimate β_1 = −1.4. A 1% increase in price is associated with what percentage change in units sold?
 ```python
 # Enter the percentage change (e.g., enter -2.3 for a 2.3% decrease)
 q9_pct_change = None
 ```
-`[ANSWER KEY: -1.4]`
 
 **Q10.** With an elasticity of −1.4, is demand elastic or inelastic?
 ```python
 # Enter "elastic" or "inelastic"
 q10_elastic_or_not = None
 ```
-`[ANSWER KEY: "elastic"]`
 
 **Q11.** With an elasticity of −1.4, if you raise price by 5%, what happens to total revenue?
 ```python
 # Enter "increases", "decreases", or "stays the same"
 q11_revenue_effect = None
 ```
-`[ANSWER KEY: "decreases"]`
 
 ---
 
@@ -525,25 +513,21 @@ Please:
 ```python
 q12_own_price_elasticity = None
 ```
-`[ANSWER KEY: approximately −1.80 to −2.20 depending on dataset; provide exact value after running]`
 
 **Q13.** Is the own-price elasticity statistically significant? (Look at the p-value for log_price. Enter True if p-value < 0.05, False otherwise.)
 ```python
 q13_significant = None
 ```
-`[ANSWER KEY: True]`
 
 **Q14.** What is the cross-price elasticity (coefficient on log_comp_price)? Round to 2 decimal places.
 ```python
 q14_cross_price_elasticity = None
 ```
-`[ANSWER KEY: approximately +0.40 to +0.90; positive because a higher competitor price shifts demand to our product]`
 
 **Q15.** What is the R-squared of the regression? Round to 2 decimal places.
 ```python
 q15_r_squared = None
 ```
-`[ANSWER KEY: approximately 0.75 to 0.90]`
 
 ---
 
@@ -557,7 +541,6 @@ q15_r_squared = None
 ```python
 q16_cross_price_meaning = None  # Enter "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 **Q17.** A manager argues: "Our regression proves that raising price causes sales to drop." Is this statement correct?
 - (a) Yes — a negative regression coefficient on price proves a causal relationship
@@ -567,11 +550,9 @@ q16_cross_price_meaning = None  # Enter "a", "b", "c", or "d"
 ```python
 q17_causation = None  # Enter "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 ---
 
-**[INSTRUCTOR NOTE]** The exact values for Q12–Q15 depend on the synthetic dataset. Generate the dataset with a fixed seed before class, run the agent yourself once to record exact outputs, and update the answer key accordingly. Acceptable range is ±0.15 for elasticities and ±0.05 for R-squared. Use `abs(student_answer - key_answer) < tolerance` in the autograder.
 
 ---
 

@@ -159,7 +159,6 @@ The Qini coefficient measures model ranking quality — how much of the maximum 
 ### Section 2.1 — Worked Example
 #### (~30 minutes | Hybrid: attempt Part A first, then reveal; work through Parts B–C together)
 
-**[INSTRUCTOR NOTE]** Give students 8 minutes for Part A individually. Then reveal and discuss. Work through B and C together.
 
 ---
 
@@ -273,31 +272,26 @@ Note: C7 (T=0, Y=1, $\hat{\tau}=0.18$) converted in the control group despite mo
 ```python
 q1_ate = None
 ```
-`[ANSWER KEY: 0.22 - 0.14 = 0.08]`
 
 **Q2.** The treatment cost is \$2 per customer. The value of a conversion is \$30. What is the minimum uplift τ(X) that justifies targeting a customer?
 ```python
 q2_min_uplift = None
 ```
-`[ANSWER KEY: 2/30 = 0.0667 — only target if τ > cost/value ≈ 0.067]`
 
 **Q3.** A customer has predicted uplift $\hat{\tau}(X) = 0.12$ and the minimum uplift threshold is 0.067. Should this customer be targeted?
 ```python
 q3_target = None  # True or False
 ```
-`[ANSWER KEY: True — 0.12 > 0.067]`
 
 **Q4.** If there are 10,000 customers with an average predicted uplift of 0.09, and you target all of them with a \$2 cost and \$30 conversion value, what is the expected net profit from the campaign? (Expected net profit = N × τ̄ × value - N × cost)
 ```python
 q4_expected_profit = None
 ```
-`[ANSWER KEY: 10000 × 0.09 × 30 - 10000 × 2 = 27000 - 20000 = $7000]`
 
 **Q5.** True or False: A customer with Y=1 who was in the treatment group must be a "persuadable."
 ```python
 q5_treated_converter_persuadable = None  # True or False
 ```
-`[ANSWER KEY: False — they could be a "Sure Thing" who would have converted without treatment]`
 
 **Q6.** The T-learner trains model $\hat{\mu}_0$ on control customers only. A new customer has features X_new = [age=42, tenure=5]. The model predicts $\hat{\mu}_0(X_{new}) = 0.08$. What does this represent in business terms?
 ```python
@@ -307,14 +301,12 @@ q5_treated_converter_persuadable = None  # True or False
 # (c) The uplift from treating this customer is 8%
 q6_mu0_meaning = None
 ```
-`[ANSWER KEY: "b"]`
 
 **Q7.** Under random assignment, T is independent of X. Why does this matter for the T-learner? In one sentence, explain what goes wrong if self-selected customers join the treatment group.
 ```python
 # Free response — participation credit; no autograded answer
 q7_random_assignment = "write your answer here as a string"
 ```
-`[ANSWER KEY: Participation — expected answer: if customers self-select into treatment, treated customers systematically differ from control customers on features X, so μ₁(X) estimated from treated is not a valid counterfactual for control customers, biasing the uplift estimate]`
 
 ---
 
@@ -352,25 +344,21 @@ Please:
 ```python
 q8_observed_ate = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q9.** What is the mean predicted uplift (tau_hat) on the test set? Round to 3 decimal places.
 ```python
 q9_mean_tau_hat = None
 ```
-`[ANSWER KEY: pre-run to determine; should be close to q8]`
 
 **Q10.** What is the Qini coefficient? Round to 2 decimal places.
 ```python
 q10_qini_coef = None
 ```
-`[ANSWER KEY: pre-run to determine; expected range 0.20–0.50]`
 
 **Q11.** What is the single most important feature in model mu_1 (the treatment model)?
 ```python
 q11_top_feature_mu1 = None  # feature name as string
 ```
-`[ANSWER KEY: pre-run to determine; expected: avg_monthly_balance or account_tenure_years]`
 
 ---
 
@@ -384,7 +372,6 @@ q11_top_feature_mu1 = None  # feature name as string
 ```python
 q12 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 **Q13.** The most important feature in mu_1 (treatment model) is avg_monthly_balance, but this feature is much less important in mu_0 (control model). What does this suggest about who responds to the promotion?
 - (a) High-balance customers have higher baseline conversion rates
@@ -394,7 +381,6 @@ q12 = None  # "a", "b", "c", or "d"
 ```python
 q13 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b" — when a feature matters in mu_1 but not mu_0, it moderates the treatment effect]`
 
 **Q14.** You want to target the top 20% of customers by predicted uplift. Based on the Qini curve, approximately what fraction of total incremental conversions would this targeting strategy capture?
 - (a) Exactly 20% — targeting 20% always captures 20% of incremental conversions
@@ -404,7 +390,6 @@ q13 = None  # "a", "b", "c", or "d"
 ```python
 q14 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 ---
 

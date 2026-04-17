@@ -168,7 +168,6 @@ Share A = 0.223/1.872 = **11.9%**. Share B = 1.649/1.872 = **88.1%**.
 ### Section 2.1 — Worked Example
 #### (~30 minutes | Hybrid: attempt Part A first, then reveal)
 
-**[INSTRUCTOR NOTE]** Give students 10 minutes for Parts A–B. Reveal. Then work through Part C (market simulation) together, computing each step at the board.
 
 ---
 
@@ -286,62 +285,52 @@ Use these utility parameters for all calculations:
 ```python
 q1_Va = None
 ```
-`[ANSWER KEY: -0.20 × 10 + 0 + 0 = -2.00]`
 
 **Q2.** Compute $V_B$ for the product: \$15/month, premium content, no ads.
 ```python
 q2_Vb = None
 ```
-`[ANSWER KEY: -0.20 × 15 + 1.50 + 0 = -3.00 + 1.50 = -1.50]`
 
 **Q3.** Compute $e^{V_A}$. Use the approximation $e^{-2.00} \approx 0.1353$.
 ```python
 q3_exp_Va = None
 ```
-`[ANSWER KEY: 0.1353]`
 
 **Q4.** Compute $e^{V_B}$. Use $e^{-1.50} \approx 0.2231$.
 ```python
 q4_exp_Vb = None
 ```
-`[ANSWER KEY: 0.2231]`
 
 **Q5.** What is $P(\text{choose B})$ in a choice between only A and B?
 ```python
 q5_prob_B = None
 ```
-`[ANSWER KEY: 0.2231 / (0.1353 + 0.2231) = 0.2231/0.3584 ≈ 0.6226]`
 
 **Q6.** Compute the WTP for "premium content."
 ```python
 q6_wtp_premium = None
 ```
-`[ANSWER KEY: 1.50/0.20 = $7.50 per month]`
 
 **Q7.** Now a third option C is added: \$8/month, standard content, limited ads. Compute $V_C$.
 ```python
 q7_Vc = None
 ```
-`[ANSWER KEY: -0.20 × 8 + 0 + (-0.60) = -1.60 - 0.60 = -2.20]`
 
 **Q8.** With $e^{-2.20} \approx 0.1108$, compute $P(\text{choose A})$ from the 3-option set {A, B, C}.
 ```python
 q8_prob_A_3opt = None
 ```
-`[ANSWER KEY: 0.1353 / (0.1353 + 0.2231 + 0.1108) = 0.1353/0.4692 ≈ 0.2884]`
 
 **Q9.** Compare $P(\text{choose A})$ in the 2-option set (Q5, complement = 1 − 0.6226 = 0.3774) vs. the 3-option set (Q8, 0.2884). Did adding option C take share from A, B, or both?
 ```python
 # Enter "A_only", "B_only", or "both"
 q9_share_loss = None
 ```
-`[ANSWER KEY: "both" — under IIA, adding C draws proportionally from both A and B]`
 
 **Q10.** True or False: The WTP formula $\beta_{\text{attr}} / |\beta_{\text{price}}|$ requires that price must have a negative coefficient.
 ```python
 q10_wtp_requires_neg_price = None  # True or False
 ```
-`[ANSWER KEY: True — if price had a positive coefficient, higher prices would increase utility, which is economically nonsensical and would produce a negative WTP]`
 
 ---
 
@@ -379,25 +368,21 @@ Use random seed 42.
 ```python
 q11_beta_price = None
 ```
-`[ANSWER KEY: pre-run to determine; expected negative, range −0.10 to −0.25]`
 
 **Q12.** What is the WTP for premium content? Round to 2 decimal places (in dollars per month).
 ```python
 q12_wtp_premium = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q13.** What is the simulated market share for Tier 2 (premium, \$16)? Round to 1 decimal place (as a %).
 ```python
 q13_tier2_share = None
 ```
-`[ANSWER KEY: pre-run to determine]`
 
 **Q14.** Is the price coefficient statistically significant at the 5% level?
 ```python
 q14_price_significant = None  # True or False
 ```
-`[ANSWER KEY: pre-run to determine; expected True]`
 
 ---
 
@@ -411,7 +396,6 @@ q14_price_significant = None  # True or False
 ```python
 q15 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b" — customers WTP $7.50 but only charged $6 premium; this is consumer surplus, suggesting there may be room to raise the premium tier price]`
 
 **Q16.** A marketing analyst says: "The WTP estimate of \$7.50 means every customer will pay \$7.50 more for premium." Is this correct?
 - (a) Yes — WTP is the price every customer will pay
@@ -421,7 +405,6 @@ q15 = None  # "a", "b", "c", or "d"
 ```python
 q16 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 **Q17.** The market simulation shows Tier 3 (cheapest, full ads) capturing only 8% of the market despite being the cheapest option. What does this tell you about the customer segment in this survey?
 - (a) The survey has a sampling bias toward high-income respondents
@@ -431,7 +414,6 @@ q16 = None  # "a", "b", "c", or "d"
 ```python
 q17 = None  # "a", "b", "c", or "d"
 ```
-`[ANSWER KEY: "b"]`
 
 ---
 
