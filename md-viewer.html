@@ -7,29 +7,29 @@
 <title>Loading…</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<!-- Marked.js for Markdown → HTML -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
-<!-- MathJax for LaTeX rendering -->
+<!-- MathJax MUST load before marked so config is set; async intentionally omitted -->
 <script>
-  window.MathJax = {
-    tex: {
-      inlineMath:  [['$', '$']],
-      displayMath: [['$$', '$$']],
-      processEscapes: true
-    },
-    options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] },
-    startup: { typeset: false }
-  };
+window.MathJax = {
+  tex: {
+    inlineMath:  [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    processEscapes: false
+  },
+  options: {
+    skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+  }
+};
 </script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
 <style>
 :root {
-  --ink:   #1a1a1a;
-  --ink2:  #444;
-  --ink3:  #888;
-  --paper: #fafaf7;
-  --rule:  #e0ddd6;
-  --accent:#c0392b;
+  --ink:    #1a1a1a;
+  --ink2:   #444;
+  --ink3:   #888;
+  --paper:  #fafaf7;
+  --rule:   #e0ddd6;
+  --accent: #c0392b;
   --mono-bg:#f0ede8;
   --code-bg:#f5f2ee;
 }
@@ -45,146 +45,84 @@ body {
 .topbar {
   background: var(--ink);
   color: white;
-  padding: 0.6rem 2rem;
+  padding: 0.65rem 2rem;
   display: flex;
   align-items: center;
   gap: 1.5rem;
   font-size: 0.78rem;
   font-family: 'IBM Plex Mono', monospace;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
-.topbar a {
-  color: rgba(255,255,255,0.6);
-  text-decoration: none;
-  transition: color 0.12s;
-}
+.topbar a { color: rgba(255,255,255,0.55); text-decoration: none; transition: color 0.12s; }
 .topbar a:hover { color: white; }
 .topbar .sep { color: rgba(255,255,255,0.2); }
-#filename { color: rgba(255,255,255,0.85); }
+#filename { color: rgba(255,255,255,0.85); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .page { max-width: 740px; margin: 0 auto; padding: 3rem 2rem 6rem; }
 
-/* Loading / error states */
-#loading, #error {
-  text-align: center;
-  padding: 4rem 0;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.85rem;
-  color: var(--ink3);
-}
-#error { color: var(--accent); }
+#loading { text-align: center; padding: 4rem 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--ink3); }
+#error   { display: none; text-align: center; padding: 4rem 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--accent); }
 #content { display: none; }
 
-/* ── Markdown rendered styles ── */
+/* ── Rendered markdown ── */
 #content h1 {
   font-family: 'Lora', Georgia, serif;
   font-size: clamp(1.6rem, 4vw, 2.4rem);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.75rem;
+  font-weight: 600; line-height: 1.15; letter-spacing: -0.02em;
+  margin-bottom: 0.5rem; padding-bottom: 0.75rem;
   border-bottom: 2px solid var(--ink);
 }
 #content h2 {
   font-family: 'Lora', Georgia, serif;
-  font-size: 1.35rem;
-  font-weight: 600;
-  margin-top: 2.5rem;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.3rem;
-  border-bottom: 1px solid var(--rule);
+  font-size: 1.35rem; font-weight: 600;
+  margin-top: 2.5rem; margin-bottom: 0.75rem;
+  padding-bottom: 0.3rem; border-bottom: 1px solid var(--rule);
 }
-#content h3 {
-  font-size: 1rem;
-  font-weight: 500;
-  margin-top: 2rem;
-  margin-bottom: 0.5rem;
-  color: var(--ink);
-}
+#content h3 { font-size: 1rem; font-weight: 500; margin-top: 2rem; margin-bottom: 0.5rem; }
 #content h4 {
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink3);
-  margin-top: 1.5rem;
-  margin-bottom: 0.4rem;
+  font-size: 0.875rem; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--ink3); margin-top: 1.5rem; margin-bottom: 0.4rem;
 }
 #content p { margin-bottom: 1rem; }
 #content strong { font-weight: 500; }
 #content em { font-family: 'Lora', serif; font-style: italic; }
-
-#content ul, #content ol {
-  margin: 0.5rem 0 1rem 1.4rem;
-}
+#content a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+#content a:hover { opacity: 0.75; }
+#content ul, #content ol { margin: 0.5rem 0 1rem 1.5rem; }
 #content li { margin-bottom: 0.3rem; }
-
 #content code {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.84em;
-  background: var(--mono-bg);
-  padding: 0.1em 0.4em;
-  border-radius: 2px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.84em;
+  background: var(--mono-bg); padding: 0.1em 0.4em; border-radius: 2px;
 }
 #content pre {
-  background: var(--code-bg);
-  border: 1px solid var(--rule);
+  background: var(--code-bg); border: 1px solid var(--rule);
   border-left: 3px solid var(--accent);
-  padding: 1rem 1.2rem;
-  overflow-x: auto;
-  margin: 1rem 0 1.5rem;
-  border-radius: 0 2px 2px 0;
+  padding: 1rem 1.2rem; overflow-x: auto;
+  margin: 1rem 0 1.5rem; border-radius: 0 2px 2px 0;
 }
-#content pre code {
-  background: none;
-  padding: 0;
-  font-size: 0.83em;
-  line-height: 1.55;
-}
-
+#content pre code { background: none; padding: 0; font-size: 0.83em; line-height: 1.55; }
 #content blockquote {
-  border-left: 3px solid var(--rule);
-  padding-left: 1.2rem;
-  color: var(--ink2);
-  margin: 1rem 0;
-  font-style: italic;
+  border-left: 3px solid var(--rule); padding-left: 1.2rem;
+  color: var(--ink2); margin: 1rem 0;
 }
-
-#content table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.2rem 0 1.5rem;
-  font-size: 0.875rem;
-}
+#content table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.875rem; }
 #content th {
-  text-align: left;
-  font-weight: 500;
+  text-align: left; font-weight: 500;
   border-bottom: 2px solid var(--ink);
   padding: 0.4rem 0.8rem 0.4rem 0;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ink3);
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink3);
 }
-#content td {
-  padding: 0.45rem 0.8rem 0.45rem 0;
-  border-bottom: 1px solid var(--rule);
-  vertical-align: top;
-}
+#content td { padding: 0.45rem 0.8rem 0.45rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
 #content tr:last-child td { border-bottom: none; }
+#content hr { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
 
-#content hr {
-  border: none;
-  border-top: 1px solid var(--rule);
-  margin: 2.5rem 0;
-}
-
-/* Display math block spacing */
-.MathJax-Display, mjx-container[display="true"] {
-  margin: 1.2rem 0 !important;
-  overflow-x: auto;
-}
+/* Math spacing */
+mjx-container { overflow-x: auto; }
+mjx-container[display="true"] { margin: 1.2rem 0 !important; }
 </style>
 </head>
 <body>
@@ -197,17 +135,17 @@ body {
 
 <div class="page">
   <div id="loading">Loading…</div>
-  <div id="error" style="display:none"></div>
+  <div id="error"></div>
   <div id="content"></div>
 </div>
 
 <script>
 (async () => {
-  const params   = new URLSearchParams(window.location.search);
-  const file     = params.get('file');
-  const loading  = document.getElementById('loading');
-  const errorDiv = document.getElementById('error');
-  const content  = document.getElementById('content');
+  const params     = new URLSearchParams(window.location.search);
+  const file       = params.get('file');
+  const loading    = document.getElementById('loading');
+  const errorDiv   = document.getElementById('error');
+  const content    = document.getElementById('content');
   const filenameEl = document.getElementById('filename');
 
   if (!file) {
@@ -222,50 +160,64 @@ body {
 
   try {
     const resp = await fetch(file);
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status} — file not found`);
     const md = await resp.text();
 
-    // Stash math blocks before Marked processes them (Marked can mangle LaTeX)
-    const mathBlocks = [];
-    const placeholder = (i) => `MATHPLACEHOLDER${i}ENDMATH`;
+    // ── Step 1: extract math blocks BEFORE marked touches them ──
+    // marked will escape backslashes inside code spans etc., which breaks LaTeX.
+    // We replace every math region with a placeholder, run marked, then restore.
+    const stash = [];
+    const tag   = (i) => `\x00MATH${i}\x00`;  // null-byte delimited — safe from markdown
 
     let safe = md
-      // Display math $$ ... $$ (possibly multiline)
-      .replace(/\$\$([\s\S]+?)\$\$/g, (_, expr) => {
-        mathBlocks.push({ type: 'display', expr });
-        return placeholder(mathBlocks.length - 1);
+      // Display math: $$...$$ (multiline)
+      .replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => {
+        stash.push(`\\[${tex}\\]`);
+        return tag(stash.length - 1);
       })
-      // Inline math $ ... $ (not $$ — already handled above)
-      .replace(/\$([^\n$]+?)\$/g, (_, expr) => {
-        mathBlocks.push({ type: 'inline', expr });
-        return placeholder(mathBlocks.length - 1);
+      // Inline math: $...$ (single line, not preceded by another $)
+      .replace(/(?<!\$)\$(?!\$)([^\n$]+?)\$/g, (_, tex) => {
+        stash.push(`\\(${tex}\\)`);
+        return tag(stash.length - 1);
       });
 
-    // Parse markdown
-    let html = marked.parse(safe);
-
-    // Restore math blocks as MathJax delimiters
-    html = html.replace(/MATHPLACEHOLDER(\d+)ENDMATH/g, (_, i) => {
-      const { type, expr } = mathBlocks[parseInt(i)];
-      return type === 'display'
-        ? `<p>\\[${expr}\\]</p>`
-        : `\\(${expr}\\)`;
+    // ── Step 2: configure marked with URL auto-linking ──
+    marked.use({
+      gfm: true,
+      breaks: false,
+      mangle: false,
+      headerIds: true
     });
 
-    loading.style.display  = 'none';
-    content.style.display  = 'block';
-    content.innerHTML      = html;
+    // ── Step 3: parse markdown ──
+    let html = marked.parse(safe);
 
-    // Trigger MathJax typesetting after DOM is updated
+    // ── Step 4: restore math placeholders ──
+    html = html.replace(/\x00MATH(\d+)\x00/g, (_, i) => stash[parseInt(i)]);
+
+    // ── Step 5: render ──
+    loading.style.display = 'none';
+    content.style.display = 'block';
+    content.innerHTML     = html;
+
+    // ── Step 6: typeset math ──
+    // MathJax may or may not be ready yet — use promise if available, else poll
+    const typeset = () => {
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([content]).catch(console.error);
+      }
+    };
+
     if (window.MathJax && MathJax.typesetPromise) {
-      MathJax.typesetPromise([content]);
+      typeset();
     } else {
-      // MathJax not loaded yet — wait for it
-      window.addEventListener('load', () => {
+      // Poll until MathJax is ready (it loads synchronously but startup is async)
+      const poll = setInterval(() => {
         if (window.MathJax && MathJax.typesetPromise) {
-          MathJax.typesetPromise([content]);
+          clearInterval(poll);
+          typeset();
         }
-      });
+      }, 100);
     }
 
   } catch (err) {
