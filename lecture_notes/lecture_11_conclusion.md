@@ -1,22 +1,21 @@
 # Lecture 11: Synthesis and Capstone
-## Connecting the 10 Models — and What to Do With Them
+## Connecting the 10 Foundational Models — and What to Do With Them
 
 ---
 
 ### Overview
 
-This is the final class session. No new models. Instead: how the 10 models fit
-together into a coherent analytical practice, the common failure modes that cut
-across all of them, and how to develop the judgment to know when each model applies.
+This is the mid-course synthesis session. No new models. Instead: how the first 10
+models fit together into a coherent analytical practice, the common failure modes that
+cut across all of them, and how to develop the judgment to know when each model applies.
 
-The session culminates in the Intensive Day debrief — going through the FitLoop case
-together and explaining the analytical reasoning behind the recommended answers.
+The session also prepares you for the Intensive Day, which follows after Lectures 12–14.
 
 **By the end of this session you should be able to:**
 - Map any marketing analytics question to the appropriate model (or combination of models)
-- Identify the common failure modes shared across all 10 models
+- Identify the common failure modes shared across all 10 foundational models
 - Explain why no model output should be trusted without external validation
-- Describe your own analytical development trajectory from Lecture 0 to now
+- Articulate your analytical development trajectory so far and what remains in Lectures 12–14
 
 ---
 
@@ -272,93 +271,46 @@ will give recommendations that get implemented.
 
 ---
 
-## PART 3: Intensive Day Debrief
+## PART 3: Intensive Day Preparation
 
 ---
 
-### 3.1 The FitLoop Case: What the Models Said
+### 3.1 What the Intensive Day Requires
 
-This section is completed in class, working through the FitLoop case scenario
-together. The six model outputs from the intensive day, and the analytical reasoning
-behind the recommended answers:
+The Intensive Day happens after Lectures 12–14. Before it, you will receive the FitLoop
+company briefing (Part A of the case scenario). Read it carefully. The model outputs
+(Part B) are released at the start of the working session.
 
-**Model Output 1: Bayesian A/B Test (pricing experiment)**
-- P(B > A) = 0.94. The $21 price is better than $18 with 94% posterior probability.
-- Expected lift: +8.2% in conversion rate
-- Key judgment call: 94% is below the typical 97% threshold for pricing changes.
-  Is the additional data collection cost worth narrowing the uncertainty? This depends
-  on the cost of being wrong — with 185,000 subscribers, a wrong pricing decision
-  affects significant revenue.
+Your preparation for the Intensive Day is this course. The models in Lectures 1–10
+(and the additional tools from Lectures 12–14) are the tools you will apply.
 
-**Model Output 2: Price Elasticity**
-- Log-log elasticity: ε = -0.83 (inelastic demand)
-- Revenue-maximizing price: above $21
-- Key judgment call: inelastic demand supports the price increase, but elasticity
-  was estimated from a period with specific competitive dynamics. The A/B test is
-  more reliable than the elasticity model for this specific decision.
+**What to review before the Intensive Day:**
+- The model reference card (one-page summary of all models)
+- The FitLoop company briefing distributed in the week prior
+- Your own notes on any models you feel less confident about
 
-**Model Output 3: BG/NBD CLV**
-- Median 12-month CLV: $162
-- Top decile CLV: $480
-- Key judgment call: which CLV estimate do you use to justify the $6 retention
-  campaign budget? The median overstates value for low-P(alive) customers; the
-  mean is pulled up by a few very high-value customers.
-
-**Model Output 4: Survival Analysis + Cox Model**
-- Median survival time: 22 months
-- HR for avg_workouts: 0.74 (each additional workout reduces churn 26%)
-- HR for support_tickets_30d: 1.42 (each ticket increases churn 42%)
-- Key judgment call: the Cox model identifies two opposing signals. The product
-  intervention (improve workout completion) is the high-leverage play; support
-  ticket resolution is the damage-control play.
-
-**Model Output 5: T-Learner Uplift**
-- ATE: 10.7 percentage points
-- Profit-maximizing targeting threshold: 3.7% (= $6 / $162)
-- ~38% of at-risk customers should be targeted
-- Key judgment call: 38% is a lot of customers to include in a retention campaign.
-  Does the Sleeping Dog risk justify further segmentation? The model showed ~8% of
-  at-risk customers have τ̂ < 0.
-
-**Model Output 6: Markov Chain Engagement States**
-- Current Active% = 68%, projected to drift to 41% over 18 months without intervention
-- Key judgment call: the intervention that most changes the steady-state is
-  increasing the Dormant→Active transition (re-engagement). The At-Risk→Active
-  transition matters too but requires catching customers earlier in the cycle.
+**What to bring:** Nothing. All materials are provided on the day.
 
 ---
 
-### 3.2 The Recommended Intensive Day Answers
+### 3.2 How the Individual Response Card Works
 
-**Q1 (specific number from a specific model):**
-The specific number that most directly answers the decision question (raise price?)
-is P(B>A) = 0.94 from the Bayesian A/B test. This directly quantifies confidence
-that the $21 price generates higher conversion × revenue than $18.
+Before any group presentations begin, you will each submit an individual response card
+with four questions. See the intensive day format document for full details. The key
+point: the card is worth 100 of 140 total points and is submitted during working time —
+not after presentations.
 
-**Q2 (model excluded and why):**
-Strongest exclusion argument: the price elasticity model should be weighted less
-than the A/B test for this specific decision because the A/B test provides experimental
-evidence under current market conditions, while the elasticity model is based on
-historical observational data subject to endogeneity bias.
-
-**Q3 (assumption you would want to test):**
-For the Cox model: proportional hazards assumption. The HR for workouts (0.74) may
-not be constant over the full tenure distribution — new subscribers with low workout
-rates may have very different churn dynamics than long-tenured subscribers with
-established habits.
-
-**Q4 (recommendation + what would change it):**
-Raise price to $21 AND run the retention campaign targeting the 38% of at-risk
-customers identified by the uplift model. What would change it: (a) If the Sleeping
-Dog rate is higher than 8%, reduce the targeting threshold. (b) If competitive
-analysis shows a rival is planning an aggressive pricing move, delay the price
-increase until competitive dynamics are clearer.
+**The four questions (identical for every student):**
+1. State one specific number from your analysis, the model it came from, and what it means for the decision.
+2. Name one model you considered but did not use, and explain why it was lower priority for this case.
+3. Identify one assumption in your analysis that you are least confident in, and what you would check to test it.
+4. Write your personal recommendation for the executive team (may agree or differ from your group's), plus one condition that would change it.
 
 ---
 
 ## PART 3 Checkpoint
 
-These questions synthesize across the full course.
+These questions synthesize across the first 10 lectures.
 
 1. A new analyst proposes running a Markov chain model to answer the question "did
    our re-engagement campaign cause more customers to become active?" What is wrong
@@ -380,65 +332,41 @@ These questions synthesize across the full course.
 
 ---
 
-### Checkpoint Answer Key
-
-**Q1.** Markov chains describe the distribution of customers across states over time —
-they are predictive/descriptive models, not causal models. A Markov chain cannot
-tell you whether the re-engagement campaign CAUSED more customers to become active
-(it might just reflect seasonal variation, or the customers who received the campaign
-might have self-selected). Use **Bayesian A/B Testing or uplift modeling** with a
-randomized control group to measure causal impact.
-
-*Common wrong answer:* "Compare Markov chain steady states before and after the
-campaign." This doesn't control for anything that changed in the same period.
-
-**Q2.** "Is the HR reflecting the causal effect of annual plans, or the selection
-effect of who chooses annual plans?" Annual subscribers are not a random sample —
-they self-select for higher commitment. The HR = 0.52 may primarily reflect that
-customers who were already going to stay long-term are more likely to choose annual
-plans, not that annual plans cause retention. Before recommending this to all customers,
-you need a randomized experiment: randomly assign some customers to receive an
-annual-plan discount and compare churn rates to a control group.
-
-**Q3.** Two errors: (1) β_TV is the MAXIMUM revenue contribution plateau (when TV's
-Hill function = 1.0), not the actual current contribution. What matters for reallocation
-is the marginal ROI at current spend levels, not the model coefficient. (2) Moving
-all digital to TV would push TV spend far outside the range where the Hill function
-was calibrated, extrapolating into unknown territory where diminishing returns may be
-severe. Reallocation should be incremental, with cross-validation at each step.
-
-*Common wrong answer:* "You're right that TV is better." The β coefficients are not
-comparable without normalizing for Hill function values at current spend.
-
-**Q4.** Three additional checks: (1) Inspect the component decomposition for
-plausibility — does the trend growth rate match business understanding? Does the
-seasonal pattern peak at the right time of year? (2) Check for changepoints — does
-the model correctly identify known structural breaks in the historical data? (3)
-Compare the Prophet MAPE to a naive baseline (last year's same week, or a moving
-average) — a MAPE of 8% means nothing if the naive baseline achieves 6%.
-
-**Q5.** Build in this order: (1) **Survival analysis** first — it characterizes who
-churns and when, providing the empirical basis for retention priorities. (2) **CLV**
-second — once you know survival rates, you can estimate future transaction counts and
-thus CLV. The BG/NBD uses survival-analysis-like logic (P(alive)). (3) **Uplift
-modeling** last — you need CLV estimates to set the campaign targeting threshold
-(cost/CLV = threshold). You also need the survival model's Cox hazard ratios to
-identify which behavioral features predict churn, which informs the feature space
-for the uplift model.
+*Checkpoint answer key available from your instructor.*
 
 ---
 
-## PART 4: What Comes Next
+## PART 4: What Comes Next in This Course
 
 ---
 
-### 4.1 Extensions and Advanced Topics
+### 4.1 Lectures 12–14 Preview
 
-This course covered the foundational 10 models. Each has a body of advanced literature:
+The next three lectures extend the analytical toolkit beyond the first 10 models:
+
+**Lecture 12: Difference-in-Differences**
+- Establishes causation from observational data using parallel trends
+- Critical for evaluating marketing interventions when randomized experiments are not feasible
+
+**Lecture 13: Customer Segmentation**
+- k-means clustering to identify behaviorally distinct customer groups
+- Enables model-per-segment strategies for targeting and personalization
+
+**Lecture 14: CausalImpact**
+- Bayesian structural time series to measure the causal effect of a marketing campaign
+- The most rigorous non-experimental tool for incrementality measurement
+
+After Lecture 14, the Intensive Day applies all 14 models (or a selection of them)
+to the FitLoop case.
+
+---
+
+### 4.2 Extensions Beyond the Course
+
+Each model in this course has a body of advanced literature:
 
 **Causal Inference:**
-- Difference-in-differences, synthetic control, regression discontinuity (extensions
-  of A/B and uplift concepts)
+- Synthetic control, regression discontinuity
 - Key resource: Cunningham, *Causal Inference: The Mixtape* — free at
   causalinferencethebook.com
 
@@ -463,9 +391,9 @@ This course covered the foundational 10 models. Each has a body of advanced lite
 
 ---
 
-### 4.2 The Skills That Matter Most
+### 4.3 The Skills That Matter Most
 
-Looking back over the course, the five capabilities that will most determine your
+Looking back over the first 10 lectures, the five capabilities that will most determine your
 effectiveness as a marketing analyst:
 
 **1. Model selection judgment.** Knowing which model answers which question — and
@@ -484,7 +412,7 @@ career-long practice.
 **4. Incremental thinking.** Every optimization question in this course (budget
 reallocation, targeting threshold, revenue-maximizing price) comes down to marginal
 reasoning: what does one more dollar do? What does one more customer in this segment
-do? The marginal framework generalizes far beyond these 10 models.
+do? The marginal framework generalizes far beyond these models.
 
 **5. The habit of external validation.** No model output should be trusted without
 checking it against an independent source. This course gave you the tools to check:
@@ -492,23 +420,24 @@ the textbook formulas, the worked examples, the verification checklists. Use the
 
 ---
 
-### Final Reflection Questions
+### Mid-Course Reflection Questions
 
-These are not graded. They are for your own synthesis.
+These are not graded. They are for your own synthesis at the halfway point.
 
-1. Which of the 10 models do you expect to use most in your career, and why?
+1. Which of the first 10 models do you expect to use most in your career, and why?
 
 2. Which model's assumptions are most likely to be violated in the domain you are
    planning to work in? What would you do about it?
 
 3. The course philosophy is that analytical judgment matters more than model execution.
-   Give a specific example from the course where judgment — not calculation — was the
+   Give a specific example from the first 10 lectures where judgment — not calculation — was the
    hardest and most important step.
 
 4. What is one analytical question you are now equipped to answer that you could not
-   answer before this course? What would you need to learn next to answer it well?
+   answer before this course? What additional tools from Lectures 12–14 might further
+   strengthen your answer?
 
 ---
 
-**End of Course. Good luck.**
+*Three more lectures remain: Difference-in-Differences (L12), Customer Segmentation (L13), and CausalImpact (L14), followed by the Intensive Day.*
 

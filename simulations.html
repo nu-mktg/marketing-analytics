@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Interactive Simulations — Marketing Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #1a1a1a;
+  --ink2:     #444;
+  --ink3:     #888;
+  --paper:    #fafaf7;
+  --rule:     #e0ddd6;
+  --accent:   #c0392b;
+  --accent-s: rgba(192,57,43,0.08);
+  --mono-bg:  #f0ede8;
+  --blue:     #1a4466;
+  --green:    #1a6640;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.topbar {
+  background: var(--ink);
+  color: white;
+  padding: 0.65rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.78rem;
+  font-family: 'IBM Plex Mono', monospace;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.topbar a { color: rgba(255,255,255,0.55); text-decoration: none; transition: color 0.12s; }
+.topbar a:hover { color: white; }
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 3rem 2rem 6rem;
+}
+
+h1 {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--ink);
+}
+.page-sub {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink2);
+  margin-bottom: 3rem;
+  margin-top: 0.4rem;
+}
+
+/* ── Simulation panels ── */
+.sim-section {
+  margin-bottom: 4rem;
+}
+.sim-section h2 {
+  font-family: 'Lora', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.4rem;
+  margin-bottom: 1rem;
+}
+.sim-section p {
+  font-size: 0.9rem;
+  color: var(--ink2);
+  margin-bottom: 1.2rem;
+}
+
+.sim-body {
+  background: white;
+  border: 1px solid var(--rule);
+  padding: 1.5rem;
+}
+
+/* Controls row */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  align-items: flex-end;
+}
+.ctrl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 160px;
+}
+.ctrl label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink3);
+}
+.ctrl .val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 500;
+}
+input[type=range] {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Canvas */
+canvas {
+  width: 100%;
+  border: 1px solid var(--rule);
+  background: #fafaf7;
+  display: block;
+}
+
+/* Stats bar */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+}
+.stat { display: flex; flex-direction: column; gap: 0.1rem; }
+.stat-label { color: var(--ink3); font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.stat-val { color: var(--ink); font-weight: 500; }
+
+@media (max-width: 600px) {
+  .page { padding: 2rem 1rem 4rem; }
+  .controls { gap: 1rem; }
+  .ctrl { min-width: 120px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← Course Home</a>
+</div>
+
+<div class="page">
+
+<h1>Interactive Simulations</h1>
+<p class="page-sub">Explore the Beta distribution and Hill function before and during homework</p>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SIMULATION 1: Beta Distribution Explorer               -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="sim-section">
+  <h2>Beta Distribution Explorer — Lecture 1</h2>
+  <p>
+    Adjust the prior and observed data to see how the Beta posterior updates.
+    Relevant to Homework 1: Bayesian A/B testing and conjugate updates.
+  </p>
+
+  <div class="sim-body">
+
+    <!-- Prior controls -->
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);margin-bottom:.6rem;">Prior Parameters</div>
+    <div class="controls">
+      <div class="ctrl">
+        <label>α₀ (prior successes) <span class="val" id="beta-a0-val">2</span></label>
+        <input type="range" id="beta-a0" min="1" max="50" step="1" value="2">
+      </div>
+      <div class="ctrl">
+        <label>β₀ (prior failures) <span class="val" id="beta-b0-val">8</span></label>
+        <input type="range" id="beta-b0" min="1" max="100" step="1" value="8">
+      </div>
+    </div>
+
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);margin-bottom:.6rem;margin-top:1rem;">Observed Data</div>
+    <div class="controls">
+      <div class="ctrl">
+        <label>Successes (s) <span class="val" id="beta-s-val">27</span></label>
+        <input type="range" id="beta-s" min="0" max="200" step="1" value="27">
+      </div>
+      <div class="ctrl">
+        <label>Failures (f) <span class="val" id="beta-f-val">973</span></label>
+        <input type="range" id="beta-f" min="0" max="2000" step="1" value="973">
+      </div>
+    </div>
+
+    <canvas id="beta-canvas" height="240"></canvas>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-label">Prior mean</span>
+        <span class="stat-val" id="beta-prior-mean">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Posterior α</span>
+        <span class="stat-val" id="beta-post-a">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Posterior β</span>
+        <span class="stat-val" id="beta-post-b">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Posterior mean</span>
+        <span class="stat-val" id="beta-post-mean">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">95% credible interval</span>
+        <span class="stat-val" id="beta-ci">—</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SIMULATION 2: Hill Function Explorer                   -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="sim-section">
+  <h2>Hill Function (Saturation Curve) Explorer — Lecture 3</h2>
+  <p>
+    Adjust EC50 and the shape parameter α to see how diminishing returns changes.
+    Explore how marginal ROI falls as spend increases.
+    Relevant to Homework 3: Marketing Mix Modeling and budget reallocation.
+  </p>
+
+  <div class="sim-body">
+
+    <div class="controls">
+      <div class="ctrl">
+        <label>EC50 (saturation point) <span class="val" id="hill-ec50-val">150</span></label>
+        <input type="range" id="hill-ec50" min="10" max="500" step="5" value="150">
+      </div>
+      <div class="ctrl">
+        <label>n (Hill exponent) <span class="val" id="hill-alpha-val">2.0</span></label>
+        <input type="range" id="hill-alpha" min="0.5" max="6" step="0.1" value="2.0">
+      </div>
+      <div class="ctrl">
+        <label>Current spend <span class="val" id="hill-spend-val">100</span></label>
+        <input type="range" id="hill-spend" min="0" max="600" step="5" value="100">
+      </div>
+    </div>
+
+    <canvas id="hill-canvas" height="260"></canvas>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-label">H(spend)</span>
+        <span class="stat-val" id="hill-h">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Marginal ROI at spend</span>
+        <span class="stat-val" id="hill-mroi">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">H(EC50)</span>
+        <span class="stat-val" id="hill-h-ec50">0.500</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">% of max response used</span>
+        <span class="stat-val" id="hill-pct">—</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<script>
+// ─────────────────────────────────────────────────────────
+// UTILITIES
+// ─────────────────────────────────────────────────────────
+
+// Log-gamma via Lanczos approximation
+function logGamma(x) {
+  if (x <= 0) return NaN;
+  const g = 7;
+  const c = [
+    0.99999999999980993,
+    676.5203681218851,
+    -1259.1392167224028,
+    771.32342877765313,
+    -176.61502916214059,
+    12.507343278686905,
+    -0.13857109526572012,
+    9.9843695780195716e-6,
+    1.5056327351493116e-7
+  ];
+  if (x < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * x)) - logGamma(1 - x);
+  x -= 1;
+  let a = c[0];
+  for (let i = 1; i < g + 2; i++) a += c[i] / (x + i);
+  const t = x + g + 0.5;
+  return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(a);
+}
+
+function logBeta(a, b) { return logGamma(a) + logGamma(b) - logGamma(a + b); }
+
+// Beta PDF (unnormalized evaluation, rescaled for plotting)
+function betaPDF(x, a, b) {
+  if (x <= 0 || x >= 1) return 0;
+  return Math.exp((a - 1) * Math.log(x) + (b - 1) * Math.log(1 - x) - logBeta(a, b));
+}
+
+// Beta mean and variance
+function betaMean(a, b)     { return a / (a + b); }
+function betaVariance(a, b) { return (a * b) / ((a + b) ** 2 * (a + b + 1)); }
+
+// Numerical Beta quantile via bisection (for CI)
+function betaQuantile(p, a, b, lo = 0, hi = 1, tol = 1e-7) {
+  // Incomplete beta via regularised series — use bisection for simplicity
+  for (let i = 0; i < 60; i++) {
+    const mid = (lo + hi) / 2;
+    if (incompleteBeta(mid, a, b) < p) lo = mid; else hi = mid;
+    if (hi - lo < tol) break;
+  }
+  return (lo + hi) / 2;
+}
+
+// Regularised incomplete beta I(x; a, b) via continued fraction (Lentz)
+function incompleteBeta(x, a, b) {
+  if (x <= 0) return 0;
+  if (x >= 1) return 1;
+  const lbeta = logBeta(a, b);
+  const front = Math.exp(a * Math.log(x) + b * Math.log(1 - x) - lbeta);
+  // Symmetry for efficiency
+  if (x > (a + 1) / (a + b + 2)) return 1 - incompleteBeta(1 - x, b, a);
+  const cf = betaCF(x, a, b);
+  return front * cf / a;
+}
+
+function betaCF(x, a, b) {
+  // Lentz method
+  const MAXIT = 200, EPS = 1e-12, FPMIN = 1e-30;
+  const qab = a + b, qap = a + 1, qam = a - 1;
+  let c = 1, d = 1 - qab * x / qap;
+  if (Math.abs(d) < FPMIN) d = FPMIN;
+  d = 1 / d;
+  let h = d;
+  for (let m = 1; m <= MAXIT; m++) {
+    const m2 = 2 * m;
+    let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+    d = 1 + aa * d; if (Math.abs(d) < FPMIN) d = FPMIN;
+    c = 1 + aa / c; if (Math.abs(c) < FPMIN) c = FPMIN;
+    d = 1 / d; h *= d * c;
+    aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+    d = 1 + aa * d; if (Math.abs(d) < FPMIN) d = FPMIN;
+    c = 1 + aa / c; if (Math.abs(c) < FPMIN) c = FPMIN;
+    d = 1 / d;
+    const del = d * c;
+    h *= del;
+    if (Math.abs(del - 1) < EPS) break;
+  }
+  return h;
+}
+
+function fmt2(x) { return x.toFixed(4); }
+function fmt3(x) { return x.toFixed(3); }
+
+// ─────────────────────────────────────────────────────────
+// BETA DISTRIBUTION SIMULATION
+// ─────────────────────────────────────────────────────────
+
+const betaControls = {
+  a0: document.getElementById('beta-a0'),
+  b0: document.getElementById('beta-b0'),
+  s:  document.getElementById('beta-s'),
+  f:  document.getElementById('beta-f'),
+};
+const betaVals = {
+  a0: document.getElementById('beta-a0-val'),
+  b0: document.getElementById('beta-b0-val'),
+  s:  document.getElementById('beta-s-val'),
+  f:  document.getElementById('beta-f-val'),
+};
+
+function drawBeta() {
+  const a0 = +betaControls.a0.value;
+  const b0 = +betaControls.b0.value;
+  const s  = +betaControls.s.value;
+  const f  = +betaControls.f.value;
+
+  betaVals.a0.textContent = a0;
+  betaVals.b0.textContent = b0;
+  betaVals.s.textContent  = s;
+  betaVals.f.textContent  = f;
+
+  const aPrior = a0, bPrior = b0;
+  const aPost  = a0 + s, bPost = b0 + f;
+
+  document.getElementById('beta-prior-mean').textContent = fmt2(betaMean(aPrior, bPrior));
+  document.getElementById('beta-post-a').textContent     = aPost;
+  document.getElementById('beta-post-b').textContent     = bPost;
+  document.getElementById('beta-post-mean').textContent  = fmt2(betaMean(aPost, bPost));
+
+  try {
+    const lo = betaQuantile(0.025, aPost, bPost);
+    const hi = betaQuantile(0.975, aPost, bPost);
+    document.getElementById('beta-ci').textContent =
+      `[${(lo * 100).toFixed(2)}%, ${(hi * 100).toFixed(2)}%]`;
+  } catch { document.getElementById('beta-ci').textContent = '—'; }
+
+  // Canvas
+  const canvas = document.getElementById('beta-canvas');
+  const dpr    = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth || 700;
+  const H = 240;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const PAD = { top: 20, right: 20, bottom: 36, left: 48 };
+  const plotW = W - PAD.left - PAD.right;
+  const plotH = H - PAD.top - PAD.bottom;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const N = 400;
+  const xs = Array.from({length: N}, (_, i) => (i + 0.5) / N);
+
+  const priorY = xs.map(x => betaPDF(x, aPrior, bPrior));
+  const postY  = xs.map(x => betaPDF(x, aPost, bPost));
+
+  const maxY = Math.max(...priorY, ...postY, 0.1);
+
+  const toCanvasX = x => PAD.left + x * plotW;
+  const toCanvasY = y => PAD.top + (1 - y / maxY) * plotH;
+
+  // Axes
+  ctx.strokeStyle = '#e0ddd6';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD.left, PAD.top);
+  ctx.lineTo(PAD.left, PAD.top + plotH);
+  ctx.lineTo(PAD.left + plotW, PAD.top + plotH);
+  ctx.stroke();
+
+  // X ticks
+  ctx.fillStyle = '#888';
+  ctx.font = `10px 'IBM Plex Mono', monospace`;
+  ctx.textAlign = 'center';
+  [0, 0.25, 0.5, 0.75, 1.0].forEach(v => {
+    const cx = toCanvasX(v);
+    ctx.fillText(v.toFixed(2), cx, PAD.top + plotH + 16);
+  });
+
+  // Prior curve (dashed, grey)
+  ctx.beginPath();
+  ctx.setLineDash([4, 4]);
+  ctx.strokeStyle = '#aaa';
+  ctx.lineWidth = 1.5;
+  xs.forEach((x, i) => {
+    const cx = toCanvasX(x), cy = toCanvasY(priorY[i]);
+    i === 0 ? ctx.moveTo(cx, cy) : ctx.lineTo(cx, cy);
+  });
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Posterior curve (solid, red)
+  ctx.beginPath();
+  ctx.strokeStyle = '#c0392b';
+  ctx.lineWidth = 2;
+  xs.forEach((x, i) => {
+    const cx = toCanvasX(x), cy = toCanvasY(postY[i]);
+    i === 0 ? ctx.moveTo(cx, cy) : ctx.lineTo(cx, cy);
+  });
+  ctx.stroke();
+
+  // Fill under posterior
+  ctx.beginPath();
+  ctx.fillStyle = 'rgba(192,57,43,0.08)';
+  ctx.moveTo(toCanvasX(xs[0]), toCanvasY(0));
+  xs.forEach((x, i) => ctx.lineTo(toCanvasX(x), toCanvasY(postY[i])));
+  ctx.lineTo(toCanvasX(xs[N - 1]), toCanvasY(0));
+  ctx.closePath();
+  ctx.fill();
+
+  // Legend
+  ctx.font = `10px 'IBM Plex Mono', monospace`;
+  ctx.textAlign = 'left';
+  ctx.setLineDash([4, 4]);
+  ctx.strokeStyle = '#aaa'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(W - 120, 28); ctx.lineTo(W - 98, 28); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(W - 120, 44); ctx.lineTo(W - 98, 44); ctx.stroke();
+  ctx.fillStyle = '#444';
+  ctx.fillText('Prior', W - 93, 32);
+  ctx.fillText('Posterior', W - 93, 48);
+
+  // X axis label
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#888';
+  ctx.font = `10px 'IBM Plex Mono', monospace`;
+  ctx.fillText('θ (conversion rate)', PAD.left + plotW / 2, H - 4);
+}
+
+Object.values(betaControls).forEach(el => el.addEventListener('input', drawBeta));
+window.addEventListener('resize', drawBeta);
+drawBeta();
+
+// ─────────────────────────────────────────────────────────
+// HILL FUNCTION SIMULATION
+// ─────────────────────────────────────────────────────────
+
+const hillControls = {
+  ec50:  document.getElementById('hill-ec50'),
+  alpha: document.getElementById('hill-alpha'),
+  spend: document.getElementById('hill-spend'),
+};
+const hillVals = {
+  ec50:  document.getElementById('hill-ec50-val'),
+  alpha: document.getElementById('hill-alpha-val'),
+  spend: document.getElementById('hill-spend-val'),
+};
+
+function hillFn(s, ec50, alpha) {
+  if (s <= 0) return 0;
+  return Math.pow(s, alpha) / (Math.pow(ec50, alpha) + Math.pow(s, alpha));
+}
+
+// Marginal ROI ≈ derivative of Hill(s) w.r.t. s
+function hillMarginal(s, ec50, alpha) {
+  const eps = 0.1;
+  // Use symmetric finite difference for numerical derivative
+  const sLo = Math.max(eps, s - eps);
+  return (hillFn(s + eps, ec50, alpha) - hillFn(sLo, ec50, alpha)) / (s + eps - sLo);
+}
+
+function drawHill() {
+  const ec50  = +hillControls.ec50.value;
+  const alpha = +hillControls.alpha.value;
+  const spend = +hillControls.spend.value;
+
+  hillVals.ec50.textContent  = ec50;
+  hillVals.alpha.textContent = alpha.toFixed(1);
+  hillVals.spend.textContent = spend;
+
+  const hAtSpend  = hillFn(spend, ec50, alpha);
+  const mroi      = hillMarginal(spend, ec50, alpha);
+
+  document.getElementById('hill-h').textContent    = hAtSpend.toFixed(4);
+  document.getElementById('hill-mroi').textContent = mroi.toFixed(5);
+  document.getElementById('hill-pct').textContent  = (hAtSpend * 100).toFixed(1) + '%';
+
+  // Canvas
+  const canvas = document.getElementById('hill-canvas');
+  const dpr    = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth || 700;
+  const H = 260;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const PAD = { top: 20, right: 20, bottom: 36, left: 52 };
+  const plotW = W - PAD.left - PAD.right;
+  const plotH = H - PAD.top - PAD.bottom;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const maxS = Math.max(ec50 * 3, spend * 1.5, 100);
+  const N = 400;
+  const xs = Array.from({length: N}, (_, i) => (i / (N - 1)) * maxS);
+  const ys = xs.map(x => hillFn(x, ec50, alpha));
+
+  const toX = x => PAD.left + (x / maxS) * plotW;
+  const toY = y => PAD.top + (1 - y) * plotH;
+
+  // Axes
+  ctx.strokeStyle = '#e0ddd6'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD.left, PAD.top);
+  ctx.lineTo(PAD.left, PAD.top + plotH);
+  ctx.lineTo(PAD.left + plotW, PAD.top + plotH);
+  ctx.stroke();
+
+  // Grid line at H = 0.5 (EC50 level)
+  ctx.setLineDash([3, 3]); ctx.strokeStyle = '#ccc'; ctx.lineWidth = 0.75;
+  ctx.beginPath();
+  ctx.moveTo(PAD.left, toY(0.5));
+  ctx.lineTo(PAD.left + plotW, toY(0.5));
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#bbb'; ctx.font = `9px 'IBM Plex Mono', monospace`;
+  ctx.textAlign = 'left';
+  ctx.fillText('H = 0.5', PAD.left + 4, toY(0.5) - 3);
+
+  // X ticks
+  ctx.fillStyle = '#888'; ctx.font = `10px 'IBM Plex Mono', monospace`;
+  ctx.textAlign = 'center';
+  const xTickCount = 5;
+  for (let i = 0; i <= xTickCount; i++) {
+    const v = (i / xTickCount) * maxS;
+    const cx = toX(v);
+    ctx.fillText(Math.round(v), cx, PAD.top + plotH + 16);
+  }
+
+  // Y ticks
+  ctx.textAlign = 'right';
+  [0, 0.25, 0.5, 0.75, 1.0].forEach(v => {
+    const cy = toY(v);
+    ctx.fillText(v.toFixed(2), PAD.left - 6, cy + 4);
+  });
+
+  // Hill curve fill
+  ctx.beginPath();
+  ctx.fillStyle = 'rgba(26,68,102,0.07)';
+  ctx.moveTo(toX(0), toY(0));
+  xs.forEach((x, i) => ctx.lineTo(toX(x), toY(ys[i])));
+  ctx.lineTo(toX(maxS), toY(0));
+  ctx.closePath(); ctx.fill();
+
+  // Hill curve line
+  ctx.beginPath();
+  ctx.strokeStyle = '#1a4466'; ctx.lineWidth = 2;
+  xs.forEach((x, i) => {
+    const cx = toX(x), cy = toY(ys[i]);
+    i === 0 ? ctx.moveTo(cx, cy) : ctx.lineTo(cx, cy);
+  });
+  ctx.stroke();
+
+  // EC50 vertical marker
+  ctx.setLineDash([4, 4]); ctx.strokeStyle = '#888'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(toX(ec50), PAD.top);
+  ctx.lineTo(toX(ec50), PAD.top + plotH);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#888'; ctx.font = `9px 'IBM Plex Mono', monospace`;
+  ctx.textAlign = 'center';
+  ctx.fillText('EC50', toX(ec50), PAD.top + 12);
+
+  // Current spend vertical marker + dot
+  if (spend > 0 && spend <= maxS) {
+    const hS = hillFn(spend, ec50, alpha);
+    ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(toX(spend), toY(0));
+    ctx.lineTo(toX(spend), toY(hS));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Dot at (spend, H(spend))
+    ctx.beginPath();
+    ctx.fillStyle = '#c0392b';
+    ctx.arc(toX(spend), toY(hS), 5, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Tangent line (marginal ROI slope)
+    const slope = mroi;
+    const dsRange = maxS * 0.1;
+    const x1 = spend - dsRange, x2 = spend + dsRange;
+    const cs = 1 / maxS * plotW;  // canvas units per spend unit
+    const tangY1 = toY(hS) + slope * cs * (x1 - spend) * -1;
+    const tangY2 = toY(hS) + slope * cs * (x2 - spend) * -1;
+    // Clip to plot area
+    if (tangY1 > PAD.top && tangY2 > PAD.top && tangY1 < PAD.top + plotH && tangY2 < PAD.top + plotH) {
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(192,57,43,0.5)'; ctx.lineWidth = 1;
+      ctx.moveTo(toX(x1), tangY1);
+      ctx.lineTo(toX(x2), tangY2);
+      ctx.stroke();
+    }
+  }
+
+  // Axis labels
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#888'; ctx.font = `10px 'IBM Plex Mono', monospace`;
+  ctx.fillText('spend', PAD.left + plotW / 2, H - 4);
+
+  ctx.save();
+  ctx.translate(14, PAD.top + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('H(spend)', 0, 0);
+  ctx.restore();
+}
+
+Object.values(hillControls).forEach(el => el.addEventListener('input', drawHill));
+window.addEventListener('resize', drawHill);
+drawHill();
+</script>
+</body>
+</html>

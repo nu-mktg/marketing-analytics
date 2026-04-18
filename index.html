@@ -250,8 +250,17 @@ footer {
 @media (max-width: 600px) {
   .masthead { grid-template-columns: 1fr; }
   .masthead-meta { text-align: left; }
-  .module-row { grid-template-columns: 2rem 1fr; }
-  .mod-links { display: none; }
+  .page { padding: 1rem 1rem 4rem; }
+  .module-row {
+    grid-template-columns: 2rem 1fr;
+    grid-template-rows: auto auto;
+  }
+  .mod-links {
+    grid-column: 2;
+    justify-content: flex-start;
+    padding-top: 0.35rem;
+    flex-wrap: wrap;
+  }
 }
 </style>
 </head>
@@ -287,11 +296,6 @@ footer {
 </div>
 
 <!-- MODULES -->
-<div class="sec">
-  <span class="sec-num">01</span>
-  <h2>Weekly Modules</h2>
-</div>
-
 <div class="sec">
   <span class="sec-num">01</span>
   <h2>Weekly Modules</h2>
@@ -473,6 +477,10 @@ footer {
 </div>
 
 <div class="ref-grid">
+  <a class="ref-card" href="simulations.html">
+    <div class="ref-card-title">Interactive Simulations</div>
+    <div class="ref-card-sub">Beta distribution explorer · Hill function saturation curve · Adjust parameters live</div>
+  </a>
   <a class="ref-card" href="md-viewer.html?file=student/model_reference_card.md">
     <div class="ref-card-title">Model Reference Card</div>
     <div class="ref-card-sub">All 14 models: estimand, formula, assumptions, decision tree</div>

@@ -169,10 +169,24 @@ mjx-container[display="true"] { margin: 1.2rem 0 !important; }
     // ── Step 1: extract math blocks BEFORE marked touches them ──
     // marked will escape backslashes inside code spans etc., which breaks LaTeX.
     // We replace every math region with a placeholder, run marked, then restore.
+    //
+    // Dollar-sign protection strategy:
+    //   a) \$ (escaped dollar, currency) → placeholder, then restore as literal $
+    //   b) $N (dollar followed by digit, currency) → placeholder, restore as $N
+    //   c) $$...$$ and $...$ (actual LaTeX) → converted to MathJax delimiters
     const stash = [];
     const tag   = (i) => `\x00MATH${i}\x00`;  // null-byte delimited — safe from markdown
 
-    let safe = md
+    // First, protect escaped currency: \$ → placeholder
+    const escapedDollar = '\x00ESDOLLAR\x00';
+    let safe = md.replace(/\\\$/g, escapedDollar);
+
+    // Also protect bare $N patterns (currency like $18, $3.5B, $100k)
+    // These are $ followed by a digit — not valid LaTeX math starts in this context.
+    // We only replace the $ sign itself; the digits remain in place.
+    safe = safe.replace(/\$(?=\d)/g, '\x00DOLLAR\x00');
+
+    safe = safe
       // Display math: $$...$$ (multiline)
       .replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => {
         stash.push(`\\[${tex}\\]`);
@@ -195,8 +209,10 @@ mjx-container[display="true"] { margin: 1.2rem 0 !important; }
     // ── Step 3: parse markdown ──
     let html = marked.parse(safe);
 
-    // ── Step 4: restore math placeholders ──
+    // ── Step 4: restore math placeholders and currency tokens ──
     html = html.replace(/\x00MATH(\d+)\x00/g, (_, i) => stash[parseInt(i)]);
+    html = html.replace(/\x00DOLLAR\x00/g, '$');
+    html = html.replace(/\x00ESDOLLAR\x00/g, '$');
 
     // ── Step 5: render ──
     loading.style.display = 'none';

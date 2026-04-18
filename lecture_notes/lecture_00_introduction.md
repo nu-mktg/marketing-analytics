@@ -12,7 +12,7 @@ before next class.
 **By the end of this session you should:**
 - Understand the course philosophy and what distinguishes analytical judgment from
   analytical execution
-- Know the 10 models covered and how they connect to real business decisions
+- Know the 14 models covered and how they connect to real business decisions
 - Have a working GitHub Codespace running a Jupyter notebook
 - Have submitted your first homework (a technology setup verification)
 
@@ -67,7 +67,7 @@ interpretation questions where collaboration is encouraged (manager track).
 
 ### 1.3 The Course Structure
 
-Ten lectures. Each covers one model. The order follows mathematical dependency:
+Fourteen lectures. Each covers one model. The order follows mathematical dependency:
 each model builds on concepts from previous ones.
 
 | Lecture | Model | Core question answered |
@@ -82,8 +82,12 @@ each model builds on concepts from previous ones.
 | 8 | Customer Lifetime Value | How much is a customer worth — and are they still there? |
 | 9 | Conjoint Analysis | What do customers value — and how much will they pay? |
 | 10 | Demand Forecasting | Where is our business heading? |
+| 11 | Synthesis & Capstone | How do the models fit together into a decision framework? |
+| 12 | Difference-in-Differences | Can we establish causation from observational data? |
+| 13 | Customer Segmentation | How do we group customers to target them differently? |
+| 14 | CausalImpact | Did our marketing campaign actually cause the revenue lift? |
 
-**The thread connecting all 10:** Every model addresses uncertainty about customer
+**The thread connecting all 14:** Every model addresses uncertainty about customer
 behavior. Every model requires judgment about when it applies and when it doesn't.
 None of them is a black box you can trust blindly.
 
@@ -93,9 +97,9 @@ None of them is a black box you can trust blindly.
 
 | Component | Weight | Description |
 |---|---|---|
-| Homework (10 × individual) | 50% | Part A autograded; Parts B+C autograded |
-| Quiz 1 (after L05) | 5% | 20 T/F questions, Bayesian confidence scoring |
-| Quiz 2 (after L10) | 5% | 20 T/F questions, Bayesian confidence scoring |
+| Homework (14 × individual) | 50% | Part A autograded; Parts B+C autograded |
+| Quiz 1 (after L06) | 5% | 20 T/F questions, Bayesian confidence scoring |
+| Quiz 2 (after L12) | 5% | 20 T/F questions, Bayesian confidence scoring |
 | Intensive Day | 20% | FitLoop case: six model outputs, group presentations |
 | Checkpoints (in-class) | 20% | Participation credit; 5 questions per session |
 
@@ -305,8 +309,6 @@ e^{\beta^\top x}   % superscript
 | Platform | LaTeX support | Recommended use |
 |---|---|---|
 | **Jupyter notebook** | ✅ Native — type `$formula$` in a Markdown cell | Homework work, derivations |
-| **Obsidian** (free app) | ✅ Native rendering, live preview | Personal study notes |
-| **VS Code** + Markdown Preview Enhanced | ✅ With extension | Lecture notes, documents |
 | **Overleaf** (browser) | ✅ Native, collaborative | Polished reports |
 | **GitHub README** | ✅ Partial (display math only) | Documentation |
 
@@ -337,17 +339,11 @@ After this practice session, you will be fluent enough for everything in this co
 
 ---
 
-### 2.7 Recommended Tools Summary
+### 2.7 Required Tools Summary
 
 **Required (free):**
 - GitHub account at github.com
 - GitHub Codespaces (accessed through GitHub — no installation)
-
-**Strongly recommended for studying and note-taking:**
-- **Obsidian** (obsidian.md) — free desktop app, renders LaTeX, files are plain `.md`
-  - Ideal for personal study notes that persist across the course
-  - Set up: download, create a vault folder, enable the "MathJax" plugin in Settings
-- **Zotero** (zotero.org) — free reference manager if you want to track readings
 
 **Optional (for those who want to go deeper):**
 - **Quarto** (quarto.org) — builds on R Markdown to create slides, PDFs, and HTML documents
