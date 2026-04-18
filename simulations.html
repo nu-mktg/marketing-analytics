@@ -159,6 +159,18 @@ canvas {
   .controls { gap: 1rem; }
   .ctrl { min-width: 120px; }
 }
+
+/* Formula reference blocks */
+.formula {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--ink2);
+  background: var(--mono-bg);
+  padding: 0.5rem 0.9rem;
+  margin-bottom: 1rem;
+  border-left: 3px solid var(--rule);
+  line-height: 1.8;
+}
 </style>
 </head>
 <body>
@@ -170,7 +182,7 @@ canvas {
 <div class="page">
 
 <h1>Interactive Simulations</h1>
-<p class="page-sub">Explore the Beta distribution and Hill function before and during homework</p>
+<p class="page-sub">Explore the Beta distribution, Hill function, survival curves, CLV distributions, and Fourier seasonality</p>
 
 <!-- ══════════════════════════════════════════════════════ -->
 <!-- SIMULATION 1: Beta Distribution Explorer               -->
@@ -184,12 +196,18 @@ canvas {
 
   <div class="sim-body">
 
+    <div class="formula">
+      PDF: f(θ | α, β) = θ<sup>α−1</sup>(1−θ)<sup>β−1</sup> / B(α, β) &nbsp;&nbsp; where B(α,β) = Γ(α)Γ(β)/Γ(α+β)<br>
+      Prior: θ ~ Beta(α₀, β₀) &nbsp;&nbsp; Posterior: θ | data ~ Beta(α₀ + s, β₀ + f)<br>
+      Mean = α/(α+β)
+    </div>
+
     <!-- Prior controls -->
     <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);margin-bottom:.6rem;">Prior Parameters</div>
     <div class="controls">
       <div class="ctrl">
         <label>α₀ (prior successes) <span class="val" id="beta-a0-val">2</span></label>
-        <input type="range" id="beta-a0" min="1" max="50" step="1" value="2">
+        <input type="range" id="beta-a0" min="1" max="100" step="1" value="2">
       </div>
       <div class="ctrl">
         <label>β₀ (prior failures) <span class="val" id="beta-b0-val">8</span></label>
@@ -251,6 +269,11 @@ canvas {
 
   <div class="sim-body">
 
+    <div class="formula">
+      H(s) = s<sup>n</sup> / (EC50<sup>n</sup> + s<sup>n</sup>)<br>
+      EC50 = spend level at which response = 0.5 (half-maximum) &nbsp;&nbsp; n = Hill exponent / shape parameter (n=1 → hyperbolic, n&gt;1 → sigmoidal)
+    </div>
+
     <div class="controls">
       <div class="ctrl">
         <label>EC50 (saturation point) <span class="val" id="hill-ec50-val">150</span></label>
@@ -285,10 +308,189 @@ canvas {
         <span class="stat-label">% of max response used</span>
         <span class="stat-val" id="hill-pct">—</span>
       </div>
+      <div class="stat">
+        <span class="stat-label">Tangent line slope</span>
+        <span class="stat-val" id="hill-tangent-note">= marginal ROI at spend</span>
+      </div>
     </div>
 
   </div>
 </div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SIMULATION 3: Survival Analysis Explorer               -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="sim-section">
+  <h2>Survival Analysis Explorer — Lecture 4</h2>
+  <p>
+    Adjust the hazard rate λ and the Weibull shape parameter k to see how survival curves and hazard functions change.
+    When k = 1 the model reduces to the exponential (constant hazard). k &gt; 1 means increasing hazard over time (burn-in / aging);
+    k &lt; 1 means decreasing hazard (early attrition). Relevant to Homework 4: churn prediction.
+  </p>
+
+  <div class="sim-body">
+
+    <div class="formula">
+      Exponential (k = 1): S(t) = e<sup>−λt</sup>,  h(t) = λ (constant)<br>
+      Weibull: S(t) = exp(−(λt)<sup>k</sup>),  h(t) = kλ(λt)<sup>k−1</sup><br>
+      Median survival: t<sub>½</sub> = (ln 2)<sup>1/k</sup> / λ
+    </div>
+
+    <div class="controls">
+      <div class="ctrl">
+        <label>λ (hazard / scale) <span class="val" id="surv-lambda-val">0.10</span></label>
+        <input type="range" id="surv-lambda" min="0.01" max="0.50" step="0.01" value="0.10">
+      </div>
+      <div class="ctrl">
+        <label>k (Weibull shape) <span class="val" id="surv-k-val">1.0</span></label>
+        <input type="range" id="surv-k" min="0.3" max="4.0" step="0.1" value="1.0">
+      </div>
+    </div>
+
+    <canvas id="surv-canvas" height="240"></canvas>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-label">Model type</span>
+        <span class="stat-val" id="surv-model">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Median survival</span>
+        <span class="stat-val" id="surv-median">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">S(t = 6)</span>
+        <span class="stat-val" id="surv-s6">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">S(t = 12)</span>
+        <span class="stat-val" id="surv-s12">—</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SIMULATION 4: BG/NBD Distribution Explorer             -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="sim-section">
+  <h2>Distribution Explorer (Poisson &amp; Gamma) — Lecture 8 (BG/NBD)</h2>
+  <p>
+    The BG/NBD model assumes each customer's purchases follow a Poisson process with rate λ,
+    and that λ varies across customers according to a Gamma distribution.
+    Explore how the distribution shapes change with the parameters.
+    Relevant to Homework 8: Customer Lifetime Value modeling.
+  </p>
+
+  <div class="sim-body">
+
+    <div class="formula">
+      Poisson PMF:  P(X = k) = e<sup>−λ</sup> · λ<sup>k</sup> / k!  &nbsp;&nbsp; (purchase counts per period)<br>
+      Gamma PDF:    f(x; r, α) = α<sup>r</sup> · x<sup>r−1</sup> · e<sup>−αx</sup> / Γ(r) &nbsp;&nbsp; (α = rate parameter; heterogeneity in λ)<br>
+      Gamma mean = r/α &nbsp;&nbsp; Gamma variance = r/α²  &nbsp;&nbsp; (BG/NBD default: r=0.85, α=8.2 → mean rate ≈ 0.10/period)
+    </div>
+
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);margin-bottom:.6rem;">Poisson Distribution</div>
+    <div class="controls">
+      <div class="ctrl">
+        <label>λ (purchase rate) <span class="val" id="pois-lambda-val">3.0</span></label>
+        <input type="range" id="pois-lambda" min="0.5" max="15" step="0.5" value="3.0">
+      </div>
+    </div>
+
+    <canvas id="pois-canvas" height="200"></canvas>
+
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);margin-bottom:.6rem;margin-top:1.5rem;">Gamma Distribution (Heterogeneity in Purchase Rate)</div>
+    <div class="controls">
+      <div class="ctrl">
+        <label>r (shape) <span class="val" id="gamma-r-val">0.85</span></label>
+        <input type="range" id="gamma-r" min="0.2" max="5.0" step="0.05" value="0.85">
+      </div>
+      <div class="ctrl">
+        <label>α (rate) <span class="val" id="gamma-alpha-val">8.2</span></label>
+        <input type="range" id="gamma-alpha" min="0.5" max="20" step="0.1" value="8.2">
+      </div>
+    </div>
+
+    <canvas id="gamma-canvas" height="200"></canvas>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-label">Poisson mean (λ)</span>
+        <span class="stat-val" id="pois-mean-val">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Gamma mean (r/α)</span>
+        <span class="stat-val" id="gamma-mean-val">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Gamma variance (r/α²)</span>
+        <span class="stat-val" id="gamma-var-val">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Gamma mode ((r−1)/α, r≥1; else 0)</span>
+        <span class="stat-val" id="gamma-mode-val">—</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SIMULATION 5: Fourier / Seasonal Decomposition         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="sim-section">
+  <h2>Fourier Seasonal Decomposition — Lecture 10 (Prophet)</h2>
+  <p>
+    Prophet models seasonality as a sum of sine and cosine waves (Fourier series).
+    Increase the number of harmonics to see how additional terms create more detailed seasonal patterns.
+    The thick line is the total signal (trend + seasonality); coloured thin lines show individual harmonic components.
+    Relevant to Homework 10: Demand forecasting with Prophet.
+  </p>
+
+  <div class="sim-body">
+
+    <div class="formula">
+      y(t) = trend(t) + Σ<sub>n=1..N</sub> [ a<sub>n</sub> cos(2πnt/P) + b<sub>n</sub> sin(2πnt/P) ] + ε<br>
+      P = seasonal period (52 weeks),  N = number of Fourier harmonics<br>
+      More harmonics → finer detail; fewer harmonics → smoother seasonal curve
+    </div>
+
+    <div class="controls">
+      <div class="ctrl">
+        <label>N harmonics <span class="val" id="fourier-n-val">1</span></label>
+        <input type="range" id="fourier-n" min="1" max="6" step="1" value="1">
+      </div>
+      <div class="ctrl">
+        <label>Trend slope (per week) <span class="val" id="fourier-trend-val">2.0</span></label>
+        <input type="range" id="fourier-trend" min="-5" max="10" step="0.5" value="2.0">
+      </div>
+    </div>
+
+    <canvas id="fourier-canvas" height="300"></canvas>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-label">Harmonics shown</span>
+        <span class="stat-val" id="fourier-harmonics-val">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Seasonal amplitude</span>
+        <span class="stat-val" id="fourier-amp-val">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Peak week (approx.)</span>
+        <span class="stat-val" id="fourier-peak-val">—</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
 </div><!-- /page -->
 
@@ -471,7 +673,26 @@ function drawBeta() {
     ctx.fillText(v.toFixed(2), cx, PAD.top + plotH + 16);
   });
 
-  // Prior curve (dashed, grey)
+  // Posterior fill
+  ctx.beginPath();
+  ctx.fillStyle = 'rgba(192,57,43,0.08)';
+  ctx.moveTo(toCanvasX(xs[0]), toCanvasY(0));
+  xs.forEach((x, i) => ctx.lineTo(toCanvasX(x), toCanvasY(postY[i])));
+  ctx.lineTo(toCanvasX(xs[N - 1]), toCanvasY(0));
+  ctx.closePath();
+  ctx.fill();
+
+  // Posterior curve (solid, red) — drawn first so prior renders on top when they overlap
+  ctx.beginPath();
+  ctx.strokeStyle = '#c0392b';
+  ctx.lineWidth = 2;
+  xs.forEach((x, i) => {
+    const cx = toCanvasX(x), cy = toCanvasY(postY[i]);
+    i === 0 ? ctx.moveTo(cx, cy) : ctx.lineTo(cx, cy);
+  });
+  ctx.stroke();
+
+  // Prior curve (dashed, grey) — drawn AFTER posterior so it stays visible when curves overlap
   ctx.beginPath();
   ctx.setLineDash([4, 4]);
   ctx.strokeStyle = '#aaa';
@@ -482,25 +703,6 @@ function drawBeta() {
   });
   ctx.stroke();
   ctx.setLineDash([]);
-
-  // Posterior curve (solid, red)
-  ctx.beginPath();
-  ctx.strokeStyle = '#c0392b';
-  ctx.lineWidth = 2;
-  xs.forEach((x, i) => {
-    const cx = toCanvasX(x), cy = toCanvasY(postY[i]);
-    i === 0 ? ctx.moveTo(cx, cy) : ctx.lineTo(cx, cy);
-  });
-  ctx.stroke();
-
-  // Fill under posterior
-  ctx.beginPath();
-  ctx.fillStyle = 'rgba(192,57,43,0.08)';
-  ctx.moveTo(toCanvasX(xs[0]), toCanvasY(0));
-  xs.forEach((x, i) => ctx.lineTo(toCanvasX(x), toCanvasY(postY[i])));
-  ctx.lineTo(toCanvasX(xs[N - 1]), toCanvasY(0));
-  ctx.closePath();
-  ctx.fill();
 
   // Legend
   ctx.font = `10px 'IBM Plex Mono', monospace`;
@@ -514,6 +716,14 @@ function drawBeta() {
   ctx.fillStyle = '#444';
   ctx.fillText('Prior', W - 93, 32);
   ctx.fillText('Posterior', W - 93, 48);
+
+  // Note when prior = posterior
+  if (s === 0 && f === 0) {
+    ctx.font = `9px 'IBM Plex Mono', monospace`;
+    ctx.fillStyle = '#888';
+    ctx.textAlign = 'center';
+    ctx.fillText('(s = 0, f = 0 → prior = posterior)', PAD.left + plotW / 2, PAD.top + 14);
+  }
 
   // X axis label
   ctx.textAlign = 'center';
@@ -586,7 +796,9 @@ function drawHill() {
 
   ctx.clearRect(0, 0, W, H);
 
-  const maxS = Math.max(ec50 * 3, spend * 1.5, 100);
+  // Fixed axis range (independent of EC50) so the EC50 line clearly moves as the slider changes.
+  // 800 gives comfortable headroom for EC50 up to its slider max of 500.
+  const maxS = Math.max(800, spend * 1.1);
   const N = 400;
   const xs = Array.from({length: N}, (_, i) => (i / (N - 1)) * maxS);
   const ys = xs.map(x => hillFn(x, ec50, alpha));
@@ -674,21 +886,24 @@ function drawHill() {
     ctx.arc(toX(spend), toY(hS), 5, 0, 2 * Math.PI);
     ctx.fill();
 
-    // Tangent line (marginal ROI slope)
+    // Tangent line (marginal ROI slope) — shows the instantaneous slope = marginal return
     const slope = mroi;
-    const dsRange = maxS * 0.1;
+    const dsRange = maxS * 0.08;
     const x1 = spend - dsRange, x2 = spend + dsRange;
     const cs = 1 / maxS * plotW;  // canvas units per spend unit
     const tangY1 = toY(hS) + slope * cs * (x1 - spend) * -1;
     const tangY2 = toY(hS) + slope * cs * (x2 - spend) * -1;
-    // Clip to plot area
-    if (tangY1 > PAD.top && tangY2 > PAD.top && tangY1 < PAD.top + plotH && tangY2 < PAD.top + plotH) {
-      ctx.beginPath();
-      ctx.strokeStyle = 'rgba(192,57,43,0.5)'; ctx.lineWidth = 1;
-      ctx.moveTo(toX(x1), tangY1);
-      ctx.lineTo(toX(x2), tangY2);
-      ctx.stroke();
-    }
+    const tY1clamp = Math.max(PAD.top, Math.min(PAD.top + plotH, tangY1));
+    const tY2clamp = Math.max(PAD.top, Math.min(PAD.top + plotH, tangY2));
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(192,57,43,0.5)'; ctx.lineWidth = 1;
+    ctx.moveTo(toX(x1), tY1clamp);
+    ctx.lineTo(toX(x2), tY2clamp);
+    ctx.stroke();
+    // Label the tangent line
+    ctx.fillStyle = 'rgba(192,57,43,0.7)'; ctx.font = `8px 'IBM Plex Mono', monospace`;
+    ctx.textAlign = 'left';
+    ctx.fillText('← tangent (marginal ROI)', toX(x2) + 4, toY(hS) - 2);
   }
 
   // Axis labels
@@ -706,6 +921,487 @@ function drawHill() {
 Object.values(hillControls).forEach(el => el.addEventListener('input', drawHill));
 window.addEventListener('resize', drawHill);
 drawHill();
+
+// ─────────────────────────────────────────────────────────
+// SURVIVAL ANALYSIS SIMULATION (Lecture 4)
+// ─────────────────────────────────────────────────────────
+
+function drawSurv() {
+  const lambda = +document.getElementById('surv-lambda').value;
+  const k      = +document.getElementById('surv-k').value;
+
+  document.getElementById('surv-lambda-val').textContent = lambda.toFixed(2);
+  document.getElementById('surv-k-val').textContent      = k.toFixed(1);
+
+  // Weibull survival: S(t) = exp(-(λt)^k)
+  function S(t) { return t <= 0 ? 1 : Math.exp(-Math.pow(lambda * t, k)); }
+  // Weibull hazard: h(t) = k·λ·(λt)^(k-1)
+  function h(t) { return k * lambda * Math.pow(lambda * Math.max(t, 1e-9), k - 1); }
+
+  // Median: (λ·t_m)^k = ln(2)  →  t_m = (ln2)^(1/k) / λ
+  const tMedian = Math.pow(Math.LN2, 1 / k) / lambda;
+
+  document.getElementById('surv-model').textContent =
+    Math.abs(k - 1) < 0.05 ? 'Exponential (k = 1, constant hazard)' :
+    k > 1 ? `Weibull k = ${k.toFixed(1)} — increasing hazard` :
+             `Weibull k = ${k.toFixed(1)} — decreasing hazard`;
+  document.getElementById('surv-median').textContent = tMedian.toFixed(2) + ' periods';
+  document.getElementById('surv-s6').textContent     = S(6).toFixed(4);
+  document.getElementById('surv-s12').textContent    = S(12).toFixed(4);
+
+  const canvas = document.getElementById('surv-canvas');
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.offsetWidth || 700;
+  const H   = 240;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const tMax = Math.max(24, Math.ceil(tMedian * 4));
+  const N    = 300;
+  const ts   = Array.from({length: N}, (_, i) => (i / (N - 1)) * tMax);
+
+  // ── Left panel: S(t) ──────────────────────────────────
+  const PAD_L = { top: 30, right: 12, bottom: 30, left: 48 };
+  const panelW = Math.floor((W - 20) / 2) - PAD_L.left - PAD_L.right;
+  const panelH = H - PAD_L.top - PAD_L.bottom;
+
+  const lX0  = PAD_L.left;                         // left edge of S(t) plot
+  const rX0  = PAD_L.left + panelW + PAD_L.right + 20 + PAD_L.left; // left edge of h(t) plot
+  const rPanelW = W - rX0 - PAD_L.right;
+
+  const toSX = t => lX0 + (t / tMax) * panelW;
+  const toSY = y => PAD_L.top + (1 - Math.max(0, Math.min(1, y))) * panelH;
+
+  // Hazard range (cap for display)
+  const hVals  = ts.slice(1).map(t => h(t));
+  const hMax   = Math.min(Math.max(...hVals), lambda * 5);
+  const toHX   = t => rX0 + (t / tMax) * rPanelW;
+  const toHY   = y => PAD_L.top + (1 - Math.max(0, Math.min(y, hMax)) / hMax) * panelH;
+
+  // Panel titles
+  ctx.font = `9px 'IBM Plex Mono', monospace`; ctx.textAlign = 'center'; ctx.fillStyle = '#666';
+  ctx.fillText('S(t) — Survival Probability', lX0 + panelW / 2, PAD_L.top - 12);
+  ctx.fillText('h(t) — Hazard Rate', rX0 + rPanelW / 2, PAD_L.top - 12);
+
+  function drawAxes(x0, pw) {
+    ctx.strokeStyle = '#e0ddd6'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x0, PAD_L.top);
+    ctx.lineTo(x0, PAD_L.top + panelH);
+    ctx.lineTo(x0 + pw, PAD_L.top + panelH);
+    ctx.stroke();
+    // X ticks
+    ctx.fillStyle = '#888'; ctx.font = `9px 'IBM Plex Mono', monospace`; ctx.textAlign = 'center';
+    [0, 0.25, 0.5, 0.75, 1].forEach(f => {
+      const tv = Math.round(f * tMax);
+      ctx.fillText(tv, x0 + f * pw, PAD_L.top + panelH + 14);
+    });
+    ctx.fillText('t', x0 + pw / 2, PAD_L.top + panelH + 27);
+  }
+  drawAxes(lX0, panelW);
+  drawAxes(rX0, rPanelW);
+
+  // S(t) — Y ticks
+  ctx.textAlign = 'right'; ctx.fillStyle = '#888'; ctx.font = `9px 'IBM Plex Mono', monospace`;
+  [0, 0.25, 0.5, 0.75, 1].forEach(v => ctx.fillText(v.toFixed(2), lX0 - 5, toSY(v) + 3));
+
+  // h(t) — Y ticks
+  [0, 0.25, 0.5, 0.75, 1].forEach(f => {
+    const v = f * hMax;
+    ctx.fillText(v.toFixed(3), rX0 - 5, toHY(v) + 3);
+  });
+
+  // Exponential reference (k=1, same λ) — grey dashed on S(t) panel
+  ctx.setLineDash([3, 3]); ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1.5; ctx.beginPath();
+  ts.forEach((t, i) => {
+    const y = Math.exp(-lambda * t);
+    i === 0 ? ctx.moveTo(toSX(t), toSY(y)) : ctx.lineTo(toSX(t), toSY(y));
+  });
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // Weibull S(t) — blue solid
+  ctx.strokeStyle = '#1a4466'; ctx.lineWidth = 2; ctx.beginPath();
+  ts.forEach((t, i) => {
+    i === 0 ? ctx.moveTo(toSX(t), toSY(S(t))) : ctx.lineTo(toSX(t), toSY(S(t)));
+  });
+  ctx.stroke();
+
+  // S(t) = 0.5 gridline + median marker
+  ctx.setLineDash([2, 3]); ctx.strokeStyle = '#ddd'; ctx.lineWidth = 0.75;
+  ctx.beginPath(); ctx.moveTo(lX0, toSY(0.5)); ctx.lineTo(lX0 + panelW, toSY(0.5)); ctx.stroke();
+  ctx.setLineDash([]);
+  if (tMedian <= tMax) {
+    ctx.setLineDash([3, 3]); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(toSX(tMedian), toSY(0.5)); ctx.lineTo(toSX(tMedian), PAD_L.top + panelH); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#c0392b'; ctx.font = `8px 'IBM Plex Mono', monospace`; ctx.textAlign = 'center';
+    ctx.fillText('t½', toSX(tMedian), PAD_L.top + panelH + 26);
+  }
+
+  // Legend S(t)
+  ctx.font = `8px 'IBM Plex Mono', monospace`; ctx.textAlign = 'left';
+  ctx.setLineDash([3, 3]); ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(lX0 + 4, PAD_L.top + 8); ctx.lineTo(lX0 + 20, PAD_L.top + 8); ctx.stroke();
+  ctx.setLineDash([]); ctx.strokeStyle = '#1a4466'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(lX0 + 4, PAD_L.top + 19); ctx.lineTo(lX0 + 20, PAD_L.top + 19); ctx.stroke();
+  ctx.fillStyle = '#444'; ctx.fillText('Exp (k=1)', lX0 + 23, PAD_L.top + 11);
+  ctx.fillText('Weibull', lX0 + 23, PAD_L.top + 22);
+
+  // Exponential reference h(t) — grey dashed flat line
+  ctx.setLineDash([3, 3]); ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(toHX(0), toHY(lambda)); ctx.lineTo(toHX(tMax), toHY(lambda)); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Weibull h(t) — green solid
+  ctx.strokeStyle = '#1a6640'; ctx.lineWidth = 2; ctx.beginPath();
+  let hStarted = false;
+  ts.forEach((t, i) => {
+    // Skip t=0 when k<1: h(0) → ∞ (singularity for decreasing-hazard Weibull),
+    // which would cause a near-vertical spike that distorts the y-axis scale.
+    if (i === 0 && k < 1) return;
+    const hy = h(t);
+    const cy = toHY(hy);
+    if (cy < PAD_L.top - 2) { hStarted = false; return; }
+    const cx = toHX(t);
+    if (!hStarted) { ctx.moveTo(cx, cy); hStarted = true; } else { ctx.lineTo(cx, cy); }
+  });
+  ctx.stroke();
+}
+
+document.getElementById('surv-lambda').addEventListener('input', drawSurv);
+document.getElementById('surv-k').addEventListener('input', drawSurv);
+window.addEventListener('resize', drawSurv);
+drawSurv();
+
+// ─────────────────────────────────────────────────────────
+// DISTRIBUTION EXPLORER — POISSON & GAMMA (Lecture 8)
+// ─────────────────────────────────────────────────────────
+
+function factorialLog(n) {
+  let s = 0;
+  for (let i = 2; i <= n; i++) s += Math.log(i);
+  return s;
+}
+
+function poissonPMF(k, lambda) {
+  if (k < 0) return 0;
+  return Math.exp(-lambda + k * Math.log(lambda) - factorialLog(k));
+}
+
+function gammaPDF(x, r, alpha) {
+  // alpha = rate parameter (inverse scale); consistent with BG/NBD notation: mean = r/alpha
+  if (x <= 0) return 0;
+  return Math.exp((r - 1) * Math.log(x) - alpha * x + r * Math.log(alpha) - logGamma(r));
+}
+
+function drawPoisson() {
+  const lambda = +document.getElementById('pois-lambda').value;
+  document.getElementById('pois-lambda-val').textContent = lambda.toFixed(1);
+  document.getElementById('pois-mean-val').textContent   = lambda.toFixed(2);
+
+  const canvas = document.getElementById('pois-canvas');
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.offsetWidth || 700;
+  const H   = 200;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const PAD = { top: 20, right: 20, bottom: 36, left: 52 };
+  const plotW = W - PAD.left - PAD.right;
+  const plotH = H - PAD.top - PAD.bottom;
+
+  // Bar chart for Poisson PMF — show k = 0..kMax
+  const kMax = Math.max(20, Math.ceil(lambda * 3));
+  const probs = Array.from({length: kMax + 1}, (_, k) => poissonPMF(k, lambda));
+  const maxP  = Math.max(...probs, 0.01);
+
+  const barW = plotW / (kMax + 1);
+  const toX  = k  => PAD.left + k * barW;
+  const toY  = p  => PAD.top  + (1 - p / maxP) * plotH;
+
+  // Axes
+  ctx.strokeStyle = '#e0ddd6'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD.left, PAD.top); ctx.lineTo(PAD.left, PAD.top + plotH);
+  ctx.lineTo(PAD.left + plotW, PAD.top + plotH); ctx.stroke();
+
+  // Bars
+  probs.forEach((p, k) => {
+    const x = toX(k);
+    const y = toY(p);
+    ctx.fillStyle = k === Math.round(lambda) ? '#1a4466' : 'rgba(26,68,102,0.35)';
+    ctx.fillRect(x + 1, y, barW - 2, PAD.top + plotH - y);
+  });
+
+  // X tick labels (every other bar if crowded)
+  ctx.fillStyle = '#888'; ctx.font = `9px 'IBM Plex Mono', monospace`; ctx.textAlign = 'center';
+  const step = kMax > 20 ? 5 : kMax > 12 ? 2 : 1;
+  for (let k = 0; k <= kMax; k += step) {
+    ctx.fillText(k, toX(k) + barW / 2, PAD.top + plotH + 14);
+  }
+  // Y ticks
+  ctx.textAlign = 'right';
+  [0, 0.5, 1].forEach(f => {
+    const v = f * maxP;
+    ctx.fillText(v.toFixed(3), PAD.left - 5, toY(v) + 3);
+  });
+
+  // Mean marker
+  const meanX = toX(lambda) + barW / 2;
+  ctx.setLineDash([3, 3]); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(meanX, PAD.top); ctx.lineTo(meanX, PAD.top + plotH); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#c0392b'; ctx.font = `9px 'IBM Plex Mono', monospace`; ctx.textAlign = 'center';
+  ctx.fillText('mean = λ', meanX, PAD.top + 10);
+
+  // Axis labels
+  ctx.fillStyle = '#888';
+  ctx.fillText('k (purchases per period)', PAD.left + plotW / 2, H - 4);
+  ctx.save(); ctx.translate(14, PAD.top + plotH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillText('P(X = k)', 0, 0); ctx.restore();
+}
+
+function drawGamma() {
+  const r     = +document.getElementById('gamma-r').value;
+  const alpha = +document.getElementById('gamma-alpha').value;
+
+  document.getElementById('gamma-r-val').textContent    = r.toFixed(2);
+  document.getElementById('gamma-alpha-val').textContent = alpha.toFixed(1);
+  document.getElementById('gamma-mean-val').textContent  = (r / alpha).toFixed(4);
+  document.getElementById('gamma-var-val').textContent   = (r / (alpha * alpha)).toFixed(5);
+  document.getElementById('gamma-mode-val').textContent  = r >= 1 ? ((r - 1) / alpha).toFixed(4) : '0 (r < 1)';
+
+  const canvas = document.getElementById('gamma-canvas');
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.offsetWidth || 700;
+  const H   = 200;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const PAD = { top: 20, right: 20, bottom: 36, left: 52 };
+  const plotW = W - PAD.left - PAD.right;
+  const plotH = H - PAD.top - PAD.bottom;
+
+  // Gamma PDF over reasonable range
+  const mean  = r / alpha;
+  const xMax  = mean + 5 * Math.sqrt(r / (alpha * alpha));
+  const N     = 400;
+  const xs    = Array.from({length: N}, (_, i) => (i + 0.5) / N * xMax);
+  const ys    = xs.map(x => gammaPDF(x, r, alpha));
+  const maxY  = Math.max(...ys, 0.01);
+
+  const toX = x => PAD.left + (x / xMax) * plotW;
+  const toY = y => PAD.top  + (1 - Math.min(y, maxY) / maxY) * plotH;
+
+  // Axes
+  ctx.strokeStyle = '#e0ddd6'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD.left, PAD.top); ctx.lineTo(PAD.left, PAD.top + plotH);
+  ctx.lineTo(PAD.left + plotW, PAD.top + plotH); ctx.stroke();
+
+  // Fill under curve
+  ctx.beginPath(); ctx.fillStyle = 'rgba(26,68,102,0.07)';
+  ctx.moveTo(toX(xs[0]), toY(0));
+  xs.forEach((x, i) => ctx.lineTo(toX(x), toY(ys[i])));
+  ctx.lineTo(toX(xs[N - 1]), toY(0)); ctx.closePath(); ctx.fill();
+
+  // Curve
+  ctx.beginPath(); ctx.strokeStyle = '#1a4466'; ctx.lineWidth = 2;
+  xs.forEach((x, i) => i === 0 ? ctx.moveTo(toX(x), toY(ys[i])) : ctx.lineTo(toX(x), toY(ys[i])));
+  ctx.stroke();
+
+  // Mean marker
+  ctx.setLineDash([3, 3]); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(toX(mean), PAD.top); ctx.lineTo(toX(mean), PAD.top + plotH); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#c0392b'; ctx.font = `9px 'IBM Plex Mono', monospace`; ctx.textAlign = 'center';
+  ctx.fillText('mean = r/α', toX(mean), PAD.top + 10);
+
+  // X ticks
+  ctx.fillStyle = '#888'; ctx.font = `9px 'IBM Plex Mono', monospace`; ctx.textAlign = 'center';
+  [0, 0.25, 0.5, 0.75, 1].forEach(f => {
+    const v = f * xMax;
+    ctx.fillText(v.toFixed(2), toX(v), PAD.top + plotH + 14);
+  });
+  ctx.textAlign = 'right';
+  [0, 0.5, 1].forEach(f => {
+    const v = f * maxY;
+    ctx.fillText(v.toFixed(2), PAD.left - 5, toY(v) + 3);
+  });
+
+  // Axis labels
+  ctx.fillStyle = '#888'; ctx.textAlign = 'center';
+  ctx.fillText('λ (purchase rate)', PAD.left + plotW / 2, H - 4);
+  ctx.save(); ctx.translate(14, PAD.top + plotH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillText('f(λ; r, α)', 0, 0); ctx.restore();
+}
+
+document.getElementById('pois-lambda').addEventListener('input', drawPoisson);
+document.getElementById('gamma-r').addEventListener('input', drawGamma);
+document.getElementById('gamma-alpha').addEventListener('input', drawGamma);
+window.addEventListener('resize', () => { drawPoisson(); drawGamma(); });
+drawPoisson();
+drawGamma();
+
+// ─────────────────────────────────────────────────────────
+// FOURIER SEASONAL DECOMPOSITION (Lecture 10)
+// ─────────────────────────────────────────────────────────
+
+// Typical retail seasonal Fourier coefficients (yearly, P=52 weeks)
+// These approximate a pattern with Q4 peak and summer dip
+const FOURIER_COEFS = [
+  { a: -4.2,  b: -18.5 },   // n=1: dominant annual wave (Q4 peak)
+  { a:  8.1,  b:   6.3 },   // n=2: semi-annual
+  { a:  2.8,  b:  -3.4 },   // n=3: quarterly
+  { a: -1.6,  b:   1.9 },   // n=4: sub-quarterly
+  { a:  0.9,  b:  -0.7 },   // n=5
+  { a: -0.4,  b:   0.5 },   // n=6
+];
+
+const FOURIER_COLORS = ['#c0392b', '#1a6640', '#1a4466', '#8e44ad', '#d35400', '#16a085'];
+
+function drawFourier() {
+  const N          = +document.getElementById('fourier-n').value;
+  const trendSlope = +document.getElementById('fourier-trend').value;
+
+  document.getElementById('fourier-n-val').textContent = N;
+  document.getElementById('fourier-trend-val').textContent = trendSlope.toFixed(1);
+
+  const P    = 52;   // period = 52 weeks
+  const tLen = 104;  // 2 years
+  const pts  = 400;
+  const ts   = Array.from({length: pts}, (_, i) => (i / (pts - 1)) * tLen);
+
+  // Build seasonal series
+  const baseY = 100;
+  function seasonal(t) {
+    let s = 0;
+    for (let n = 1; n <= N; n++) {
+      const c = FOURIER_COEFS[n - 1];
+      s += c.a * Math.cos(2 * Math.PI * n * t / P) + c.b * Math.sin(2 * Math.PI * n * t / P);
+    }
+    return s;
+  }
+  function trend(t) { return baseY + trendSlope * t / P; }
+  const totalY = ts.map(t => trend(t) + seasonal(t));
+
+  // Stats
+  const seasonalVals = ts.map(t => seasonal(t));
+  const amp  = (Math.max(...seasonalVals) - Math.min(...seasonalVals)) / 2;
+  const peakT = ts[seasonalVals.indexOf(Math.max(...seasonalVals))];
+  const peakWeek = Math.round(peakT % P);
+  document.getElementById('fourier-harmonics-val').textContent = N === 1 ? '1 (fundamental)' : `${N}`;
+  document.getElementById('fourier-amp-val').textContent       = amp.toFixed(1) + ' units';
+  document.getElementById('fourier-peak-val').textContent      = `week ${peakWeek} of year`;
+
+  const canvas = document.getElementById('fourier-canvas');
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.offsetWidth || 700;
+  const H   = 300;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const PAD = { top: 30, right: 20, bottom: 40, left: 58 };
+  const plotW = W - PAD.left - PAD.right;
+  const plotH = H - PAD.top - PAD.bottom;
+
+  const allY  = [...totalY, baseY];
+  const yMin  = Math.min(...allY) - 5;
+  const yMax  = Math.max(...allY) + 5;
+  const toX   = t => PAD.left + (t / tLen) * plotW;
+  const toY   = y => PAD.top  + (1 - (y - yMin) / (yMax - yMin)) * plotH;
+
+  // Axes
+  ctx.strokeStyle = '#e0ddd6'; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD.left, PAD.top); ctx.lineTo(PAD.left, PAD.top + plotH);
+  ctx.lineTo(PAD.left + plotW, PAD.top + plotH); ctx.stroke();
+
+  // Year separator
+  ctx.setLineDash([3, 4]); ctx.strokeStyle = '#ddd'; ctx.lineWidth = 0.75;
+  ctx.beginPath(); ctx.moveTo(toX(P), PAD.top); ctx.lineTo(toX(P), PAD.top + plotH); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#bbb'; ctx.font = `8px 'IBM Plex Mono', monospace`; ctx.textAlign = 'center';
+  ctx.fillText('Year 1', toX(P / 2), PAD.top - 6);
+  ctx.fillText('Year 2', toX(P * 1.5), PAD.top - 6);
+
+  // Trend line (dashed)
+  ctx.setLineDash([4, 4]); ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(toX(0), toY(trend(0))); ctx.lineTo(toX(tLen), toY(trend(tLen))); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#bbb'; ctx.font = `8px 'IBM Plex Mono', monospace`; ctx.textAlign = 'right';
+  ctx.fillText('trend', toX(tLen) - 4, toY(trend(tLen)) - 5);
+
+  // Individual harmonic components (light coloured lines)
+  for (let n = 1; n <= N; n++) {
+    const c  = FOURIER_COEFS[n - 1];
+    const col = FOURIER_COLORS[n - 1];
+    ctx.beginPath(); ctx.strokeStyle = col + '55'; ctx.lineWidth = 1;
+    ts.forEach((t, i) => {
+      const y = trend(t) + c.a * Math.cos(2 * Math.PI * n * t / P) + c.b * Math.sin(2 * Math.PI * n * t / P);
+      i === 0 ? ctx.moveTo(toX(t), toY(y)) : ctx.lineTo(toX(t), toY(y));
+    });
+    ctx.stroke();
+  }
+
+  // Total signal (thick, dark)
+  ctx.beginPath(); ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 2.5;
+  ts.forEach((t, i) => i === 0 ? ctx.moveTo(toX(t), toY(totalY[i])) : ctx.lineTo(toX(t), toY(totalY[i])));
+  ctx.stroke();
+
+  // X ticks (every 4 weeks)
+  ctx.fillStyle = '#888'; ctx.font = `9px 'IBM Plex Mono', monospace`; ctx.textAlign = 'center';
+  for (let t = 0; t <= tLen; t += 13) {
+    ctx.fillText(`w${t}`, toX(t), PAD.top + plotH + 14);
+  }
+  // Y ticks
+  ctx.textAlign = 'right';
+  const yStep = Math.ceil((yMax - yMin) / 5 / 10) * 10;
+  for (let v = Math.ceil(yMin / yStep) * yStep; v <= yMax; v += yStep) {
+    ctx.fillText(v, PAD.left - 5, toY(v) + 3);
+  }
+
+  // Legend
+  ctx.font = `8px 'IBM Plex Mono', monospace`; ctx.textAlign = 'left';
+  ctx.strokeStyle = '#555'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(PAD.left + 4, PAD.top + 8); ctx.lineTo(PAD.left + 20, PAD.top + 8); ctx.stroke();
+  ctx.fillStyle = '#444'; ctx.fillText('Total signal', PAD.left + 24, PAD.top + 12);
+  for (let n = 1; n <= N; n++) {
+    ctx.strokeStyle = FOURIER_COLORS[n - 1] + '99'; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(PAD.left + 4, PAD.top + 8 + n * 12);
+    ctx.lineTo(PAD.left + 20, PAD.top + 8 + n * 12); ctx.stroke();
+    ctx.fillStyle = FOURIER_COLORS[n - 1];
+    ctx.fillText(`harmonic n=${n}`, PAD.left + 24, PAD.top + 12 + n * 12);
+  }
+  ctx.setLineDash([4, 4]); ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(PAD.left + 4, PAD.top + 20 + N * 12); ctx.lineTo(PAD.left + 20, PAD.top + 20 + N * 12); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#bbb'; ctx.fillText('trend', PAD.left + 24, PAD.top + 24 + N * 12);
+
+  // Axis labels
+  ctx.fillStyle = '#888'; ctx.textAlign = 'center';
+  ctx.fillText('week', PAD.left + plotW / 2, H - 6);
+  ctx.save(); ctx.translate(14, PAD.top + plotH / 2); ctx.rotate(-Math.PI / 2);
+  ctx.fillText('demand index', 0, 0); ctx.restore();
+}
+
+document.getElementById('fourier-n').addEventListener('input', drawFourier);
+document.getElementById('fourier-trend').addEventListener('input', drawFourier);
+window.addEventListener('resize', drawFourier);
+drawFourier();
 </script>
 </body>
 </html>
