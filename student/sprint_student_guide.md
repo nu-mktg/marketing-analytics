@@ -16,7 +16,7 @@ reasoning and your group's presentation.
 
 | Part | When | Format | Weight |
 |---|---|---|---|
-| Individual response card | Week 14 (in class) | Timed Canvas quiz, 60 min | 100 of 140 points |
+| Individual scenario quiz | Week 14 (in class) | Timed Canvas quiz, 60 min | 100 of 140 points |
 | Group presentation | Week 15 (in class) | 12–15 min per group | 40 of 140 points |
 | Group write-up | Week 16 (online) | Written submission, 2 pages max | — (see below) |
 
@@ -30,17 +30,17 @@ by the end of Week 16. It is graded using the same group scorecard as the presen
 ### Week 13 — Briefing released
 One week before the Sprint work session, you receive the FitLoop company briefing (Part A
 of the case scenario). **Read it carefully. Discuss it with your group.** You will not be able
-to revise your individual card after the Week 14 deadline, so your group analysis needs to
+to revise your individual quiz after the Week 14 deadline, so your group analysis needs to
 happen during this week.
 
 You will not receive the model output data yet — that is released at the start of the
 Week 14 in-class session.
 
-### Week 14 — Individual response card + group work (in class)
+### Week 14 — Individual scenario quiz + group work (in class)
 - Model outputs are released at the start of class
-- You have **60 minutes** to analyze the data and write your individual response card
+- You have **60 minutes** to analyze the data and complete the individual scenario quiz
 - The Canvas quiz closes automatically at the 60-minute mark — no extensions
-- After submitting your card, the remaining class time is dedicated group work: refine
+- After submitting your quiz, the remaining class time is dedicated group work: refine
   your analysis, prepare your presentation outline, and align on your recommendation
 
 ### Week 15 — Group presentations (in class)
@@ -63,55 +63,46 @@ directly to the two business decisions in the scenario. The six outputs draw on 
 the first half of the course (Bayesian A/B testing, price elasticity, BG/NBD CLV, survival
 analysis, uplift modelling, and Markov chains).
 
-You are expected to be familiar with **all course models** — not just the six used in the
-pre-run outputs. Q2 (the excluded model question) asks you to name a model from the full
-course that your group *considered but decided not to use*. This means you need to have
-surveyed the entire toolkit and reasoned about which models apply and which do not.
+The individual assessment is a 10-question multiple-choice quiz in Canvas (Respondus
+Lockdown Browser required). Each question presents a scenario with **specific numbers
+from your group's model outputs** and asks you to identify the best analytical
+interpretation or recommendation.
+
+**You may have your group's model output packet open during the quiz.** You may not
+communicate with group members while the quiz is open.
+
+**The key feature of these questions:** All four answer choices are correct or plausible
+statements about the FitLoop case. Your task is to identify the *best* answer given what
+the specific question is asking. Some distractors are:
+- Factually correct statements that are irrelevant to the question being asked
+- Correct interpretations of a different model than the one the question is about
+- True observations that lead to the wrong conclusion for the specific decision
+
+This means you cannot answer the questions by looking up a definition or producing
+a generic "best practice" statement. You need to understand what the numbers in *your
+group's specific output* mean in context.
+
+**Question topics** (one question per area):
+1. Bayesian A/B test — interpreting posterior probability and credible intervals for a pricing decision
+2. Price elasticity — using the elasticity coefficient alongside the A/B test for the same decision
+3. BG/NBD CLV — P(alive) interpretation and retention campaign targeting
+4. Survival analysis — Cox hazard ratios and the correct product intervention they imply
+5. Uplift model — profit-maximising targeting threshold and sleeping dog exclusion
+6. Markov chain — steady-state interpretation and identifying the highest-leverage bottleneck
+7. Model selection — which model applies to which decision (and which does not)
+8. Assumption identification — causal vs. observational inference in the Cox model
+9. Integration — identifying the most important analytical gap in a proposed recommendation
+10. Recommendation — selecting the recommendation that best integrates uncertainty with business constraints
 
 ---
 
-## The Individual Response Card (60 min, Canvas Quiz)
+## How to Prepare
 
-The response card has four questions. They are the same for every student in every group,
-and they do not change year to year. You can see them here so you are not surprised.
-
-**Q1 — Your most important number (30 points)**
-
-> State one specific numerical finding from your group's analysis. Write the number,
-> the model it came from, and one sentence explaining what it means for the business decision.
-
-*Example of full marks:* "Our BG/NBD model estimates P(alive) = 0.11 for customers with no
-purchase in 18+ months. This means roughly 89% of our 'dormant' customers have likely
-churned, so a reactivation campaign targeting the full dormant segment would waste
-approximately 89 cents of every dollar."
-
-*Example of zero marks:* "Our CLV analysis showed that some customers are more valuable
-than others." ← No specific number from the actual data.
-
-**Q2 — Your excluded model (20 points)**
-
-> Name one model from this course that your group considered but decided not to use.
-> In two sentences: why did you consider it, and what specific feature of this case made
-> it inappropriate or lower priority?
-
-*A model you never considered does not count. The answer must show you actively evaluated it.*
-
-**Q3 — Your weakest assumption (25 points)**
-
-> Identify one assumption in your group's analysis that you are least confident in.
-> State: (a) what the assumption is, (b) what specific aspect of this dataset makes you
-> uncertain about it, and (c) what you would check or collect to test it.
-
-*Generic answers ("we assumed the data was accurate") earn zero. The assumption must be
-model-specific and connected to something in the actual dataset.*
-
-**Q4 — Your personal recommendation (25 points)**
-
-> Write your personal recommendation for the executive team in three sentences or fewer.
-> It may agree with your group's recommendation or differ from it.
-> State one condition that would change your recommendation.
-
-*"It depends" with no decision rule earns zero.*
+**The course models you are expected to draw on:** You are expected to be familiar with
+**all course models** — not just the six used in the pre-run outputs. The quiz includes a
+question (Q7) about model selection that asks you to evaluate which model applies to which
+decision and why a specific model *does not* apply in a given context. This means you need
+to have surveyed the entire toolkit and understood the scope of each model.
 
 ---
 
@@ -127,23 +118,25 @@ model-specific and connected to something in the actual dataset.*
 
 - Read the briefing carefully — understand the two business decisions
 - Discuss with your group which models are most relevant to each decision
-- Think about which models you would *not* use and why (this is Q2!)
+- Think about which models you would *not* use and why (Q7 in the quiz covers model selection)
 - You do not need to run any analysis yet; the pre-run model outputs are released in Week 14
 
 **Week 14 (in-class):**
 
 - The model outputs are pre-generated and provided to you — no coding required during the
-  individual work time
-- First 60 min: individual response card (Canvas quiz, auto-closes)
+  individual quiz time
+- First 60 min: individual scenario quiz (Canvas MC, auto-closes)
 - Remaining class time: group work — review the outputs together, align on your analysis,
   and prepare your presentation outline
-- You can look at your own group's analysis notes during the card — not closed-book, but no
-  communication with group members while writing
+- You can reference your group's model output packet during the quiz — it is open-book for
+  the data, not for communication with group members while the quiz is open
 
 **The best preparation:** Make sure you personally understand every number your group's
-analysis produces. You do not need to run all the analysis yourself, but you need to be able
-to explain any result your group presents. If you let one group member do all the analysis
-and you just watched, you will not be able to answer Q1, Q3, or Q4 specifically.
+analysis produces. You cannot answer these questions by producing a generic statement —
+each question requires you to integrate a specific number from your group's outputs with
+the analytical reasoning the question is testing. If you let one group member do all the
+analysis and you just watched, you will not have the depth needed to identify the best
+answer from four plausible options.
 
 ---
 
@@ -161,9 +154,9 @@ and you just watched, you will not be able to answer Q1, Q3, or Q4 specifically.
 
 - 12–15 minutes per group
 - No strict structure — use whatever format communicates your analysis best
-- The individual response cards are already submitted before any presentations begin,
+- The individual quiz is already submitted before any presentations begin,
   so what you say in the presentation does not affect your individual grade
-- If your presentation disagrees with your own card, that is fine — the card reflects
+- If your presentation disagrees with your quiz answers, that is fine — the quiz reflects
   your view at the time of analysis; the presentation is the group's collective view
 
 ---
@@ -184,12 +177,12 @@ articulate any points that were unclear in the live presentation.
 
 ## Makeup Policy
 
-**Individual response card (Week 14 Canvas quiz):**
+**Individual scenario quiz (Week 14 Canvas quiz):**
 If you cannot attend the in-class session in Week 14, you may request a makeup window
 by emailing the instructor at least 24 hours in advance (or as soon as possible for
 emergencies). The makeup quiz uses the same Canvas question set with a different time
 window. It is taken independently with Respondus Lockdown Browser — no Codespace
-access is required because no coding is needed during the response card.
+access is required because no coding is needed during the quiz.
 
 You can self-schedule the makeup by:
 1. Emailing the instructor with your preferred 2-hour window (must be within 5 days

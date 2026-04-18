@@ -353,7 +353,7 @@ The mean of the lift distribution across all plausible true conversion rates. Th
 ### Section 2.1 — Worked Example
 #### Agent-assisted live demo (~25 minutes)
 
-**Scenario:** FitLoop (the company from the intensive day case) ran a pricing experiment: 1,847 trial users saw \$18/month (Variant A) and 1,853 saw \$22/month (Variant B). The outcome is trial-to-paid conversion within 14 days.
+**Scenario:** FitLoop (the company from the Sprint case) ran a pricing experiment: 1,847 trial users saw \$18/month (Variant A) and 1,853 saw \$22/month (Variant B). The outcome is trial-to-paid conversion within 14 days.
 
 **Agent context prompt:**
 ```

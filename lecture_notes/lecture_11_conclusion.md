@@ -9,7 +9,7 @@ This is the mid-course synthesis session. No new models. Instead: how the first 
 models fit together into a coherent analytical practice, the common failure modes that
 cut across all of them, and how to develop the judgment to know when each model applies.
 
-The session also prepares you for the Intensive Day, which follows after Lectures 12–14.
+The session also prepares you for the Sprint, which follows after Lectures 12–14.
 
 **By the end of this session you should be able to:**
 - Map any marketing analytics question to the appropriate model (or combination of models)
@@ -271,20 +271,20 @@ will give recommendations that get implemented.
 
 ---
 
-## PART 3: Intensive Day Preparation
+## PART 3: Sprint Preparation
 
 ---
 
-### 3.1 What the Intensive Day Requires
+### 3.1 What the Sprint Requires
 
-The Intensive Day happens after Lectures 12–14. Before it, you will receive the FitLoop
+The Sprint happens after Lectures 12–14. Before it, you will receive the FitLoop
 company briefing (Part A of the case scenario). Read it carefully. The model outputs
 (Part B) are released at the start of the working session.
 
-Your preparation for the Intensive Day is this course. The models in Lectures 1–10
+Your preparation for the Sprint is this course. The models in Lectures 1–10
 (and the additional tools from Lectures 12–14) are the tools you will apply.
 
-**What to review before the Intensive Day:**
+**What to review before the Sprint:**
 - The model reference card (one-page summary of all models)
 - The FitLoop company briefing distributed in the week prior
 - Your own notes on any models you feel less confident about
@@ -293,11 +293,12 @@ Your preparation for the Intensive Day is this course. The models in Lectures 1�
 
 ---
 
-### 3.2 How the Individual Response Card Works
+### 3.2 How the Individual Scenario Quiz Works
 
-Before any group presentations begin, you will each submit an individual response card
-with four questions. See the intensive day format document for full details. The key
-point: the card is worth 100 of 140 total points and is submitted during working time —
+Before any group presentations begin, you will each complete a 10-question multiple-choice
+quiz in Canvas with your group's model outputs open in front of you.
+See the Sprint assessment guide for full details. The key
+point: the quiz is worth 100 of 140 total points and is submitted during working time —
 not after presentations.
 
 **The four questions (identical for every student):**
@@ -356,7 +357,7 @@ The next three lectures extend the analytical toolkit beyond the first 10 models
 - Bayesian structural time series to measure the causal effect of a marketing campaign
 - The most rigorous non-experimental tool for incrementality measurement
 
-After Lecture 14, the Intensive Day applies all 14 models (or a selection of them)
+After Lecture 14, the Sprint applies all 14 models (or a selection of them)
 to the FitLoop case.
 
 ---
@@ -439,5 +440,5 @@ These are not graded. They are for your own synthesis at the halfway point.
 
 ---
 
-*Three more lectures remain: Difference-in-Differences (L12), Customer Segmentation (L13), and CausalImpact (L14), followed by the Intensive Day.*
+*Three more lectures remain: Difference-in-Differences (L12), Customer Segmentation (L13), and CausalImpact (L14), followed by the Sprint.*
 

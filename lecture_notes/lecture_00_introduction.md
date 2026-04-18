@@ -100,14 +100,14 @@ None of them is a black box you can trust blindly.
 | Homework (14 × individual) | 50% | Part A autograded; Parts B+C autograded |
 | Quiz 1 (after L06) | 5% | 20 T/F questions, Bayesian confidence scoring |
 | Quiz 2 (after L12) | 5% | 20 T/F questions, Bayesian confidence scoring |
-| Intensive Day | 20% | FitLoop case: six model outputs, group presentations |
+| Sprint | 20% | FitLoop case: six model outputs, group presentations |
 | Checkpoints (in-class) | 20% | Participation credit; 5 questions per session |
 
 **Collaboration policy:**
 - Part A (math questions): Individual. No collaboration.
 - Part B and C (code + interpretation): Collaboration permitted and encouraged.
 - Quizzes: Individual. No resources.
-- Intensive Day: Group presentation; individual response card submitted before group work begins.
+- Sprint: Group presentation; individual scenario quiz submitted before group work begins.
 
 ---
 

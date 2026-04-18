@@ -210,7 +210,7 @@ these questions — and that interpretation may be correct. Your job is to know
 Submitting an answer to Part C that the agent gave you is acceptable — *if you
 verified it*. Submitting an answer to Part C that the agent gave you without
 understanding why it is correct means you have not achieved the learning objective,
-and you will be unable to apply that reasoning in the Intensive Day or in
+and you will be unable to apply that reasoning in the Sprint or in
 subsequent coursework.
 
 The test is simple: could you defend your Part C answer to a classmate who chose
