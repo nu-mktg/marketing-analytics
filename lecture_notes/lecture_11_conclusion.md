@@ -277,35 +277,58 @@ will give recommendations that get implemented.
 
 ### 3.1 What the Sprint Requires
 
-The Sprint happens after Lectures 12–14. Before it, you will receive the FitLoop
-company briefing (Part A of the case scenario). Read it carefully. The model outputs
-(Part B) are released at the start of the working session.
+The Sprint spans three weeks. The timeline matters:
 
-Your preparation for the Sprint is this course. The models in Lectures 1–10
-(and the additional tools from Lectures 12–14) are the tools you will apply.
+**Week 13 — Company briefing distributed (no model outputs yet)**
+You receive the FitLoop company briefing (Part A of the case scenario): company
+background, the two business decisions, and the data landscape. Read it carefully
+and discuss it with your group. Form hypotheses about which models are most relevant.
 
-**What to review before the Sprint:**
+You will **not** see any model output numbers during Week 13. The model outputs
+(Part B of the case) are released at the start of the Week 14 in-class session —
+not before. There is nothing to run, no data to analyze, and no numbers to interpret
+during Week 13. Your preparation this week is conceptual: understanding the scenario
+and knowing which models address which questions.
+
+**Week 14 — Model outputs released; individual quiz + group work (in class)**
+At the start of class, model outputs are distributed for the first time. The Canvas
+individual quiz opens immediately after. You have 60 minutes to complete the quiz
+with your group's model output packet open in front of you.
+
+**What to review before Week 14:**
 - The model reference card (one-page summary of all models)
-- The FitLoop company briefing distributed in the week prior
+- The FitLoop company briefing distributed in Week 13
 - Your own notes on any models you feel less confident about
 
-**What to bring:** Nothing. All materials are provided on the day.
+**What to bring to Week 14:** Nothing extra. Model outputs are provided at the start of class.
 
 ---
 
 ### 3.2 How the Individual Scenario Quiz Works
 
-Before any group presentations begin, you will each complete a 10-question multiple-choice
-quiz in Canvas with your group's model outputs open in front of you.
-See the Sprint assessment guide for full details. The key
-point: the quiz is worth 100 of 140 total points and is submitted during working time —
-not after presentations.
+At the start of the Week 14 session, after the model outputs are distributed, you will
+complete a **10-question multiple-choice Canvas quiz** (60 minutes, auto-closes).
+Your group's model output packet is open in front of you — the quiz is open-book for
+the data, not for communication with group members.
 
-**The four questions (identical for every student):**
-1. State one specific number from your analysis, the model it came from, and what it means for the decision.
-2. Name one model you considered but did not use, and explain why it was lower priority for this case.
-3. Identify one assumption in your analysis that you are least confident in, and what you would check to test it.
-4. Write your personal recommendation for the executive team (may agree or differ from your group's), plus one condition that would change it.
+The quiz is worth **100 of 140 total points**. Canvas auto-grades it immediately.
+
+**The 10 question topics (one per area):**
+1. **Bayesian A/B test** — interpreting posterior probability and credible intervals for a pricing decision
+2. **Price elasticity** — using the elasticity coefficient alongside the A/B test for the same decision
+3. **BG/NBD CLV** — P(alive) interpretation and retention campaign targeting
+4. **Survival analysis** — Cox hazard ratios and the correct product intervention they imply
+5. **Uplift model** — profit-maximising targeting threshold and sleeping dog exclusion
+6. **Markov chain** — steady-state interpretation and identifying the highest-leverage bottleneck
+7. **Model selection** — which model applies to which decision (and which does not)
+8. **Assumption identification** — causal vs. observational inference in the Cox model
+9. **Integration** — identifying the most important analytical gap in a proposed recommendation
+10. **Recommendation** — selecting the recommendation that best integrates uncertainty with business constraints
+
+Each question has four answer choices — all correct or plausible statements about the FitLoop
+case. Your task is to identify the *best* answer given what the specific question is asking.
+The correct answer requires integrating a specific number from your group's model outputs
+with the analytical reasoning being tested. Generic definitions will not suffice.
 
 ---
 

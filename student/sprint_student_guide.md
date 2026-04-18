@@ -29,12 +29,13 @@ by the end of Week 16. It is graded using the same group scorecard as the presen
 
 ### Week 13 — Briefing released
 One week before the Sprint work session, you receive the FitLoop company briefing (Part A
-of the case scenario). **Read it carefully. Discuss it with your group.** You will not be able
-to revise your individual quiz after the Week 14 deadline, so your group analysis needs to
-happen during this week.
+of the case scenario). **Read it carefully. Discuss it with your group.**
 
-You will not receive the model output data yet — that is released at the start of the
-Week 14 in-class session.
+You will **not** receive model output data this week — that is released at the very start
+of the Week 14 in-class session. There is nothing to run, no numbers to analyze, and no
+model outputs to look at during Week 13. Your preparation this week is entirely conceptual:
+understanding the two business decisions, thinking about which models are relevant, and
+knowing which models you would *not* use and why.
 
 ### Week 14 — Individual scenario quiz + group work (in class)
 - Model outputs are released at the start of class
@@ -119,7 +120,8 @@ to have surveyed the entire toolkit and understood the scope of each model.
 - Read the briefing carefully — understand the two business decisions
 - Discuss with your group which models are most relevant to each decision
 - Think about which models you would *not* use and why (Q7 in the quiz covers model selection)
-- You do not need to run any analysis yet; the pre-run model outputs are released in Week 14
+- **No model outputs are available yet** — your preparation this week is conceptual, not
+  numerical. The numbers arrive at the start of Week 14.
 
 **Week 14 (in-class):**
 
