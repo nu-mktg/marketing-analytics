@@ -1,5 +1,5 @@
 # Model Reference Card
-## Marketing Analytics — 10 Models at a Glance
+## Marketing Analytics — 14 Lectures at a Glance
 
 ---
 
@@ -15,6 +15,10 @@
 | 8 | **CLV — BG/NBD + Gamma-Gamma** | $P(\text{alive} \mid x, t_x, T)$; $E[\text{CLV}_{12}]$ | Recency $t_x$; frequency $x$; observation window $T$; order values (GG model) | Customers die at most once; frequency $\perp$ spend (Gamma-Gamma) | Subscription products (discrete renewal differs from BG/NBD's continuous churn model); strong frequency–spend correlation |
 | 9 | **Conjoint Analysis (MNL)** | $\hat{\beta}_k$ per attribute; $\text{WTP}_k = \hat{\beta}_k / \lvert\hat{\beta}_{\text{price}}\rvert$; market shares via softmax | Choice data from stated-preference survey; attribute levels per alternative | IIA (Independence of Irrelevant Alternatives); random utility | Attributes are highly correlated; IIA fails when new alternatives are close substitutes for specific existing options |
 | 10 | **Prophet Forecasting** | $\hat{y}(t) = g(t) + s(t) + h(t)$; prediction intervals at horizon $h$ | Weekly or daily time series of outcome variable; holiday calendar (optional) | Piecewise linear or logistic trend; Fourier seasonality; additive error | Missing regressors for known structural breaks (competitor entry, policy changes); very short series (< 2 seasonal cycles) |
+| 11 | **Synthesis & Capstone** | Decision framework integrating all prior models; which model to apply and when | Prior model outputs across customer lifecycle stages | Each constituent model's assumptions must hold within its own application | Applying a model outside its identifying assumptions; missing a better-suited estimator for the question |
+| 12 | **Difference-in-Differences** | $\hat{\tau}_{\text{DiD}} = (\bar{Y}_{T,\text{post}} - \bar{Y}_{T,\text{pre}}) - (\bar{Y}_{C,\text{post}} - \bar{Y}_{C,\text{pre}})$ | Panel data: outcome, time period, treatment/control group indicator | Parallel trends: treatment and control groups would have moved together absent intervention | Pre-existing divergent trends between groups; spillover from treatment to control; differential shocks |
+| 13 | **Customer Segmentation (k-means)** | Cluster assignments $z_i \in \{1, \ldots, k\}$; centroid $\boldsymbol{\mu}_c$ per cluster; WCSS | Customer feature vectors $\mathbf{x}_i \in \mathbb{R}^p$ (standardised); number of clusters $k$ | Euclidean distance meaningful after standardisation; spherical cluster shapes | Clusters are non-spherical or very differently sized; $k$ chosen arbitrarily without diagnostic checks; features not standardised |
+| 14 | **CausalImpact (BSTS)** | Posterior distribution over pointwise effect $\hat{\tau}_t = y_t - \hat{y}_t^{(0)}$; cumulative effect $\hat{\tau}_{\text{cum}}$; relative effect | Outcome time series; control covariate series uncorrelated with intervention; pre-period for model fit | Control covariates are unaffected by intervention; relationship between controls and outcome is stable across periods | Controls are themselves affected by intervention; poor pre-period model fit (high MAPE); short pre-period relative to seasonality |
 
 ---
 
@@ -53,7 +57,9 @@ What type of question?
 │
 ├─ "Did an intervention work?"
 │   ├─ Randomised experiment + binary outcome → Bayesian A/B Testing (L1)
-│   └─ Randomised experiment + heterogeneous effects wanted → Uplift (L7)
+│   ├─ Randomised experiment + heterogeneous effects wanted → Uplift (L7)
+│   ├─ Geographic holdout design (pre/post + control regions) → DiD (L12)
+│   └─ National campaign, no control group → CausalImpact (L14)
 │
 ├─ "How does outcome change with a driver?"
 │   ├─ Driver = price; outcome = quantity → Price Elasticity + OLS (L2)
@@ -65,9 +71,12 @@ What type of question?
 │   ├─ Discrete states, transition dynamics → Markov Chains (L5)
 │   └─ Individual future purchase value → CLV / BG/NBD (L8)
 │
-└─ "What do customers want or what is coming?"
-    ├─ Feature valuation and willingness-to-pay → Conjoint (L9)
-    └─ Future demand, seasonal planning → Prophet (L10)
+├─ "What do customers want or what is coming?"
+│   ├─ Feature valuation and willingness-to-pay → Conjoint (L9)
+│   └─ Future demand, seasonal planning → Prophet (L10)
+│
+└─ "How do we group or target customers?"
+    └─ Discover latent structure in customer features → Segmentation (L13)
 ```
 
 ---
@@ -84,3 +93,6 @@ What type of question?
 | GG model | $\text{Corr}(\text{frequency}, \text{avg\_order\_value}) \approx 0$? |
 | MNL | Are any new alternatives very similar to existing ones? (IIA concern) |
 | Prophet | Are there structural breaks not encoded as changepoints? |
+| DiD | Do pre-trends run parallel? Run a placebo test using only pre-period data |
+| k-means | Are features standardised? Is k chosen via elbow/silhouette, not arbitrary? |
+| CausalImpact | Are control covariates unaffected by the intervention? Is pre-period MAPE acceptable? |
