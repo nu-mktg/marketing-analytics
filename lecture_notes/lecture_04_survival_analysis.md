@@ -105,8 +105,14 @@ where n_t is the number of customers at risk just before time t, and d_t is the 
 
 **Reading the table:** Ŝ(9) = 0.785 means 78.5% of customers survived at least 9 months. Equivalently, 21.5% churned within the first 9 months.
 
-**Conditional churn** between months 5 and 9, given survival to month 5:
+**Conditional churn probability** between any two times t₁ and t₂, given survival to t₁:
+
+$$P(\text{churn between } t_1, t_2 \mid T > t_1) = 1 - \frac{\hat{S}(t_2)}{\hat{S}(t_1)}$$
+
+**Example:** Conditional churn between months 5 and 9, given survival to month 5:
 1 − Ŝ(9)/Ŝ(5) = 1 − 0.785/0.897 = 1 − 0.875 = **12.5%**
+
+Note: this is much lower than the *unconditional* churn rate 1 − Ŝ(9) = 21.5%, which includes early-tenure churners.
 
 > ### 🔍 Deep Dive: Why Multiply Rather Than Subtract?
 > The product formula arises because each interval is conditioned on surviving the previous one. The probability of surviving through month 9 = P(survive to 2) × P(survive 2→5 | survived to 2) × P(survive 5→9 | survived to 5). Each conditional probability is (n_t − d_t)/n_t. Multiplying them gives the joint probability of surviving all intervals — which is Ŝ(t).
