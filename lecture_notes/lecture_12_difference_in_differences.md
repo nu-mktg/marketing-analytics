@@ -211,6 +211,12 @@ When you fit `revenue ~ treat + post + treat_x_post`, the output contains four r
 
 ### Part A: Math Questions (Individual)
 
+> **Answers:** homework answers are not duplicated here. The single source of truth is
+> `answer_keys/hwNN.json` in the instructor repo, synced to the private key repo with
+> `./tools/push_answer_keys.sh`. Duplicating them in this file is what caused them to
+> drift out of sync with the notebooks (Task 015).
+
+
 Use the aggregate pre/post means from the dataset header:
 
 | Period | Treatment | Control |

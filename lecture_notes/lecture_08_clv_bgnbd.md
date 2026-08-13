@@ -273,141 +273,28 @@ For Marcus: threshold = 15/19 = 0.789 (not exceeded — P(alive) = 0.11)
 ### Section 2.3 — Homework Assignment
 #### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-**Repository:** `data/transactions.csv` + `homework_08.ipynb`
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
----
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_08_clv_bgnbd.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-#### Part A: Math Questions (no agent required)
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_08_clv_bgnbd.ipynb` |
+| Dataset | `homework_datasets/transactions.csv` |
+| Graded questions | **15** — Part A: 8 · Part B: 4 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw08.json` |
 
-**Q1.** A customer purchases at rate $\lambda = 0.4$ per month. Under the Poisson model, what is the expected number of purchases in 6 months?
-```python
-q1_expected_purchases = None
-```
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-**Q2.** Under the geometric dropout model, a customer remains active after each purchase with probability $p = 0.80$. What is the probability they survive (remain active) through 4 consecutive purchase opportunities?
-```python
-q2_survive_4 = None
-```
-
-**Q3.** The BG/NBD model has parameters $r = 1.2$ and $\alpha = 6.0$. What is the mean purchase rate across all customers?
-```python
-q3_mean_rate = None
-```
-
-**Q4.** A customer has E[transactions next 12 months] = 3.2 and expected order value = $55. What is their predicted 12-month CLV (ignoring discounting)?
-```python
-q4_clv_no_discount = None
-```
-
-**Q5.** With a 2% monthly discount rate, what is the present value of a $100 payment received 12 months from now? Use the formula PV = 100/(1.02)^12. Note: (1.02)^12 ≈ 1.268.
-```python
-q5_present_value = None
-```
-
-**Q6.** Customer X made 3 purchases in 24 months, last purchase was 2 months ago. Customer Y made 3 purchases in 24 months, last purchase was 22 months ago. Without running any model, which customer has a higher probability of being alive? Explain in one sentence.
-```python
-# Enter "X" or "Y"
-q6_higher_p_alive = None
-```
-
-**Q7.** True or False: The BG/NBD model requires detailed demographic data (age, gender, income) to compute predicted CLV.
-```python
-q7_needs_demographics = None
-```
-
-**Q8.** A company's Gamma-Gamma model shows that customers who purchase 10+ times per year have average order values of $20, while customers who purchase 1–2 times per year have average order values of $80. Should the Gamma-Gamma model be applied to this data?
-```python
-# Enter "yes" or "no" and briefly explain
-q8_gamma_gamma_applicable = None  # "yes" or "no"
-```
-
----
-
-#### Part B: Agent Questions
-
-Paste the following **Context Prompt** into your agent:
-
-```
-I am computing customer lifetime value for an e-commerce company.
-
-transactions.csv has one row per transaction:
-- customer_id
-- transaction_date: date of purchase (YYYY-MM-DD format)
-- order_value: revenue from this transaction in dollars
-
-Please:
-1. Use the lifetimes library to prepare the RFM summary data
-   (frequency, recency, T, monetary_value) for each customer.
-   Observation end date = the most recent date in the dataset.
-2. Fit the BG/NBD model. Print the fitted parameters r, alpha, a, b.
-3. Fit the Gamma-Gamma model. Print the fitted parameters p, q, v.
-4. Compute predicted CLV for each customer for the next 12 months
-   using a monthly discount rate of 1%.
-5. Report: mean CLV, median CLV, and CLV at the 10th, 50th, 90th,
-   and 99th percentiles.
-6. Find the 5 customers with the highest predicted CLV.
-7. Check the Gamma-Gamma assumption: plot average order value vs.
-   purchase frequency (number of transactions). Report the correlation.
-Use random seed 42 where applicable.
-```
-
-**Q9.** What is the fitted BG/NBD parameter $r$? Round to 2 decimal places.
-```python
-q9_param_r = None
-```
-
-**Q10.** What is the fitted BG/NBD parameter $\alpha$? Round to 2 decimal places.
-```python
-q10_param_alpha = None
-```
-
-**Q11.** What is the median predicted 12-month CLV across all customers? Round to 2 decimal places.
-```python
-q11_median_clv = None
-```
-
-**Q12.** What is the 99th percentile predicted CLV? Round to 2 decimal places.
-```python
-q12_p99_clv = None
-```
-
-**Q13.** What is the Pearson correlation between average order value and purchase frequency? Round to 2 decimal places. (This tests the Gamma-Gamma independence assumption.)
-```python
-q13_spend_freq_correlation = None
-```
-
----
-
-#### Part C: Interpretation Questions
-
-**Q14.** The mean predicted CLV is $85 and the median is $32. What does this large gap between mean and median tell you about the distribution of CLV in this customer base?
-- (a) Most customers have CLV around $85, with a few very high-value outliers pulling the mean up
-- (b) The model has a bug — mean and median should always be equal
-- (c) The CLV distribution is right-skewed: most customers have modest CLV, but a small number of high-CLV customers pull the mean up significantly
-- (d) The median is a better estimate of future revenue than the mean
-```python
-q14 = None  # "a", "b", "c", or "d"
-```
-
-**Q15.** Customer K made 15 purchases with their last purchase 3 months ago. Their predicted CLV is $310. Customer L made 2 purchases with their last purchase 1 month ago. Their predicted CLV is $45. A marketing manager proposes spending $50 on retention for Customer K and $5 for Customer L, proportional to CLV. Is this reasonable?
-- (a) Yes — spending proportional to CLV is always optimal
-- (b) Not necessarily — you should spend up to the point where the cost equals P(alive) × CLV, which may differ from a proportional allocation
-- (c) No — you should spend nothing, since both will churn eventually
-- (d) Yes — Customer K is definitely more valuable than Customer L
-```python
-q15 = None  # "a", "b", "c", or "d"
-```
-
-**Q16.** The Gamma-Gamma correlation is −0.47. This is a strong negative correlation between spend per order and purchase frequency. Should you use the Gamma-Gamma model as-is?
-- (a) Yes — a correlation of −0.47 is always acceptable for Gamma-Gamma
-- (b) No — the independence assumption is violated; the Gamma-Gamma model will overestimate CLV for low-frequency/high-spend customers and underestimate for high-frequency/low-spend customers
-- (c) Yes — the Gamma-Gamma model is robust to any correlation
-- (d) No — you should switch to a completely different CLV method
-```python
-q16 = None  # "a", "b", "c", or "d"
-```
-
----
+<!-- END GENERATED homework pointer -->
 
 ### Common Misconceptions
 

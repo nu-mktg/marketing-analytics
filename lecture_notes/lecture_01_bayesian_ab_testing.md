@@ -385,6 +385,12 @@ Please:
 ---
 
 ### Section 2.2 — Homework Assignment
+
+> **Answers:** homework answers are not duplicated here. The single source of truth is
+> `answer_keys/hwNN.json` in the instructor repo, synced to the private key repo with
+> `./tools/push_answer_keys.sh`. Duplicating them in this file is what caused them to
+> drift out of sync with the notebooks (Task 015).
+
 #### Due: start of next lecture
 
 See notebook: `homework_01_bayesian_ab.ipynb`

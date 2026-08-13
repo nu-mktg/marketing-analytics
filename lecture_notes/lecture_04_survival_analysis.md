@@ -272,156 +272,28 @@ $$e^{-0.052} \approx 0.949, \qquad e^{0.148} \approx 1.160, \qquad e^{-0.002} \a
 ### Section 2.3 — Homework Assignment
 #### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-**Repository:** `data/subscribers.csv` + `homework_04.ipynb`
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
----
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_04_survival_analysis.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-#### Part A: Math Questions (no agent required)
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_04_survival_analysis.ipynb` |
+| Dataset | `homework_datasets/survival_data.csv` |
+| Graded questions | **17** — Part A: 8 · Part B: 6 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw04.json` |
 
-**KM Dataset:**
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-| Customer | Tenure (months) | Status |
-|---|---|---|
-| A | 1 | Churned |
-| B | 3 | Churned |
-| C | 4 | Censored |
-| D | 6 | Churned |
-| E | 9 | Censored |
-| F | 11 | Churned |
-
-**Q1.** How many customers are at risk at t = 1?
-```python
-q1_n_at_t1 = None
-```
-
-**Q2.** How many churn events occur at t = 1?
-```python
-q2_d_at_t1 = None
-```
-
-**Q3.** What is $\hat{S}(1)$? Express as a decimal, 4 decimal places.
-```python
-q3_S_t1 = None
-```
-
-**Q4.** How many customers are at risk at t = 3?
-```python
-q4_n_at_t3 = None
-```
-
-**Q5.** What is $\hat{S}(3)$?
-```python
-q5_S_t3 = None
-```
-
-**Q6.** Customer C is censored at t = 4. Does this change $\hat{S}(3)$? Enter True or False.
-```python
-q6_censoring_changes_S3 = None
-```
-
-**Q7.** How many customers are at risk at t = 6? (A churned at t=1, B at t=3, C censored at t=4.)
-```python
-q7_n_at_t6 = None
-```
-
-**Q8.** What is $\hat{S}(6)$? Round to 4 decimal places.
-```python
-q8_S_t6 = None
-```
-
-**Q9.** A Cox model reports β = 0.18 for "complaints_last_30d." Compute e^0.18. Use the approximation e^0.18 ≈ 1.197. Round to 3 decimal places.
-```python
-q9_hazard_ratio = None
-```
-
-**Q10.** Using the hazard ratio from Q9: a customer who files 2 more complaints per month than another customer has a churn hazard that is what percentage higher? (Hint: the hazard ratio for a 2-unit increase is e^(0.18×2).)
-Use approximation: e^0.36 ≈ 1.433.
-```python
-q10_pct_increase_2_units = None  # enter as a percentage, e.g., 43.3 for 43.3%
-```
-
----
-
-#### Part B: Agent Questions
-
-Paste the following **Context Prompt** into your agent:
-
-```
-I am analyzing customer churn for a subscription SaaS company.
-
-subscribers.csv has one row per customer:
-- customer_id
-- tenure_months: observation length
-- churned: 1 if cancelled, 0 if still active (censored)
-- plan_type: "basic", "pro", or "enterprise"
-- monthly_spend: average monthly spend ($)
-- support_tickets_last_90d: support tickets filed in past 90 days
-- login_frequency_last_30d: logins in past 30 days
-
-Please:
-1. Fit and plot a Kaplan-Meier survival curve per plan_type with
-   confidence intervals and a log-rank test.
-2. Fit a Cox Proportional Hazards model (lifelines) with predictors:
-   monthly_spend, support_tickets_last_90d, login_frequency_last_30d.
-3. Print the Cox summary table (hazard ratios, 95% CI, p-values).
-4. Report the concordance index.
-5. Run check_assumptions(). Flag any violated predictors.
-6. State the single strongest predictor of churn timing.
-Use random seed 42.
-```
-
-**Q11.** Which plan type has the highest survival probability at 24 months?
-```python
-q11_best_plan = None  # "basic", "pro", or "enterprise"
-```
-
-**Q12.** What is the concordance index? Round to 2 decimal places.
-```python
-q12_c_index = None
-```
-
-**Q13.** What is the hazard ratio for login_frequency_last_30d? Round to 3 decimal places.
-```python
-q13_hr_login = None
-```
-
-**Q14.** Is the hazard ratio for support_tickets_last_90d statistically significant at 5%?
-```python
-q14_tickets_significant = None  # True or False
-```
-
----
-
-#### Part C: Interpretation Questions
-
-**Q15.** The enterprise KM curve is always above the basic curve. This means:
-- (a) Enterprise customers have lower churn hazard throughout their tenure
-- (b) Enterprise customers generate more revenue
-- (c) Enterprise customers file fewer support tickets
-- (d) Enterprise customers are more likely to churn early
-```python
-q15 = None  # "a", "b", "c", or "d"
-```
-
-**Q16.** The concordance index is 0.71. Which interpretation is correct?
-- (a) The model correctly predicts 71% of all churn events
-- (b) Of all pairs of customers where one churned before the other, the model correctly ranks them 71% of the time
-- (c) The model explains 71% of the variation in tenure
-- (d) 71% of customers have hazard ratios above 1.0
-```python
-q16 = None  # "a", "b", "c", or "d"
-```
-
-**Q17.** A manager wants to flag all customers with more than 3 support tickets in the past 90 days for a retention call. Based on the Cox output, is this reasonable?
-- (a) No — tickets are not related to churn
-- (b) Yes — this uses a significant predictor; combining with login frequency would be more precise
-- (c) Yes — but only if the hazard ratio for tickets exceeds 2.0
-- (d) No — only the KM curve should be used for this decision
-```python
-q17 = None  # "a", "b", "c", or "d"
-```
-
----
+<!-- END GENERATED homework pointer -->
 
 ### Common Misconceptions
 

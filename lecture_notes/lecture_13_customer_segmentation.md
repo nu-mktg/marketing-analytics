@@ -184,6 +184,12 @@ C is closer to $\boldsymbol{\mu}_1$, so assigned to Cluster 1. ✓
 
 ### Part A: Math Questions (Individual)
 
+> **Answers:** homework answers are not duplicated here. The single source of truth is
+> `answer_keys/hwNN.json` in the instructor repo, synced to the private key repo with
+> `./tools/push_answer_keys.sh`. Duplicating them in this file is what caused them to
+> drift out of sync with the notebooks (Task 015).
+
+
 ```python
 # Q1. Customer A = (z1=1.2, z2=0.8). Initial centres: mu1=(1.2,0.8), mu2=(-0.9,-1.1).
 # Which cluster is A assigned to? (integer: 1 or 2)

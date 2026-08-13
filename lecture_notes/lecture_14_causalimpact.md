@@ -183,6 +183,12 @@ $$\text{MAPE}_{\text{pre}} = \frac{1}{T_{\text{pre}}} \sum_{t=1}^{T_{\text{pre}}
 
 ### Part A: Math Questions (Individual)
 
+> **Answers:** homework answers are not duplicated here. The single source of truth is
+> `answer_keys/hwNN.json` in the instructor repo, synced to the private key repo with
+> `./tools/push_answer_keys.sh`. Duplicating them in this file is what caused them to
+> drift out of sync with the notebooks (Task 015).
+
+
 Use the summary statistics printed at the top of the notebook.
 
 ```python

@@ -395,166 +395,28 @@ When the agent fits a regression model and prints the output table, here is what
 ### Section 2.3 — Homework Assignment
 #### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-**Setup:** Open the GitHub Classroom assignment for Lecture 2. The repository contains:
-- `data/pricing_data.csv` — weekly price and sales data for three products across 50 stores and 104 weeks
-- `homework_02.ipynb` — the notebook you will complete and push
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
----
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_02_price_elasticity.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-#### Part A: Math Questions (no agent required)
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_02_price_elasticity.ipynb` |
+| Dataset | `homework_datasets/pricing_data.csv` |
+| Graded questions | **17** — Part A: 11 · Part B: 4 · Part C: 2 |
+| Answer key (instructor only) | `answer_keys/hw02.json` |
 
-Use this small dataset for all math questions:
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-| Week | Price ($) | Units Sold |
-|---|---|---|
-| 1 | 5.00 | 200 |
-| 2 | 6.00 | 160 |
-| 3 | 7.00 | 140 |
-| 4 | 8.00 | 110 |
-| 5 | 9.00 | 90 |
-
-**Q1.** Compute the mean price $\bar{x}$. Round to 2 decimal places.
-```python
-q1_mean_price = None
-```
-
-**Q2.** Compute the mean units sold $\bar{y}$. Round to 2 decimal places.
-```python
-q2_mean_units = None
-```
-
-**Q3.** Compute $\sum(x_i - \bar{x})(y_i - \bar{y})$. (Build the deviation table as in the worked example.)
-```python
-q3_cov_numerator = None
-```
-
-**Q4.** Compute $\sum(x_i - \bar{x})^2$.
-```python
-q4_var_denominator = None
-```
-
-**Q5.** Compute the OLS slope β_1.
-```python
-q5_beta1 = None
-```
-
-**Q6.** Compute the OLS intercept β_0.
-```python
-q6_beta0 = None
-```
-
-**Q7.** Using your regression line, what is the predicted units sold when price = $7.50?
-```python
-q7_prediction = None
-```
-
-**Q8.** The natural log of 5.00 is approximately 1.6094, and the natural log of 200 is approximately 5.2983. In the log-log model, which of these would be used as the x-variable (predictor)?
-```python
-# Enter "log_price" or "log_units"
-q8_log_predictor = None
-```
-
-**Q9.** In a log-log regression of log(units) on log(price), you estimate β_1 = −1.4. A 1% increase in price is associated with what percentage change in units sold?
-```python
-# Enter the percentage change (e.g., enter -2.3 for a 2.3% decrease)
-q9_pct_change = None
-```
-
-**Q10.** With an elasticity of −1.4, is demand elastic or inelastic?
-```python
-# Enter "elastic" or "inelastic"
-q10_elastic_or_not = None
-```
-
-**Q11.** With an elasticity of −1.4, if you raise price by 5%, what happens to total revenue?
-```python
-# Enter "increases", "decreases", or "stays the same"
-q11_revenue_effect = None
-```
-
----
-
-#### Part B: Agent Questions
-
-**Step 1:** Paste the following **Context Prompt** into your agent:
-
-```
-I am a pricing analyst studying price elasticity of demand using weekly
-sales data from a grocery chain.
-
-The dataset pricing_data.csv contains the following columns:
-- week: week number (1 to 104, representing 2 years)
-- store_id: store identifier (50 stores)
-- product_id: product identifier (3 products)
-- units_sold: weekly units sold
-- price: price per unit in dollars
-- competitor_price: competitor's price for the same product
-- display_flag: 1 if the product was on in-store display this week, 0 otherwise
-
-I want to estimate price elasticity using a log-log regression model:
-log(units_sold) = beta_0 + beta_1 * log(price) + beta_2 * log(competitor_price)
-                + beta_3 * display_flag + store_fixed_effects + product_fixed_effects
-
-Please:
-1. Load the data and show the first 5 rows
-2. Create log-transformed variables: log_units, log_price, log_comp_price
-3. Fit the log-log OLS regression using statsmodels, including store and
-   product fixed effects as dummy variables
-4. Print the full regression summary table
-5. State the estimated own-price elasticity and cross-price elasticity
-   clearly, and interpret each in one sentence
-6. Plot predicted log(units) versus actual log(units) as a scatter plot
-   to visualize model fit
-```
-
-**Step 2:** Run the agent and fill in:
-
-**Q12.** What is the estimated own-price elasticity (coefficient on log_price)? Round to 2 decimal places.
-```python
-q12_own_price_elasticity = None
-```
-
-**Q13.** Is the own-price elasticity statistically significant? (Look at the p-value for log_price. Enter True if p-value < 0.05, False otherwise.)
-```python
-q13_significant = None
-```
-
-**Q14.** What is the cross-price elasticity (coefficient on log_comp_price)? Round to 2 decimal places.
-```python
-q14_cross_price_elasticity = None
-```
-
-**Q15.** What is the R-squared of the regression? Round to 2 decimal places.
-```python
-q15_r_squared = None
-```
-
----
-
-#### Part C: Interpretation Questions
-
-**Q16.** The cross-price elasticity you found in Q14 is positive. What does a positive cross-price elasticity mean about the relationship between the focal product and the competitor product?
-- (a) The two products are complements — when the competitor's price rises, people buy less of both products
-- (b) The two products are substitutes — when the competitor's price rises, people switch to our product
-- (c) The two products are unrelated — the competitor's price has no effect on our sales
-- (d) The two products are identical — customers do not distinguish between them
-```python
-q16_cross_price_meaning = None  # Enter "a", "b", "c", or "d"
-```
-
-**Q17.** A manager argues: "Our regression proves that raising price causes sales to drop." Is this statement correct?
-- (a) Yes — a negative regression coefficient on price proves a causal relationship
-- (b) No — regression shows correlation, not causation; prices may be set lower when demand is expected to be low, creating a confounding effect
-- (c) No — regression cannot detect any relationship between price and sales
-- (d) Yes — because R² is high, we can conclude causation
-```python
-q17_causation = None  # Enter "a", "b", "c", or "d"
-```
-
----
-
-
----
+<!-- END GENERATED homework pointer -->
 
 ### Common Misconceptions
 

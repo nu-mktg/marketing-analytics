@@ -276,146 +276,28 @@ Under Shapley: Email receives 0.090 / 0.500 = **18%** of total value.
 ### Section 2.3 — Homework Assignment
 #### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-**Repository:** `data/customer_journeys.csv` + `homework_06.ipynb`
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
----
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_06_attribution.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-#### Part A: Math Questions (no agent required)
-
-Use the following value function for 3 channels: Display (D), Affiliate (A), Retargeting (R):
-
-| Coalition | $v(S)$ |
+| | |
 |---|---|
-| $\{\}$ | 0 |
-| $\{D\}$ | 0.08 |
-| $\{A\}$ | 0.12 |
-| $\{R\}$ | 0.18 |
-| $\{D,A\}$ | 0.22 |
-| $\{D,R\}$ | 0.28 |
-| $\{A,R\}$ | 0.35 |
-| $\{D,A,R\}$ | 0.42 |
+| Notebook | `homework_notebooks/homework_06_attribution.ipynb` |
+| Dataset | `homework_datasets/attribution_data.csv` |
+| Graded questions | **15** — Part A: 8 · Part B: 4 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw06.json` |
 
-**Q1.** How many orderings of 3 channels exist? (Compute 3!)
-```python
-q1_num_orderings = None
-```
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-**Q2.** In ordering (D, A, R), what is D's marginal contribution? (Coalition before D is empty.)
-```python
-q2_d_marginal_ordering1 = None
-```
-
-**Q3.** In ordering (A, D, R), what is D's marginal contribution? (Coalition before D is {A}.)
-```python
-q3_d_marginal_ordering3 = None
-```
-
-**Q4.** In ordering (A, R, D), what is D's marginal contribution? (Coalition before D is {A,R}.)
-```python
-q4_d_marginal_ordering4 = None
-```
-
-**Q5.** The 6 orderings and D's marginal contributions are:
-(D,A,R): 0.08; (D,R,A): 0.08; (A,D,R): 0.10; (A,R,D): 0.07; (R,D,A): 0.10; (R,A,D): 0.07.
-Compute $\phi_D$.
-```python
-q5_shapley_d = None
-```
-
-**Q6.** The Shapley values are $\phi_D = 0.083$, $\phi_A = 0.127$, $\phi_R = 0.210$. Verify the efficiency condition: do these sum to $v(\{D,A,R\})$?
-```python
-q6_efficiency_check = None  # True if sum ≈ 0.42, False otherwise
-```
-
-**Q7.** Under last-touch attribution (assume R is almost always last), Retargeting would receive nearly 100% of credit. Under Shapley, what percentage does Retargeting receive?
-```python
-# Enter as a percentage, e.g., 50.0 for 50%
-q7_retargeting_shapley_pct = None
-```
-
-**Q8.** True or False: In this example, Display's Shapley value (0.083) is lower than its standalone conversion rate (0.08). Since the Shapley value is only slightly above Display's standalone rate, Display contributes relatively little incremental value when combined with other channels.
-```python
-q8_display_incremental = None  # True or False
-```
-
----
-
-#### Part B: Agent Questions
-
-Paste the following **Context Prompt** into your agent:
-
-```
-I am a marketing analyst conducting multi-touch attribution analysis.
-
-customer_journeys.csv has one row per touchpoint:
-- customer_id
-- session_date
-- channel: one of "paid_search", "social", "email", "display", "organic"
-- converted: 1 if this session ended in purchase, 0 otherwise
-
-Please:
-1. Compute last-touch, first-touch, linear (equal), and Shapley value
-   attribution for each channel. Report as % of total conversions.
-2. Compute Markov chain attribution using the removal effect method.
-3. Create a comparison table: channel vs. attribution share under each method.
-4. Plot a grouped bar chart comparing all methods side by side.
-5. Identify the channel where Shapley and last-touch differ most.
-Use the pychannel library if available; otherwise implement Shapley
-via coalition enumeration with random seed 42.
-```
-
-**Q9.** What is the Shapley attribution share for paid_search? Round to 1 decimal place (as a %).
-```python
-q9_shapley_paid_search_pct = None
-```
-
-**Q10.** What is the last-touch attribution share for email? Round to 1 decimal place.
-```python
-q10_lastouch_email_pct = None
-```
-
-**Q11.** Which channel has the largest difference between Shapley and last-touch attribution?
-```python
-q11_biggest_divergence_channel = None  # channel name as string
-```
-
-**Q12.** What is the Markov removal effect for social? Round to 2 decimal places.
-```python
-q12_removal_effect_social = None
-```
-
----
-
-#### Part C: Interpretation Questions
-
-**Q13.** Paid Search has Shapley share = 35% but last-touch share = 8%. What does this tell you about Paid Search's role in the customer journey?
-- (a) Paid Search is overvalued by Shapley — last-touch is more accurate
-- (b) Paid Search frequently appears early in paths and generates high marginal value, but rarely as the final click
-- (c) Paid Search generates conversions that would have happened anyway without it
-- (d) Paid Search is a dummy channel and should receive zero attribution
-```python
-q13 = None  # "a", "b", "c", or "d"
-```
-
-**Q14.** Email has Shapley share = 12% but last-touch share = 55%. A budget analyst proposes cutting Paid Search and tripling Email spend. Based on the attribution analysis, what is the main risk?
-- (a) Email campaigns are always cheaper than Paid Search
-- (b) Removing Paid Search may reduce the pool of customers that Email can later convert — the channels are complementary
-- (c) Shapley values are always wrong for Email
-- (d) The Markov model is more reliable than Shapley for Email
-```python
-q14 = None  # "a", "b", "c", or "d"
-```
-
-**Q15.** The Shapley and Markov methods give very similar channel rankings for your data. What does this convergence tell you about the reliability of the results?
-- (a) Nothing — two methods agreeing is always suspicious
-- (b) The rankings are likely robust — different methodological assumptions lead to the same conclusion
-- (c) Both methods are wrong because they use the same data
-- (d) You should use whichever method gives the highest attribution to your most expensive channel
-```python
-q15 = None  # "a", "b", "c", or "d"
-```
-
----
+<!-- END GENERATED homework pointer -->
 
 ### Common Misconceptions
 

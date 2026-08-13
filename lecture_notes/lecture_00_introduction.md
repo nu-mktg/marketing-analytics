@@ -97,11 +97,17 @@ None of them is a black box you can trust blindly.
 
 | Component | Weight | Description |
 |---|---|---|
-| Homework (14 × individual) | 50% | Part A autograded; Parts B+C autograded |
-| Quiz 1 (after L06) | 5% | 20 T/F questions, Bayesian confidence scoring |
-| Quiz 2 (after L12) | 5% | 20 T/F questions, Bayesian confidence scoring |
-| Sprint | 20% | FitLoop case: six model outputs, group presentations |
-| Checkpoints (in-class) | 20% | Participation credit; 5 questions per session |
+| Homework (×14) | 40% | 14 graded assignments, equal weight; Part A individual |
+| Quiz 1 (after L06) | 10% | In-class, 20 T/F questions, Bayesian confidence scoring |
+| Quiz 2 (after L12) | 10% | In-class, 20 T/F questions, Bayesian confidence scoring |
+| Checkpoints (×14) | 10% | End-of-lecture participation, graded for attempt |
+| Sprint — Individual | 15% | Individual 10-question Canvas MC quiz (auto-graded) |
+| Sprint — Group | 15% | FitLoop case: group presentation and write-up |
+
+> Canonical as of 2026-08-12 (sh.lee). This previously read HW 50 / Q 5+5 / Sprint 20 /
+> Checkpoints 20, which contradicted `instructor/course_syllabus_template.md`. The syllabus
+> version won: it puts ~35% of the grade on individually-discriminating work rather than
+> ~10–15%, which matters when homework is AI-assisted. Both files now agree.
 
 **Collaboration policy:**
 - Part A (math questions): Individual. No collaboration.
@@ -233,6 +239,12 @@ errors. When in doubt: Kernel → Restart & Run All.
 ---
 
 ### 2.5 Submitting Homework
+
+> **Answers:** homework answers are not duplicated here. The single source of truth is
+> `answer_keys/hwNN.json` in the instructor repo, synced to the private key repo with
+> `./tools/push_answer_keys.sh`. Duplicating them in this file is what caused them to
+> drift out of sync with the notebooks (Task 015).
+
 
 Submission is automatic when you push to GitHub. The autograder runs within 2 minutes.
 

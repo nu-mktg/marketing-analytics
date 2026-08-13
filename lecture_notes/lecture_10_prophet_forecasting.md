@@ -288,151 +288,28 @@ $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 ### Section 2.3 — Homework Assignment
 #### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-**Repository:** `data/weekly_sales.csv` + `homework_10.ipynb`
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
----
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_10_prophet_forecasting.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-#### Part A: Math Questions (no agent required)
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_10_prophet_forecasting.ipynb` |
+| Dataset | `homework_datasets/revenue_weekly.csv` |
+| Graded questions | **16** — Part A: 8 · Part B: 5 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw10.json` |
 
-Use the quarterly dataset from the worked example for all calculations.
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-**Q1.** What is the seasonal index for Q4? (Seasonal index = quarterly average − overall mean)
-```python
-q1_seasonal_q4 = None
-```
-
-**Q2.** What is the seasonal index for Q2?
-```python
-q2_seasonal_q2 = None
-```
-
-**Q3.** Do the four seasonal indices sum to approximately 0? (Enter True or False)
-```python
-q3_sum_to_zero = None
-```
-
-**Q4.** Using the naive seasonal forecast (last year's same quarter), what is the % error for Q4 2023? (Forecast=180, Actual=200)
-```python
-q4_q4_pct_error = None
-```
-
-**Q5.** Using the trend-adjusted forecast (add 10 units), what is the Q4 2023 forecast?
-```python
-q5_q4_trend_forecast = None
-```
-
-**Q6.** What is the % error for Q4 2023 using the trend-adjusted forecast?
-```python
-q6_q4_trend_error = None
-```
-
-**Q7.** With quarterly data ($P = 4$) and $N = 1$, the Fourier seasonality has how many parameters (coefficients to estimate)?
-```python
-q7_fourier_params = None
-```
-
-**Q8.** With $N = 2$, how many parameters does the Fourier seasonal component have?
-```python
-q8_fourier_params_n2 = None
-```
-
-**Q9.** Evaluate the Fourier term $\cos(2\pi \times 4 / 4)$. (This is the Q4 value of the n=1 cosine term with P=4.)
-```python
-q9_cos_q4 = None
-```
-
-**Q10.** True or False: For standard k-fold cross-validation on weekly time series data, it is acceptable for a training fold to contain data from weeks after the test fold.
-```python
-q10_kfold_acceptable = None
-```
-
----
-
-#### Part B: Agent Questions
-
-Paste the following **Context Prompt** into your agent:
-
-```
-I am building a demand forecast for a consumer goods company.
-
-weekly_sales.csv has one row per week:
-- ds: date (YYYY-MM-DD format, always a Sunday)
-- y: units sold that week
-
-I also have a list of promotional events that typically boost sales:
-- Spring Promotion: runs first week of March annually
-- Back-to-School: runs third week of August annually
-- Black Friday: last Friday of November annually
-- Holiday Season: runs December 15 through December 31 annually
-  (use lower_window=-14 and upper_window=0 for this)
-
-Please:
-1. Fit a Prophet model with:
-   - yearly_seasonality=True, weekly_seasonality=False (weekly data)
-   - multiplicative seasonality mode (since peaks scale with trend)
-   - The 4 promotional events as custom holidays
-   - changepoint_prior_scale=0.05 (default)
-2. Generate a 26-week forecast with uncertainty intervals.
-3. Plot the forecast and the components (trend, seasonality, holidays).
-4. Run temporal cross-validation: initial="104 weeks", period="13 weeks",
-   horizon="13 weeks". Report MAPE at the 13-week horizon.
-5. Report: the week with the highest forecasted demand, and the estimated
-   % lift from the Holiday Season event.
-Use random seed 42.
-```
-
-**Q11.** What is the MAPE at the 13-week forecast horizon from cross-validation? Round to 1 decimal place (as a %).
-```python
-q11_mape_13wk = None
-```
-
-**Q12.** According to the forecast, which week has the highest predicted demand? (Enter as a date string, e.g., "2024-12-22")
-```python
-q12_peak_week = None
-```
-
-**Q13.** What is the estimated % lift from the Holiday Season event (the holiday coefficient, approximately)? Round to 1 decimal place.
-```python
-q13_holiday_lift_pct = None
-```
-
-**Q14.** Does the trend component show an upward or downward direction over the full historical period?
-```python
-q14_trend_direction = None  # "upward" or "downward"
-```
-
----
-
-#### Part C: Interpretation Questions
-
-**Q15.** MAPE at 13 weeks is 11.2%. A supply chain manager says this is too high for inventory planning. What are two things you could try to improve forecast accuracy?
-- (a) Add more Fourier terms (increase N) and switch from multiplicative to additive seasonality
-- (b) Add more historical data, validate and refine the holiday specifications, and tune changepoint_prior_scale
-- (c) Use a different dataset and run the forecast again
-- (d) Ignore MAPE and rely on the uncertainty intervals instead
-```python
-q15 = None  # "a", "b", "c", or "d"
-```
-
-**Q16.** The forecast plot shows a very steep trend upward for the next 6 months based on a recent sharp growth period. You know this growth was caused by a temporary promotion that has ended. What should you do?
-- (a) Trust the model — it learned from the data
-- (b) Manually add a changepoint at the end of the promotion period to prevent the model from extrapolating the temporary growth
-- (c) Use a different forecasting model entirely
-- (d) Nothing — Prophet will automatically detect that the trend has changed once more data arrives
-```python
-q16 = None  # "a", "b", "c", or "d"
-```
-
-**Q17.** Prophet's uncertainty interval at 26 weeks is ±35% of the point forecast. A manager says: "That's too wide to be useful — we need a precise forecast." What is the correct response?
-- (a) Agree — a 35% interval is always a sign of a bad model
-- (b) Disagree — forecast uncertainty increases with horizon; a 35% interval at 26 weeks may be honest and appropriate. Artificially narrow intervals give false confidence.
-- (c) Agree — switch to a simpler model with tighter intervals
-- (d) Disagree — Prophet's intervals are always too wide and can be ignored
-```python
-q17 = None  # "a", "b", "c", or "d"
-```
-
----
+<!-- END GENERATED homework pointer -->
 
 ### Common Misconceptions
 

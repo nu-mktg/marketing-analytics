@@ -256,140 +256,28 @@ If paid search shows $\lambda = 0.85$, investigate — this likely reflects a da
 ### Section 2.3 — Homework Assignment
 #### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-**Repository contents:** `data/mmm_data.csv` (104 weeks, TV/digital/social spend, revenue) + `homework_03.ipynb`
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
----
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_03_mmm.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-#### Part A: Math Questions (no agent required)
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_03_mmm.ipynb` |
+| Dataset | `homework_datasets/mmm_data.csv` |
+| Graded questions | **17** — Part A: 10 · Part B: 4 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw03.json` |
 
-Use $\lambda = 0.7$ and the spend sequence $S_1 = 200$, $S_2 = 100$, $S_3 = 0$, $S_4 = 150$.
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-**Q1.** Compute $A_1$.
-```python
-q1_adstock_1 = None
-```
-
-**Q2.** Compute $A_2$.
-```python
-q2_adstock_2 = None
-```
-
-**Q3.** Compute $A_3$.
-```python
-q3_adstock_3 = None
-```
-
-**Q4.** Compute $A_4$.
-```python
-q4_adstock_4 = None
-```
-
-**Q5.** For a Hill function with EC50 = 200 and $\alpha = 2$, compute $H(200)$.
-```python
-q5_hill_at_ec50 = None
-```
-
-**Q6.** Compute $H(100)$ with EC50 = 200, $\alpha = 2$. Round to 4 decimal places.
-```python
-q6_hill_at_100 = None
-```
-
-**Q7.** Compute $H(400)$ with EC50 = 200, $\alpha = 2$. Round to 4 decimal places.
-```python
-q7_hill_at_400 = None
-```
-
-**Q8.** Going from $s = 0$ to $s = 100$ (EC50=200, $\alpha$=2): gain = $H(100) - H(0) = 0.2 - 0 = 0.2$. Going from $s = 100$ to $s = 200$: gain = $H(200) - H(100) = 0.5 - 0.2 = ?$. Is the gain larger or smaller for the second \$100 of spend?
-```python
-q8_second_gain = None  # numerical value of H(200)-H(100)
-```
-
-**Q9.** True or False: $\lambda = 0.9$ produces higher week-3 adstock than $\lambda = 0.3$, given the same single spend of \$100 in week 1 and no spend afterward.
-```python
-q9_decay_comparison = None  # True or False
-```
-
-**Q10.** Channel A's marginal ROI = \$4.00. Channel B's marginal ROI = \$1.50. You have \$1,000 to move from one channel to the other. How much additional revenue do you gain by moving from B to A vs. leaving it in B?
-```python
-q10_revenue_gain = None  # in dollars
-```
-
----
-
-#### Part B: Agent Questions
-
-Paste the following **Context Prompt** into your agent:
-
-```
-I am building a Marketing Mix Model (MMM) for a consumer goods company.
-I have 104 weeks of data in mmm_data.csv with columns: week, tv_spend,
-digital_spend, social_spend, revenue (all spend and revenue in $000s).
-
-Build an MMM with these components:
-1. ADSTOCK: A_t = S_t + lambda * A_{t-1}, A_0=0. Fit a separate lambda
-   per channel.
-2. HILL FUNCTION: H(A; EC50, alpha) = A^alpha / (EC50^alpha + A^alpha).
-   Fit separate EC50 and alpha per channel.
-3. REGRESSION: Revenue_t = beta_0 + beta_TV*H(A_TV) + beta_Digital*H(A_Digital)
-   + beta_Social*H(A_Social) + error
-4. BUDGET OPTIMIZATION: Find the allocation of the current average total
-   weekly budget across three channels that maximizes predicted weekly revenue.
-
-Use scipy.optimize with seed=42. Print:
-- Fitted lambda, EC50, alpha per channel
-- Beta coefficients
-- Current vs optimal budget allocation (in $000s)
-- Predicted revenue uplift from optimal reallocation (%)
-```
-
-**Q11.** What is the fitted decay parameter (λ) for TV? Round to 2 decimal places.
-```python
-q11_lambda_tv = None
-```
-
-**Q12.** What is the fitted EC50 for Digital (\$000s)? Round to 1 decimal place.
-```python
-q12_ec50_digital = None
-```
-
-**Q13.** According to the budget optimization, should TV spend increase or decrease?
-```python
-q13_tv_direction = None  # "increase" or "decrease"
-```
-
-**Q14.** What is the predicted revenue uplift (%) from the optimal reallocation? Round to 1 decimal place.
-```python
-q14_revenue_uplift_pct = None
-```
-
----
-
-#### Part C: Interpretation Questions
-
-**Q15.** The Hill function response for TV is 0.82. This means:
-- (a) TV spend is well below EC50 — high marginal return remains
-- (b) TV spend is at exactly EC50
-- (c) TV spend is well above EC50 — diminishing returns have set in
-- (d) Cannot determine without knowing the actual spend value
-```python
-q15_tv_saturation = None  # "a", "b", "c", or "d"
-```
-
-**Q16.** True or False: A decay parameter of λ = 0 means advertising has no effect on sales.
-```python
-q16_lambda_zero = None  # True or False
-```
-
-**Q17.** The budget optimization recommends tripling Social spend and cutting TV to near zero. Before acting on this, which check is most important?
-- (a) Whether TV's λ is higher than Social's λ
-- (b) Whether the model's predicted revenue at current spend matches actual revenue — a poor fit means the recommendation is unreliable
-- (c) Whether EC50 for Social is lower than EC50 for TV
-- (d) Whether β_Social is larger than β_TV
-```python
-q17_trust_check = None  # "a", "b", "c", or "d"
-```
-
----
+<!-- END GENERATED homework pointer -->
 
 ### Common Misconceptions
 

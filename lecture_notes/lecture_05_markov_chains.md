@@ -263,137 +263,28 @@ This is exactly the survival function $\hat{S}(t)$ from Lecture 4, computed here
 ### Section 2.3 — Homework Assignment
 #### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-**Repository:** `data/customer_states.csv` (customer-month data) + `homework_05.ipynb`
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
----
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_05_markov_chains.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-#### Part A: Math Questions (no agent required)
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_05_markov_chains.ipynb` |
+| Dataset | `homework_datasets/engagement_data.csv` |
+| Graded questions | **16** — Part A: 8 · Part B: 5 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw05.json` |
 
-Use this transition count matrix for all calculations:
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-| From↓ \ To→ | New | Active | At-Risk | Churned |
-|---|---|---|---|---|
-| New | 0 | 350 | 100 | 50 |
-| Active | 0 | 480 | 120 | 0 |
-| At-Risk | 0 | 200 | 100 | 200 |
-| Churned | 0 | 0 | 0 | 600 |
-
-**Q1.** What is the row sum for Active customers?
-```python
-q1_active_row_sum = None
-```
-
-**Q2.** What is the transition probability $P_{Active, At-Risk}$ (Active → At-Risk)?
-```python
-q2_p_active_atrisk = None
-```
-
-**Q3.** What is the transition probability $P_{At-Risk, Churned}$?
-```python
-q3_p_atrisk_churned = None
-```
-
-**Q4.** Is Churned an absorbing state? Enter True or False.
-```python
-q4_churned_absorbing = None
-```
-
-**Q5.** Starting from At-Risk, compute $(P^2)_{At-Risk, Churned}$ — the 2-step probability of reaching Churned starting from At-Risk. Use $P_{At-Risk} = [0, 0.40, 0.20, 0.40]$ and the column of Churned transitions $[0.10, 0, 0.40, 1.00]$. (Hint: dot product of the At-Risk row with the Churned column.)
-
-```python
-q5_p2_atrisk_churned = None
-```
-
-**Q6.** Is $(P^2)_{At-Risk, Churned}$ higher or lower than the 1-step probability $P_{At-Risk, Churned} = 0.40$?
-```python
-# Enter "higher" or "lower"
-q6_comparison = None
-```
-
-**Q7.** True or False: The steady-state distribution for this 4-state chain (with Churned absorbing) is $\pi = [0, 0, 0, 1]$.
-```python
-q7_steady_state = None
-```
-
-**Q8.** Given the matrix above, which transition represents the biggest "leak" — the transition with the highest probability that moves customers toward Churned?
-```python
-# Enter the transition as a string, e.g., "Active_to_AtRisk"
-q8_biggest_leak = None
-```
-
----
-
-#### Part B: Agent Questions
-
-Paste the following **Context Prompt** into your agent:
-
-```
-I have monthly customer engagement data for a subscription service.
-customer_states.csv has one row per customer-month with columns:
-- customer_id
-- month (integer)
-- state: one of "new", "active", "at_risk", "dormant", "churned"
-
-Please:
-1. Build the 5×5 transition probability matrix by counting consecutive
-   month-to-month state changes and normalizing rows.
-   Display as a formatted table and a heatmap.
-2. Starting from "active", compute and display the state distribution
-   after 1, 3, 6, and 12 months (using matrix multiplication P^n).
-3. Identify the state with the highest single-period transition probability
-   to "churned".
-4. Simulate 500 customer journeys starting from "new" for 18 months.
-   Plot the average fraction in each state over time.
-Use random seed 42.
-```
-
-**Q9.** What is the transition probability from "at_risk" to "churned"? Round to 2 decimal places.
-```python
-q9_p_atrisk_churned = None
-```
-
-**Q10.** After 12 months starting from "active", what fraction of customers are still active (not churned)? Round to 2 decimal places.
-```python
-q10_active_survival_12m = None
-```
-
-**Q11.** Which state has the highest transition probability to "churned"?
-```python
-q11_highest_churn_state = None  # e.g., "dormant", "at_risk", etc.
-```
-
----
-
-#### Part C: Interpretation Questions
-
-**Q12.** The steady-state distribution for a 4-state chain with an absorbing Churned state is always $\pi_{Churned} = 1$. Does this mean all customers will eventually churn? What does it actually tell you, and why is the expected time to reach Churned more useful?
-- (a) Yes — it means all customers will eventually churn, which is expected for any subscription
-- (b) No — it means some customers will always remain active
-- (c) Yes — and this is a problem with the model that should be fixed
-- (d) No — it means Churned is not truly absorbing
-```python
-q12 = None  # "a", "b", "c", or "d"
-```
-
-**Q13.** The simulation shows a "spike" in the At-Risk fraction at month 3 before it decreases. What business interpretation would you give for this pattern?
-- (a) The simulation has a bug — at-risk should decrease monotonically
-- (b) New customers enter an at-risk phase around month 3 before either re-engaging or churning
-- (c) The Markov property is violated at month 3
-- (d) This only happens because the dataset is too small
-```python
-q13 = None  # "a", "b", "c", or "d"
-```
-
-**Q14.** You are designing a retention campaign. Based on the transition matrix, which customers should you prioritize targeting: Active customers who might become At-Risk, or At-Risk customers who might churn?
-- (a) Active customers — there are more of them
-- (b) At-Risk customers — their next-step churn probability is highest, so intervention has the most immediate impact per dollar
-- (c) Dormant customers — they have the lowest probability of recovery
-- (d) New customers — preventing early churn is always most valuable
-```python
-q14 = None  # "a", "b", "c", or "d"
-```
-
----
+<!-- END GENERATED homework pointer -->
 
 ### Common Misconceptions
 

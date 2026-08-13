@@ -262,136 +262,28 @@ Note: C7 (T=0, Y=1, $\hat{\tau}=0.18$) converted in the control group despite mo
 ### Section 2.3 — Homework Assignment
 #### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-**Repository:** `data/uplift_data.csv` + `homework_07.ipynb`
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
----
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_07_uplift_modeling.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-#### Part A: Math Questions (no agent required)
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_07_uplift_modeling.ipynb` |
+| Dataset | `homework_datasets/uplift_experiment.csv` |
+| Graded questions | **16** — Part A: 8 · Part B: 5 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw07.json` |
 
-**Q1.** In an experiment, 2,000 customers were treated and 2,000 were controls. Treated conversion rate = 0.22. Control conversion rate = 0.14. What is the ATE?
-```python
-q1_ate = None
-```
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-**Q2.** The treatment cost is \$2 per customer. The value of a conversion is \$30. What is the minimum uplift τ(X) that justifies targeting a customer?
-```python
-q2_min_uplift = None
-```
-
-**Q3.** A customer has predicted uplift $\hat{\tau}(X) = 0.12$ and the minimum uplift threshold is 0.067. Should this customer be targeted?
-```python
-q3_target = None  # True or False
-```
-
-**Q4.** If there are 10,000 customers with an average predicted uplift of 0.09, and you target all of them with a \$2 cost and \$30 conversion value, what is the expected net profit from the campaign? (Expected net profit = N × τ̄ × value - N × cost)
-```python
-q4_expected_profit = None
-```
-
-**Q5.** True or False: A customer with Y=1 who was in the treatment group must be a "persuadable."
-```python
-q5_treated_converter_persuadable = None  # True or False
-```
-
-**Q6.** The T-learner trains model $\hat{\mu}_0$ on control customers only. A new customer has features X_new = [age=42, tenure=5]. The model predicts $\hat{\mu}_0(X_{new}) = 0.08$. What does this represent in business terms?
-```python
-# Enter "a", "b", or "c"
-# (a) The customer will convert with 8% probability if treated
-# (b) The customer will convert with 8% probability if NOT treated (baseline conversion probability)
-# (c) The uplift from treating this customer is 8%
-q6_mu0_meaning = None
-```
-
-**Q7.** Under random assignment, T is independent of X. Why does this matter for the T-learner? In one sentence, explain what goes wrong if self-selected customers join the treatment group.
-```python
-# Free response — participation credit; no autograded answer
-q7_random_assignment = "write your answer here as a string"
-```
-
----
-
-#### Part B: Agent Questions
-
-Paste the following **Context Prompt** into your agent:
-
-```
-I am running an uplift analysis for a retail bank promotion experiment.
-
-uplift_data.csv contains one row per customer:
-- customer_id
-- treated: 1 if customer received the promotion, 0 if control
-- converted: 1 if customer accepted a cross-sell offer, 0 otherwise
-- age: customer age in years
-- account_tenure_years: years as a customer
-- avg_monthly_balance: average balance in dollars
-- num_products: number of existing products
-- last_login_days_ago: days since last login
-- credit_score_band: "low", "medium", or "high"
-
-Please:
-1. Verify random assignment: compare feature means between treated and
-   control groups. Report any significant differences.
-2. Compute the observed ATE (treated rate - control rate).
-3. Implement a T-learner using Random Forest classifiers for both
-   mu_1 and mu_0. Use 80/20 train/test split with random_state=42.
-4. Compute predicted uplift tau_hat = mu_1(X) - mu_0(X) for the test set.
-5. Report: mean tau_hat, and verify it is close to the observed ATE.
-6. Plot the Qini curve and compute the Qini coefficient.
-7. Print the top 5 most important features from mu_1 and mu_0 separately.
-```
-
-**Q8.** What is the observed ATE? Round to 3 decimal places.
-```python
-q8_observed_ate = None
-```
-
-**Q9.** What is the mean predicted uplift (tau_hat) on the test set? Round to 3 decimal places.
-```python
-q9_mean_tau_hat = None
-```
-
-**Q10.** What is the Qini coefficient? Round to 2 decimal places.
-```python
-q10_qini_coef = None
-```
-
-**Q11.** What is the single most important feature in model mu_1 (the treatment model)?
-```python
-q11_top_feature_mu1 = None  # feature name as string
-```
-
----
-
-#### Part C: Interpretation Questions
-
-**Q12.** The Qini coefficient is 0.31. A colleague says: "Our model only works 31% of the time." Is this correct?
-- (a) Yes — 31% accuracy is poor for a marketing model
-- (b) No — the Qini coefficient measures ranking quality (how well persuadables are ranked first), not prediction accuracy
-- (c) Yes — any Qini below 0.5 means the model performs worse than random
-- (d) No — the Qini coefficient should always be above 0.9 for marketing models
-```python
-q12 = None  # "a", "b", "c", or "d"
-```
-
-**Q13.** The most important feature in mu_1 (treatment model) is avg_monthly_balance, but this feature is much less important in mu_0 (control model). What does this suggest about who responds to the promotion?
-- (a) High-balance customers have higher baseline conversion rates
-- (b) High-balance customers respond more strongly to the promotion — the treatment effect is larger for them
-- (c) Balance is not useful for predicting conversions at all
-- (d) The model is overfitted and the feature importance should be ignored
-```python
-q13 = None  # "a", "b", "c", or "d"
-```
-
-**Q14.** You want to target the top 20% of customers by predicted uplift. Based on the Qini curve, approximately what fraction of total incremental conversions would this targeting strategy capture?
-- (a) Exactly 20% — targeting 20% always captures 20% of incremental conversions
-- (b) More than 20% — if the model is good, the top 20% are disproportionately persuadables
-- (c) Less than 20% — the model always underperforms random
-- (d) Exactly 100% — all persuadables are in the top 20%
-```python
-q14 = None  # "a", "b", "c", or "d"
-```
-
----
+<!-- END GENERATED homework pointer -->
 
 ### Common Misconceptions
 

@@ -269,153 +269,28 @@ $$P_1 = \frac{0.1423}{0.4062} \approx \mathbf{35.0\%}, \quad P_2 = \frac{0.2231}
 ### Section 2.3 — Homework Assignment
 #### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-**Repository:** `data/conjoint_data.csv` + `homework_09.ipynb`
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
----
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_09_conjoint_analysis.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-#### Part A: Math Questions (no agent required)
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_09_conjoint_analysis.ipynb` |
+| Dataset | `homework_datasets/conjoint_survey.csv` |
+| Graded questions | **16** — Part A: 9 · Part B: 4 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw09.json` |
 
-Use these utility parameters for all calculations:
-- $\beta_{\text{price}} = -0.20$ per dollar
-- $\beta_{\text{premium content}} = +1.50$ (vs. standard)
-- $\beta_{\text{full ads}} = -1.80$ (vs. no ads)
-- $\beta_{\text{limited ads}} = -0.60$ (vs. no ads)
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-**Q1.** Compute $V_A$ for the product: \$10/month, standard content, no ads.
-```python
-q1_Va = None
-```
-
-**Q2.** Compute $V_B$ for the product: \$15/month, premium content, no ads.
-```python
-q2_Vb = None
-```
-
-**Q3.** Compute $e^{V_A}$. Use the approximation $e^{-2.00} \approx 0.1353$.
-```python
-q3_exp_Va = None
-```
-
-**Q4.** Compute $e^{V_B}$. Use $e^{-1.50} \approx 0.2231$.
-```python
-q4_exp_Vb = None
-```
-
-**Q5.** What is $P(\text{choose B})$ in a choice between only A and B?
-```python
-q5_prob_B = None
-```
-
-**Q6.** Compute the WTP for "premium content."
-```python
-q6_wtp_premium = None
-```
-
-**Q7.** Now a third option C is added: \$8/month, standard content, limited ads. Compute $V_C$.
-```python
-q7_Vc = None
-```
-
-**Q8.** With $e^{-2.20} \approx 0.1108$, compute $P(\text{choose A})$ from the 3-option set {A, B, C}.
-```python
-q8_prob_A_3opt = None
-```
-
-**Q9.** Compare $P(\text{choose A})$ in the 2-option set (Q5, complement = 1 − 0.6226 = 0.3774) vs. the 3-option set (Q8, 0.2884). Did adding option C take share from A, B, or both?
-```python
-# Enter "A_only", "B_only", or "both"
-q9_share_loss = None
-```
-
-**Q10.** True or False: The WTP formula $\beta_{\text{attr}} / |\beta_{\text{price}}|$ requires that price must have a negative coefficient.
-```python
-q10_wtp_requires_neg_price = None  # True or False
-```
-
----
-
-#### Part B: Agent Questions
-
-Paste the following **Context Prompt** into your agent:
-
-```
-I am analyzing a conjoint survey for a streaming subscription service.
-
-conjoint_data.csv has one row per choice task:
-- respondent_id: unique respondent identifier
-- task_id: choice task number (each respondent sees 8 tasks)
-- chosen: 1 if this option was chosen, 0 otherwise
-- price: monthly subscription price ($8, $13, or $18)
-- content: "standard" or "premium"
-- ads: "none", "limited", or "full"
-
-Please:
-1. Prepare the data in long format: each row is one option in one task.
-2. Fit a Multinomial Logit (MNLogit) model using statsmodels or pylogit.
-   Use dummy coding with "standard" and "none" (no ads) as reference levels.
-3. Print the full model summary with coefficients, standard errors, p-values.
-4. Compute WTP for premium content and for "full ads" (how much would
-   customers need to be compensated to accept full ads).
-5. Simulate market shares for three products:
-   - Tier 1: $10/month, standard, no ads
-   - Tier 2: $16/month, premium, no ads
-   - Tier 3: $7/month, standard, full ads
-6. Identify the attribute with the highest WTP magnitude.
-Use random seed 42.
-```
-
-**Q11.** What is the estimated price coefficient? Round to 3 decimal places.
-```python
-q11_beta_price = None
-```
-
-**Q12.** What is the WTP for premium content? Round to 2 decimal places (in dollars per month).
-```python
-q12_wtp_premium = None
-```
-
-**Q13.** What is the simulated market share for Tier 2 (premium, \$16)? Round to 1 decimal place (as a %).
-```python
-q13_tier2_share = None
-```
-
-**Q14.** Is the price coefficient statistically significant at the 5% level?
-```python
-q14_price_significant = None  # True or False
-```
-
----
-
-#### Part C: Interpretation Questions
-
-**Q15.** The WTP for premium content is \$7.50. Currently, Tier 1 (standard) is priced at \$10 and Tier 2 (premium) is priced at \$16. The price gap is \$6. What does the WTP tell you about this pricing?
-- (a) The premium tier is overpriced — customers would only pay \$7.50 more, not \$6
-- (b) Wait, \$6 < \$7.50, so the premium tier is underpriced — customers would pay up to \$7.50 extra but only need to pay \$6 extra
-- (c) The WTP and the price gap are essentially the same
-- (d) WTP cannot be compared to actual prices
-```python
-q15 = None  # "a", "b", "c", or "d"
-```
-
-**Q16.** A marketing analyst says: "The WTP estimate of \$7.50 means every customer will pay \$7.50 more for premium." Is this correct?
-- (a) Yes — WTP is the price every customer will pay
-- (b) No — WTP is the average across respondents; some are willing to pay more, some less
-- (c) Yes — because conjoint analysis measures exact reservation prices
-- (d) No — WTP in conjoint is always understated due to hypothetical bias
-```python
-q16 = None  # "a", "b", "c", or "d"
-```
-
-**Q17.** The market simulation shows Tier 3 (cheapest, full ads) capturing only 8% of the market despite being the cheapest option. What does this tell you about the customer segment in this survey?
-- (a) The survey has a sampling bias toward high-income respondents
-- (b) Ad aversion is very strong in this sample — the disutility from full ads outweighs the price savings
-- (c) The logit model is always biased against low-price options
-- (d) The price range used in the survey is too narrow
-```python
-q17 = None  # "a", "b", "c", or "d"
-```
-
----
+<!-- END GENERATED homework pointer -->
 
 ### Common Misconceptions
 
