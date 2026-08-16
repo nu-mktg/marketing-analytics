@@ -79,7 +79,15 @@ $$\hat{\tau}_{\text{DiD}} = 10.08 - 3.83 = \mathbf{+6.25}$$
 
 **Interpretation:** The price reduction caused a 6.25-unit increase in weekly revenue, after removing the 3.83-unit increase that would have occurred due to the underlying time trend alone.
 
-**Naive estimate bias:** 10.08 − 6.25 = 3.83 units (the naive estimate overstates by 61%).
+**Naive estimate bias:** 10.08 − 6.25 = **3.83 units**.
+
+> **Convention — what "overstates by" means in this course.** *Overstatement* is a **difference, in the outcome's own units**:
+>
+> $$\text{overstatement} = \hat{\tau}_{\text{naive}} - \hat{\tau}_{\text{DiD}} = 10.08 - 6.25 = \mathbf{3.83}$$
+>
+> It is numerically the common time trend $\beta_2$, because the trend is exactly what the naive estimate fails to remove. **This single number, in units, is the answer** — it is what Part A Q3 (`q3_overstatement`) asks for.
+>
+> A percentage, when one is quoted, is always that same difference expressed as a fraction of the causal effect: 3.83 / 6.25 = **61%**, i.e. the naive estimate is 61% larger than the truth. The **ratio** $\hat{\tau}_{\text{naive}} / \hat{\tau}_{\text{DiD}} = 1.61$ restates the same fact in a third form and is *not* what "overstates by" refers to.
 
 ---
 
@@ -106,7 +114,11 @@ DiD is valid only under the parallel trends assumption:
 
 $$\boxed{E[\bar{Y}_{T,\text{post}}^{(0)} - \bar{Y}_{T,\text{pre}}] = E[\bar{Y}_{C,\text{post}} - \bar{Y}_{C,\text{pre}}]}$$
 
-The superscript (0) denotes the **counterfactual** — what the treatment region would have experienced absent the intervention. We cannot observe this. But we can test whether it is plausible.
+**Reading the superscript.** $\bar{Y}_{T,\text{post}}$ — no superscript — is the treatment regions' *observed* mean after the intervention: a column of numbers you can compute from `geo_experiment.csv`. The superscript $(0)$ marks a **potential outcome under no treatment**, so $\bar{Y}_{T,\text{post}}^{(0)}$ is the treatment regions' post-period mean *in the world where the price cut never happened*. That world did not occur, so **no dataset contains $\bar{Y}_{T,\text{post}}^{(0)}$** — not this one, and not a larger one. These are two different quantities for the same regions in the same weeks, and the gap between them is precisely the thing we are trying to estimate: $\bar{Y}_{T,\text{post}} - \bar{Y}_{T,\text{post}}^{(0)}$. ($\bar{Y}_{T,\text{pre}}$ needs no superscript: before the intervention the treated and untreated worlds are the same world.)
+
+**Why that makes it an assumption.** Every term in the boxed equation is observable *except* $\bar{Y}_{T,\text{post}}^{(0)}$. Parallel trends is therefore a constraint on a quantity that is missing by construction — you cannot check it against data the way you check a regression coefficient, and no sample size fixes that. What the assumption buys is a **substitution**: it licenses using the control regions' observed change $(\bar{Y}_{C,\text{post}} - \bar{Y}_{C,\text{pre}})$ in place of the treatment regions' unobservable counterfactual change. When it holds, DiD is causal; when it fails, DiD is a subtraction with no causal content, and the data look identical either way.
+
+So the two procedures below can never *verify* parallel trends. They ask a weaker question that data can answer — in the pre-period, where *both* groups' outcomes are observed, did the two move together? — and a yes makes the substitution more credible. Plausibility is the most any evidence can buy here.
 
 **How to assess parallel trends:**
 
@@ -153,7 +165,7 @@ Marketing Mix Models estimate channel contributions from observational data. Bec
 
 3. Write the regression equation for DiD. Which coefficient is the treatment effect?
 
-4. You plot weekly revenue for treatment and control regions in the 8 weeks before the intervention. The treatment region is trending +3 units/week while the control region trends +3 units/week. Is parallel trends plausible?
+4. You plot weekly revenue for treatment and control regions in the 8 weeks before the intervention. The treatment regions trend at +5.2 units/week; the control regions trend at +3.1 units/week. Is parallel trends plausible, and what does your answer imply for the DiD estimate?
 
 5. Your MMM estimates the causal effect of the price reduction at +10.5 units/week. Your geo-holdout DiD estimates +6.25 units/week. What does this discrepancy suggest about the MMM estimate?
 
@@ -163,11 +175,15 @@ Marketing Mix Models estimate channel contributions from observational data. Bec
 
 **Q1.** $\hat{\tau}_{\text{DiD}} = (200-180) - (172-160) = 20 - 12 = \mathbf{+8}$
 
-**Q2.** Naive estimate = 200 − 180 = 20. Overstates by 12 (the common trend). As a fraction: 20/8 = 2.5× too large.
+**Q2.** Naive estimate = 200 − 180 = **20**. By §1.3's convention the overstatement is the difference, in units: 20 − 8 = **12** — which is exactly the common trend (172 − 160 = 12), as it always is. As a fraction of the causal effect that is 12/8 = 150%, and the ratio 20/8 = 2.5× is the same fact in a third form. **The answer is 12.**
 
 **Q3.** $Y_{it} = \beta_0 + \beta_1 \text{Treat}_i + \beta_2 \text{Post}_t + \beta_3(\text{Treat}_i \times \text{Post}_t) + \varepsilon_{it}$. The treatment effect is $\beta_3$, the coefficient on the interaction term.
 
-**Q4.** Yes — both regions trend at the same rate (+3/week). Parallel trends is plausible.
+**Q4.** No. The two groups are already diverging before anything happens: the treatment regions gain 5.2 units/week against the control regions' 3.1, a **differential pre-trend of about 2.1 units/week**. Parallel trends says the two groups' *changes* would have matched absent the intervention, and the pre-period is the one window where that can be checked — here it visibly fails. Note that the *levels* are irrelevant to this judgement; only the slopes matter.
+
+The consequence is directional, not just "be careful". DiD substitutes the control regions' change for what the treatment regions would have done anyway. That substitute is too small by ~2.1 units/week, so the leftover is credited to the intervention and **DiD will overstate the causal effect** — by roughly 2.1 units for each post-period week. A treatment group on a *shallower* pre-trend would bias it the other way.
+
+Formally this is what the placebo test in §1.5 detects: run the DiD on pre-period data alone with a fake intervention date, and here $\hat{\beta}_3$ would come back significantly non-zero rather than the $\hat{\beta}_3 = 0.81$, $p = 0.86$ the real dataset gives. The response is to find better-matched control regions, or to use a method that allows differing trends — not to report the DiD estimate with a caveat attached.
 
 **Q5.** The MMM overestimates the causal effect by 4.25 units/week (~68%). The most likely cause: the MMM's price coefficient is confounded — price reductions may have been deployed in periods when demand was already expected to increase. The DiD is a more credible causal estimate because randomisation of treatment regions eliminates the endogeneity that biases the MMM.
 
@@ -233,7 +249,7 @@ print(f'Q1: {q1_did_estimate}')
 q2_naive_estimate = None
 print(f'Q2: {q2_naive_estimate}')
 
-# Q3. By how much does the naive estimate overstate the causal effect?
+# Q3. Overstatement: naive - DiD
 q3_overstatement = None
 print(f'Q3: {q3_overstatement}')
 
