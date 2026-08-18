@@ -121,7 +121,15 @@ Once the agent provides E[purchases in next 12 months] and E[order value], CLV i
 
 The Gamma-Gamma model for spend assumes that a customer's average order value is independent of their purchase frequency. If high-frequency buyers tend to make smaller purchases (as often happens in grocery retail), this assumption is violated.
 
-**How to check:** Compute the Pearson correlation between each customer's purchase frequency and their average order value. A correlation of −0.30 or stronger is a material violation.
+**How to check:** Compute the Pearson correlation between each customer's purchase frequency and their average order value, and read it against one scale — the same one the pre-flight checklist at the end of this lecture uses:
+
+| \|correlation\| | Verdict |
+|---|---|
+| < 0.2 | assumption holds well enough to use Gamma-Gamma as-is |
+| 0.2 – 0.3 | grey zone — usable, but say so and check whether the CLV ranking changes if you drop the highest-frequency decile |
+| ≥ 0.3 | material violation — CLV for high-frequency customers is systematically biased |
+
+Two numbers used to appear in this lecture for this one decision (a −0.30 "material violation" line here and a 0.2 line in the checklist), which left the 0.2–0.3 range with two different answers depending on which passage you read. They are one scale, above.
 
 **What to do if violated:** The CLV estimates for high-frequency customers will be systematically overestimated. Add a note of caution to any recommendation based on CLV for high-frequency customer segments.
 
