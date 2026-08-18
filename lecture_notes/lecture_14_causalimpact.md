@@ -117,7 +117,11 @@ $$\text{MAPE}_{\text{pre}} = \frac{1}{T_{\text{pre}}} \sum_{t=1}^{T_{\text{pre}}
 | 10–20% | Moderate — post-period CIs will be wide |
 | > 20% | Poor fit — counterfactual is unreliable; reconsider covariates |
 
-**Dataset result:** With `branded_search_impressions` as covariate, pre-period MAPE ≈ 3.3%. This indicates the covariate explains the outcome well in the pre-period, and the post-period counterfactual is credible.
+**Dataset result:** With `branded_search_impressions` as covariate, pre-period MAPE ≈ 3.3%, which lands in the "excellent fit" row above.
+
+**But read that number carefully — it is the most instructive thing in this section.** A low MAPE says the fitted line tracks the observed series closely. It does *not* say the covariate is what made it track. In this dataset the pre-period regression of `website_sessions` on `branded_search_impressions` has $R^2 \approx 0.01$: the covariate explains essentially none of the week-to-week variation. The MAPE is small anyway because the pre-period series is nearly flat, so predicting "roughly the pre-period average" is already right to within a few percent. Adding `social_mentions` as a second covariate only lifts $R^2$ to about 0.07.
+
+Two lessons follow, and they are the same lesson from opposite ends. First, $100\% - \text{MAPE}$ is not $R^2$ — the two answer different questions and can point in opposite directions, which is exactly the point the worked Q3 below makes. Second, and more practically: a flat outcome series will pass a MAPE screen with useless controls, so the MAPE table above is a *necessary* check on the counterfactual, not a sufficient one. Always look at the fitted relationship as well as the fit error, and be most suspicious when the outcome barely moves in the pre-period — that is precisely the case where a good-looking MAPE is cheapest to obtain.
 
 ---
 
