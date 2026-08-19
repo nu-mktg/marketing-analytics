@@ -311,7 +311,9 @@ complete a **10-question multiple-choice Canvas quiz** (60 minutes, auto-closes)
 Your group's model output packet is open in front of you — the quiz is open-book for
 the data, not for communication with group members.
 
-The quiz is worth **100 of 140 total points**. Canvas auto-grades it immediately.
+The quiz is scored out of **100 Canvas points** and is the **Sprint — Individual 15%** of your
+course grade (the group presentation + write-up are the other 15%). Canvas auto-grades it
+immediately.
 
 **The 10 question topics (one per area):**
 1. **Bayesian A/B test** — interpreting posterior probability and credible intervals for a pricing decision

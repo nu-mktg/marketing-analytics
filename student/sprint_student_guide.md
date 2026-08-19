@@ -10,18 +10,26 @@ brings together the course's analytical models. You will work as a group on a re
 problem (a fictional company called FitLoop), and you will be graded on both your individual
 reasoning and your group's presentation.
 
-**Total weight:** 20% of your final grade.
+**Total weight:** 30% of your final grade (Sprint — Individual 15% + Sprint — Group 15%).
 
 **The Sprint has three parts spread across the final weeks of the course:**
 
-| Part | When | Format | Weight |
-|---|---|---|---|
-| Individual scenario quiz | Week 14 (in class) | Timed Canvas quiz, 60 min | 100 of 140 points |
-| Group presentation | Week 15 (in class) | 12–15 min per group | 40 of 140 points |
-| Group write-up | Week 16 (online) | Written submission, 2 pages max | — (see below) |
+| Part | When | Format | Canvas points | Weight |
+|---|---|---|---|---|
+| Individual scenario quiz | Week 14 (in class) | Timed Canvas quiz, 60 min | 100 | 15% |
+| Group presentation | Week 15 (in class) | 12–15 min per group | 40 | 15% |
+| Group write-up | Week 16 (online) | Written submission, 2 pages max | scored with the presentation | (included in the 15%) |
 
-*Note: the write-up is part of the same 140-point assessment, submitted as a PDF to Canvas
-by the end of Week 16. It is graded using the same group scorecard as the presentation.*
+**How the points map to your grade.** The two point totals are *separate Canvas scales*, not
+shares of one 140-point pot: your individual quiz score out of 100 becomes the Individual 15%,
+and your group's scorecard score out of 40 becomes the Group 15%. So a student who scores 80/100
+on the quiz and whose group scores 30/40 earns (0.80 × 15) + (0.75 × 15) = **23.25% of the
+course grade** out of the 30% the Sprint is worth. The larger quiz point total does **not** make
+the individual portion count for more than the group portion — the split is 50/50.
+
+*Note: the write-up is submitted as a PDF to Canvas by the end of Week 16 and is graded using the
+same 40-point group scorecard as the presentation; the higher of your presentation and write-up
+score on each criterion is the one that counts.*
 
 ---
 
@@ -182,8 +190,10 @@ articulate any points that were unclear in the live presentation.
 **Individual scenario quiz (Week 14 Canvas quiz):**
 If you cannot attend the in-class session in Week 14, you may request a makeup window
 by emailing the instructor at least 24 hours in advance (or as soon as possible for
-emergencies). The makeup quiz uses the same Canvas question set with a different time
-window. It is taken independently with Respondus Lockdown Browser — no Codespace
+emergencies). The makeup quiz is **your own group's version** of the quiz (the Canvas quiz
+named `Sprint Individual Quiz — GROUP_N` for your group number), reopened for a different time
+window — the questions are keyed to your group's model output packet, so no other group's version
+will match your numbers. It is taken independently with Respondus Lockdown Browser — no Codespace
 access is required because no coding is needed during the quiz.
 
 You can self-schedule the makeup by:
