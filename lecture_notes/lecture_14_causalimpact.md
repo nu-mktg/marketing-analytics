@@ -117,7 +117,7 @@ $$\text{MAPE}_{\text{pre}} = \frac{1}{T_{\text{pre}}} \sum_{t=1}^{T_{\text{pre}}
 | 10–20% | Moderate — post-period CIs will be wide |
 | > 20% | Poor fit — counterfactual is unreliable; reconsider covariates |
 
-**Dataset result:** With `branded_search_impressions` as covariate, pre-period MAPE ≈ 3.3%, which lands in the "excellent fit" row above.
+**Dataset result:** A plain pre-period OLS regression of `website_sessions` on `branded_search_impressions` gives MAPE ≈ 3.3%, which lands in the "excellent fit" row above. Homework 14 fits the *same 30 weeks* with the full CausalImpact state-space model and *both* covariates and gets ≈ 4.2% — a different estimator of the same series, landing in the same row. That is not a contradiction, and neither number is the "real" one: **a MAPE belongs to a fit, so always say which fit produced it.**
 
 **But read that number carefully — it is the most instructive thing in this section.** A low MAPE says the fitted line tracks the observed series closely. It does *not* say the covariate is what made it track. In this dataset the pre-period regression of `website_sessions` on `branded_search_impressions` has $R^2 \approx 0.01$: the covariate explains essentially none of the week-to-week variation. The MAPE is small anyway because the pre-period series is nearly flat, so predicting "roughly the pre-period average" is already right to within a few percent. Adding `social_mentions` as a second covariate only lifts $R^2$ to about 0.07.
 
