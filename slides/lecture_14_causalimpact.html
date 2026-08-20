@@ -1223,10 +1223,10 @@ Running total effect.<br>
 Final value + CI = headline result.</p>
 </div>
 <div>
-<p>From the dataset:</p>
+<p>From the dataset (CausalImpact, both covariates):</p>
 <ul>
-<li>Pre MAPE: <strong>3.3%</strong> ✓ (good fit)</li>
-<li>Avg pointwise: <strong>+2,775</strong> sessions/week</li>
+<li>Pre MAPE: <strong>4.2%</strong> ✓ (good fit)</li>
+<li>Avg pointwise: <strong>+2,740</strong> sessions/week</li>
 <li>95% CI: <strong>excludes zero</strong> ✓</li>
 <li>Posterior P(effect &gt; 0): <strong>&gt; 0.95</strong> ✓</li>
 </ul>
@@ -1277,6 +1277,10 @@ Final value + CI = headline result.</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">MAPE</mtext><mtext mathvariant="normal">pre</mtext></msub><mo>=</mo><mfrac><mn>1</mn><msub><mi>T</mi><mtext mathvariant="normal">pre</mtext></msub></mfrac><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>T</mi><mtext mathvariant="normal">pre</mtext></msub></munderover><mfrac><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>y</mi><mi>t</mi></msub><mo>−</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>y</mi><mi>t</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow></mfrac><mo>×</mo><mn>100</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">\text{MAPE}_{\text{pre}} = \frac{1}{T_{\text{pre}}} \sum_{t=1}^{T_{\text{pre}}} \frac{|y_t - \hat{y}_t|}{|y_t|} \times 100\%</annotation></semantics></math></p>
 </div>
 <table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>MAPE</th>
@@ -1286,7 +1290,7 @@ Final value + CI = headline result.</p>
 <tbody>
 <tr class="odd">
 <td>&lt; 5%</td>
-<td>Excellent — counterfactual reliable</td>
+<td>Excellent — counterfactual reliable (a MAPE belongs to a <em>fit</em>: quote which one)</td>
 </tr>
 <tr class="even">
 <td>5–10%</td>

@@ -11,7 +11,8 @@
 - Multiply a state vector by a transition matrix by hand
 - Iterate toward the steady-state distribution
 - Identify absorbing states and explain what they imply
-- Compute the impact of an intervention on the steady-state
+- Work out what an intervention to the transition matrix does — and does not — change about the
+  long run
 - Explain why the steady-state is not necessarily where you want to be
 
 ---
@@ -122,7 +123,26 @@ The steady-state distribution π is the distribution where v × P = v. In other 
 
 **The critical insight:** The steady-state is where the current transition dynamics are pointing — not necessarily where you want to be. If current Active% = 75% and the steady-state Active% = 40%, then without any intervention, Active% will decline from 75% toward 40% over time.
 
-**Interventions change the transition matrix.** If a re-engagement campaign increases Dormant → Active from 0.30 to 0.45, a new transition matrix P' applies. The new steady-state under P' will be different — and can be computed by iterating P' to convergence.
+**Interventions change the transition matrix — but check what that actually moves.** If a
+re-engagement campaign increases Dormant → Active from 0.30 to 0.45, a new matrix P' applies, and you
+find its steady state by iterating P' to convergence. P' is row 2 re-balanced — Dormant → Active rises
+0.30 → 0.45 and Dormant → Dormant falls 0.50 → 0.35, so the row still sums to 1. Do that and the result
+is worth pausing on:
+
+| | steady state | Active after 12 periods (from v₀ = [0.60, 0.30, 0.10]) |
+|---|---|---|
+| P (Dormant→Active = 0.30) | [0, 0, 1] | 0.208 |
+| P' (Dormant→Active = 0.45) | [0, 0, 1] | 0.250 |
+
+**The steady state does not budge.** As long as Churned is absorbing, *every* path leads there
+eventually, so no change to the Active and Dormant rows can alter the destination — it can only change
+**how long the journey takes**. The campaign is worth running, and the 12-period Active share is where
+you see its value; the steady state is simply the wrong instrument for measuring it.
+
+**What would move the destination:** a *win-back* flow — making Churned non-absorbing by giving it a
+non-zero Churned → Active probability. That is a qualitatively different intervention from improving a
+transition among your surviving customers, and this is the distinction the steady state is actually
+sensitive to.
 
 > ### 🔍 Deep Dive: Eigenvalues and the Steady State
 > For a matrix without absorbing states, the steady-state distribution is the eigenvector corresponding to eigenvalue λ = 1. All Markov chains have at least one eigenvalue equal to 1. The other eigenvalues (< 1 in absolute value) determine how quickly the distribution converges to steady state — larger gaps between 1 and the second-largest eigenvalue mean faster convergence.
@@ -139,7 +159,7 @@ The steady-state distribution π is the distribution where v × P = v. In other 
 
 4. Current Active% = 70%. Steady-state Active% = 35%. If nothing changes, will Active% increase or decrease over time?
 
-5. A re-engagement campaign increases Dormant→Active from 0.30 to 0.45. Without computing a new steady state, which direction will the new steady-state Active% move relative to the old one?
+5. A re-engagement campaign increases Dormant→Active from 0.30 to 0.45, with Churned still absorbing. What happens to the steady-state Active%, and what does the campaign actually change?
 
 ---
 
@@ -167,9 +187,9 @@ v₂ ≈ [0.528, 0.206, 0.267]. Sum ≈ 1.00 ✓
 
 *Common wrong answer:* Increase, because 70% > 35% means we are already above the target. The steady state is not a target — it is an attractor. The system moves toward it, not away from it.
 
-**Q5.** The new steady-state Active% will be **higher** than 35%. Increasing the Dormant→Active flow brings more customers back into Active each period, shifting the equilibrium upward. The Dormant pool replenishes Active rather than flowing mostly toward Churned.
+**Q5.** **It does not change — the steady state stays at 0% Active / 100% Churned.** Churned is still absorbing, so every customer still ends up there eventually; raising Dormant→Active cannot alter the destination. What the campaign changes is the **speed**: starting from [0.60, 0.30, 0.10], Active after 12 periods is 0.208 under the original P and 0.250 under P'. That improvement is real and is worth paying for — you just have to measure it at a **finite horizon**, not in the steady state.
 
-*Common wrong answer:* The steady state does not change because Churned is still absorbing. The steady state with an absorbing Churned always converges to 100% Churned eventually — but the transition matrix change affects how quickly and through which intermediate states the distribution moves. If framing this as a finite-horizon question (e.g., steady state over 24 months), the Active% after 24 months will be higher under the new P.
+*Common wrong answer:* "The steady-state Active% will be higher, because more customers are returning to Active each period." This is the trap the absorbing state sets. It is true that more customers return to Active each period, and true that the distribution is healthier at every finite horizon — but the steady state answers a different question ("where does this end up?"), and with an absorbing Churned the answer is always the same. The only intervention that moves the steady state is one that makes Churned **non-absorbing** — a win-back programme with a non-zero Churned → Active probability.
 
 ## PART 2: Application
 ### (~1 hour 40 minutes)
