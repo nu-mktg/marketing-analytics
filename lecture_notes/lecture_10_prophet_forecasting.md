@@ -49,7 +49,7 @@ MAPE measures how far off a forecast is, on average, as a percentage of actual v
 | 120 | 130 | 8.3% |
 | 80 | 88 | 10.0% |
 | 110 | 115 | 4.5% |
-MAPE = (5.0 + 8.3 + 10.0 + 4.5)/4 = **6.9%**
+MAPE = (5.0 + 8.3 + 10.0 + 4.5)/4 = 27.8/4 = **7.0%**
 
 ---
 
@@ -106,7 +106,11 @@ $$y(t) = \text{trend}(t) + \text{seasonality}(t) + \text{holidays}(t) + \varepsi
 
 Prophet produces three key outputs per time period:
 - **yhat:** Point forecast (the expected value)
-- **yhat_lower / yhat_upper:** 95% uncertainty interval (the range containing 95% of plausible outcomes)
+- **yhat_lower / yhat_upper:** the uncertainty interval. **Prophet's default is an 80% interval**
+  (`interval_width=0.80`). This course sets `interval_width=0.95` everywhere — including the
+  homework's agent prompt — so every interval quoted in this lecture is a **95%** interval (the
+  range containing 95% of plausible outcomes). The two widths differ by roughly 50%, so always
+  check which one produced the numbers you are reading.
 
 **Reading the uncertainty interval:**
 > Week 1: yhat = $980k, interval = [$890k, $1,070k]
