@@ -98,8 +98,8 @@ None of them is a black box you can trust blindly.
 | Component | Weight | Description |
 |---|---|---|
 | Homework (×14) | 40% | 14 graded assignments, equal weight; Part A individual |
-| Quiz 1 (after L06) | 10% | In-class, 20 T/F questions, Bayesian confidence scoring |
-| Quiz 2 (after L12) | 10% | In-class, 20 T/F questions, Bayesian confidence scoring |
+| Quiz 1 (Week 7, covers L01–L05) | 10% | In-class, 20 T/F questions, Bayesian confidence scoring |
+| Quiz 2 (Week 13, covers L06–L10) | 10% | In-class, 20 T/F questions, Bayesian confidence scoring |
 | Checkpoints (×14) | 10% | End-of-lecture participation, graded for attempt |
 | Sprint — Individual | 15% | Individual 10-question Canvas MC quiz (auto-graded) |
 | Sprint — Group | 15% | FitLoop case: group presentation and write-up |
