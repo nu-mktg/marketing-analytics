@@ -125,7 +125,7 @@ where EC50 is the spend level at which the channel is at 50% of its maximum effe
 
 **Interpretation:**
 - H < 0.5: current spend is below EC50 — high marginal return, increasing spend is efficient
-- H = 0.5: at EC50 — marginal returns are at their steepest decline point
+- H = 0.5: at EC50 — the channel is at half its maximum effect
 - H > 0.5: above EC50 — diminishing returns have set in, marginal ROI is falling
 
 > ### 🔍 Deep Dive: Why H(EC50) = 0.5 Regardless of α
@@ -245,7 +245,7 @@ Digital drops far faster in week 2 (100 → 20 vs. 100 → 60 for TV). TV accumu
 
 If paid search shows $\lambda = 0.85$, investigate — this likely reflects a data or model problem.
 
-**EC50 values:** Compare to the actual spend range in your data. If EC50 is far above your maximum spend, you are far from saturation and still on the high-marginal-return part of the curve. If EC50 is below your minimum spend, you are already past the half-saturation point.
+**EC50 values:** Compare to the actual **adstock** range in your data — adstock, not raw spend, is what the Hill function takes as input, and adstock is always the larger of the two. If EC50 is far above your maximum adstock, you are far from saturation and still on the high-marginal-return part of the curve. If EC50 is below your minimum adstock, you are already past the half-saturation point.
 
 **β coefficients:** The maximum revenue attributable to each channel. A channel with β = \$500k can contribute at most \$500k in weekly revenue (when its Hill response approaches 1).
 
@@ -312,4 +312,4 @@ Equal marginal ROI across channels is exactly the optimal condition. The model i
 1. All λ values between 0 and 1
 2. EC50 values in plausible range relative to actual spend
 3. Predicted revenue at current spend ≈ actual average revenue (model fit sanity check)
-4. Budget recommendation moves spending toward the channel currently above EC50 less and away from the channel above EC50 more
+4. Budget recommendation moves spending toward the channel with the higher **marginal ROI** — β × the Hill slope at its current adstock — and not simply toward whichever channel sits lower relative to its own EC50. A large β can outweigh being further up the saturation curve.
