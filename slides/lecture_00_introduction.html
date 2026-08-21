@@ -1396,27 +1396,32 @@ Course Introduction
 <tbody>
 <tr class="odd">
 <td>Homework (14 × individual)</td>
-<td>50%</td>
-<td>Part A autograded; Parts B+C autograded</td>
+<td>40%</td>
+<td>Part A individual; all parts autograded</td>
 </tr>
 <tr class="even">
 <td>Quiz 1 (after L06)</td>
-<td>5%</td>
+<td>10%</td>
 <td>20 T/F questions, Bayesian confidence scoring</td>
 </tr>
 <tr class="odd">
 <td>Quiz 2 (after L12)</td>
-<td>5%</td>
-<td>20 T/F questions, Bayesian confidence scoring</td>
+<td>10%</td>
+<td>24 T/F questions, Bayesian confidence scoring</td>
 </tr>
 <tr class="even">
-<td>Sprint</td>
-<td>20%</td>
-<td>FitLoop case: six model outputs, group presentations</td>
+<td>Sprint — Individual</td>
+<td>15%</td>
+<td>10-question Canvas MC quiz (auto-graded)</td>
 </tr>
 <tr class="odd">
+<td>Sprint — Group</td>
+<td>15%</td>
+<td>FitLoop case: group presentation and write-up</td>
+</tr>
+<tr class="even">
 <td>Checkpoints (in-class)</td>
-<td>20%</td>
+<td>10%</td>
 <td>Participation credit; 5 questions per session</td>
 </tr>
 </tbody>
@@ -1582,7 +1587,7 @@ You <strong>may not</strong> use them for <strong>Part A</strong>.</p>
 <span id="cb4-3"><a aria-hidden="true" tabindex="-1"></a>theta_a <span class="op">=</span> np.random.beta(<span class="dv">26</span>, <span class="dv">624</span>, <span class="dv">100_000</span>)</span>
 <span id="cb4-4"><a aria-hidden="true" tabindex="-1"></a>theta_b <span class="op">=</span> np.random.beta(<span class="dv">36</span>, <span class="dv">614</span>, <span class="dv">100_000</span>)</span>
 <span id="cb4-5"><a aria-hidden="true" tabindex="-1"></a>prob_b_greater <span class="op">=</span> np.mean(theta_b <span class="op">&gt;</span> theta_a)</span>
-<span id="cb4-6"><a aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;P(B &gt; A) = </span><span class="sc">{</span>prob_b_greater<span class="sc">:.3f}</span><span class="ss">&quot;</span>)   <span class="co"># should be approximately 0.968</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-6"><a aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;P(B &gt; A) = </span><span class="sc">{</span>prob_b_greater<span class="sc">:.3f}</span><span class="ss">&quot;</span>)   <span class="co"># should be approximately 0.905</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Part C — Reflection (no MCQ this week):</strong></p>
 <ol type="1">
 <li>Did the agent’s P(B&gt;A) match your Part A answer?</li>

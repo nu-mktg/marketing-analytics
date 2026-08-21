@@ -1417,23 +1417,23 @@ Probability distributions normalize automatically — we only need the shape.</p
 <span id="cb1-10"><a aria-hidden="true" tabindex="-1"></a>ci_upper <span class="op">=</span> np.percentile((theta_b <span class="op">-</span> theta_a) <span class="op">/</span> theta_a <span class="op">*</span> <span class="dv">100</span>, <span class="fl">97.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>B</mi></msub><mo>&gt;</mo><msub><mi>θ</mi><mi>A</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>≈</mo><mfrac><mn>1</mn><mi>S</mi></mfrac><munderover><mo>∑</mo><mrow><mi>s</mi><mo>=</mo><mn>1</mn></mrow><mi>S</mi></munderover><mn>𝟏</mn><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">[</mo><msubsup><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>B</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>&gt;</mo><msubsup><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>A</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">P(\theta_B &gt; \theta_A) \approx \frac{1}{S}\sum_{s=1}^{S} \mathbf{1}\!\left[\tilde{\theta}_B^{(s)} &gt; \tilde{\theta}_A^{(s)}\right]</annotation></semantics></math></p>
 <div class="muted">
-<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>100</mn><mo>,</mo><mn>000</mn></mrow><annotation encoding="application/x-tex">S = 100{,}000</annotation></semantics></math> samples. Result: <strong>P(B &gt; A) ≈ 0.968</strong></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>100</mn><mo>,</mo><mn>000</mn></mrow><annotation encoding="application/x-tex">S = 100{,}000</annotation></semantics></math> samples. Result: <strong>P(B &gt; A) ≈ 0.905</strong></p>
 </div>
 </section>
 <section class="slide level2">
 <h2>Interpreting the Output</h2>
-<p>For this experiment: P(B &gt; A) ≈ 0.968</p>
+<p>For this experiment: P(B &gt; A) ≈ 0.905</p>
 <div class="two-col">
 <div>
 <p><strong>What it means:</strong></p>
-<p>Given our prior and the observed data, there is a <strong>96.8% posterior probability</strong> that B’s true conversion rate exceeds A’s.</p>
+<p>Given our prior and the observed data, there is a <strong>90.5% posterior probability</strong> that B’s true conversion rate exceeds A’s.</p>
 <p>Direct answer to the decision question.</p>
 </div>
 <div>
 <p><strong>What it does NOT mean:</strong></p>
-<p>“B wins 96.8% of repeated experiments”<br>
+<p>“B wins 90.5% of repeated experiments”<br>
 (that’s frequentist language)</p>
-<p>“There is a 3.2% chance of a Type I error”<br>
+<p>“There is a 9.5% chance of a Type I error”<br>
 (that’s a p-value)</p>
 </div>
 </div>
