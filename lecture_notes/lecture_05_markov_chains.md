@@ -339,4 +339,4 @@ The steady state is an asymptotic property. Convergence may take months or years
 1. All rows of $P$ sum to 1.0 (within 0.001 tolerance)
 2. The steady-state vector satisfies $\pi P \approx \pi$ — multiply it out and check
 3. If Churned is absorbing: $(P)_{Churned,Churned} = 1.0$, all other entries in that row = 0
-4. Transition probabilities are directionally sensible (At-Risk → Churned > Active → Churned)
+4. Transition probabilities are directionally sensible (Dormant → Churned > Active → Churned)

@@ -56,14 +56,14 @@ A **deviation** is how far a value is from the mean: (xᵢ − x̄).
 
 The natural log converts multiplication into addition. For our purposes, one property matters:
 
-> **If y = ln(x), then a 1-unit increase in x from its current level is approximately a 100% proportional change.**
+> **If y = ln(x), then a small change in y equals the proportional change in x: Δln(x) ≈ Δx/x. A change of 0.01 in ln(x) is about a 1% change in x.**
 
 More practically: in a log-log regression, the slope coefficient equals the *percentage* change in y for a 1% change in x — which is the definition of elasticity.
 
 **Key fact:** ln(AB) = ln(A) + ln(B). Multiplying becomes adding in log space.
 
 > 🔍 **Deep Dive:** Why ln specifically (and not log base 10)?
-> The natural log has a unique property: d/dx[ln(x)] = 1/x. This means the slope of ln(x) at any point equals the proportional change rate. It is the only log function where a 1-unit increase in ln(x) exactly corresponds to a 100% increase in x. This is why economists and statisticians use ln for elasticity models.
+> The natural log has a unique property: d/dx[ln(x)] = 1/x. This means the slope of ln(x) at any point equals the proportional change rate. It is the only log function for which a *small* change in ln(x) equals the proportional change in x — a change of 0.01 in ln(x) is a ≈1% change in x. (A full 1-unit increase in ln(x) multiplies x by e ≈ 2.718, a ≈172% increase — not 100%.) This is why economists and statisticians use ln for elasticity models.
 
 ---
 
@@ -244,7 +244,7 @@ Denominator = 4 + 1 + 0 + 1 + 4 = 10. β₁ = −135/10 = **−13.5 units per do
 
 **Q4.** Too small (less negative) — biased toward zero. When the manager lowers prices during slow periods, observed low prices coincide with low demand (not because of the price cut, but because it's Saturday). The regression incorrectly attributes low demand to the low price, making demand appear less sensitive to price than it truly is.
 
-*Common wrong answer:* "The estimate will be more negative because cutting prices on slow days shows prices matter." The direction of endogeneity bias is counterintuitive — it depends on the correlation between the instrument (price) and the omitted variable (day-of-week demand), not on the direction of the price cut.
+*Common wrong answer:* "The estimate will be more negative because cutting prices on slow days shows prices matter." The direction of endogeneity bias is counterintuitive — it depends on the correlation between the endogenous regressor (price) and the omitted variable (day-of-week demand), not on the direction of the price cut.
 
 **Q5.** Yes — this is a good thing for you. Cross-price elasticity of +0.62 means a 15% competitor price increase → approximately 15 × 0.62 = 9.3% increase in your units. You could consider whether to maintain your price (capturing volume) or raise yours slightly (capturing some of the competitor's pricing power). Do not be alarmed — positive cross-price elasticity means the competitor's higher price benefits you.
 

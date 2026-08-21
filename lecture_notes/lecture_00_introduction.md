@@ -99,7 +99,7 @@ None of them is a black box you can trust blindly.
 |---|---|---|
 | Homework (×14) | 40% | 14 graded assignments, equal weight; Part A individual |
 | Quiz 1 (Week 7, covers L01–L05) | 10% | In-class, 20 T/F questions, Bayesian confidence scoring |
-| Quiz 2 (Week 13, covers L06–L10) | 10% | In-class, 20 T/F questions, Bayesian confidence scoring |
+| Quiz 2 (Week 13, covers L06–L10) | 10% | In-class, 24 T/F questions, Bayesian confidence scoring |
 | Checkpoints (×14) | 10% | End-of-lecture participation, graded for attempt |
 | Sprint — Individual | 15% | Individual 10-question Canvas MC quiz (auto-graded) |
 | Sprint — Group | 15% | FitLoop case: group presentation and write-up |
@@ -161,7 +161,7 @@ Your instructor will post an invitation link in Canvas. When you click it:
 2. A private repository is automatically created for you
 3. The repository is named: `hw01-bayesian-ab-[your-username]`
 
-You will repeat this process for each of the 10 homework assignments.
+You will repeat this process for each of the 14 homework assignments.
 
 ---
 
@@ -171,8 +171,8 @@ You will repeat this process for each of the 10 homework assignments.
 
 A Codespace is a virtual computer that runs in Microsoft's cloud, accessed entirely
 through your browser. When you open a Codespace:
-- A Linux machine with 4 CPUs and 8 GB RAM starts up
-- Python 3.10 is pre-installed
+- A Linux machine with 2 CPUs and 8 GB RAM starts up
+- Python 3.11 is pre-installed
 - All required libraries (numpy, pandas, scipy, lifetimes, prophet, etc.) are
   pre-installed via the repository's `devcontainer.json`
 - VS Code runs in the browser as your editor

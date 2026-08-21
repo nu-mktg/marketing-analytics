@@ -281,11 +281,11 @@ print(f"Expected lift = {expected_lift:.1f}%")
 
 **Typical output:**
 ```
-P(B > A) = 0.967
-Expected lift = 38.5%
+P(B > A) = 0.905
+Expected lift = 43.7%
 ```
 
-**Interpretation:** Given this data and prior, there is approximately a 97% probability that Variant B's true conversion rate is higher than Variant A's. The expected lift is about 38% — meaning B converts 38% more visitors than A on average across all plausible true rates.
+**Interpretation:** Given this data and prior, there is approximately a 91% probability that Variant B's true conversion rate is higher than Variant A's. The expected lift is about 44% — meaning B converts 44% more visitors than A on average across all plausible true rates.
 
 ---
 
@@ -326,7 +326,7 @@ The 2.5th and 97.5th percentiles of the simulated lift distribution. "Lift of [8
 
 **What is expected lift?**
 
-The mean of the lift distribution across all plausible true conversion rates. This is the business-relevant summary: "on average across all scenarios consistent with this data, B converts 38% more visitors than A."
+The mean of the lift distribution across all plausible true conversion rates. This is the business-relevant summary: "on average across all scenarios consistent with this data, B converts 44% more visitors than A."
 
 ---
 
