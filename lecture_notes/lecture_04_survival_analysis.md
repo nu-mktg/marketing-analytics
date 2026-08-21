@@ -131,6 +131,10 @@ $$h(t | X) = h_0(t) \times e^{\beta_1 X_1 + \beta_2 X_2 + ...}$$
 
 **Hazard ratios:** We report e^β for each predictor, not β itself.
 
+The two hazard ratios below are **illustrative round numbers**, not this course's fitted values — the
+model fitted on `survival_data.csv` returns HR ≈ 1.47 for `support_tickets` and ≈ 0.72 for
+`workouts_per_week`. (1.42 recurs elsewhere as a *given* constant in hand-calculations.)
+
 | HR interpretation | Meaning |
 |---|---|
 | HR = 1.42 for support_tickets | Each additional support ticket multiplies churn hazard by 1.42 — a 42% increase in churn risk per ticket |

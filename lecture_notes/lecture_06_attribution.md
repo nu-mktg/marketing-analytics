@@ -120,7 +120,7 @@ Channels with high removal effects are critically important to the journey.
 > 2. **Symmetry:** Channels that contribute equally receive equal credit
 > 3. **Dummy:** A channel that never adds value receives zero credit
 > 4. **Additivity:** For two independent games, values add
-> No other attribution method satisfies all four. Last-touch fails efficiency (100% to one channel), symmetry, and dummy player. Shapley is the unique "fair" allocation given these properties.
+> No other attribution method satisfies all four. Last-touch fails **symmetry** (position, not contribution, decides credit) and **dummy** (a channel that adds nothing still takes 100% whenever it happens to be last). ⚠️ Note what it does **not** fail: last-touch *does* satisfy **efficiency**, because efficiency only requires the credits to sum to v(N) — and giving one channel 100% of the total still sums to the total. So do first-touch and linear credit. **Efficiency alone is therefore not what makes Shapley fair; it is the only rule satisfying all four at once.**
 
 ---
 
@@ -267,7 +267,7 @@ Under Shapley: Email receives 0.090 / 0.500 = **18%** of total value.
 
 **Before trusting the agent output:**
 1. Do Shapley values sum to approximately the observed overall conversion rate? (Efficiency axiom)
-2. Are all Shapley values non-negative? Negative values indicate a computational error.
+2. Are all Shapley values non-negative? A negative value means the **value function is non-monotone** — some coalition got *worse* when a channel joined. That can be a genuine finding or a specification artefact, so investigate the value function rather than assuming a coding bug (`homework_06` pins a monotone v for exactly this reason).
 3. Are all removal effects between 0 and 1?
 4. Does the channel with the most touchpoints have the highest Shapley value? Not necessarily — a channel in many paths but always as redundant filler should have low Shapley value.
 
@@ -330,6 +330,6 @@ They model different things. Markov uses path ordering and transition probabilit
 
 **What to verify before trusting the output:**
 1. Shapley values sum to approximately the observed overall conversion rate (efficiency)
-2. All Shapley values are non-negative
+2. Shapley values are non-negative — or, if not, the value function is non-monotone (investigate v, not the code)
 3. All removal effects are between 0 and 1
-4. Channels in nearly every path do not automatically get the highest Shapley — verify the efficiency axiom makes business sense
+4. Channels in nearly every path do not automatically get the highest Shapley — a channel that appears everywhere as redundant filler should score low (efficiency is guaranteed by construction, so it is a check on the *arithmetic*, never on the business story)
