@@ -1316,7 +1316,10 @@ Both ignore the actual marginal contribution of each channel.</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>N</mi></mrow></munder><msub><mi>ϕ</mi><mi>i</mi></msub><mo>=</mo><mi>v</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>N</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\sum_{i \in N} \phi_i = v(N)</annotation></semantics></math></p>
 </div>
 <p>Shapley values always sum to the overall conversion rate.</p>
-<p><strong>Check:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mrow><mi>P</mi><mi>S</mi></mrow></msub><mo>+</mo><msub><mi>ϕ</mi><mi>S</mi></msub><mo>+</mo><msub><mi>ϕ</mi><mi>E</mi></msub><mo>=</mo><mn>0.258</mn><mo>+</mo><mn>0.178</mn><mo>+</mo><mn>0.113</mn><mo>=</mo><mn mathvariant="bold">0.550</mn></mrow><annotation encoding="application/x-tex">\phi_{PS} + \phi_S + \phi_E = 0.258 + 0.178 + 0.113 = \mathbf{0.550}</annotation></semantics></math> ✓</p>
+<p><strong>Check:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϕ</mi><mrow><mi>P</mi><mi>S</mi></mrow></msub><mo>+</mo><msub><mi>ϕ</mi><mi>S</mi></msub><mo>+</mo><msub><mi>ϕ</mi><mi>E</mi></msub><mo>=</mo><mn>0.2583</mn><mover><mn>3</mn><mo accent="true">¯</mo></mover><mo>+</mo><mn>0.1783</mn><mover><mn>3</mn><mo accent="true">¯</mo></mover><mo>+</mo><mn>0.1133</mn><mover><mn>3</mn><mo accent="true">¯</mo></mover><mo>=</mo><mn mathvariant="bold">0.550</mn></mrow><annotation encoding="application/x-tex">\phi_{PS} + \phi_S + \phi_E = 0.2583\overline{3} + 0.1783\overline{3} + 0.1133\overline{3} = \mathbf{0.550}</annotation></semantics></math> ✓</p>
+<div class="muted">
+<p>Rounded to 3 dp those are 0.258 + 0.178 + 0.113 = 0.549. All three round <strong>down</strong>, so the displayed sum misses by 0.001 while the exact sum is exactly 0.550 — which is why the code check below needs a tolerance, not equality.</p>
+</div>
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1326,7 +1329,7 @@ Both ignore the actual marginal contribution of each channel.</p>
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>Use this as a sanity check in code: if the sum doesn’t equal the overall rate, there’s a bug.</p>
+<p>Use this as a sanity check in code: if the sum doesn’t match the overall rate <strong>within a small tolerance</strong> (say 1e-9), there’s a bug. Test with <code>abs(sum - v_N) &lt; tol</code>, never <code>==</code> — floating point and rounded intermediates will defeat exact equality.</p>
 </div>
 </div>
 </div>
