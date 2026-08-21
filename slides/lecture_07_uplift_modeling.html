@@ -1291,7 +1291,7 @@ margin-right: 0; }
 <p><strong>Warning</strong></p>
 </div>
 <div class="callout-content">
-<p><strong>Policy implication:</strong> The optimal targeting rule excludes sure-things (positive CATE but <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>&lt;</mo><mi>c</mi><mi>/</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">\hat{\tau}(x) &lt; c/v</annotation></semantics></math>) and sleeping dogs (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\hat{\tau}(x) &lt; 0</annotation></semantics></math>). Both errors are distinct and costly.</p>
+<p><strong>Policy implication:</strong> The optimal targeting rule excludes customers whose uplift is positive but <strong>unprofitable</strong> (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>&lt;</mo><mi>c</mi><mi>/</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">0 &lt; \hat{\tau}(x) &lt; c/v</annotation></semantics></math>) and sleeping dogs (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>τ</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\hat{\tau}(x) &lt; 0</annotation></semantics></math>). Sure things need no rule — their uplift is ≈ 0, so the threshold excludes them automatically. Both errors are distinct and costly.</p>
 </div>
 </div>
 </div>
@@ -1356,9 +1356,10 @@ If <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics>
 <ul>
 <li>Qini = 0: model is random (useless)</li>
 <li>Qini = 1: perfect ranking</li>
-<li>Qini ∈ [0.25, 0.50]: typical good model</li>
+<li>Qini ∈ [0.30, 0.60]: typical good model, <strong>in-sample</strong></li>
 </ul>
 <p>Computed from the <strong>Qini curve</strong> (cumulative incremental conversions vs. % targeted, in rank order of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>τ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat{\tau}</annotation></semantics></math>).</p>
+<p>⚠️ <strong>Always say which split.</strong> The same model scores ~20× higher in-sample than held out; <code>homework_07</code>’s held-out Qini is ≈ <strong>0.02</strong>, and that is correct, not broken.</p>
 </div>
 <div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklift.metrics <span class="im">import</span> qini_auc_score</span>
