@@ -322,7 +322,7 @@ e^{\beta^\top x}   % superscript
 |---|---|---|
 | **Jupyter notebook** | ✅ Native — type `$formula$` in a Markdown cell | Homework work, derivations |
 | **Overleaf** (browser) | ✅ Native, collaborative | Polished reports |
-| **GitHub README** | ✅ Partial (display math only) | Documentation |
+| **GitHub README** | ✅ Native — inline `$...$` and block `$$...$$` | Documentation |
 
 **Practice exercise (do now, in your Codespace):**
 
@@ -413,7 +413,7 @@ understanding.
 
 ---
 
-## PART 1 Checkpoint
+## Lecture 0 Checkpoint
 
 These questions have no math. They test whether you understand the course structure
 and have completed the technology setup.

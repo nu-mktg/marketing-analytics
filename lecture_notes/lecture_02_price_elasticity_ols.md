@@ -450,6 +450,6 @@ An elasticity of −0.8 (inelastic) means revenue increases when price increases
 
 **What to verify before trusting the agent's elasticity estimate:**
 1. Does the coefficient on log(price) have the expected sign (negative)?
-2. Is the magnitude in a plausible range? Most consumer goods: −0.5 to −3.5. Outside this range, investigate whether there is a data problem.
+2. Is the magnitude in a plausible range? Most consumer goods: −0.3 to −4.0. Outside this range, investigate whether there is a data problem.
 3. Is the model correctly specified? Fixed effects for store and product should be present if you have panel data. Without them, unobserved store-level and product-level differences will bias the elasticity estimate.
 4. Do the predicted vs. actual values cluster around the 45-degree line? Large deviations indicate systematic misspecification.
