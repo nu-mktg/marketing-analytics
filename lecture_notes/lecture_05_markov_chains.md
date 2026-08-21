@@ -5,7 +5,7 @@
 
 ### Overview
 
-**Business question:** Of your customers currently classified as "At-Risk," what fraction will churn by month 3 if nothing changes? And if you run a re-engagement campaign that improves the At-Risk → Active transition, how does that change the long-run customer distribution?
+**Business question:** Of your customers currently classified as "Dormant," what fraction will churn by month 3 if nothing changes? And if you run a re-engagement campaign that improves the Dormant → Active transition, how does that change the long-run customer distribution?
 
 **What you will be able to do:**
 - Multiply a state vector by a transition matrix by hand
