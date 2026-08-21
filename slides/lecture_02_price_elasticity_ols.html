@@ -1318,6 +1318,19 @@ elastic on one side,<br>
 inelastic on the other</p>
 </div>
 </div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>These two slides assume different things — read log-log as a <em>local</em> approximation.</strong> A strict log-log model has <strong>constant</strong> elasticity, so if <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">|</mo><mi>ε</mi><mo stretchy="true" form="postfix">|</mo></mrow><mo>≠</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|\varepsilon| \neq 1</annotation></semantics></math> revenue never turns: it rises (or falls) with price without limit. An interior optimum requires elasticity that <strong>varies</strong> with price. Use log-log to estimate <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math> <strong>where you have data</strong>, not to extrapolate to the revenue-maximising price.</p>
+</div>
+</div>
+</div>
 </section>
 <section class="slide level2">
 <h2>Endogeneity: When OLS Lies</h2>
@@ -1336,7 +1349,7 @@ inelastic on the other</p>
 </div>
 </div>
 </div>
-<p><strong>Fix:</strong> Instrumental Variables (IV) — find a variable that shifts price but doesn’t directly affect demand (e.g., input cost changes, competitor pricing).</p>
+<p><strong>Fix:</strong> Instrumental Variables (IV) — find a variable that shifts price but doesn’t directly affect demand (e.g., input cost changes).</p>
 <div class="muted">
 <p>Recognizing endogeneity is more important than fixing it at this stage.</p>
 </div>

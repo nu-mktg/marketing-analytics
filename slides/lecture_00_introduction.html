@@ -1581,19 +1581,20 @@ You <strong>may not</strong> use them for <strong>Part A</strong>.</p>
 </section>
 <section class="slide level2">
 <h2>HW00: Setup Verification (Ungraded)</h2>
-<p><strong>Part A — Run this in your notebook:</strong></p>
+<p><strong>In-class demo — paste this into your Codespace to confirm the environment runs.</strong><br>
+<em>A preview of Lecture 1, not a homework question.</em></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb4-3"><a aria-hidden="true" tabindex="-1"></a>theta_a <span class="op">=</span> np.random.beta(<span class="dv">26</span>, <span class="dv">624</span>, <span class="dv">100_000</span>)</span>
 <span id="cb4-4"><a aria-hidden="true" tabindex="-1"></a>theta_b <span class="op">=</span> np.random.beta(<span class="dv">36</span>, <span class="dv">614</span>, <span class="dv">100_000</span>)</span>
 <span id="cb4-5"><a aria-hidden="true" tabindex="-1"></a>prob_b_greater <span class="op">=</span> np.mean(theta_b <span class="op">&gt;</span> theta_a)</span>
 <span id="cb4-6"><a aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;P(B &gt; A) = </span><span class="sc">{</span>prob_b_greater<span class="sc">:.3f}</span><span class="ss">&quot;</span>)   <span class="co"># should be approximately 0.905</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Part C — Reflection (no MCQ this week):</strong></p>
-<ol type="1">
-<li>Did the agent’s P(B&gt;A) match your Part A answer?</li>
-<li>What’s the difference between hand-calculation and Monte Carlo here?</li>
-<li>What one thing about the tech stack do you want to understand better?</li>
-</ol>
+<p><strong>What HW00 actually asks</strong> — open <code>homework_00_introduction.ipynb</code>:</p>
+<ul>
+<li><strong>Part A</strong> (individual): Python basics — exponentiation, a list, <code>np.mean</code>, a 2×2 NumPy array, a string length</li>
+<li><strong>Part B</strong>: render one LaTeX formula in a Markdown cell</li>
+<li><strong>Part C</strong> (collaboration permitted): three reflections — propensity vs uplift, a question you want this course to answer, the worst analytical mistake you have seen</li>
+</ul>
 </section>
 <section class="slide level2">
 <h2>Checkpoint — Before You Leave</h2>
