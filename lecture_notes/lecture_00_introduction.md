@@ -413,7 +413,7 @@ understanding.
 
 ---
 
-## Lecture 0 Checkpoint
+## Checkpoint
 
 These questions have no math. They test whether you understand the course structure
 and have completed the technology setup.
