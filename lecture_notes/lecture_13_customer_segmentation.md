@@ -88,7 +88,7 @@ $$\boldsymbol{\mu}_2 = \frac{(-0.9, -1.1)}{1} = (-0.9, -1.1) \text{ (unchanged)}
 
 **Problem:** Features on different scales give disproportionate weight to the feature with the largest variance.
 
-**Example:** Without standardisation, `monthly_spend` (range \$0–\$2000) dominates `login_count` (range 0–50) because a \$100 spend difference looks 20× larger than a 1-login difference to the Euclidean distance metric.
+**Example:** Without standardisation, `monthly_spend` (range \$0–\$2000) dominates `login_count` (range 0–50) — a 40× wider range. A \$100 spend difference contributes $100^2 = 10{,}000$ to the squared distance, while a 1-login difference contributes $1^2 = 1$.
 
 **Fix:** Standardise each feature before clustering:
 
