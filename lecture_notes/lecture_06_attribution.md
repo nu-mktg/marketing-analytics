@@ -322,10 +322,10 @@ They model different things. Markov uses path ordering and transition probabilit
 
 | Agent step | Corresponds to |
 |---|---|
-| Computes $v(S)$ for each coalition from path data | Section 1.3 — value function definition |
+| Computes $v(S)$ for each coalition from path data | Section 1.1, Tool 2 — the $v(S)$ definition |
 | Enumerates orderings, averages marginal contributions | Section 1.4 — full Shapley derivation |
-| Builds Markov transition matrix from journeys | Lecture 5, Section 1.4A — row normalization |
-| Computes removal effect per channel | Section 1.3 — Markov attribution formula |
+| Builds Markov transition matrix from journeys | Lecture 5, Section 1.1, Tool 2 — row sums must equal 1 |
+| Computes removal effect per channel | Section 1.4B — the removal effect RE(C) |
 | Creates comparison table | Section 2.2 — interpretation of attribution divergence |
 
 **What to verify before trusting the output:**

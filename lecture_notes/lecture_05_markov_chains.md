@@ -329,10 +329,10 @@ The steady state is an asymptotic property. Convergence may take months or years
 
 | Agent step | Corresponds to |
 |---|---|
-| Counts transitions, normalizes rows → matrix $P$ | Section 1.4A — row normalization |
+| Counts transitions, normalizes rows → matrix $P$ | Sections 1.3 and 1.1 — building $P$; Tool 2: row sums must equal 1 |
 | Computes state distribution after $n$ months via $\pi_0 P^n$ | Section 1.4B — $P^n$ interpretation |
-| Solves $\pi P = \pi$ for steady state | Section 1.4C — linear system derivation |
-| Identifies absorbing states | Section 1.4D — $P_{ii} = 1$ |
+| Solves $\pi P = \pi$ for steady state | Section 1.4B — the steady-state distribution (found by iterating $P$) |
+| Identifies absorbing states | Section 1.3 — absorbing states ($P_{ii} = 1$) |
 | Simulation of 500 journeys | Section 2.2 — Monte Carlo approximation to $P^n$ |
 
 **What to verify:**

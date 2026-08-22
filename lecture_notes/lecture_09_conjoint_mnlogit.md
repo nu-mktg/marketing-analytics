@@ -318,11 +318,11 @@ A negative coefficient means customers prefer the reference level over the coded
 
 | Agent step | Corresponds to |
 |---|---|
-| Fits MNLogit via MLE | Section 1.1C — maximizing log-likelihood |
-| Reports β coefficients + standard errors | Section 1.3 — part-worth utilities |
+| Fits MNLogit via MLE | Sections 1.1 and 1.4A — the softmax choice probability and the utility model being fitted (the lecture does not derive the MLE itself) |
+| Reports β coefficients + standard errors | Section 1.4A — part-worth utilities; Section 2.2 — standard errors |
 | Computes WTP = β_attr / |β_price| | Section 1.4A — indifference derivation |
 | Runs market simulation using softmax | Section 1.4B — softmax formula |
-| Reports significance (p-values) | Section 1.1C — MLE uncertainty |
+| Reports significance (p-values) | Section 2.2 — standard errors and statistical significance |
 
 **What to verify before trusting the output:**
 1. Price coefficient is negative

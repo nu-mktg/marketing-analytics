@@ -322,9 +322,9 @@ It means the *ratio* of two customers' hazards is constant over time — not tha
 
 | Agent step | Corresponds to |
 |---|---|
-| Fits and plots KM curves per group | Section 1.4C — product-limit estimator |
-| Log-rank test between groups | Extension of conditional probability in Section 1.4C |
-| Fits Cox model, prints β and $e^\beta$ | Sections 1.4D–E — hazard function and ratio derivation |
+| Fits and plots KM curves per group | Section 1.4A — product-limit estimator |
+| Log-rank test between groups | Section 1.1, Tool 1 — conditional probability; Section 2.2 — reading the test |
+| Fits Cox model, prints β and $e^\beta$ | Section 1.4B — hazard function and hazard ratio |
 | Reports concordance index | Section 2.2 — model evaluation |
 | Runs check_assumptions() | Section 2.2 — proportional hazards test |
 

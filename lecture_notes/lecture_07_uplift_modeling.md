@@ -312,12 +312,12 @@ The Qini coefficient measures ranking quality, not profitability. A model that p
 
 | Agent step | Corresponds to |
 |---|---|
-| Compares treated/control feature means | Section 1.2 — verifying random assignment |
+| Compares treated/control feature means | Section 1.4A — treatment must be randomly assigned |
 | Computes treated rate − control rate | Section 1.4A — observed ATE |
-| Fits $\hat{\mu}_1$ on treated data | Section 1.3 — T-learner Step 2 |
-| Fits $\hat{\mu}_0$ on control data | Section 1.3 — T-learner Step 3 |
-| Computes $\hat{\tau}(X) = \hat{\mu}_1 - \hat{\mu}_0$ | Section 1.3 — T-learner Step 4 |
-| Checks mean $\hat{\tau}$ vs observed ATE | Section 1.4B — ATE check (unbiasedness) |
+| Fits $\hat{\mu}_1$ on treated data | Section 1.4A — $\mu_1(X)$, trained on treated customers only |
+| Fits $\hat{\mu}_0$ on control data | Section 1.4A — $\mu_0(X)$, trained on control customers only |
+| Computes $\hat{\tau}(X) = \hat{\mu}_1 - \hat{\mu}_0$ | Section 1.4A — the CATE estimate |
+| Checks mean $\hat{\tau}$ vs observed ATE | Section 1.4A — random assignment and potential outcomes |
 | Plots Qini curve, computes coefficient | Section 1.4C — Qini curve construction |
 
 **What to verify:**

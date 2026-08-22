@@ -24,9 +24,9 @@
 
 ---
 
-#### Tool 1: Weighted Average
+#### Tool 1: Multiplying a Rate by a Value
 
-A weighted average assigns different importance to different values.
+A rate — how many times something happens — multiplied by a value — how much each one is worth — gives an expected total. Both inputs are averages, so the product is an average too: it is what you expect *on average*, not what any one customer will do.
 
 **Example:** CLV is the expected number of future purchases × expected spend per purchase. If a customer has E[purchases] = 3.2 and E[spend] = $55:
 > CLV = 3.2 × $55 = **$176**
@@ -327,12 +327,12 @@ CLV is an expected value — the cost of interventions must be weighed against t
 
 | Agent step | Corresponds to |
 |---|---|
-| Prepares RFM summary (x, t_x, T, m) per customer | Lecture 1 workshop concepts + Section 1.3 |
+| Prepares RFM summary (x, t_x, T, m) per customer | Section 1.4A — the BG/NBD inputs (x, t_x, T) |
 | Fits BG/NBD via MLE, reports r, α, a, b | Section 1.4A — likelihood structure |
-| Computes P(alive) per customer | Section 1.4B — alive probability intuition |
-| Computes E[transactions] per customer | Section 1.4C — expected future transactions |
-| Fits Gamma-Gamma, computes E[spend] | Section 1.3 + 1.4D — Gamma-Gamma model |
-| Multiplies E[transactions] × E[spend] × discount | Section 1.4D — CLV formula |
+| Computes P(alive) per customer | Section 1.4A — reading P(alive) |
+| Computes E[transactions] per customer | Section 1.4B — E[transactions] as the CLV input |
+| Fits Gamma-Gamma, computes E[spend] | Section 1.3 + 1.4C — Gamma-Gamma model |
+| Multiplies E[transactions] × E[spend] × discount | Section 1.4B — CLV formula and discount factor |
 | Plots spend vs. frequency (assumption check) | Section 2.2 — Gamma-Gamma independence |
 
 **What to verify:**

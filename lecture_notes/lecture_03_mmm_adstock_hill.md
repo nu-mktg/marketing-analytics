@@ -305,8 +305,8 @@ Equal marginal ROI across channels is exactly the optimal condition. The model i
 | Computes $A_t = S_t + \lambda A_{t-1}$ | Section 1.4A — adstock recursion |
 | Applies $H(A; \text{EC50}, \alpha)$ | Section 1.4B — Hill function |
 | Fits regression on transformed variables | Lecture 2 — OLS on $\beta_c \cdot H(A_{c,t})$ |
-| Reports fitted $\lambda$, EC50, $\alpha$ per channel | Sections 1.3, 1.4B — parameter interpretation |
-| Computes optimal budget allocation | Section 1.4D — equalize marginal ROI |
+| Reports fitted $\lambda$, EC50, $\alpha$ per channel | Sections 1.3, 1.4A, 1.4B — parameter interpretation ($\lambda$ in 1.4A) |
+| Computes optimal budget allocation | Section 1.4C — equalize marginal ROI |
 
 **What to verify in the agent output:**
 1. All λ values between 0 and 1

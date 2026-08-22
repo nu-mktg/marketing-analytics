@@ -340,11 +340,11 @@ Training MAPE measures fit, not forecast accuracy. A model that memorizes the tr
 |---|---|
 | Decomposes $y(t) = g(t) + s(t) + h(t) + \varepsilon$ | Section 1.3 — additive decomposition |
 | Fits piecewise linear trend with changepoints | Section 1.3 — trend model |
-| Fits Fourier series for seasonality | Section 1.4A — Fourier coefficients |
+| Fits Fourier series for seasonality | Section 1.3 Deep Dive — how Prophet models seasonality internally |
 | Adds holiday indicators | Section 1.3 — holiday effects |
 | `plot_components()` | Section 2.2 — interpreting trend/seasonality panels |
-| `cross_validation()` | Section 1.4B — temporal cross-validation |
-| `performance_metrics()` → MAPE | Section 1.1C — MAPE formula |
+| `cross_validation()` | Section 1.4C — evaluating forecast accuracy on a held-out period |
+| `performance_metrics()` → MAPE | Section 1.1, Tool 2 — the MAPE formula |
 
 **What to verify before trusting the output:**
 1. Trend direction matches domain knowledge

@@ -441,11 +441,11 @@ An elasticity of −0.8 (inelastic) means revenue increases when price increases
 
 | Agent step | Corresponds to |
 |---|---|
-| Creates log_price and log_units columns | Section 1.4D — log transformation |
+| Creates log_price and log_units columns | Section 1.4B — the log-log specification |
 | Fits OLS regression | Section 1.4A — minimizing sum of squared residuals |
-| Prints coefficient on log_price | Section 1.4D — elasticity = β_1 in log-log model |
+| Prints coefficient on log_price | Section 1.4B — elasticity = β_1 in log-log model |
 | Prints p-values | Section 2.2 — statistical significance check |
-| Prints R-squared | Section 1.4C — proportion of variance explained |
+| Prints R-squared | Section 2.2 — proportion of variance explained |
 | Plots predicted vs. actual | Direct visualization of residuals from Section 1.3 |
 
 **What to verify before trusting the agent's elasticity estimate:**
