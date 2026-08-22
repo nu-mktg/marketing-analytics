@@ -91,7 +91,10 @@ where 𝟙[...] = 1 if the attribute level is present, 0 otherwise.
 - β_price = −0.18 (per $1 increase in monthly price)
 - β_premium_content = +1.26 (vs. standard content)
 - β_no_ads = +2.00 (vs. full ads)
+- β_limited_ads = +0.80 (vs. full ads — used in the market simulation below)
 - β_annual_plan = +0.65 (vs. monthly)
+
+All ad coefficients are measured against **full ads** as the reference level, so full ads contributes 0.
 
 **WTP calculation:**
 > WTP for premium content = 1.26 / 0.18 = **$7.00/month**
