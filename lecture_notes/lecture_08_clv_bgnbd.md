@@ -98,10 +98,10 @@ For each customer, compute:
 The model fits population-level parameters (r, α for purchase rate distribution; a, b for dropout probability distribution) by maximizing the likelihood across all customers. You do not need to perform this estimation by hand — the agent does it.
 
 **Reading P(alive):**
-- Customer A: x=12, t_x=23 (recent), T=24 → P(alive) ≈ 0.93
-- Customer B: x=12, t_x=5 (19 months ago), T=24 → P(alive) ≈ 0.09
+- Customer A: x=11, t_x=23 (recent), T=24 → P(alive) ≈ 0.93
+- Customer B: x=11, t_x=5 (19 months ago), T=24 → P(alive) ≈ 0.09
 
-Both bought 12 times. The difference in P(alive) comes entirely from recency. Customer B's 19 months of silence is strong evidence of dropout.
+Both bought 12 times (so x = 11 repeat purchases each, per the definition above). The difference in P(alive) comes entirely from recency. Customer B's 19 months of silence is strong evidence of dropout.
 
 ---
 
@@ -192,11 +192,11 @@ A subscription box company has fitted a BG/NBD + Gamma-Gamma model to their cust
 | $b$ | 3.80 | Beta shape parameter; mean dropout prob per purchase = $a/(a+b) = 0.126$ |
 | $p$ | 6.25 | Gamma-Gamma shape |
 | $q$ | 3.74 | Gamma-Gamma shape |
-| $\gamma$ | 15.45 | Gamma-Gamma scale; population mean spend ≈ $p/\gamma \times q/(q-1) \approx \$42$ |
+| $\gamma$ | 15.45 | Gamma-Gamma scale; population mean spend $= \gamma p/(q-1) = 15.45 \times 6.25/2.74 \approx \$35$ |
 
 Three customers are to be evaluated:
 
-| Customer | Purchases ($x$) | Observation period ($T$, months) | Last purchase ($t_x$, months from start) |
+| Customer | Repeat purchases ($x$) | Observation period ($T$, months) | Last purchase ($t_x$, months from start) |
 |---|---|---|---|
 | Valentina | 12 | 24 | 23.5 |
 | Marcus | 12 | 24 | 6.0 |
@@ -232,7 +232,7 @@ Does the ranking match your intuition from Part A? What explains each customer's
 
 The ranking matches the intuition: Valentina ($182) > Priya ($61) > Marcus ($19).
 
-**Valentina** (P(alive)=0.94): Recent purchase confirms she is almost certainly active. High frequency means high expected future transactions (4.8 over 12 months). At 1 purchase per month historically and mostly still active, this is consistent.
+**Valentina** (P(alive)=0.94): Recent purchase confirms she is almost certainly active. High frequency means high expected future transactions (4.8 over 12 months). At roughly one purchase every two months historically (12 in 24) and mostly still active, 4.8 over the next 12 months is consistent — one *per* month would imply about twice that.
 
 **Marcus** (P(alive)=0.11): Despite identical total purchases as Valentina, his 18-month silence is overwhelming evidence of dropout. Even if the model thinks there is an 11% chance he is still alive, that translates to only 0.5 expected purchases. Historical CLV = 12 × $38 = $456; future CLV = $19. This is a 24:1 ratio — the past massively overstates his future value.
 
@@ -271,8 +271,8 @@ For Marcus: threshold = 15/19 = 0.789 (not exceeded — P(alive) = 0.11)
 **Model fit check:** The lifetimes library provides a `plot_calibration_purchases_vs_holdout_purchases` function that compares predicted purchase counts to actual purchases in a holdout period. If the model systematically underpredicts for high-frequency customers, the Gamma assumption for $\lambda$ may be misspecified.
 
 **Before trusting the agent output:**
-1. Do BG/NBD parameters fall in plausible ranges? ($r$ typically 0.1–3, $\alpha$ typically 1–20)
-2. Are P(alive) estimates intuitive? Recent buyers should have P(alive) > 0.8; long-silent buyers should have P(alive) < 0.2
+1. Do BG/NBD parameters fall in plausible ranges? ($r$ typically 0.1–3, $\alpha$ typically 1–30 — the same band as the pre-flight checklist at the end of this lecture)
+2. Are P(alive) estimates intuitive? Long-silent buyers should have P(alive) < 0.2. Recent buyers should be *high*, but how high depends on their purchase rate — a low-frequency customer who bought recently can sit around 0.7 (Priya, above) and be perfectly well estimated, because the model has little evidence either way
 3. Does mean predicted CLV across all customers seem reasonable relative to average historical order value?
 4. Is the Gamma-Gamma independence assumption approximately satisfied? (Plot order value vs. frequency)
 
@@ -313,7 +313,7 @@ The BG/NBD model is specifically designed for non-contractual settings where cus
 P(alive) = 0.10 means there is a 10% chance they are still active — they may still purchase. It means you should not invest heavily in retaining them, but they are not zeroed out.
 
 **3. "The BG/NBD model only works for frequent buyers."**
-The model handles customers with 0 purchases in the observation period (by giving them a very low P(alive) and low expected future transactions). It also works for customers with 1 or 2 purchases.
+It also works for customers with 1 or 2 repeat purchases. ⚠️ **And it treats a customer with x = 0 in a way that surprises everyone the first time:** their P(alive) is **exactly 1.0**, not low. Dropout in BG/NBD can only happen *after* a repeat purchase, so a customer who never repeated cannot have dropped out — there was no opportunity. Their *expected future transactions* are still low, because the model infers a low purchase rate; low future value and certain-alive are not the same statement. Verify this yourself: `bgf.conditional_probability_alive(0, 0, T)` returns 1.0 for any T.
 
 **4. "Predicted CLV decreases as we observe more purchases."**
 More purchases generally increase predicted CLV, because they provide stronger evidence the customer is alive and indicate a higher purchase rate. The recency of the most recent purchase matters enormously.
