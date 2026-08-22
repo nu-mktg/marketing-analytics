@@ -225,107 +225,29 @@ When you fit `revenue ~ treat + post + treat_x_post`, the output contains four r
 
 ---
 
-### Part A: Math Questions (Individual)
+### Section 2.3 — Homework Assignment
+#### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-> **Answers:** homework answers are not duplicated here. The single source of truth is
-> `answer_keys/hwNN.json` in the instructor repo, synced to the private key repo with
-> `./tools/push_answer_keys.sh`. Duplicating them in this file is what caused them to
-> drift out of sync with the notebooks (Task 015).
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_12_did.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-Use the aggregate pre/post means from the dataset header:
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_12_did.ipynb` |
+| Dataset | `homework_datasets/geo_experiment.csv` |
+| Graded questions | **13** — Part A: 5 · Part B: 5 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw12.json` |
 
-| Period | Treatment | Control |
-|---|---|---|
-| Pre (weeks 1–10) | 146.39 | 137.02 |
-| Post (weeks 11–20) | 156.47 | 140.84 |
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-```python
-# Q1. Compute the DiD estimate from the 2x2 table
-q1_did_estimate = None   # e.g. 6.25
-print(f'Q1: {q1_did_estimate}')
+<!-- END GENERATED homework pointer -->
 
-# Q2. Compute the naive estimate (treatment region pre-post only)
-q2_naive_estimate = None
-print(f'Q2: {q2_naive_estimate}')
-
-# Q3. Overstatement: naive - DiD
-q3_overstatement = None
-print(f'Q3: {q3_overstatement}')
-
-# Q4. In the regression Y = b0 + b1*treat + b2*post + b3*treat_x_post + e,
-#     what numerical value should b3 equal?
-q4_beta3 = None
-print(f'Q4: {q4_beta3}')
-
-# Q5. Is the DiD estimate positive? (True/False)
-q5_positive_effect = None
-print(f'Q5: {q5_positive_effect}')
-```
-
-### Part B: Agent Analysis (Collaboration permitted)
-
-```
-Dataset: geo_experiment.csv
-Variables: region_id, week, revenue, treat, post, treat_x_post
-
-Please:
-1. Fit the DiD regression: revenue ~ treat + post + treat_x_post
-   Report all four coefficients with standard errors and p-values.
-   State which coefficient is the treatment effect and interpret it.
-
-2. Plot mean weekly revenue for treatment vs. control groups (weeks 1–20).
-   Add a vertical line at week 10.5 to mark the intervention start.
-   Do the pre-period trends appear parallel?
-
-3. Run a placebo test: use pre-period data only (weeks 1–10).
-   Define fake_post = 1 if week >= 5, else 0.
-   Define fake_txp = treat * fake_post.
-   Fit: revenue ~ treat + fake_post + fake_txp
-   Report the coefficient and p-value for fake_txp.
-   What does this tell you about parallel trends?
-
-4. Report the 95% confidence interval for the treatment effect (treat_x_post).
-
-Print all results clearly labelled.
-```
-
-### Part C: Interpretation Questions (Collaboration permitted)
-
-```python
-# Q11. The parallel trends plot shows treatment and control regions
-# moving together in weeks 1-8, then the treatment region growing
-# 2 units/week faster than control in weeks 9-10 (before week 11).
-# The most likely explanation is:
-# a) Random noise — two weeks of slight divergence is not meaningful
-# b) Anticipation effects — treatment regions may have begun adjusting
-#    behaviour before the formal price change took effect
-# c) A measurement error in the control regions
-# d) The DiD estimate is unbiased despite this pattern
-q11 = None
-print(f'Q11: {q11}')
-
-# Q12. DiD estimate = 6.25, 95% CI = [0.09, 12.41], p = 0.049.
-# A manager says: "The result is barely significant — we can't be confident."
-# The most precise response is:
-# a) Agree — p = 0.049 is too close to 0.05 to be reliable
-# b) The estimate has meaningful uncertainty about magnitude (CI spans 12 units)
-#    but provides credible evidence of a positive causal effect;
-#    with more regions or longer experiment, the interval would narrow
-# c) Statistical significance is not the right criterion here
-# d) The CI includes zero so the effect is not credible
-q12 = None
-print(f'Q12: {q12}')
-
-# Q13. MMM estimated the price reduction effect at +10.5 units/week.
-# Geo-holdout DiD estimated +6.25 units/week.
-# The most likely interpretation is:
-# a) The MMM is wrong and should be discarded entirely
-# b) The MMM's price coefficient is likely confounded — price reductions
-#    may have been deployed in already-high-demand periods, inflating the OLS estimate;
-#    the DiD is more credible as a causal estimate
-# c) The DiD experiment failed — the regions are not comparable
-# d) Both estimates are correct — they measure different things
-q13 = None
-print(f'Q13: {q13}')
-```

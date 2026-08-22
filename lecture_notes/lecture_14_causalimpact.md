@@ -185,89 +185,29 @@ Two lessons follow, and they are the same lesson from opposite ends. First, $100
 
 ---
 
-### Part A: Math Questions (Individual)
+### Section 2.3 — Homework Assignment
+#### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-> **Answers:** homework answers are not duplicated here. The single source of truth is
-> `answer_keys/hwNN.json` in the instructor repo, synced to the private key repo with
-> `./tools/push_answer_keys.sh`. Duplicating them in this file is what caused them to
-> drift out of sync with the notebooks (Task 015).
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_14_causalimpact.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-Use the summary statistics printed at the top of the notebook.
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_14_causalimpact.ipynb` |
+| Dataset | `homework_datasets/campaign_timeseries.csv` |
+| Graded questions | **13** — Part A: 5 · Part B: 5 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw14.json` |
 
-```python
-# Q1. Average weekly sessions in the post-period (weeks 21-30)
-q1_post_mean_sessions = None
-print(f'Q1: {q1_post_mean_sessions}')
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-# Q2. Total sessions in the post-period (sum, weeks 21-30)
-q2_post_total_sessions = None
-print(f'Q2: {q2_post_total_sessions}')
+<!-- END GENERATED homework pointer -->
 
-# Q3. Are mean post-period sessions higher than mean pre-period sessions? (True/False)
-q3_post_gt_pre = None
-print(f'Q3: {q3_post_gt_pre}')
-
-# Q4. In which week do website_sessions reach their maximum?
-q4_peak_week = None
-print(f'Q4: {q4_peak_week}')
-
-# Q5. In CausalImpact, the prediction interval for week 30 (the final post week)
-# is wider than for week 21 (the first post week). Is this expected? (True/False)
-q5_ci_grows_with_horizon = None
-print(f'Q5: {q5_ci_grows_with_horizon}')
-```
-
-### Part B: Agent Analysis (Collaboration permitted)
-
-```
-Dataset: campaign_timeseries.csv
-Campaign start: week 21.
-Pre-period index: 0–19 (weeks 1–20).
-Post-period index: 20–29 (weeks 21–30).
-
-Please:
-1. Install: pip install causalimpact
-   Fit CausalImpact with branded_search_impressions and social_mentions as
-   control covariates. Report the summary table (average and cumulative effects
-   with 95% CIs, posterior probability of positive effect).
-
-2. Plot the three panels (original, pointwise, cumulative).
-
-3. Compute the pre-period MAPE:
-   mean(|actual - fitted| / actual) × 100 over weeks 1-20.
-
-4. Refit with only branded_search_impressions as the single covariate.
-   Does the cumulative effect change by more than 10%?
-
-Print all results clearly labelled.
-```
-
-### Part C: Interpretation Questions (Collaboration permitted)
-
-```python
-# Q11. The key identifying assumption of CausalImpact is:
-# a) The control time series perfectly predicts the counterfactual
-# b) The control covariates continue to predict the outcome in the post-period
-#    using the pre-period relationship, for reasons unrelated to the campaign
-# c) The outcome time series is stationary
-# d) The campaign affects all time series simultaneously
-q11 = None
-
-# Q12. CausalImpact reports: cumulative effect = +12,400, 95% CI = [-200, 25,000].
-# The correct interpretation is:
-# a) The campaign worked — 12,400 sessions is a large positive effect
-# b) The CI includes zero; the positive causal effect is not statistically
-#    credible at the 95% level
-# c) The CI is too wide — CausalImpact always overestimates uncertainty
-# d) 95% CI means there is a 95% probability the effect is positive
-q12 = None
-
-# Q13. Pre-period MAPE = 28%. This indicates:
-# a) The model fit is excellent — 28% is within the acceptable threshold
-# b) The campaign started earlier than week 21 (anticipation effect)
-# c) The control covariates do not explain the outcome well in the pre-period;
-#    the post-period counterfactual will have wide and unreliable uncertainty
-# d) The dataset contains a structural break in the pre-period
-q13 = None
-```

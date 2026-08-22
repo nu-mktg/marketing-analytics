@@ -182,94 +182,29 @@ C is closer to $\boldsymbol{\mu}_1$, so assigned to Cluster 1. ✓
 
 ---
 
-### Part A: Math Questions (Individual)
+### Section 2.3 — Homework Assignment
+#### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
 
-> **Answers:** homework answers are not duplicated here. The single source of truth is
-> `answer_keys/hwNN.json` in the instructor repo, synced to the private key repo with
-> `./tools/push_answer_keys.sh`. Duplicating them in this file is what caused them to
-> drift out of sync with the notebooks (Task 015).
+<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
+     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
+     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
+     variables still matched the notebook, and the dataset filenames were wrong.
+     The notebook is the assignment of record; answers live only in answer_keys/. -->
 
+> **The assignment of record is the notebook, not this section.** Open
+> `homework_notebooks/homework_13_segmentation.ipynb` — it carries the questions, the dataset
+> description and the agent context prompt you will need. Nothing here restates
+> them, so there is no second version to get out of step with the one you submit.
 
-```python
-# Q1. Customer A = (z1=1.2, z2=0.8). Initial centres: mu1=(1.2,0.8), mu2=(-0.9,-1.1).
-# Which cluster is A assigned to? (integer: 1 or 2)
-q1_cluster_a = None
-print(f'Q1: {q1_cluster_a}')
+| | |
+|---|---|
+| Notebook | `homework_notebooks/homework_13_segmentation.ipynb` |
+| Dataset | `homework_datasets/customer_features.csv` |
+| Graded questions | **13** — Part A: 5 · Part B: 5 · Part C: 3 |
+| Answer key (instructor only) | `answer_keys/hw13.json` |
 
-# Q2. Which cluster is B = (-0.9, -1.1) assigned to?
-q2_cluster_b = None
-print(f'Q2: {q2_cluster_b}')
+Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
+(rendered for instructors as `quiz/answer_key_values.md`).
 
-# Q3. After assignment step, update mu1.
-# Cluster 1 contains A and C. Updated mu1 x-coordinate = (1.2 + 0.7) / 2
-q3_updated_mu1_x = None
-print(f'Q3: {q3_updated_mu1_x}')
+<!-- END GENERATED homework pointer -->
 
-# Q4. Updated mu1 y-coordinate = (0.8 + 0.9) / 2
-q4_updated_mu1_y = None
-print(f'Q4: {q4_updated_mu1_y}')
-
-# Q5. WCSS always decreases as k increases.
-# Does this mean higher k is always the better model choice? (True/False)
-q5_k_more_not_always = None   # False = higher k is NOT always better
-print(f'Q5: {q5_k_more_not_always}')
-```
-
-### Part B: Agent Analysis (Collaboration permitted)
-
-```
-Dataset: customer_features.csv
-Variables: recency_days, frequency, avg_order_value, support_tickets,
-           email_open_rate (standardise these five)
-           clv_12m, tau_hat (use for profiling ONLY, do not standardise)
-
-Please:
-1. Standardise the five clustering features to zero mean and unit variance.
-
-2. Fit k-means for k=2 through 8.
-   Plot WCSS vs k (elbow plot) and mean silhouette vs k.
-   State your recommended k and why.
-
-3. Fit k-means with the recommended k (use random_state=42).
-
-4. For each cluster, compute the mean of:
-   recency_days, frequency, avg_order_value, clv_12m, tau_hat.
-   Assign a descriptive label to each cluster.
-
-5. What fraction (%) of ALL customers have tau_hat > 0.133?
-
-6. Report mean clv_12m and mean tau_hat for each cluster separately.
-
-Print all results clearly labelled.
-```
-
-### Part C: Interpretation Questions (Collaboration permitted)
-
-```python
-# Q11. Before k-means, you MUST standardise features when:
-# a) Features are measured in different units or have very different variances
-# b) Only when k > 3
-# c) Only for numeric features, not binary ones
-# d) Standardisation is never needed for k-means
-q11 = None
-print(f'Q11: {q11}')
-
-# Q12. Mean silhouette score = 0.18 for the chosen k. This means:
-# a) Clustering is invalid — discard the results
-# b) Cluster structure is weak; customers are not well-separated; interpret
-#    segments as directional guidance rather than ground truth
-# c) The distance metric is wrong — switch to Manhattan distance
-# d) k is too small — always increase k until silhouette > 0.5
-q12 = None
-print(f'Q12: {q12}')
-
-# Q13. Cluster 3: mean CLV = $380, mean tau_hat = 0.06 (threshold = 0.133).
-# For the retention campaign, the correct decision is:
-# a) Target Cluster 3 because their high CLV justifies the spend
-# b) Do not target Cluster 3 with the retention campaign — expected
-#    incremental profit = 0.06×$30 − $4 = −$2.20 regardless of CLV
-# c) Target only the top 20% of Cluster 3 by CLV
-# d) Reduce the campaign cost to $1.80 to break even on Cluster 3
-q13 = None
-print(f'Q13: {q13}')
-```
