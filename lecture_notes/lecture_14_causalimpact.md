@@ -181,7 +181,12 @@ Two lessons follow, and they are the same lesson from opposite ends. First, $100
 | `social_mentions` | Control covariate 2: brand mentions on social media |
 | `post` | 1 = post-campaign (weeks 21–30), 0 = pre-campaign |
 
-**Campaign:** Brand awareness campaign launched at week 21. True causal effect: +1,200 sessions/week.
+**Campaign:** Brand awareness campaign launched at week 21. In the shipped data the series steps up by
+roughly **2,300–2,800 sessions/week** from week 21 (naive pre/post difference 2,835; against the
+extrapolated pre-period trend 2,427), and CausalImpact recovers a cumulative effect of about
+**+27,400 sessions** over the ten post-period weeks — which is what `answer_keys/hw14.json` `q6` keys.
+No generator for this dataset is committed, so there is no documented data-generating "true effect" to
+quote; describe what the series does instead.
 
 ---
 
