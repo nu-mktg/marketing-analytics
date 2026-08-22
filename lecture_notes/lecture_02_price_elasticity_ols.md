@@ -198,7 +198,7 @@ If prices are set partly in response to demand conditions (managers lower prices
 - Demand is elastic (|1.84| > 1)
 - A 1% price increase → 1.84% decrease in units sold
 - A 10% price increase → 18.4% decrease in units sold
-- Revenue is currently ABOVE the revenue-maximizing price — lowering price would increase revenue
+- The current price is ABOVE the revenue-maximizing price — lowering price would increase revenue
 
 **R² = 0.87: What does this mean?**
 - 87% of the variation in log(units) is explained by the regression predictors

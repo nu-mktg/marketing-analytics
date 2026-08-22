@@ -79,7 +79,7 @@ Uplift Modeling (L07)
 
 The order matters. You cannot understand BG/NBD's P(alive) logic without understanding
 survival analysis. You cannot interpret Shapley values without understanding marginal
-contributions. This is why the course is 10 lectures rather than 10 independent modules.
+contributions. This is why the first ten models form a sequence rather than ten independent modules.
 
 ---
 
@@ -103,10 +103,12 @@ correlational.
 | Cox Hazard Ratios | Association between features and churn timing | Whether changing the feature would change churn |
 | BG/NBD CLV | Expected future purchases based on history | Whether investing in this customer would change their behavior |
 
-The only model in this course that can support causal claims directly is Bayesian
-A/B Testing — and only when assignment was randomized. Uplift modeling supports
-causal claims about treatment effects, but only when the T-learner was estimated from
-a randomized experiment.
+Of the **ten models covered so far**, only two support causal claims directly, and both
+only under randomization: Bayesian A/B Testing (L01), and Uplift Modeling (L07) when the
+T-learner was estimated from a randomized experiment. Everything else in the table above is
+associational. **This is exactly why Lectures 12 and 14 exist** — Difference-in-Differences and
+CausalImpact are built to recover causal effects when a randomized experiment is not available
+(see Part 4).
 
 Rule: If someone asks "did X cause Y?" and the only evidence is a coefficient from
 a regression or an attribution model, the honest answer is: "We observed an association.
@@ -186,7 +188,7 @@ Jess Lachs framed it precisely: "Not just answering the why, but answering the
 
 The most important question to ask after any model output: "So what?" 
 
-- Price elasticity is -1.84. **So what?** Revenue is currently above the
+- Price elasticity is -1.84. **So what?** The current price is above the
   revenue-maximizing price. Lower prices to increase revenue — but by how much,
   for which SKUs, with what competitive response risk?
 - Shapley value for Paid Search is 50%, but last-touch was 8%. **So what?** Paid
@@ -394,7 +396,7 @@ Each model in this course has a body of advanced literature:
 **Causal Inference:**
 - Synthetic control, regression discontinuity
 - Key resource: Cunningham, *Causal Inference: The Mixtape* — free at
-  causalinferencethebook.com
+  mixtape.scunning.com (the current online edition is titled *The Remix*)
 
 **Bayesian Methods:**
 - Hierarchical models, MCMC sampling, prior elicitation
