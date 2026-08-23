@@ -79,15 +79,17 @@ $$\hat{\tau}_{\text{DiD}} = 10.08 - 3.83 = \mathbf{+6.25}$$
 
 **Interpretation:** The price reduction caused a 6.25-unit increase in weekly revenue, after removing the 3.83-unit increase that would have occurred due to the underlying time trend alone.
 
-**Naive estimate bias:** 10.08 − 6.25 = **3.83 units**.
+**Overstatement of the naive estimate:** 10.08 − 6.25 = **3.83 units**.
 
-> **Convention — what "overstates by" means in this course.** *Overstatement* is a **difference, in the outcome's own units**:
+> **Convention — what "overstates by" means in this course.** Overstatement is a **difference, in the outcome's own units**:
 >
-> $$\text{overstatement} = \hat{\tau}_{\text{naive}} - \hat{\tau}_{\text{DiD}} = 10.08 - 6.25 = \mathbf{3.83}$$
+> $$\text{overstatement} = \hat{\tau}_{\text{naive}} - \hat{\tau}_{\text{DiD}}$$
 >
-> It is numerically the common time trend $\beta_2$, because the trend is exactly what the naive estimate fails to remove. **This single number, in units, is the answer** — it is what Part A Q3 (`q3_overstatement`) asks for.
+> That difference *is* the common time trend $\beta_2$. The trend is exactly what the naive estimate fails to subtract, so what is left over is the trend itself.
 >
-> A percentage, when one is quoted, is always that same difference expressed as a fraction of the causal effect: 3.83 / 6.25 = **61%**, i.e. the naive estimate is 61% larger than the truth. The **ratio** $\hat{\tau}_{\text{naive}} / \hat{\tau}_{\text{DiD}} = 1.61$ restates the same fact in a third form and is *not* what "overstates by" refers to.
+> Two other quantities are true of the example above but are **not** what "overstates by" means. A **percentage**: the difference as a share of the causal effect, **61%** here, so the naive estimate is 61% larger than the truth. A **ratio**: $\hat{\tau}_{\text{naive}} / \hat{\tau}_{\text{DiD}} = 1.61$.
+>
+> **Part A Q3 (`q3_overstatement`) wants the difference, in units, computed from your own given constants.** Every student's constants differ, so no figure from this worked example is your answer.
 
 ---
 
