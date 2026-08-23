@@ -169,6 +169,8 @@ Always validate on a held-out period before using a forecast for decisions.
 **Q1.** Q4 baseline = $1,200k × 1.42 = $1,704k. Black Friday = $1,704k × 1.38 = **$2,351k**.
 *Common wrong answer:* $1,200k × (1.42 + 1.38) = $1,200k × 2.80 = $3,360k. Seasonal lifts apply multiplicatively (each multiplied onto the previous result), not additively.
 
+> **Also asked on the slides:** *"Trend = +2.5%/week, base = 80,000 units. Forecast after 3 weeks."* — Trend compounds the same way the seasonal lifts do: 80,000 × 1.025³ = 80,000 × 1.0769 = **86,151 units**. *Common wrong answer:* 80,000 × (1 + 3 × 0.025) = 86,000 — adding three weeks of growth instead of compounding them. The gap is only 151 units over three weeks, which is the point worth making: additive and multiplicative growth are nearly indistinguishable over a short horizon and diverge sharply over a long one (at 26 weeks the same rate gives 152,023 compounded versus 132,000 added).
+
 **Q2.** **Not always.** MAPE usefulness depends on context. 18% may be excellent for rough planning (staffing, marketing budgets) where decisions have significant uncertainty anyway. It may be unacceptable for just-in-time inventory or financial commitments with tight margins. The manager's statement ignores that the alternative to an 18% MAPE model may be gut feel (no model), which typically has much higher effective error.
 *Common wrong answer:* The manager is correct — any MAPE above some threshold (like 10%) makes a model useless. There is no universal threshold; it depends on decision stakes.
 

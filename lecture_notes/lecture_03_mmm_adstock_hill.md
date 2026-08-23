@@ -163,8 +163,16 @@ The β coefficients capture the maximum revenue each channel can generate (the p
 **Q2.** **Above EC50.** H = 0.73 > 0.5, and H > 0.5 if and only if current spend > EC50. The channel is on the diminishing-returns portion of the curve.
 *Common wrong answer:* "H = 0.73 means we're at 73% efficiency, which is below the maximum." True, but the relevant threshold for the EC50 question is H = 0.5, not H = 1.0.
 
+> **Also asked on the slides:** *"Channel EC₅₀ = 200, α = 2. Compute H(100), H(200), H(400)."* — Substituting into H(s) = sᵃ / (EC50ᵃ + sᵃ) with α = 2:
+> H(100) = 100² / (200² + 100²) = 10,000 / 50,000 = **0.20**;
+> H(200) = 200² / (200² + 200²) = **0.50** (the H(EC50) = 0.5 property, true for any EC50);
+> H(400) = 400² / (200² + 400²) = 160,000 / 200,000 = **0.80**.
+> Doubling spend from 100 to 200 buys +0.30 of effectiveness; doubling again from 200 to 400 buys only +0.30 → +0.80, i.e. the same 0.30 for four times the incremental spend. That is saturation, and it is why the answer to Q3 is "shift incrementally," not "shift everything."
+
 **Q3.** Move budget from Digital (lower marginal ROI) to TV (higher). But **not the entire Digital budget at once**. As TV spend increases, TV marginal ROI falls along the Hill curve. The equalization principle says shift incrementally until marginal ROIs are equal.
 *Common wrong answer:* "Shift everything to TV since TV ROI is higher." Diminishing returns mean the last dollar moved to TV has a much lower marginal ROI than the first dollar.
+
+> **Also asked on the slides:** *"Last-touch attribution shows Digital = 70% of conversions, TV = 10%. MMM shows TV = 35% contribution. Which is right — and why might they differ?"* — Neither is "wrong"; they measure different things, and for a budget decision the MMM figure is the relevant one. Last-touch gives 100% of the credit to whatever the customer clicked last, so it systematically over-credits demand-harvesting channels and under-credits demand-creating ones: as Section 1.2 puts it, "paid search captures demand, it does not create it." A customer may have learned about the brand from a TV spot, seen social posts, then clicked a digital ad — last touch records only the click. MMM models all channels simultaneously with their own adstock and saturation, so TV's carryover (high λ) shows up as contribution that last touch cannot see. The practical warning in Section 1.2 is exactly this case: shifting budget from TV to digital on last-touch evidence looks successful short-term while you are harvesting awareness TV built.
 
 **Q4.** **False.** λ = 0 means instant decay — each period's advertising effect disappears completely before the next period. The channel can still have immediate in-period impact (S_t contributes fully to A_t). λ = 0 means no carryover, not no effect.
 *Common wrong answer:* True. Confusing "no carryover" with "no effect."

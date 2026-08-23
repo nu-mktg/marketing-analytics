@@ -159,6 +159,8 @@ A customer who would have converted through paid search even without seeing the 
 **Q3.** By the efficiency axiom, Shapley values sum to the overall conversion rate. 0.275 + 0.200 + 0.075 = **0.550** = 55%.
 *Common wrong answer:* Need additional information to compute the conversion rate. No — the sum of Shapley values IS the conversion rate, guaranteed by the efficiency axiom.
 
+> **Also asked on the slides:** *"Under what conditions could a Shapley value be negative?"* — When the **value function is non-monotone**: some coalition got *worse* when the channel joined, so that channel's average marginal contribution across orderings comes out negative. Section 2.2 makes this diagnostic check number 2, immediately after the efficiency check in Q3 — a negative Shapley value "can be a genuine finding or a specification artefact, so investigate the value function rather than assuming a coding bug" (`homework_06` pins a monotone v for exactly this reason). The slide goes on to ask you to *construct* a characteristic function v that produces φᵢ < 0; attempt that one and bring your example to class.
+
 **Q4.** **False.** Shapley measures marginal contribution within observed paths — it is correlation-based. It cannot distinguish between "Social caused this conversion" and "Social appeared on the path of customers who would have converted anyway." Causal incrementality requires a holdout experiment.
 *Common wrong answer:* True, because Shapley accounts for the full path, not just the last touch. Path accounting ≠ causal identification.
 

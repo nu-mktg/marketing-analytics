@@ -470,9 +470,25 @@ when you are not actively typing. Leaving one running overnight wastes approxima
 (green border): you are typing inside a cell. Press Escape for command mode; press
 Enter or click inside a cell for edit mode.
 
+> **Also asked on the slides:** *"You get `NameError: name 'q5' is not defined`. What
+> went wrong?"* — You ran the cells out of order. Always run cells in order from top to
+> bottom: if a later cell depends on a variable set in an earlier cell, running them out
+> of order will cause errors. Here the cell that defines `q5` was never run, or was run
+> only after the cell that uses it. Fix: Kernel → Restart & Run All.
+
 **Q5.** Wrong: C-index ≠ R². R² measures percentage of variance explained in a
 regression. C-index (concordance index) measures the fraction of comparable pairs the
 model ranks correctly by predicted survival time. C=0.50 means no better than random
 (coin flip). C=0.82 means the model correctly ranks 82% of pairs where one customer
 churned before the other. It is a ranking metric, not a variance explanation metric.
+
+> **Also asked on the slides:** *"P(B>A) = 0.87. Your manager says 'B wins 87% of
+> repeated experiments.' Is this correct?"* — No. P(B > A) = 0.87 is a **Bayesian
+> posterior probability** about the unknown true rates, given this data and this prior.
+> It does not say how often B would win in repeated experiments — that would be a
+> frequentist statement about long-run sampling, which is not what Bayesian inference
+> computes. The correct reading: given what we observed, there is an 87% probability that
+> B's true conversion rate is higher than A's. This is the same category error as Q5
+> above — reading a probability as a share of repetitions. Lecture 1 works this through
+> in full with P(B > A) = 0.91.
 

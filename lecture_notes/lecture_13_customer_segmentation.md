@@ -159,6 +159,8 @@ C is closer to $\boldsymbol{\mu}_1$, so assigned to Cluster 1. ✓
 
 **Q5.** $k = 4$ is better. Although $k = 5$ has lower WCSS (expected — WCSS always decreases), it has a lower silhouette score (0.24 vs. 0.31), meaning customers are *less* well-separated into coherent groups. The silhouette score is the right criterion for comparing solutions of different $k$.
 
+> **Also asked on the slides:** *"Cluster 2 has mean CLV = \$380 and mean τ̂ = 0.06. The campaign threshold is \$c/v = 4/30 = 0.133\$. Do you target Cluster 2 with the campaign?"* — **No.** The campaign decision is made on uplift against the threshold, not on value: mean τ̂ = 0.06 < 0.133, so the average member of Cluster 2 does not generate enough incremental conversion to cover the \$4 cost (expected profit ≈ 0.06 × \$30 − \$4 = −\$2.20 per contact, by the rule in Lecture 7). The \$380 mean CLV is the answer to a *different* question. Section 1.6 keeps the two uses separate: mean CLV per segment says which segments to prioritise for premium offers and retention spend, while mean τ̂ per segment says which segments sit above or below the targeting threshold. A high-CLV, low-uplift segment is exactly the case where those two recommendations diverge — worth protecting, not worth this campaign. Two cautions before acting on the segment mean: τ̂ varies *within* a cluster, so a sub-group above 0.133 may still be worth targeting, and the threshold moves with `c` and `v`.
+
 ---
 
 ## PART 2: Application

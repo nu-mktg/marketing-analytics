@@ -232,19 +232,29 @@ If prices are set partly in response to demand conditions (managers lower prices
 
 *Common wrong answer:* "Elastic means demand responds a lot, so −1.84 must be inelastic since it's less than 1." The elasticity is compared to 1 in absolute value, not as a raw number. ε = −1.84 means |ε| = 1.84 > 1 → elastic.
 
+> **Also asked on the slides:** *"The log-log regression gives β̂₁ = −1.42. Is demand elastic or inelastic? What happens to revenue if price rises 5%?"* — Elastic: |−1.42| = 1.42 > 1. In a log-log model β₁ **is** the elasticity, so a 5% price rise is associated with a 1.42 × 5% ≈ **7.1% fall in units**. Revenue = price × units, so revenue moves by roughly +5% − 7.1% ≈ **−2.1%** — revenue falls. Same rule as Q1: when demand is elastic, raising price reduces revenue.
+
 **Q2.** x̄ = 10, ȳ = 90. Deviations: (−2, −1, 0, +1, +2) and (+30, +10, 0, −15, −25).
 Numerator = (−2)(30) + (−1)(10) + (0)(0) + (1)(−15) + (2)(−25) = −60 − 10 + 0 − 15 − 50 = −135.
 Denominator = 4 + 1 + 0 + 1 + 4 = 10. β₁ = −135/10 = **−13.5 units per dollar**.
 
 *Common wrong answer:* Forgetting to compute deviations first, using raw values instead of (xᵢ − x̄) and (yᵢ − ȳ).
 
+> **Also asked on the slides:** *"From the data above, compute β̂₀ and verify it equals 329."* — The table on that slide is the Part A worked example in these notes: Prices [5, 6, 7, 8, 9], Units [200, 160, 140, 110, 90], x̄ = 7, ȳ = 140, Σ(x−x̄)(y−ȳ) = −270, Σ(x−x̄)² = 10. So β₁ = −270/10 = −27, and the intercept follows from β₀ = ȳ − β₁x̄ = 140 − (−27 × 7) = 140 + 189 = **329**, giving the fitted line Units = 329 − 27 × Price. Note that the checkpoint table in Q2 is a *different* dataset (β₁ = −13.5), so do not expect 329 from it.
+
+> **Also asked on the slides:** *"Why does log-log give a constant elasticity but level-level gives a varying elasticity?"* — Because of what the coefficient measures. In the level-level model the slope is a constant number of **units per dollar** (here −27, or −13.5 in Q2), so the *percentage* response depends on where you are: at a base of 200 units a 27-unit drop is 13.5%, at a base of 90 units the same 27-unit drop is 30%. Elasticity therefore changes along the line. In the log-log model both sides are in logs, so β₁ is a **percentage response to a percentage change** — the same at every price by construction. That is why log-log is the specification used for elasticity, and why the level-level slope "does not make economic sense for large price changes."
+
 **Q3.** Revenue is maximized where |ε| = 1. Current |ε| = 1.84 > 1 means we are on the elastic portion of the demand curve. Lowering price would increase revenue — current price is **too high** relative to the revenue-maximizing price.
 
 *Common wrong answer:* "Elastic means customers are sensitive, so raising prices will hurt us — we should lower prices to the minimum." Elasticity tells you the direction for revenue maximization, not how much to move.
 
+> **Also asked on the slides:** *"At what elasticity is revenue maximized? What does the firm do if current ε = −0.8?"* — Revenue is maximized where |ε| = 1. With ε = −0.8 we have |ε| = 0.8 < 1, so demand is **inelastic** and the firm should **raise** price: the percentage loss in units is smaller than the percentage gain in price, so revenue rises. This is the mirror image of Q3 above, where |ε| = 1.84 > 1 called for a price cut. Both cases move *toward* |ε| = 1.
+
 **Q4.** Too small (less negative) — biased toward zero. When the manager lowers prices during slow periods, observed low prices coincide with low demand (not because of the price cut, but because it's Saturday). The regression incorrectly attributes low demand to the low price, making demand appear less sensitive to price than it truly is.
 
 *Common wrong answer:* "The estimate will be more negative because cutting prices on slow days shows prices matter." The direction of endogeneity bias is counterintuitive — it depends on the correlation between the endogenous regressor (price) and the omitted variable (day-of-week demand), not on the direction of the price cut.
+
+> **Also asked on the slides:** *"A pricing analyst runs OLS on transaction data and gets β̂₁ = +3 (positive!). What's the most likely explanation?"* — The same endogeneity as in Q4, only larger. Prices in transaction data are set *in response to* demand: they are raised when demand is strong and discounted when it is weak, so high price and high volume appear together. Section 1.4 notes the resulting bias is "typically toward zero" — but when the demand-driven component dominates, the bias carries the estimate **past** zero and the fitted coefficient comes out positive. A positive β̂₁ is therefore a diagnostic of a broken identification assumption, not a discovery that customers buy more when things cost more. The fix is the one previewed in Section 1.4: an instrument that shifts price without reflecting demand (e.g. store display promotions).
 
 **Q5.** Yes — this is a good thing for you. Cross-price elasticity of +0.62 means a 15% competitor price increase → approximately 15 × 0.62 = 9.3% increase in your units. You could consider whether to maintain your price (capturing volume) or raise yours slightly (capturing some of the competitor's pricing power). Do not be alarmed — positive cross-price elasticity means the competitor's higher price benefits you.
 

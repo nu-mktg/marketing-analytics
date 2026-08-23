@@ -150,6 +150,8 @@ The multinomial logit model assumes IIA: **Independence of Irrelevant Alternativ
 **Q1.** WTP = 1.10 / 0.15 = **$7.33/month**.
 *Common wrong answer:* WTP = 0.15/1.10 = $0.136 (inverted formula). Always divide the feature coefficient by |β_price|, not the reverse.
 
+> **Also asked on the slides:** *"β_price = −0.18, β_annual_plan = +0.65. Compute WTP for annual plan."* — Same formula, run on the example coefficients in Section 1.4: WTP = 0.65 / 0.18 = **\$3.61/month**. Read it as "the average respondent values being on an annual plan rather than monthly at about \$3.61 of monthly price" — so a \$3/month annual-plan discount is defensible on these estimates and a \$5/month one is not. Note the units: because β_price is per \$1 of *monthly* price, the WTP is also per month, not per year.
+
 **Q2.** e^(−1.5) = 0.223, e^(0.5) = 1.649. Sum = 1.872.
 Share A = 0.223/1.872 = **11.9%**. Share B = 1.649/1.872 = **88.1%**.
 *Common wrong answer:* Sharing proportional to utility values directly (−1.5 and 0.5), ignoring the softmax transformation.
