@@ -248,7 +248,7 @@ Denominator = 4 + 1 + 0 + 1 + 4 = 10. β₁ = −135/10 = **−13.5 units per do
 
 *Common wrong answer:* "Elastic means customers are sensitive, so raising prices will hurt us — we should lower prices to the minimum." Elasticity tells you the direction for revenue maximization, not how much to move.
 
-> **Also asked on the slides:** *"At what elasticity is revenue maximized? What does the firm do if current ε = −0.8?"* — Revenue is maximized where |ε| = 1. With ε = −0.8 we have |ε| = 0.8 < 1, so demand is **inelastic** and the firm should **raise** price: the percentage loss in units is smaller than the percentage gain in price, so revenue rises. This is the mirror image of Q3 above, where |ε| = 1.84 > 1 called for a price cut. Both cases move *toward* |ε| = 1.
+> **Also asked on the slides:** *"At what elasticity is revenue maximized? What does the firm do if current ε = −0.8?"* — Revenue is maximized where |ε| = 1. With ε = −0.8 we have |ε| = 0.8 < 1, so demand is **inelastic** and the firm should **raise** price: the percentage loss in units is smaller than the percentage gain in price, so revenue rises. This is the mirror image of Q3 above, where |ε| = 1.84 > 1 called for a price cut.
 
 **Q4.** Too small (less negative) — biased toward zero. When the manager lowers prices during slow periods, observed low prices coincide with low demand (not because of the price cut, but because it's Saturday). The regression incorrectly attributes low demand to the low price, making demand appear less sensitive to price than it truly is.
 
