@@ -488,7 +488,6 @@ churned before the other. It is a ranking metric, not a variance explanation met
 > It does not say how often B would win in repeated experiments — that would be a
 > frequentist statement about long-run sampling, which is not what Bayesian inference
 > computes. The correct reading: given what we observed, there is an 87% probability that
-> B's true conversion rate is higher than A's. This is the same category error as Q5
-> above — reading a probability as a share of repetitions. Lecture 1 works this through
+> B's true conversion rate is higher than A's. Lecture 1 works this through
 > in full with P(B > A) = 0.91.
 
