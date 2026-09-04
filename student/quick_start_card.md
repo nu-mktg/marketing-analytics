@@ -3,39 +3,138 @@
 
 ---
 
-## Five Steps to Submit Homework
+## One repository for the whole course
+
+You own **one private repository** for this course. Every homework arrives in it as
+its own folder:
 
 ```
-Step 1: Accept the assignment
-         → Click the link posted to Canvas
-         → Authorize GitHub Classroom
-         → Click your name in the roster
-         → Wait 30 seconds for your repo to be created
+your-repo/
+├── hw00/     ← setup verification (ungraded)
+├── hw01/     ← arrives when hw01 is released
+├── hw02/
+└── ...
+```
 
-Step 2: Open your Codespace
-         → Go to your new repo on GitHub
-         → Green "Code" button → Codespaces tab
+You do not create a new repository per assignment, and you do not need a new
+Codespace per assignment.
+
+---
+
+## Setup — once, at the start of term
+
+```
+Step 1: Create your repository
+         → Go to github.com/shleeneu/marketing-analytics
+         → Green "Use this template" → "Create a new repository"
+         → Owner: YOUR account
+         → Repository name: marketing-analytics   ← type it exactly
+         → Visibility: Private
+         → "Create repository"
+
+         ⚠️ The name must end with "marketing-analytics". Homework is
+            delivered to repositories with that name. A different name
+            means the assignment never arrives, and nothing will look
+            broken when it doesn't.
+
+Step 2: Install the course app on your repository
+         → Go to github.com/apps/nu-mktg-grader/installations/new
+         → Choose "Only select repositories"
+         → Select the repository you just created → Install
+
+         Why: the repository is yours, so the course cannot reach it by
+         default. The app is how homework gets delivered to you and how
+         your feedback gets written back. It can read and write repository
+         contents and nothing else — it cannot see your other
+         repositories, and you can remove it at any time.
+
+         Confirm: github.com/settings/installations should list
+         NU-mktg-grader with your repository under it.
+
+Step 3: Open your Codespace
+         → Your repo on GitHub → green "Code" button → Codespaces tab
          → "Create codespace on main"
-         → Wait ~90 seconds
+         → First build takes a few minutes (it installs Python 3.11 and
+           every course library at pinned versions)
 
-Step 3: Complete the notebook
-         → In the Explorer panel, open homework_0N_*.ipynb
+         You only ever create ONE. Your repository holds every homework,
+         so one Codespace serves the whole course. After this you
+         REOPEN it rather than creating another.
+
+         ⚠️ The editor opens BEFORE the install finishes. Libraries keep
+            downloading in the background for the first few minutes.
+            If hw00 says a library is "not found", wait 2-3 minutes and
+            run it again — don't rebuild, don't pip install.
+
+Step 4: Run hw00
+         → Open hw00/homework_00_introduction.ipynb
+         → Kernel → Restart & Run All Cells
+         → No errors = you are set up
+```
+
+---
+
+## Every homework after that
+
+```
+Step 1: Get the assignment
+         In your Codespace terminal:   git pull
+         A new hwNN/ folder appears.
+
+Step 2: Do the work
+         → Open hwNN/homework_NN_*.ipynb
          → Replace each None with your answer
-         → Run Kernel → Restart & Run All Cells
+         → Kernel → Restart & Run All Cells
+           (it must run clean from a fresh kernel)
 
-Step 4: Push to GitHub
-         In the terminal at the bottom:
-
+Step 3: Submit
          git add .
          git commit -m "completed hw01"
          git push
 
-Step 5: Check your result
-         → Go to your repo on GitHub
-         → Click the "Actions" tab
-         🟡 Yellow = running (wait ~2 minutes)
-         🟢 Green = all tests passed
-         🔴 Red = some tests failed → click to see which ones
+Step 4: Read your feedback
+         Wait a couple of hours, then:   git pull
+         Your score and per-question breakdown are in hwNN/GRADE.md
+```
+
+### How your work gets graded
+
+After you push, the course's grading system picks up your latest commit, grades
+it, and writes your feedback into your repository as `hwNN/GRADE.md`. It runs
+every couple of hours, so allow some time — and push early rather than once at
+the deadline, since every push is regraded.
+
+`GRADE.md` names the commit it graded, so you can always tell whether the feedback
+you are reading is for your latest work.
+
+**`hw00` is ungraded and produces no `GRADE.md`.** If none appears for hw00,
+nothing is wrong.
+
+---
+
+## Git, in the four commands you actually need
+
+**Your whole repository is ONE git repository.** The `hwNN/` folders are just
+folders inside it, not separate projects — so you run git from the repository
+root, which is where the Codespace terminal already opens.
+
+| command | what it does |
+|---|---|
+| `git pull` | brings *down* anything new — this is how a new homework folder appears |
+| `git add .` | stages your changes: marks them to be included in the next save |
+| `git commit -m "completed hw01"` | saves a snapshot **locally**, inside your Codespace |
+| `git push` | sends your commits *up* to GitHub — **nothing is submitted until you push** |
+
+`add` → `commit` → `push` is one sequence, and you run all three every time.
+`git status` shows what you changed; `git log --oneline` shows what you already
+committed.
+
+**If `git push` is rejected,** new homework was added to your repository since you
+last pulled. Normal, and not something you did wrong:
+
+```bash
+git pull
+git push
 ```
 
 ---
@@ -58,8 +157,11 @@ Step 5: Check your result
 |---|---|
 | `NameError: q5 is not defined` | Kernel → Restart & Run All Cells |
 | Cell runs forever | Kernel → Interrupt |
-| Autograder shows 🔴 | Click the red X → click "grade" job → expand the failed test |
-| "Module not found" | Run `!pip install [module_name]` in a new code cell |
+| The new homework isn't in my repo | `git pull`. Still missing? Check that NU-mktg-grader is installed at github.com/settings/installations **and** that your repo name ends with `marketing-analytics`. |
+| No `GRADE.md` appeared after a day | Confirm you actually **pushed** (`git log origin/main --oneline`), and that the app is still installed. hw00 never produces one. |
+| `GRADE.md` looks like old feedback | Check the commit it names at the top — if it isn't your latest, the next sweep hasn't run yet. |
+| "Module not found" in a brand-new Codespace | It is still installing. Wait 2–3 minutes and re-run the cell — the first cell of hw00 tells you when this is what's happening. |
+| "Module not found" after waiting | Rebuild the Codespace (Codespaces → `...` → Rebuild container) rather than `pip install`ing, so your versions still match what the grader expects. |
 | Can't open Codespace | Try a different browser, or close and reopen from your repo |
 | Lost work | Check git history: `git log --oneline` in the terminal |
 
@@ -84,19 +186,29 @@ print(f'Q3: {q3_posterior_alpha_a}')
 
 ---
 
-## Codespace Tips
+## Codespace Tips — including how to come back to unfinished work
 
-- **Stop your Codespace when done** — you get 60 free hours/month.
-  GitHub → Codespaces → click `...` next to your Codespace → Stop.
+**You do not have to finish a homework in one sitting.**
 
-- **Your work is saved even after you stop.** Your files are stored on GitHub,
-  not on your laptop. If you restart, everything is still there.
+- **Closing the browser is safe.** Your Codespace stops on its own after about 30
+  minutes of inactivity, and everything you saved is still there next time.
 
-- **One Codespace per assignment.** Don't create a new one for each session —
-  just reopen the existing one from the Codespaces tab.
+- **Reopen the same one.** Your repo → **Code → Codespaces**, or
+  github.com/codespaces, and click the Codespace you already have. Don't create
+  a second one.
 
-- **The terminal is your friend.** `git status` shows what you've changed.
-  `git log --oneline` shows your commit history.
+- ⚠️ **Push before a long break.** GitHub deletes a stopped Codespace after **30
+  days without use, and it does that even if it holds work you never pushed.**
+  Once your work is pushed, the Codespace is disposable — if it ever disappears,
+  create a new one and everything is still on GitHub.
+
+- **Stop it when you finish for the day** — a free account includes 120
+  core-hours per month, which is **60 hours** on the default 2-core machine.
+  github.com/codespaces → `...` next to your Codespace → **Stop codespace**.
+
+- **Don't upgrade packages.** The versions are pinned so your results stay
+  consistent with what the grader expects. If something seems broken, rebuild the
+  container instead.
 
 ---
 
@@ -110,6 +222,10 @@ print(f'Q3: {q3_posterior_alpha_a}')
 | Autograded | ✅ Yes | ✅ Yes |
 | How scored | Exact or tolerance match | Tolerance match (B) / Exact letter (C) |
 
+**Your Part A numbers are your own.** The constants in Part A are generated
+specifically for you, so your classmates' numbers are different and a copied
+answer is wrong by construction.
+
 ---
 
 ## Getting Help
@@ -121,4 +237,5 @@ print(f'Q3: {q3_posterior_alpha_a}')
 
 ---
 
-*This card covers HW01–HW10. The setup is identical for every assignment.*
+*The setup steps are done once. The submission steps are identical for every
+assignment, hw01 through hw14.*

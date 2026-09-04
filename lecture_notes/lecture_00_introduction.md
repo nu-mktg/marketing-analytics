@@ -431,9 +431,9 @@ and have completed the technology setup.
 4. In Jupyter, what is the keyboard shortcut to run the current cell and move to the
    next? What does it mean to be in "command mode" vs "edit mode"?
 
-5. You estimate a Cox proportional hazards model and the concordance index (C-index)
-   is 0.82. A teammate says "great, the model explains 82% of the variation." What is
-   wrong with this interpretation, and what does 0.82 actually mean?
+5. This course expects you to use an AI assistant for Parts B and C, but not Part A.
+   In your own words: why is Part A the exception? And give one concrete example of an
+   AI-generated answer you would still need to check before submitting it.
 
 ---
 
@@ -441,12 +441,16 @@ and have completed the technology setup.
 
 **Q1.** Analyst track: you are running the model. You care about whether the
 assumptions hold, how to diagnose violations, and how to report uncertainty correctly.
-Example: you fit a Cox model and notice the Schoenfeld residuals are correlated with
-time — you flag a PH assumption violation and report the issue.
+Example: you fit a model to compare two campaigns and notice one group is much smaller
+than the other — you check whether the difference is distinguishable from noise before
+reporting it as a result.
 Manager track: you are acting on the model output. You care about whether the
-recommendation is trustworthy and what would change it. Example: you receive a Cox
-model output showing HR=0.74 for workouts and ask: "Is this finding stable if we
-remove new customers from the sample? Could early dropout be driving this?"
+recommendation is trustworthy and what would change it. Example: you are handed a result
+saying customers who use a feature churn less, and you ask: "Does using the feature keep
+them, or do the customers who were staying anyway use it more?"
+
+*(Examples here are deliberately model-free: this is Lecture 0 and no model has been
+taught yet. The specific techniques arrive from Lecture 1 onward.)*
 
 *Common wrong answer:* "The analyst does the math and the manager reads the answer."
 This misses the point — both tracks require understanding what the math means, just
@@ -476,11 +480,23 @@ Enter or click inside a cell for edit mode.
 > of order will cause errors. Here the cell that defines `q5` was never run, or was run
 > only after the cell that uses it. Fix: Kernel → Restart & Run All.
 
-**Q5.** Wrong: C-index ≠ R². R² measures percentage of variance explained in a
-regression. C-index (concordance index) measures the fraction of comparable pairs the
-model ranks correctly by predicted survival time. C=0.50 means no better than random
-(coin flip). C=0.82 means the model correctly ranks 82% of pairs where one customer
-churned before the other. It is a ranking metric, not a variance explanation metric.
+**Q5.** Part A tests whether you can perform the mathematical operations yourself. The
+point is not memorisation — no professional analyst memorises the OLS formula — but that
+you understand what the formula is doing well enough to judge whether an AI-generated
+answer is plausible. Part A is the training for that judgement, so outsourcing it
+removes the only thing it measures. Parts B and C are where AI genuinely accelerates
+the work, because there you are evaluating output rather than producing it.
+
+Any concrete example of something checkable earns full credit. Good ones: a number that
+is the right magnitude but the wrong sign; an answer that ignores a stated constraint in
+the question; confidently named "results" from a dataset column that does not exist; a
+formula applied to the wrong variable. The habit being built is the course's whole
+premise — the agent can interpret, propose and flag; **you** verify, catch its errors,
+and own the result.
+
+*Common wrong answer:* "Because using AI on Part A is cheating." True but circular — the
+question asks WHY the rule exists, and the reason is that Part A is the only part that
+builds the judgement you need to supervise an AI everywhere else.
 
 > **Also asked on the slides:** *"P(B>A) = 0.87. Your manager says 'B wins 87% of
 > repeated experiments.' Is this correct?"* — No. P(B > A) = 0.87 is a **Bayesian
