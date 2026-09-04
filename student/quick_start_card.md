@@ -232,8 +232,8 @@ answer is wrong by construction.
 
 1. **Check the lecture notes first** — the worked examples match the homework structure
 2. **Post to Canvas discussion** — classmates may have solved the same issue
-3. **Office hours** — [times and location]
-4. **Email** — [address] — allow 48 hours
+3. **Office hours** — by appointment via Zoom — https://calendly.com/sh-lee-1/15min
+4. **Email** — sh.lee@northeastern.edu — allow 48 hours
 
 ---
 
