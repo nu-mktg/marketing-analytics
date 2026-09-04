@@ -124,10 +124,12 @@ doesn't. None of them is a black box you can trust blindly.
 > re-add a week to Quiz 2 — any single number is wrong for one of the two courses. Dates:
 > `instructor/course_schedule_template.md`.
 
-**Late submissions.** One policy applies to every graded component in this course —
-homework, the Sprint individual quiz, and the Sprint group write-up alike:
+**Late submissions.** One policy applies to everything you submit to a deadline in this
+course — homework and the Sprint group write-up alike:
 **on time = full credit · within 24 hours of the deadline = half credit** (half the score
-you earn) **· more than 24 hours late = not accepted.**
+you earn) **· more than 24 hours late = not accepted.** In-class quizzes are not submitted
+to a deadline, so this does not apply to them; a missed quiz is handled by the quiz
+make-up policy.
 
 **Collaboration policy:**
 - Part A (math questions): Individual. No collaboration.
