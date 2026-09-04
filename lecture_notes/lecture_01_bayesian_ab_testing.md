@@ -331,7 +331,11 @@ The mean of the lift distribution across all plausible true conversion rates. Th
 ---
 
 ### Part 1 Checkpoint
-#### 5 questions — participation credit
+
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
 
 1. A Bayesian A/B test reports P(B > A) = 0.91. Your manager says "that means if we ran this experiment 100 times, B would win 91 of them." Is your manager's interpretation correct? Why or why not?
 

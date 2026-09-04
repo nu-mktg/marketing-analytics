@@ -152,6 +152,11 @@ Always validate on a held-out period before using a forecast for decisions.
 
 ### Part 1 Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 1. Baseline weekly revenue = $1,200k. Seasonal component for Q4 = +42%. Black Friday adds another +38% on top of Q4. Estimate Black Friday week revenue.
 
 2. A forecast shows MAPE = 18% on a 13-week holdout. Your manager says "That's too inaccurate to use." Is this always correct?

@@ -136,6 +136,11 @@ A customer who would have converted through paid search even without seeing the 
 
 ### Part 1 Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 1. How many orderings must be enumerated for a 4-channel Shapley attribution?
 
 2. Attribution results: Email last-touch = 65%, Email Shapley = 13.6%. What does this divergence tell you about Email's role in the conversion journey?

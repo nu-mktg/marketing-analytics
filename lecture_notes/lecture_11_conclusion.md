@@ -338,6 +338,11 @@ with the analytical reasoning being tested. Generic definitions will not suffice
 
 ## PART 3 Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 These questions synthesize across the first 10 lectures.
 
 1. A new analyst proposes running a Markov chain model to answer the question "did

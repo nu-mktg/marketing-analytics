@@ -151,6 +151,11 @@ sensitive to.
 
 ### Part 1 Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 1. Transition matrix P: Active=[0.80, 0.15, 0.05], Dormant=[0.30, 0.50, 0.20], Churned=[0, 0, 1]. Starting from v₀=[0.60, 0.30, 0.10], compute v₁.
 
 2. Using v₁ from Q1, compute v₂ = v₁ × P.

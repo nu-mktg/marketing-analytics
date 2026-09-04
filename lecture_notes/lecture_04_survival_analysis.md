@@ -151,6 +151,11 @@ model fitted on `survival_data.csv` returns HR ≈ 1.47 for `support_tickets` an
 
 ### Part 1 Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 1. 500 customers at risk. At month 6: 25 churned. At month 12: 40 churned from the remaining risk set. Compute Ŝ(6) and Ŝ(12).
 
 2. Using the values above: what fraction of customers who survived to month 6 churned by month 12?

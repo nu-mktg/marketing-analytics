@@ -214,6 +214,11 @@ If prices are set partly in response to demand conditions (managers lower prices
 
 ### Part 1 Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 1. You estimate β₁ = −1.84 in a log-log regression. A colleague says "demand is elastic." Are they right?
 
 2. Using the table below, calculate β₁ manually. Prices: [8, 9, 10, 11, 12]. Units: [120, 100, 90, 75, 65].

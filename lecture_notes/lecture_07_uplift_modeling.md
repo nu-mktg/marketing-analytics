@@ -126,6 +126,11 @@ broken model. Compare Qini only against numbers computed the same way.
 
 ### Part 1 Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 1. ATE = treated_rate − control_rate. Treated rate = 0.24, control rate = 0.16. What is the ATE?
 
 2. Campaign cost = $4, conversion value = $25. What is the minimum profitable uplift threshold?

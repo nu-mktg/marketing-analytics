@@ -498,6 +498,11 @@ understanding.
 
 ## Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 These questions have no math. They test whether you understand the course structure
 and have completed the technology setup.
 

@@ -140,6 +140,11 @@ Two numbers used to appear in this lecture for this one decision (a −0.30 "mat
 
 ### Part 1 Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 1. Three customers with identical purchase counts (x=8) but different recency. Customer A: last purchase 1 month ago (T=12). Customer B: last purchase 6 months ago (T=12). Customer C: last purchase 11 months ago (T=12). Rank from highest to lowest P(alive).
 
 2. E[transactions in 12 months] = 3.6, E[order value] = $45. Compute CLV (no discounting).

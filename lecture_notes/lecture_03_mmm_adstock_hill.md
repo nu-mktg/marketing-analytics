@@ -147,6 +147,11 @@ The β coefficients capture the maximum revenue each channel can generate (the p
 
 ### Part 1 Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 1. With λ = 0.6, spend sequence S₁=200, S₂=0, S₃=50. Compute A₁, A₂, A₃.
 2. A Digital channel has H = 0.73. Is current spend above or below EC50?
 3. TV marginal ROI = $4.20/dollar. Digital marginal ROI = $1.80/dollar. In which direction should budget move? Can you shift the entire digital budget to TV immediately?

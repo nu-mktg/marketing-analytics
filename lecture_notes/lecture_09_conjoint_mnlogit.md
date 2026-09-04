@@ -133,6 +133,11 @@ The multinomial logit model assumes IIA: **Independence of Irrelevant Alternativ
 
 ### Part 1 Checkpoint
 
+> **These questions are not submitted and not graded.** Attempt them before class; we
+> then work through them together, and you will be asked to **explain your reasoning, not
+> just state the answer.** Using Copilot or Claude to reach the answer is expected — what
+> you cannot outsource is the explanation.
+
 1. β_price = −0.15, β_premium_content = +1.10. Compute WTP for premium content.
 
 2. Two products: A = standard, full ads, $10 (U_A = −0.15×10 + 0 + 0 = −1.5). B = premium, no ads, $16 (U_B = −0.15×16 + 1.10 + 1.80 = −2.4 + 2.90 = 0.5). Compute market shares for both.
