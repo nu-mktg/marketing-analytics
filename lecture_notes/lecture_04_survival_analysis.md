@@ -282,7 +282,7 @@ $$e^{-0.052} \approx 0.949, \qquad e^{0.148} \approx 1.160, \qquad e^{-0.002} \a
 ---
 
 ### Section 2.3 — Homework Assignment
-#### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
+#### (~55 minutes in class | Due: start of next week's lecture | Submit by pushing to your course repository)
 
 <!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
      Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT

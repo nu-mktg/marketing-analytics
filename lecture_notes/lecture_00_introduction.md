@@ -12,7 +12,7 @@ before next class.
 **By the end of this session you should:**
 - Understand the course philosophy and what distinguishes analytical judgment from
   analytical execution
-- Know the 14 models covered and how they connect to real business decisions
+- Know the ten models covered and how they connect to real business decisions
 - Have a working GitHub Codespace running a Jupyter notebook
 - Have submitted your first homework (a technology setup verification)
 
@@ -67,8 +67,9 @@ interpretation questions where collaboration is encouraged (manager track).
 
 ### 1.3 The Course Structure
 
-Fourteen lectures. Each covers one model. The order follows mathematical dependency:
-each model builds on concepts from previous ones.
+Twelve lectures: this introductory session (Lecture 0) and eleven model lectures,
+L01 through L11. Each of the eleven covers one model, and the order follows
+mathematical dependency — each model builds on concepts from previous ones.
 
 | Lecture | Model | Core question answered |
 |---|---|---|
@@ -83,13 +84,15 @@ each model builds on concepts from previous ones.
 | 9 | Conjoint Analysis | What do customers value — and how much will they pay? |
 | 10 | Demand Forecasting | Where is our business heading? |
 | 11 | Synthesis & Capstone | How do the models fit together into a decision framework? |
-| 12 | Difference-in-Differences | Can we establish causation from observational data? |
-| 13 | Customer Segmentation | How do we group customers to target them differently? |
-| 14 | CausalImpact | Did our marketing campaign actually cause the revenue lift? |
 
-**The thread connecting all 14:** Every model addresses uncertainty about customer
-behavior. Every model requires judgment about when it applies and when it doesn't.
-None of them is a black box you can trust blindly.
+**The thread connecting all of them:** Every model addresses uncertainty about
+customer behavior. Every model requires judgment about when it applies and when it
+doesn't. None of them is a black box you can trust blindly.
+
+> **Not covered this term.** The course materials also contain notes and notebooks for
+> Difference-in-Differences, Customer Segmentation and CausalImpact. They are not
+> taught this term, carry no homework and are not assessed. They are there as
+> reference if you want to read ahead.
 
 ---
 
@@ -97,23 +100,37 @@ None of them is a black box you can trust blindly.
 
 | Component | Weight | Description |
 |---|---|---|
-| Homework (×14) | 40% | 14 graded assignments, equal weight; Part A individual |
+| Homework (×11) | 40% | 11 graded assignments, equal weight |
 | Quiz 1 (Week 7, covers L01–L05) | 10% | In-class, 20 T/F questions, Bayesian confidence scoring |
 | Quiz 2 (Week 13, covers L06–L10) | 10% | In-class, 24 T/F questions, Bayesian confidence scoring |
-| Checkpoints (×14) | 10% | End-of-lecture participation, graded for attempt |
+| Class Participation | 10% | Attendance and contribution to class discussion |
 | Sprint — Individual | 15% | Individual 10-question Canvas MC quiz (auto-graded) |
 | Sprint — Group | 15% | FitLoop case: group presentation and write-up |
 
-> Canonical as of 2026-08-12 (sh.lee). This previously read HW 50 / Q 5+5 / Sprint 20 /
-> Checkpoints 20, which contradicted `instructor/course_syllabus_template.md`. The syllabus
-> version won: it puts ~35% of the grade on individually-discriminating work rather than
-> ~10–15%, which matters when homework is AI-assisted. Both files now agree.
+> Canonical as of 2026-09-04 (sh.lee). The rows above are byte-identical in
+> `instructor/course_syllabus_template.md` and `lecture_notes/lecture_00_introduction.md`
+> by requirement; if they ever disagree, one of them is wrong.
+> Two reconciliations are recorded here. **2026-08-12:** this table previously read
+> HW 50 / Q 5+5 / Sprint 20 / Checkpoints 20, which contradicted the syllabus; the
+> syllabus version won, because it puts ~35% of the grade on individually-discriminating
+> work rather than ~10–15%, which matters when homework is AI-assisted. **2026-09-04:**
+> the course was scoped to L00–L11, so Homework went ×14 → **×11** (hw01–hw11), and the
+> **Checkpoints** row became **Class Participation** — checkpoint questions are now
+> worked through together in class and are not submitted or graded.
 
 **Collaboration policy:**
 - Part A (math questions): Individual. No collaboration.
 - Part B and C (code + interpretation): Collaboration permitted and encouraged.
 - Quizzes: Individual. No resources.
 - Sprint: Group presentation; individual scenario quiz submitted before group work begins.
+
+**Checkpoints are not graded.** The five questions at the end of each lecture are not
+submitted. We work through them together in class, and you should attempt them
+beforehand — you will be asked to **explain your reasoning, not just state the
+answer.** Using Copilot or Claude to reach the answer is expected; what you cannot
+outsource is the explanation. The 10% in the table above is **Class Participation**,
+awarded for attendance and contribution to class discussion; the criteria are in the
+syllabus.
 
 ---
 
@@ -154,14 +171,39 @@ data science library. The Codespace has everything pre-configured.
 3. Upload a photo of your student ID
 4. This gives you GitHub Pro for free (larger Codespaces quota)
 
-**Step 3: Accept the GitHub Classroom invitation**
+**Step 3: Create your course repository from the template**
 
-Your instructor will post an invitation link in Canvas. When you click it:
-1. You will be asked to authorize GitHub Classroom
-2. A private repository is automatically created for you
-3. The repository is named: `hw01-bayesian-ab-[your-username]`
+You own **one private repository** for the whole course, and every homework arrives
+in it as its own folder (`hw00/`, `hw01/`, `hw02/`, and so on). You do not create a
+new repository per assignment.
 
-You will repeat this process for each of the 14 homework assignments.
+1. Go to `github.com/shleeneu/marketing-analytics`
+2. Click the green **Use this template** → **Create a new repository**
+3. Owner: **your own account**
+4. Repository name: `marketing-analytics` — type it exactly
+5. Visibility: **Private**
+6. Click **Create repository**
+
+> ⚠️ The name must end with `marketing-analytics`. Homework is delivered to
+> repositories with that name. A different name means the assignment never
+> arrives, and nothing will look broken when it doesn't.
+
+**Step 4: Install the course app on your repository**
+
+1. Go to `github.com/apps/nu-mktg-grader/installations/new`
+2. Choose **Only select repositories**
+3. Select the repository you just created → **Install**
+
+The repository is yours, so the course cannot reach it by default. The app is how
+homework gets delivered to you and how your feedback gets written back. It can read
+and write repository contents and nothing else — it cannot see your other
+repositories, and you can remove it at any time.
+
+Confirm at `github.com/settings/installations`: it should list **NU-mktg-grader**
+with your repository under it.
+
+Steps 3 and 4 are done once, at the start of term. After that, each new homework
+folder arrives in the repository you already have.
 
 ---
 
@@ -180,9 +222,12 @@ through your browser. When you open a Codespace:
 You pay nothing. GitHub provides 120 core-hours per month free, which is approximately
 60 hours of 2-core Codespace time — more than enough for this course.
 
+You create **one** Codespace and reopen it for the whole course — your repository
+holds every homework, so one Codespace serves all of them.
+
 **Opening a Codespace for the first time:**
 
-1. Go to your homework repository on GitHub
+1. Go to your course repository on GitHub
 2. Click the green **Code** button
 3. Click the **Codespaces** tab
 4. Click **Create codespace on main**
@@ -193,7 +238,8 @@ You pay nothing. GitHub provides 120 core-hours per month free, which is approxi
 **Opening the Jupyter notebook:**
 
 Once VS Code is open:
-1. In the left file panel, click `homework_01_bayesian_ab.ipynb`
+1. In the left file panel, open the `hw01/` folder and click
+   `homework_01_bayesian_ab.ipynb`
 2. The notebook opens in the editor pane
 3. If prompted "Select Kernel": choose **Python 3 (ipykernel)**
 4. You are ready to work
@@ -246,27 +292,60 @@ errors. When in doubt: Kernel → Restart & Run All.
 > drift out of sync with the notebooks (Task 015).
 
 
-Submission is automatic when you push to GitHub. The autograder runs within 2 minutes.
+**Getting the assignment.** New homework is delivered into the repository you
+already own. In your Codespace terminal, from the repository root:
+
+```bash
+git pull
+```
+
+A new `hwNN/` folder appears. That is the whole delivery step.
 
 **Step 1:** Complete all cells in the notebook. Every `q_N_variable = None` line
 should have a real value (not None) before you submit.
 
-**Step 2:** Run all cells in order to verify there are no errors.
-In VS Code: click **Run All** (the ▶▶ button at the top of the notebook).
+**Step 2:** Run all cells in order to verify there are no errors, from a fresh
+kernel: **Kernel → Restart & Run All Cells**. It must run clean.
 
-**Step 3:** In VS Code's source control panel (the branch icon in the left sidebar):
-1. Click the **+** next to your changed files to stage them
-2. Type a commit message: `HW01 final submission`
-3. Click **Commit**
-4. Click **Sync Changes** (or the push icon)
+**Step 3:** Submit by pushing. In the Codespace terminal, from the repository root:
 
-**Step 4:** Go to your repository on GitHub. Click the **Actions** tab. You will
-see your autograder run. Green checkmark = passed. Red X = at least one Part A
-question is wrong or the notebook had an error.
+```bash
+git add .
+git commit -m "completed hw01"
+git push
+```
 
-**Reading autograder output:**
-Click on the failed run → click on the "grade" job → expand "Run Part A autograder"
-to see which specific questions failed and by how much.
+`add` → `commit` → `push` is one sequence and you run all three every time.
+**Nothing is submitted until you push.** (The same thing can be done from VS Code's
+source control panel: the branch icon in the left sidebar → **+** to stage → type a
+message → **Commit** → **Sync Changes**.)
+
+**Step 4:** Read your feedback. Wait a couple of hours, then:
+
+```bash
+git pull
+```
+
+Your score and a per-question breakdown are written into your repository as
+`hwNN/GRADE.md`.
+
+**How your work gets graded.** After you push, the course's grading system picks up
+your latest commit, grades it, and writes `hwNN/GRADE.md` back into your repository.
+Grading runs on the course's own infrastructure, not in your repository. It sweeps
+every couple of hours, so allow some time — and push early rather than once at the
+deadline, since every push is regraded. `GRADE.md` names the commit it graded, so you
+can always tell whether the feedback you are reading is for your latest work.
+
+**`hw00` is ungraded and produces no `GRADE.md`.** If none appears for hw00, nothing
+is wrong.
+
+**If `git push` is rejected,** new homework was added to your repository since you
+last pulled. Normal, and not something you did wrong:
+
+```bash
+git pull
+git push
+```
 
 ---
 

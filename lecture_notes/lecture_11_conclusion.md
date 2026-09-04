@@ -368,9 +368,11 @@ These questions synthesize across the first 10 lectures.
 
 ---
 
-### 4.1 Lectures 12–14 Preview
+### 4.1 Beyond the Ten Models — Reference Material
 
-The next three lectures extend the analytical toolkit beyond the first 10 models:
+> **Not covered this term.** The three modules below are not taught, carry no homework
+> and are not assessed. Their notes and notebooks are kept in the course materials so
+> you can read ahead if you want to.
 
 **Lecture 12: Difference-in-Differences**
 - Establishes causation from observational data using parallel trends
@@ -384,8 +386,8 @@ The next three lectures extend the analytical toolkit beyond the first 10 models
 - Bayesian structural time series to measure the causal effect of a marketing campaign
 - The most rigorous non-experimental tool for incrementality measurement
 
-After Lecture 14, the Sprint applies all 14 models (or a selection of them)
-to the FitLoop case.
+The Sprint applies the ten models of this course (or a selection of them) to the
+FitLoop case.
 
 ---
 

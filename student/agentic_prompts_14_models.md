@@ -1,5 +1,9 @@
 # Agentic Programming Prompts
-## All 14 Marketing Analytics Models
+## Every Marketing Analytics Model
+
+> **The course is L00–L11.** Models 12–14 (Difference-in-Differences, Customer
+> Segmentation, CausalImpact) are not taught this term and carry no homework; their
+> prompts are kept here as reference.
 
 Each section contains: (1) a **Context Prompt** to orient the agent before any analysis,
 (2) a **Build Prompt** to generate the analysis, and (3) a **Validation Prompt** to

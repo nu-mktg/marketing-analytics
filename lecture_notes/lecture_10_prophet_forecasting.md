@@ -292,7 +292,7 @@ $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 ---
 
 ### Section 2.3 — Homework Assignment
-#### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
+#### (~55 minutes in class | Due: start of next week's lecture | Submit by pushing to your course repository)
 
 <!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
      Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT

@@ -238,4 +238,4 @@ answer is wrong by construction.
 ---
 
 *The setup steps are done once. The submission steps are identical for every
-assignment, hw01 through hw14.*
+assignment, hw01 through hw11.*

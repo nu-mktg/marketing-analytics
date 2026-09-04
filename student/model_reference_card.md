@@ -1,5 +1,5 @@
 # Model Reference Card
-## Marketing Analytics — 14 Lectures at a Glance
+## Marketing Analytics — 12 Lectures at a Glance
 
 ---
 
@@ -19,6 +19,10 @@
 | 12 | **Difference-in-Differences** | $\hat{\tau}_{\text{DiD}} = (\bar{Y}_{T,\text{post}} - \bar{Y}_{T,\text{pre}}) - (\bar{Y}_{C,\text{post}} - \bar{Y}_{C,\text{pre}})$ | Panel data: outcome, time period, treatment/control group indicator | Parallel trends: treatment and control groups would have moved together absent intervention | Pre-existing divergent trends between groups; spillover from treatment to control; differential shocks |
 | 13 | **Customer Segmentation (k-means)** | Cluster assignments $z_i \in \{1, \ldots, k\}$; centroid $\boldsymbol{\mu}_c$ per cluster; WCSS | Customer feature vectors $\mathbf{x}_i \in \mathbb{R}^p$ (standardised); number of clusters $k$ | Euclidean distance meaningful after standardisation; spherical cluster shapes | Clusters are non-spherical or very differently sized; $k$ chosen arbitrarily without diagnostic checks; features not standardised |
 | 14 | **CausalImpact (BSTS)** | Posterior distribution over pointwise effect $\hat{\tau}_t = y_t - \hat{y}_t^{(0)}$; cumulative effect $\hat{\tau}_{\text{cum}}$; relative effect | Outcome time series; control covariate series uncorrelated with intervention; pre-period for model fit | Control covariates are unaffected by intervention; relationship between controls and outcome is stable across periods | Controls are themselves affected by intervention; poor pre-period model fit (high MAPE); short pre-period relative to seasonality |
+
+> **Rows 12–14 are reference only.** Difference-in-Differences, Customer Segmentation
+> and CausalImpact are not taught this term, carry no homework and are not assessed.
+> The course is L00–L11: this card's rows 1–11.
 
 ---
 

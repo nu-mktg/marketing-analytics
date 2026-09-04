@@ -272,7 +272,7 @@ $$P_1 = \frac{0.1423}{0.4062} \approx \mathbf{35.0\%}, \quad P_2 = \frac{0.2231}
 ---
 
 ### Section 2.3 — Homework Assignment
-#### (~55 minutes in class | Due: start of next week's lecture | Submit via GitHub Classroom)
+#### (~55 minutes in class | Due: start of next week's lecture | Submit by pushing to your course repository)
 
 <!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
      Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
