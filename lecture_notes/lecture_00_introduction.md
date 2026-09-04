@@ -109,7 +109,9 @@ doesn't. None of them is a black box you can trust blindly.
 
 > Canonical as of 2026-09-04 (sh.lee). The rows above are byte-identical in
 > `instructor/course_syllabus_template.md` and `lecture_notes/lecture_00_introduction.md`
-> by requirement; if they ever disagree, one of them is wrong.
+> by requirement; if they ever disagree, one of them is wrong. **The late-submission
+> statement carries the same requirement** and is worded identically in both files
+> (ruled 2026-09-04 — one late policy for the whole course).
 > Two reconciliations are recorded here. **2026-08-12:** this table previously read
 > HW 50 / Q 5+5 / Sprint 20 / Checkpoints 20, which contradicted the syllabus; the
 > syllabus version won, because it puts ~35% of the grade on individually-discriminating
@@ -121,6 +123,11 @@ doesn't. None of them is a black box you can trust blindly.
 > MKTG3501 and week 11 for MKTG6434. Quiz 1 is week 7 in both and keeps its week. Do not
 > re-add a week to Quiz 2 — any single number is wrong for one of the two courses. Dates:
 > `instructor/course_schedule_template.md`.
+
+**Late submissions.** One policy applies to every graded component in this course —
+homework, the Sprint individual quiz, and the Sprint group write-up alike:
+**on time = full credit · within 24 hours of the deadline = half credit** (half the score
+you earn) **· more than 24 hours late = not accepted.**
 
 **Collaboration policy:**
 - Part A (math questions): Individual. No collaboration.

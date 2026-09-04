@@ -214,5 +214,6 @@ If your entire group cannot present, schedule a makeup presentation during offic
 or a mutually agreed time before the Week 16 write-up deadline.
 
 **Group write-up (Week 16):**
-Standard late submission policy applies: −10% per day, up to 50% maximum penalty.
-No submissions accepted more than one week after the deadline without prior arrangement.
+The course's single late policy applies, exactly as it does to homework:
+**on time = full credit · within 24 hours of the deadline = half credit** (half the score
+you earn) **· more than 24 hours late = not accepted.**
