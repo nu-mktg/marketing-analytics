@@ -107,22 +107,9 @@ doesn't. None of them is a black box you can trust blindly.
 | Sprint — Individual | 15% | Individual 10-question Canvas MC quiz (auto-graded) |
 | Sprint — Group | 15% | FitLoop case: group presentation and write-up |
 
-> Canonical as of 2026-09-04 (sh.lee). The rows above are byte-identical in
-> `instructor/course_syllabus_template.md` and `lecture_notes/lecture_00_introduction.md`
-> by requirement; if they ever disagree, one of them is wrong. **The late-submission
-> statement carries the same requirement** and is worded identically in both files
-> (ruled 2026-09-04 — one late policy for the whole course).
-> Two reconciliations are recorded here. **2026-08-12:** this table previously read
-> HW 50 / Q 5+5 / Sprint 20 / Checkpoints 20, which contradicted the syllabus; the
-> syllabus version won, because it puts ~35% of the grade on individually-discriminating
-> work rather than ~10–15%, which matters when homework is AI-assisted. **2026-09-04:**
-> the course was scoped to L00–L11, so Homework went ×14 → **×11** (hw01–hw11), and the
-> **Checkpoints** row became **Class Participation** — checkpoint questions are now
-> worked through together in class and are not submitted or graded. **Also 2026-09-04:**
-> Quiz 2 **lost its week number**, because the real Fall-2026 calendars put it in week 12 for
-> MKTG3501 and week 11 for MKTG6434. Quiz 1 is week 7 in both and keeps its week. Do not
-> re-add a week to Quiz 2 — any single number is wrong for one of the two courses. Dates:
-> `instructor/course_schedule_template.md`.
+> **Quiz weeks.** Quiz 1 is in week 7. Quiz 2's week is not the same in both of the
+> courses that use these materials, so it is not listed above — check your own course
+> schedule on Canvas for the date.
 
 **Late submissions.** One policy applies to everything you submit to a deadline in this
 course — homework and the Sprint group write-up alike:
@@ -298,12 +285,6 @@ errors. When in doubt: Kernel → Restart & Run All.
 ---
 
 ### 2.5 Submitting Homework
-
-> **Answers:** homework answers are not duplicated here. The single source of truth is
-> `answer_keys/hwNN.json` in the instructor repo, synced to the private key repo with
-> `./tools/push_answer_keys.sh`. Duplicating them in this file is what caused them to
-> drift out of sync with the notebooks (Task 015).
-
 
 **Getting the assignment.** New homework is delivered into the repository you
 already own. In your Codespace terminal, from the repository root:

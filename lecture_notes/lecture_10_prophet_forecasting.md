@@ -299,11 +299,7 @@ $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 ### Section 2.3 — Homework Assignment
 #### (~55 minutes in class | Due: start of next week's lecture | Submit by pushing to your course repository)
 
-<!-- BEGIN GENERATED homework pointer - tools/render_lecture_homework.py; do not hand-edit.
-     Replaces a ~150-line duplicate of the homework that had drifted into a DIFFERENT
-     assignment (Task 004, 2026-08-13): for lectures 04-10 only 1-3 of ~16 question
-     variables still matched the notebook, and the dataset filenames were wrong.
-     The notebook is the assignment of record; answers live only in answer_keys/. -->
+<!-- BEGIN GENERATED homework pointer -->
 
 > **The assignment of record is the notebook, not this section.** Open
 > `homework_notebooks/homework_10_prophet_forecasting.ipynb` — it carries the questions, the dataset
@@ -315,10 +311,6 @@ $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 | Notebook | `homework_notebooks/homework_10_prophet_forecasting.ipynb` |
 | Dataset | `homework_datasets/revenue_weekly.csv` |
 | Graded questions | **16** — Part A: 8 · Part B: 5 · Part C: 3 |
-| Answer key (instructor only) | `answer_keys/hw10.json` |
-
-Answers and tolerances are never duplicated outside `answer_keys/hwNN.json`
-(rendered for instructors as `quiz/answer_key_values.md`).
 
 <!-- END GENERATED homework pointer -->
 
