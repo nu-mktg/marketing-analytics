@@ -46,22 +46,14 @@ are violated, and how to communicate the results to people who will act on them.
 
 ---
 
-### 1.2 The Two Tracks
+### 1.2 Who This Course Is For
 
-This course is designed for two types of students simultaneously:
-
-**Analyst track:** You will implement models, interpret outputs, and check whether
-assumptions hold. You need to know the math well enough to recognize when a model
-is being misapplied — even when the code runs without errors.
-
-**Manager track:** You will commission analyses, receive model outputs, and make
-decisions based on them. You need to know enough to ask the right questions:
-"What assumption does this model make that might not hold here?" and "What would
-change your recommendation?"
-
-Both tracks are present in every session. The checkpoint questions are designed to
-serve both. The homework has individual math questions (analyst track) and
-interpretation questions where collaboration is encouraged (manager track).
+Some of you will build the models. Some of you will commission them and act on what
+comes back. Most of you will do both at different points in a career. This course does
+not split into separate paths for those futures, because the question that decides
+whether a number is worth acting on is the same either way: *what does this assume, and
+would I change my decision if the assumption failed?* Whatever you are heading toward,
+you will find something here you use.
 
 ---
 
@@ -493,12 +485,13 @@ understanding.
 > just state the answer.** Using Copilot or Claude to reach the answer is expected — what
 > you cannot outsource is the explanation.
 
-These questions have no math. They test whether you understand the course structure
-and have completed the technology setup.
+These questions have no math. They test whether you can interrogate a number, whether
+you understand the course rules, and whether you have completed the technology setup.
 
-1. In your own words: what is the difference between the "analyst track" and the
-   "manager track" framing of this course? Give a concrete example of how the same
-   model output would be used differently by each.
+1. You are handed one finding and nothing else: customers who use Feature X churn 40%
+   less than customers who do not. Name two questions you would ask before recommending
+   that the company push Feature X harder — and for each, say what answer would make you
+   stop.
 
 2. Which collaboration rule applies to Homework Part A — individual or permitted?
    Which rule applies to Part C?
@@ -517,22 +510,26 @@ and have completed the technology setup.
 
 ### Checkpoint Answer Key
 
-**Q1.** Analyst track: you are running the model. You care about whether the
-assumptions hold, how to diagnose violations, and how to report uncertainty correctly.
-Example: you fit a model to compare two campaigns and notice one group is much smaller
-than the other — you check whether the difference is distinguishable from noise before
-reporting it as a result.
-Manager track: you are acting on the model output. You care about whether the
-recommendation is trustworthy and what would change it. Example: you are handed a result
-saying customers who use a feature churn less, and you ask: "Does using the feature keep
-them, or do the customers who were staying anyway use it more?"
+**Q1.** Any two questions that could actually change the recommendation earn full
+credit. The strongest ones attack the comparison rather than the number:
+
+- **Selection.** Does Feature X keep customers, or do the customers who were staying
+  anyway use it more? Both stories produce the same 40%. If engaged customers find X on
+  their own, pushing X at everyone else changes nothing — that stops you.
+- **Who is in the comparison group?** "Customers who do not use X" may be dominated by
+  people who already had one foot out the door. If the two groups differ in ways that
+  predict churn on their own, the 40% is not X's effect — that stops you.
+- **How was churn measured, and over what window?** If X users are simply newer, they
+  have had less time to churn. If churn is counted over 30 days for one group and a year
+  for the other, the comparison is not a comparison.
 
 *(Examples here are deliberately model-free: this is Lecture 0 and no model has been
-taught yet. The specific techniques arrive from Lecture 1 onward.)*
+taught yet. The techniques for actually settling these questions — control groups,
+covariate adjustment, uplift — arrive from Lecture 1 onward.)*
 
-*Common wrong answer:* "The analyst does the math and the manager reads the answer."
-This misses the point — both tracks require understanding what the math means, just
-from different angles.
+*Common wrong answer:* "Ask for a bigger sample." A larger sample makes a selection
+problem more precise, not less real — the 40% comes back with a tighter interval and is
+still not the effect of Feature X.
 
 **Q2.** Part A: Individual — no collaboration. Part C: Collaboration permitted.
 (Parts B and C are collaboration-permitted, and both are autograded.)
