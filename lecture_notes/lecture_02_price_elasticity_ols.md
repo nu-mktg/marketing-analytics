@@ -169,7 +169,7 @@ $$\ln(\text{units}) = \beta_0 + \beta_1 \ln(\text{price}) + \varepsilon$$
 
 This is the definition of price elasticity. β₁ is the elasticity directly — no additional calculation needed.
 
-**The revenue-maximizing price:** Revenue = Price × Quantity. Revenue is maximized where elasticity |β₁| = 1. When |β₁| > 1 (elastic), revenue increases as you lower price. When |β₁| < 1 (inelastic), revenue increases as you raise price.
+**The revenue-maximizing price:** Revenue = Price × Quantity. Revenue is maximized where elasticity |β₁| = 1. When |β₁| > 1 (elastic), revenue increases as you lower price. When |β₁| < 1 (inelastic), revenue increases as you raise price. **This rule describes a demand curve whose elasticity varies with price** — read the log-log estimate as a local approximation near the prices you observe (see Misconception 3).
 
 > ### 🔍 Deep Dive: Why |ε| = 1 Maximizes Revenue
 > *Skip this if the result makes intuitive sense. Read it if you want the algebraic proof.*
@@ -179,6 +179,8 @@ This is the definition of price elasticity. β₁ is the elasticity directly —
 > dR/dP = Q + P × (dQ/dP) = Q(1 + P/Q × dQ/dP) = Q(1 + ε) = 0
 >
 > This equals zero when ε = −1. Since Q > 0 always, the condition reduces to 1 + ε = 0, or ε = −1 (equivalently |ε| = 1).
+>
+> Note what this requires: ε must *change* with P for dR/dP to cross zero. In a strict constant-elasticity model it never does — if |ε| ≠ 1, revenue rises (or falls) with price without limit.
 
 ---
 
