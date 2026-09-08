@@ -322,11 +322,13 @@ The threshold for action depends on the cost of being wrong. For a button color 
 
 **What is the 95% credible interval on lift?**
 
-The 2.5th and 97.5th percentiles of the simulated lift distribution. "Lift of [8%, 75%] with 95% credibility" means: the data is consistent with B being anywhere from 8% to 75% better than A, with 95% of the probability mass in that range. A wide interval means the experiment was underpowered — you need more data to narrow it.
+The 2.5th and 97.5th percentiles of the simulated lift distribution. "Lift of [8%, 75%] with 95% credibility" means: the data is consistent with B being anywhere from 8% to 75% better than A, with 95% of the probability mass in that range. A wide interval means the experiment lacked the **precision** to pin the magnitude down — you need more data to narrow it. Note what it does *not* mean: a wide interval is not evidence that the experiment was badly designed. A well-designed test on a small sample reports a wide interval, and reporting it honestly is the test working correctly.
 
 **What is expected lift?**
 
 The mean of the lift distribution across all plausible true conversion rates. This is the business-relevant summary: "on average across all scenarios consistent with this data, B converts 44% more visitors than A."
+
+⚠️ **The mean of a ratio is not the ratio of the means.** Expected lift is **E[(θ_B − θ_A) / θ_A]** — average the lift over the simulated draws. It is *not* (mean_B − mean_A) / mean_A, which is the number most people reach for. On the figures above those are **43.7%** and **38.46%**; on the homework's own numbers, **41.33%** against **38.00%**. The gap is larger than the tolerance, so the two are not interchangeable — compute the average of the ratios, not the ratio of the averages.
 
 ---
 
@@ -363,8 +365,8 @@ The mean of the lift distribution across all plausible true conversion rates. Th
 ```
 I am running a Bayesian A/B test for a subscription pricing experiment.
 
-Variant A ($18/month): 1,847 trial users, [CONVERSIONS_A] converted.
-Variant B ($22/month): 1,853 trial users, [CONVERSIONS_B] converted.
+Variant A ($18/month): 1,847 trial users, 85 converted.
+Variant B ($22/month): 1,853 trial users, 101 converted.
 
 Prior for both: Beta(2, 48) — weak prior around 4% baseline.
 
@@ -381,10 +383,12 @@ Please:
 ```
 
 **What to watch for when the agent runs:**
-- Does the posterior mean make sense relative to the observed rate?
+- Does the posterior mean make sense relative to the observed rate? (\$18: 85/1,847 = 4.60% observed → 4.59% posterior. With 1,847 observations against a 50-pseudo-observation prior, the data has almost all the say.)
 - Is P(A) + P(B) close to 1.0? (It should be, within simulation noise.)
-- Is the expected lift consistent with the difference in posterior means?
-- Does the chart show B's distribution shifted right relative to A's?
+- Does the chart show the **\$22** distribution shifted **right** of the \$18 one — i.e. did the *higher* price convert *better*? It did here, which is worth pausing on: this is a selection effect, not a demand curve. A higher price screens for more committed trial users. (Output 2's own-price elasticity is negative, and that tension is the Sprint case's core.)
+- 🔑 **Is the revenue conclusion stronger than the conversion conclusion?** It is, and that is the lesson. \$22/\$18 = 1.22, so revenue breaks even even if conversion falls **18.2%**. The test never had to prove conversion *rose* — only that it did not fall past that line.
+- **Hold the conversion result against the decision threshold** from Section 1: P(conversion higher at \$22) ≈ **0.88**, *below* the 0.90 commonly wanted even for a reversible decision, and the 95% interval on the rate difference **straddles zero** ([−0.6, +2.2] percentage points). Meanwhile P(revenue higher at \$22) ≈ **0.995**, interval [+\$0.09, +\$0.65]. Same experiment, same data: inconclusive on what was counted, decisive on what will be decided.
+- ⚠️ Do not ask for "expected lift" here and compare it to the difference in posterior means. They are different quantities — the mean of a *ratio* is not the ratio of the means (19.3% vs 18.0% on these numbers) — and conflating them is the error the homework's Q12 is built to catch.
 
 ---
 
