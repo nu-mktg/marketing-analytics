@@ -68,7 +68,12 @@ Step 3: Open your Codespace
 
 Step 4: Run hw00
          → Open hw00/homework_00_introduction.ipynb
-         → Kernel → Restart & Run All Cells
+         → Click "Select Kernel" (top right) → choose Python 3.11.x
+           NOT Python 3.13 — only 3.11 has the course libraries, so
+           picking the other one makes every import fail. VS Code
+           asks again for every new notebook file.
+         → Click "Restart", then "Run All"
+           (two separate buttons — there is no combined command)
          → No errors = you are set up
 ```
 
@@ -83,9 +88,14 @@ Step 1: Get the assignment
 
 Step 2: Do the work
          → Open hwNN/homework_NN_*.ipynb
+         → Click "Select Kernel" (top right) → choose Python 3.11.x
+           NOT Python 3.13 — only 3.11 has the course libraries, so
+           picking the other one makes every import fail. VS Code
+           asks again for every new notebook file.
          → Replace each None with your answer
-         → Kernel → Restart & Run All Cells
-           (it must run clean from a fresh kernel)
+         → Click "Restart", then "Run All"
+           (two separate buttons — there is no combined command)
+           It must run clean from a fresh kernel.
 
 Step 3: Submit
          git add .
@@ -145,7 +155,7 @@ git push
 |---|---|
 | Run current cell | `Shift + Enter` |
 | Run cell, stay on it | `Ctrl + Enter` |
-| Restart kernel and run all | Menu: Kernel → Restart & Run All |
+| Restart and run everything | **Restart**, then **Run All** (two separate toolbar buttons) |
 | Save notebook | `Ctrl + S` |
 | Open terminal | `Ctrl + `` ` (backtick) |
 
@@ -155,11 +165,12 @@ git push
 
 | Problem | Fix |
 |---|---|
-| `NameError: q5 is not defined` | Kernel → Restart & Run All Cells |
-| Cell runs forever | Kernel → Interrupt |
+| `NameError: q5 is not defined` | **Restart**, then **Run All** (two separate toolbar buttons) |
+| Cell runs forever | Press **Interrupt** in the notebook toolbar — it appears only while a cell is running |
 | The new homework isn't in my repo | `git pull`. Still missing? Check that NU-mktg-grader is installed at github.com/settings/installations **and** that your repo name ends with `marketing-analytics`. |
 | No `GRADE.md` appeared after a day | Confirm you actually **pushed** (`git log origin/main --oneline`), and that the app is still installed. hw00 never produces one. |
 | `GRADE.md` looks like old feedback | Check the commit it names at the top — if it isn't your latest, the next sweep hasn't run yet. |
+| Every `import` fails in a notebook that used to work | Wrong kernel. **Select Kernel** (top right) → **Python 3.11.x**, not Python 3.13 |
 | "Module not found" in a brand-new Codespace | It is still installing. Wait 2–3 minutes and re-run the cell — the first cell of hw00 tells you when this is what's happening. |
 | "Module not found" after waiting | Rebuild the Codespace (Codespaces → `...` → Rebuild container) rather than `pip install`ing, so your versions still match what the grader expects. |
 | Can't open Codespace | Try a different browser, or close and reopen from your repo |

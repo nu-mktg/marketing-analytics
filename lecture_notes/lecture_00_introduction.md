@@ -233,8 +233,15 @@ Once VS Code is open:
 1. In the left file panel, open the `hw01/` folder and click
    `homework_01_bayesian_ab.ipynb`
 2. The notebook opens in the editor pane
-3. If prompted "Select Kernel": choose **Python 3 (ipykernel)**
+3. Choose the kernel — see below
 4. You are ready to work
+
+**Pick the right Python first.** The first time you open a notebook, VS Code asks
+which Python to run it with. Click **Select Kernel** at the top right and choose the
+**Python 3.11.x** entry — **not** the Python 3.13 one. Only 3.11 has the course
+libraries installed, so choosing the other one makes every `import` fail and looks
+exactly like a broken Codespace. VS Code asks again for each new notebook file, so
+you will do this once per homework.
 
 **Stopping a Codespace (IMPORTANT):**
 
@@ -262,7 +269,7 @@ A Jupyter notebook is a document containing cells. Each cell is either:
 | Delete cell | DD (in command mode) |
 | Toggle command mode | Escape |
 | Toggle edit mode | Enter |
-| Run all cells | Kernel → Restart & Run All |
+| Restart and run everything | **Restart**, then **Run All** (two separate toolbar buttons) |
 | Find variable value | Type the variable name in a cell and run it |
 
 **Command mode vs Edit mode:**
@@ -272,7 +279,7 @@ A Jupyter notebook is a document containing cells. Each cell is either:
 
 **The most important rule:** Always run cells in order from top to bottom. If a later
 cell depends on a variable set in an earlier cell, running them out of order will cause
-errors. When in doubt: Kernel → Restart & Run All.
+errors. When in doubt: **Restart**, then **Run All** (two separate toolbar buttons).
 
 ---
 
@@ -291,7 +298,10 @@ A new `hwNN/` folder appears. That is the whole delivery step.
 should have a real value (not None) before you submit.
 
 **Step 2:** Run all cells in order to verify there are no errors, from a fresh
-kernel: **Kernel → Restart & Run All Cells**. It must run clean.
+kernel. **Then run it from a clean state:** click **Restart** in the notebook
+toolbar, then click **Run All**. They are two separate buttons, sitting next to
+**Clear All Outputs** — VS Code has no single "restart and run all" command. It
+must run clean.
 
 **Step 3:** Submit by pushing. In the Codespace terminal, from the repository root:
 
@@ -553,7 +563,8 @@ Enter or click inside a cell for edit mode.
 > went wrong?"* — You ran the cells out of order. Always run cells in order from top to
 > bottom: if a later cell depends on a variable set in an earlier cell, running them out
 > of order will cause errors. Here the cell that defines `q5` was never run, or was run
-> only after the cell that uses it. Fix: Kernel → Restart & Run All.
+> only after the cell that uses it. Fix: **Restart**, then **Run All** (two
+> separate toolbar buttons).
 
 **Q5.** Part A tests whether you can perform the mathematical operations yourself. The
 point is not memorisation — no professional analyst memorises the OLS formula — but that
