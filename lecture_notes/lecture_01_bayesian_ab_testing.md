@@ -58,6 +58,7 @@ We will encounter expressions like θ^3 × θ^5. One rule handles all of them:
 
 **Examples:**
 > θ^3 × θ^5 = θ^8
+>
 > (1−θ)^4 × (1−θ)^6 = (1−θ)^10
 
 **Why we need this:** The entire Bayesian update derivation reduces to applying this one rule twice.
@@ -210,6 +211,7 @@ where α and β are parameters we choose to encode our prior belief:
 
 **Our prior:** We encode "conversion rates are typically around 4%" with weak confidence using **Beta(2, 48)**:
 > Prior mean = 2/(2+48) = 2/50 = **0.04** ✓
+>
 > Total weight α + β = 50 (equivalent to having seen 50 prior "pseudo-observations")
 
 ---

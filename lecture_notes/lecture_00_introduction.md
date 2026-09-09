@@ -559,8 +559,7 @@ when you are not actively typing. Leaving one running overnight wastes approxima
 (green border): you are typing inside a cell. Press Escape for command mode; press
 Enter or click inside a cell for edit mode.
 
-> **Also asked on the slides:** *"You get `NameError: name 'q5' is not defined`. What
-> went wrong?"* — You ran the cells out of order. Always run cells in order from top to
+> **A troubleshooting note you will need.** `NameError: name 'q5' is not defined` means You ran the cells out of order. Always run cells in order from top to
 > bottom: if a later cell depends on a variable set in an earlier cell, running them out
 > of order will cause errors. Here the cell that defines `q5` was never run, or was run
 > only after the cell that uses it. Fix: **Restart**, then **Run All** (two
@@ -583,13 +582,4 @@ and own the result.
 *Common wrong answer:* "Because using AI on Part A is cheating." True but circular — the
 question asks WHY the rule exists, and the reason is that Part A is the only part that
 builds the judgement you need to supervise an AI everywhere else.
-
-> **Also asked on the slides:** *"P(B>A) = 0.87. Your manager says 'B wins 87% of
-> repeated experiments.' Is this correct?"* — No. P(B > A) = 0.87 is a **Bayesian
-> posterior probability** about the unknown true rates, given this data and this prior.
-> It does not say how often B would win in repeated experiments — that would be a
-> frequentist statement about long-run sampling, which is not what Bayesian inference
-> computes. The correct reading: given what we observed, there is an 87% probability that
-> B's true conversion rate is higher than A's. Lecture 1 works this through
-> in full with P(B > A) = 0.91.
 
