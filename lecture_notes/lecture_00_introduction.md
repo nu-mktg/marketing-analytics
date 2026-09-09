@@ -99,10 +99,6 @@ doesn't. None of them is a black box you can trust blindly.
 | Sprint — Individual | 15% | Individual 10-question Canvas MC quiz (auto-graded) |
 | Sprint — Group | 15% | FitLoop case: group presentation and write-up |
 
-> **Quiz weeks.** Quiz 1 is in week 7. Quiz 2's week is not the same in both of the
-> courses that use these materials, so it is not listed above — check your own course
-> schedule on Canvas for the date.
-
 **Late submissions.** One policy applies to everything you submit to a deadline in this
 course — homework and the Sprint group write-up alike:
 **on time = full credit · within 24 hours of the deadline = half credit** (half the score
@@ -559,11 +555,6 @@ when you are not actively typing. Leaving one running overnight wastes approxima
 (green border): you are typing inside a cell. Press Escape for command mode; press
 Enter or click inside a cell for edit mode.
 
-> **A troubleshooting note you will need.** `NameError: name 'q5' is not defined` means You ran the cells out of order. Always run cells in order from top to
-> bottom: if a later cell depends on a variable set in an earlier cell, running them out
-> of order will cause errors. Here the cell that defines `q5` was never run, or was run
-> only after the cell that uses it. Fix: **Restart**, then **Run All** (two
-> separate toolbar buttons).
 
 **Q5.** Part A tests whether you can perform the mathematical operations yourself. The
 point is not memorisation — no professional analyst memorises the OLS formula — but that
