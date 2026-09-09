@@ -30,7 +30,9 @@ When you multiply the same number by itself repeatedly, the sum can be calculate
 
 If λ = 0.7 and you spent $100 in week 1 only, the carryover in weeks 2, 3, 4 is:
 > Week 2: 0.7 × 100 = 70
+>
 > Week 3: 0.7 × 70 = 49
+>
 > Week 4: 0.7 × 49 = 34.3
 
 Total long-run effect = 100 + 70 + 49 + 34.3 + ... = 100 / (1 − 0.7) = **333.3**
@@ -170,7 +172,9 @@ The β coefficients capture the maximum revenue each channel can generate (the p
 
 > **Also asked on the slides:** *"Channel EC₅₀ = 200, α = 2. Compute H(100), H(200), H(400)."* — Substituting into H(s) = sᵃ / (EC50ᵃ + sᵃ) with α = 2:
 > H(100) = 100² / (200² + 100²) = 10,000 / 50,000 = **0.20**;
+>
 > H(200) = 200² / (200² + 200²) = **0.50** (the H(EC50) = 0.5 property, true for any EC50);
+>
 > H(400) = 400² / (200² + 400²) = 160,000 / 200,000 = **0.80**.
 > Doubling spend from 100 to 200 buys +0.30 of effectiveness; doubling again from 200 to 400 buys only +0.30 → +0.80, i.e. the same 0.30 for twice the incremental spend. That is saturation, and it is why the answer to Q3 is "shift incrementally," not "shift everything."
 

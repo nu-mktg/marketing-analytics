@@ -32,7 +32,9 @@ $$P(\text{choose } i) = \frac{e^{U_i}}{e^{U_1} + e^{U_2} + ... + e^{U_n}}$$
 
 **Example:** Three products with utilities U₁ = −1.5, U₂ = 0.5, U₃ = −0.8:
 > e^(−1.5) = 0.223, e^(0.5) = 1.649, e^(−0.8) = 0.449
+>
 > Sum = 0.223 + 1.649 + 0.449 = 2.321
+>
 > P(choose product 2) = 1.649/2.321 = **0.71** (71% market share)
 
 ---
@@ -98,6 +100,7 @@ All ad coefficients are measured against **full ads** as the reference level, so
 
 **WTP calculation:**
 > WTP for premium content = 1.26 / 0.18 = **$7.00/month**
+>
 > WTP for no-ads (vs full ads) = 2.00 / 0.18 = **$11.11/month**
 
 **Plain English:** On average across all respondents, customers would pay $7 more per month to upgrade from standard to premium content, and $11.11 more per month to eliminate all ads.
@@ -114,6 +117,7 @@ To predict market shares for a set of competing products, compute utility for ea
 - C: standard, limited_ads, annual, $15 → U_C = −0.18(15) + 0 + 0.80 + 0.65 = −2.70 + 1.45 = **−1.25**
 
 > e^(−2.16) = 0.115, e^(+0.02) = 1.020, e^(−1.25) = 0.287. Sum = 1.422
+>
 > Shares: A = 8.1%, B = 71.7%, C = 20.2%
 
 ---

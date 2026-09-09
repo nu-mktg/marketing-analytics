@@ -114,6 +114,7 @@ Prophet produces three key outputs per time period:
 
 **Reading the uncertainty interval:**
 > Week 1: yhat = $980k, interval = [$890k, $1,070k]
+>
 > Week 26: yhat = $1,050k, interval = [$800k, $1,300k]
 
 Uncertainty grows with forecast horizon because errors compound over time. A wide week-26 interval is not a model failure — it is the model being honest about irreducible uncertainty.

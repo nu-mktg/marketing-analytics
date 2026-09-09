@@ -30,6 +30,7 @@ Expected value = probability × outcome, summed across all scenarios.
 
 **Example:** Campaign profit per customer = uplift × conversion_value − campaign_cost
 > If τ(X) = 0.15, value = $30, cost = $4: Expected profit = 0.15 × 30 − 4 = 4.50 − 4 = **$0.50**
+>
 > If τ(X) = 0.08, value = $30, cost = $4: Expected profit = 0.08 × 30 − 4 = 2.40 − 4 = **−$1.60** (negative!)
 
 The breakeven threshold: τ(X) × value = cost → τ(X) = cost/value = 4/30 = **0.133**

@@ -29,7 +29,9 @@
 n! (read "n factorial") means multiply all integers from 1 to n together.
 
 > 3! = 3 × 2 × 1 = **6**
+>
 > 4! = 4 × 3 × 2 × 1 = **24**
+>
 > 2! = 2 × 1 = **2**
 
 **Why we need this:** A 3-channel attribution model has 3! = 6 possible orderings to enumerate for Shapley values. A 4-channel model has 4! = 24.
