@@ -329,6 +329,25 @@ The threshold for action depends on the cost of being wrong. For a button color 
 
 The 2.5th and 97.5th percentiles of the simulated lift distribution. "Lift of [8%, 75%] with 95% credibility" means: the data is consistent with B being anywhere from 8% to 75% better than A, with 95% of the probability mass in that range. A wide interval means the experiment lacked the **precision** to pin the magnitude down — you need more data to narrow it. Note what it does *not* mean: a wide interval is not evidence that the experiment was badly designed. A well-designed test on a small sample reports a wide interval, and reporting it honestly is the test working correctly.
 
+**Why is this a *credible* interval and not a *confidence* interval?**
+
+Because of what carries the probability. In the Bayesian setup the unknown true lift has a distribution, and the interval is fixed once computed — so "there is a 95% probability the true lift is between 8% and 75%" is a statement **about the parameter**, and it is exactly what the credible interval licenses.
+
+A frequentist confidence interval works the other way round. The true lift is a fixed unknown constant, not a random variable, so no probability can be attached to it. What is random is the *interval*, which moves from sample to sample. "95% confidence" is therefore a property **of the procedure**: if you repeated the experiment many times and built an interval the same way each time, 95% of those intervals would contain the true lift. About the one interval actually in front of you, a frequentist can say only that it either contains the true value or it does not.
+
+⚠️ **The two often have nearly the same endpoints** — with a weak prior and a reasonable sample size they can be almost indistinguishable numerically. What differs is what you are entitled to claim. The probability sentence everyone *wants* to say is licensed by the credible interval and is **not** licensed by the confidence interval; misreading a confidence interval as if it were a credible one is the single most common error in frequentist reporting. This is the practical reason Bayesian output is easier to hand to a decision-maker: it actually says what most people already believe a confidence interval says.
+
+**Does a wide interval mean we don't know which variant is better?**
+
+No — width and direction are separate questions, and the interval answers both independently.
+
+- **Width** is precision: how tightly the *magnitude* is pinned down.
+- **Direction** is whether the interval **excludes 0**: whether the *sign* of the lift is settled.
+
+Neither implies the other. A narrow interval of [−1%, +2%] pins the magnitude down tightly and still straddles 0, so the direction is unsettled. A wide interval of [8%, 75%] barely pins the magnitude down at all and sits entirely above 0, so B is credibly better. "The interval is wide, so we can't say whether B is better" is a mistake — check whether it crosses 0 first.
+
+The direction question is not a new question, either: P(lift > 0) is identically P(θ_B > θ_A), so an interval that excludes 0 and a high P(B > A) are two views of the same fact. Precisely, a 95% central interval sits entirely above 0 exactly when P(B > A) exceeds 0.975, because the lower bound *is* the 2.5th percentile.
+
 **What is expected lift?**
 
 The mean of the lift distribution across all plausible true conversion rates. This is the business-relevant summary: "on average across all scenarios consistent with this data, B converts 44% more visitors than A."
@@ -411,7 +430,9 @@ See notebook: `homework_01_bayesian_ab.ipynb`
 
 ## Checkpoint Answer Key
 
-**Q1.** No. P(B > A) = 0.91 is a **Bayesian posterior probability** about the unknown true rates given this specific data and prior. It does NOT mean "B wins 91% of repeated experiments" — that is a frequentist statement about long-run behavior under repeated sampling, which is not what Bayesian inference computes. The correct interpretation: given what we observed and our prior beliefs, there is a 91% probability that B's true conversion rate is higher than A's true conversion rate.
+**Q1.** No. P(B > A) = 0.91 is a **Bayesian posterior probability** about the unknown true rates given this specific data and prior: given what we observed and what we believed beforehand, there is a 91% probability that B's true conversion rate is higher than A's true conversion rate. It says nothing about how often B would win if the experiment were repeated.
+
+Be precise about *why* the manager is wrong, because "that is just the frequentist version" is not right either. No frequentist procedure outputs "B wins 91 of 100 repeated experiments." Genuine repeated-sampling claims are about the behavior of a **procedure** — a 95% confidence interval contains the true value in 95% of repeated experiments; a test at α = 0.05 falsely rejects 5% of the time when the null is true. The manager has taken a probability about a **parameter** and reread it as a frequency of **outcomes**, which is neither the Bayesian claim nor a valid frequentist one. It is the same confusion as reading a confidence interval as though it were a credible interval (Section 1.5), applied to a probability instead of to an interval.
 
 *Common wrong answer:* Interpreting P(B>A) as a p-value or a frequentist confidence statement. The distinction matters for decisions: P(B>A) = 0.91 means B is probably better *right now*, not that B would probably win in future experiments.
 
@@ -429,6 +450,8 @@ See notebook: `homework_01_bayesian_ab.ipynb`
 
 *This question has no single wrong answer — it is designed to surface whether students understand the philosophical difference, not to produce one correct response.*
 
-**Q5.** With P(B > A) = 0.76 and a costly, slow-to-reverse change: **probably do not ship yet.** For high-stakes, irreversible decisions, most practitioners require P ≥ 0.90–0.95 before acting. The additional information that would help: the width of the credible interval on lift (is the range of plausible outcomes acceptable even in the worst case?), the expected revenue impact of each direction of error, and whether you can run the experiment longer to narrow the uncertainty before the change must be made.
+**Q5.** With P(B > A) = 0.76 and a costly, slow-to-reverse change: **probably do not ship yet.** For high-stakes, irreversible decisions, most practitioners require P ≥ 0.90–0.95 before acting.
+
+Note what P(B > A) = 0.76 already tells you about the interval, before computing anything: the 95% credible interval on lift **includes 0**. A 95% central interval sits entirely above 0 only when P(B > A) exceeds 0.975, because the lower bound *is* the 2.5th percentile — so at 0.76 the **direction** is unsettled, not merely the magnitude. The additional information that would help: how far the interval extends on the downside (how bad is the worst plausible case, not just how wide is the range), the expected revenue impact of each direction of error, and whether you can run the experiment longer before the change must be made.
 
 *Common wrong answer:* "Ship it — 76% is probably better than chance." This conflates P(better) with the expected value of the decision. A 76% probability that B is better implies a 24% probability that A is better. If A being better means losing three months of engineering work and alienating millions of customers, the asymmetry of consequences matters more than the raw probability.
