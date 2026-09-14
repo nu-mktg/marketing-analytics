@@ -1456,7 +1456,30 @@ Probability distributions normalize automatically — we only need the shape.</p
 <div class="formula-box">
 <p><strong>95% credible interval on lift:</strong> <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">CI</mtext><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><msub><mtext mathvariant="normal">Percentile</mtext><mn>2.5</mn></msub><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><msub><mi>θ</mi><mi>B</mi></msub><mo>−</mo><msub><mi>θ</mi><mi>A</mi></msub></mrow><msub><mi>θ</mi><mi>A</mi></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mspace width="0.278em"></mspace><msub><mtext mathvariant="normal">Percentile</mtext><mn>97.5</mn></msub><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><msub><mi>θ</mi><mi>B</mi></msub><mo>−</mo><msub><mi>θ</mi><mi>A</mi></msub></mrow><msub><mi>θ</mi><mi>A</mi></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">\text{CI} = \left[\text{Percentile}_{2.5}\!\left(\frac{\theta_B - \theta_A}{\theta_A}\right),\; \text{Percentile}_{97.5}\!\left(\frac{\theta_B - \theta_A}{\theta_A}\right)\right]</annotation></semantics></math></p>
 </div>
-<p><strong>Interpretation:</strong> There is a 95% probability that the true lift lies in this interval.</p>
+<div class="two-col">
+<h3><span class="accent">Credible interval</span></h3>
+<p>“There is a <strong>95% probability</strong> the true lift is in <strong>this</strong> interval.”</p>
+<p>A statement about the <strong>parameter</strong>.</p>
+<h3><span class="teal">Confidence interval</span></h3>
+<p>“<strong>95% of intervals</strong> built this way would contain the true lift.”</p>
+<p>A statement about the <strong>procedure</strong>.</p>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>The endpoints are often nearly identical. What differs is what you may <em>claim</em> — the probability sentence everyone wants to say is licensed <strong>only</strong> by the credible interval.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Reading the Interval: Width vs. Direction</h2>
 <div class="two-col">
 <div>
 <p>Narrow interval → high precision<br>
@@ -1464,8 +1487,24 @@ Probability distributions normalize automatically — we only need the shape.</p
 </div>
 <div>
 <p>Wide interval → low precision<br>
-→ direction clear, magnitude uncertain</p>
+→ magnitude uncertain</p>
 </div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>Width and direction are separate questions.</strong> The direction is settled only when the interval <strong>excludes 0</strong> — wide or narrow. [−1%, +2%] is narrow and leaves it open; [8%, 75%] is wide and settles it.</p>
+</div>
+</div>
+</div>
+<div class="muted">
+<p>A 95% interval sits entirely above 0 exactly when P(B&gt;A) &gt; 0.975 — the lower bound <em>is</em> the 2.5th percentile.</p>
 </div>
 </section>
 <section class="slide level2">
