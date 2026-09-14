@@ -45,6 +45,7 @@ Probabilities and percentages represent the same idea. Divide a percentage by 10
 When we say "the conversion rate is 4%," we mean 4 out of every 100 visitors convert. As a probability: 0.04.
 
 **The complement rule:** If P(event) = p, then P(event does NOT happen) = 1 − p.
+
 > If P(converts) = 0.04, then P(does not convert) = 0.96.
 
 ---
@@ -57,6 +58,7 @@ We will encounter expressions like θ^3 × θ^5. One rule handles all of them:
 > $$a^m \times a^n = a^{m+n}$$
 
 **Examples:**
+
 > θ^3 × θ^5 = θ^8
 >
 > (1−θ)^4 × (1−θ)^6 = (1−θ)^10
@@ -210,6 +212,7 @@ where α and β are parameters we choose to encode our prior belief:
 - **Lower α + β** = weaker prior (flatter, more spread out curve)
 
 **Our prior:** We encode "conversion rates are typically around 4%" with weak confidence using **Beta(2, 48)**:
+
 > Prior mean = 2/(2+48) = 2/50 = **0.04** ✓
 >
 > Total weight α + β = 50 (equivalent to having seen 50 prior "pseudo-observations")
