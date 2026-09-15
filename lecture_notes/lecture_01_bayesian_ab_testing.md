@@ -24,9 +24,9 @@
 ---
 
 ### Section 1.1 — Math Toolkit
-#### (~20 minutes)
+#### (~30 minutes)
 
-Three lightweight tools. Each is simple on its own. Together they unlock the key insight.
+Four lightweight tools. Each is simple on its own. Together they unlock the key insight.
 
 ---
 
@@ -67,7 +67,27 @@ We will encounter expressions like θ^3 × θ^5. One rule handles all of them:
 
 ---
 
-#### Tool 3: "Proportional To" (∝)
+#### Tool 3: A Distribution Is a Curve Over the Values Something Could Take
+
+A single number says one thing: "the conversion rate is 4%." A **distribution** says something richer: *which values are plausible, and how plausible each one is.*
+
+Picture a curve drawn over every value θ could take, from 0 to 1. The **height** of the curve at a value tells you how plausible that value is. High curve = very plausible. Low curve = possible but unlikely. Zero = ruled out.
+
+> A curve peaked at 0.04 and falling away on both sides says: "the true conversion rate is probably near 4%, could plausibly be 3% or 5%, and is very unlikely to be 20%."
+
+Three properties are all we need:
+
+1. **Height is plausibility; area is probability.** For a continuous quantity like θ, the probability of getting *exactly* 0.04000… is zero. What carries probability is an *interval*: the **area** under the curve between two values is the probability that θ falls between them.
+2. **The total area is always 1.** Something must happen, so the areas over all possible values add to 1. This is why we are free to ignore constant multipliers later — the constant is whatever it has to be to make the total area 1.
+3. **Width is uncertainty.** A narrow, tall curve says "I am fairly sure θ is near here." A wide, flat curve says "θ could be a lot of things." Collecting data is what narrows the curve.
+
+**Why we need this:** the entire lecture is one curve changing shape. We start with a curve for what we believed before the experiment and end with a different curve for what we believe after. Everything in between is bookkeeping.
+
+⚠️ **The part that surprises people:** we are putting a distribution on **θ itself** — an unknown quantity that has one fixed true value. The curve does *not* mean the conversion rate wobbles around. It means **we** are uncertain about it, and the curve is the honest shape of that uncertainty. This is the whole Bayesian move, and it is what later lets §1.5 say "there is a 95% probability the true lift is in this interval."
+
+---
+
+#### Tool 4: "Proportional To" (∝)
 
 The symbol ∝ means: *equal up to a constant multiplier that does not depend on the variable we care about.*
 
@@ -75,7 +95,7 @@ The symbol ∝ means: *equal up to a constant multiplier that does not depend on
 
 $$f(\theta) \propto \theta^2 \times (1-\theta)^3$$
 
-Because the 7 is a constant — it does not change the *shape* of f as θ varies. In probability, distributions must sum to 1, so the constant is determined automatically. We only need to identify the shape.
+Because the 7 is a constant — it does not change the *shape* of f as θ varies. And by Tool 3, the area under a distribution is always 1, so the constant is determined automatically. We only need to identify the shape.
 
 **Key takeaway:** When you see θ^(α−1) × (1−θ)^(β−1), that shape tells you everything you need to know about the distribution, regardless of whatever constant sits in front of it.
 
