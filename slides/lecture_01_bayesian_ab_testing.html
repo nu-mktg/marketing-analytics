@@ -1259,6 +1259,35 @@ margin-right: 0; }
 </div>
 </section>
 <section class="slide level2">
+<h2>Math Toolkit: What a Distribution Is</h2>
+<p>A number states <strong>one</strong> value. A distribution states <strong>which values are plausible</strong>.</p>
+<div class="two-col">
+<div>
+<p><strong>Height</strong> → plausibility<br>
+<strong>Area</strong> → probability<br>
+<strong>Total area</strong> → always 1</p>
+</div>
+<div>
+<p><strong>Narrow</strong> curve → more certain<br>
+<strong>Wide</strong> curve → less certain<br>
+Data is what narrows it</p>
+</div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>The curve sits on <strong>θ itself</strong> — an unknown with one fixed true value. It does not wobble; <strong>we</strong> are uncertain about it. That is the whole Bayesian move.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
 <h2>Math Toolkit: Proportionality (∝)</h2>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><munder><munder><mn>7</mn><mo accent="true">⏟</mo></munder><mtext mathvariant="normal">constant</mtext></munder><mo>×</mo><msup><mi>θ</mi><mn>2</mn></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>3</mn></msup><mspace width="0.278em"></mspace><mo>∝</mo><mspace width="0.278em"></mspace><msup><mi>θ</mi><mn>2</mn></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>θ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">f(\theta) = \underbrace{7}_{\text{constant}} \times \theta^2(1-\theta)^3 \;\propto\; \theta^2(1-\theta)^3</annotation></semantics></math></p>
 <div class="callout callout-tip callout-titled callout-style-default">
@@ -1271,7 +1300,7 @@ margin-right: 0; }
 </div>
 <div class="callout-content">
 <p>The constant doesn’t change the <strong>shape</strong> as θ varies.<br>
-Probability distributions normalize automatically — we only need the shape.</p>
+The area under a distribution is always 1, so the constant is fixed automatically — we only need the shape.</p>
 </div>
 </div>
 </div>
