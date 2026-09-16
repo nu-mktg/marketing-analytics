@@ -321,7 +321,21 @@ Notice: The posterior mean (5.5%) is pulled slightly toward the prior (4.0%) com
 
 We now want P(θ_B > θ_A) — the probability that B's true conversion rate exceeds A's.
 
-There is no closed-form formula for this. Instead, we simulate:
+There is no closed-form formula for this. Instead, we **simulate** — and before the code, three words have to mean something.
+
+**What is a draw (a "sample") from a distribution?** One value of θ, picked at random, with the curve from Tool 3 setting the odds. Where the curve is high, that value comes up often; where it is low, it comes up rarely; where it is zero, it never comes up. `np.random.beta(26, 624)` hands you one such value.
+
+⚠️ **"Sample" is doing double duty in this lecture, and the two meanings are different.** In Section 1.3 a *sample* meant **the visitors we observed** — real data. Here a *sample* means **one value of θ drawn from a curve** — an imagined scenario, not an observation. "100,000 samples from Posterior_A" is **not** 100,000 visitors. It is 100,000 guesses at A's true rate, distributed according to how plausible each guess is.
+
+**What do 100,000 of them give you?** A stand-in for the curve itself. Histogram the draws and Posterior_A's shape comes back. That is the point: anything you wanted to know about the curve you can now get by **counting**, instead of by integrating.
+
+**Why counting answers the question.** A probability *is* a long-run fraction. P(θ_B > θ_A) asks: across all the ways the world could plausibly be, in what share is B ahead? 100,000 paired draws are a large, fair sample of those ways — so the share where B is ahead *estimates* the probability.
+
+⚠️ **Why the draws are compared one-to-one.** Step 3 compares the i-th draw from B against the i-th draw from A. That works because the two posteriors are **independent**, so pairing the i-th draw from each gives one complete picture of the world: one plausible θ_A alongside one plausible θ_B. Each pair is a fair scenario. Do **not** sort either array, and do not compare a summary of B against a summary of A — the pairing is what makes the comparison meaningful.
+
+**Why 100,000 and not 100?** Simulation noise shrinks like 1/√S, so 100× more draws gives about 10× less noise. And `np.random.seed(42)` fixes which draws you get, so re-running returns identical numbers — that reproducibility is a course-wide contract, not a detail.
+
+With that settled, the procedure is:
 
 1. Draw 100,000 samples from Posterior_A = Beta(26, 624)
 2. Draw 100,000 samples from Posterior_B = Beta(36, 614)
