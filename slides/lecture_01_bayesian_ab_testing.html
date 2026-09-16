@@ -1463,6 +1463,32 @@ Posterior → <em>another Beta</em></p>
 </div>
 </section>
 <section class="slide level2">
+<h2>What a “Draw” Is</h2>
+<p><strong>One draw</strong> = one value of θ, picked at random, with the curve setting the odds.</p>
+<div class="two-col">
+<div>
+<p><strong>100,000 draws</strong> = a stand-in for the curve.</p>
+<p>Histogram them and the posterior comes back.</p>
+</div>
+<div>
+<p>So anything you’d need to <strong>integrate</strong> for, you can now get by <strong>counting</strong>.</p>
+</div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>“Sample” means two different things in this lecture.</strong> In §1.3 it was <em>the visitors we observed</em>. Here it is <em>one value of θ drawn from a curve</em>. “100,000 samples from Posterior_A” is <strong>not</strong> 100,000 visitors — it is 100,000 guesses at A’s true rate.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
 <h2>Computing P(B &gt; A) via Monte Carlo</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
@@ -1477,6 +1503,19 @@ Posterior → <em>another Beta</em></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>θ</mi><mi>B</mi></msub><mo>&gt;</mo><msub><mi>θ</mi><mi>A</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>≈</mo><mfrac><mn>1</mn><mi>S</mi></mfrac><munderover><mo>∑</mo><mrow><mi>s</mi><mo>=</mo><mn>1</mn></mrow><mi>S</mi></munderover><mn>𝟏</mn><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">[</mo><msubsup><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>B</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>&gt;</mo><msubsup><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>A</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">P(\theta_B &gt; \theta_A) \approx \frac{1}{S}\sum_{s=1}^{S} \mathbf{1}\!\left[\tilde{\theta}_B^{(s)} &gt; \tilde{\theta}_A^{(s)}\right]</annotation></semantics></math></p>
 <div class="muted">
 <p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mn>100</mn><mo>,</mo><mn>000</mn></mrow><annotation encoding="application/x-tex">S = 100{,}000</annotation></semantics></math> samples. Result: <strong>P(B &gt; A) ≈ 0.905</strong></p>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>The pairing matters.</strong> Draw <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math> from B is compared against draw <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math> from A — one plausible θ_A beside one plausible θ_B is one complete scenario. Valid because the posteriors are <strong>independent</strong>. Never sort either array.</p>
+</div>
+</div>
 </div>
 </section>
 <section class="slide level2">
