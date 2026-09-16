@@ -97,6 +97,13 @@ $$f(\theta) \propto \theta^2 \times (1-\theta)^3$$
 
 Because the 7 is a constant — it does not change the *shape* of f as θ varies. And by Tool 3, the area under a distribution is always 1, so the constant is determined automatically. We only need to identify the shape.
 
+**What is f?** It is Tool 3's curve, written as a function: **f(θ) is the height of the curve at θ**, and that height is called a **density**.
+
+⚠️ **A density is not a probability, and f is not P.** Tool 3's rule was that height is plausibility and *area* is probability — so f(θ) is a height, and it can be any positive number, even greater than 1. Keep the two symbols apart from here on:
+
+> **P(converts) = 0.04** — a probability of an event. A number between 0 and 1.
+> **f(θ)** — a height on a curve. Not a probability; you get a probability by taking the *area* under f between two values of θ.
+
 **Key takeaway:** When you see θ^(α−1) × (1−θ)^(β−1), that shape tells you everything you need to know about the distribution, regardless of whatever constant sits in front of it.
 
 ---
@@ -213,6 +220,10 @@ $$\text{Likelihood}(\theta) \propto \theta^{34} \times (1-\theta)^{566}$$
 
 This expression is highest when θ ≈ 0.057 (= 34/600). It tells us that among all possible values of θ, the observed data is most consistent with θ ≈ 5.7%.
 
+⚠️ **Notice what just changed, because it is the most common point of confusion in this lecture.** We started by writing P(k conversions | θ, n) — a statement about *the data*, for one fixed θ. Then we fixed the data instead (k = 34, n = 600) and let **θ** vary. Same expression, opposite reading: **the likelihood is a function of θ, not of k.**
+
+That has a consequence worth stating outright: **the likelihood is not a distribution over θ.** The area under it does not equal 1, and it is not trying to. It is a *ranking* — how well each candidate θ explains the data we actually saw.
+
 ---
 
 #### Part B: The Prior — Encoding Existing Belief
@@ -236,6 +247,32 @@ where α and β are parameters we choose to encode our prior belief:
 > Prior mean = 2/(2+48) = 2/50 = **0.04** ✓
 >
 > Total weight α + β = 50 (equivalent to having seen 50 prior "pseudo-observations")
+
+---
+
+#### Which Symbol Is Which
+
+Four kinds of object have now appeared. They are easy to confuse because they all involve θ and all get written with Greek letters. Sort them out before combining them.
+
+| What you see | What it is | What it gives you |
+|---|---|---|
+| P(converts) = 0.04 | a probability of an **event** | a number in [0, 1] |
+| f(θ) | a **density** — the height of a curve | a height, *not* a probability |
+| Binomial | a **family** of distributions | — |
+| Beta(α, β) | a **family** of distributions | — |
+| Beta(2, 48) | one **member** of the Beta family | one specific curve |
+
+**Now the distinction that resolves most of the confusion: *prior*, *likelihood* and *posterior* are ROLES, not families.**
+
+A **family** is what shape a curve has. A **role** is what job it does in the update. These are independent, and the same family can take different roles:
+
+| Role in the update | Played here by |
+|---|---|
+| **Prior** — what we believed before the data | Beta(2, 48) |
+| **Likelihood** — how well each θ explains the data | the Binomial expression from Part A |
+| **Posterior** — what we believe after the data | *another Beta* — this is what Part C derives |
+
+So *"is Beta the prior?"* has a clean answer: **no.** Beta is a family. In this lecture a Beta *plays* the prior role, and after the update a **different Beta plays the posterior role**. That the posterior comes back in the same family is not a coincidence or a lucky accident — it is the entire reason Beta was chosen, and it is what Part C is about to show (see also the Deep Dive at the end of this section).
 
 ---
 
