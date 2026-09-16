@@ -120,6 +120,15 @@ body {
 #content tr:last-child td { border-bottom: none; }
 #content hr { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
 
+/* Figures. WITHOUT max-width THE FIGURE IS CLIPPED, not shrunk: a 1375px PNG renders at
+   its natural size inside a 740px .page and the right third -- annotations and all -- is
+   simply cut off. Measured in this renderer, by looking at the page rather than at the
+   markdown. `height: auto` keeps the aspect ratio once max-width starts doing work;
+   `display: block` + auto margins centre it, because marked emits the image inside a <p>
+   and an inline image would otherwise sit on a text baseline with a descender gap under
+   it. (This file is published to students, so it carries no internal task references.) */
+#content img { max-width: 100%; height: auto; display: block; margin: 1.6rem auto; }
+
 /* Math spacing */
 mjx-container { overflow-x: auto; }
 mjx-container[display="true"] { margin: 1.2rem 0 !important; }

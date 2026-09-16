@@ -81,6 +81,12 @@ Three properties are all we need:
 2. **The total area is always 1.** Something must happen, so the areas over all possible values add to 1. This is why we are free to ignore constant multipliers later — the constant is whatever it has to be to make the total area 1.
 3. **Width is uncertainty.** A narrow, tall curve says "I am fairly sure θ is near here." A wide, flat curve says "θ could be a lot of things." Collecting data is what narrows the curve.
 
+![Beta(2, 48), the prior this lecture uses. The HEIGHT at θ = 0.04 is 13.8; the shaded AREA between θ = 0.02 and θ = 0.06 is 0.54; the dotted line is y = 1](figures/lecture_01_density_height_vs_area.png)
+
+**Reading the figure.** Both marks sit on the *same* curve, and they are different kinds of thing. The **height** at θ = 0.04 is **13.8** — a plausibility. Nothing keeps a height under 1, and this one is nowhere near it: the dotted line marks y = 1, and the curve towers over it. The **shaded area** between θ = 0.02 and θ = 0.06 is **0.54** — *that* is a probability, and it is the answer to "how likely is it that the true rate is between 2% and 6%?" Same curve, two readings: property 1 above is the whole difference between them.
+
+This particular curve is the prior this lecture actually uses (Section 1.4B). You will meet it again there, being updated by data.
+
 **Why we need this:** the entire lecture is one curve changing shape. We start with a curve for what we believed before the experiment and end with a different curve for what we believe after. Everything in between is bookkeeping.
 
 ⚠️ **The part that surprises people:** we are putting a distribution on **θ itself** — an unknown quantity that has one fixed true value. The curve does *not* mean the conversion rate wobbles around. It means **we** are uncertain about it, and the curve is the honest shape of that uncertainty. This is the whole Bayesian move, and it is what later lets §1.5 say "there is a 95% probability the true lift is in this interval."
@@ -274,6 +280,8 @@ A **family** is what shape a curve has. A **role** is what job it does in the up
 
 So *"is Beta the prior?"* has a clean answer: **no.** Beta is a family. In this lecture a Beta *plays* the prior role, and after the update a **different Beta plays the posterior role**. That the posterior comes back in the same family is not a coincidence or a lucky accident — it is the entire reason Beta was chosen, and it is what Part C is about to show (see also the Deep Dive at the end of this section).
 
+Part D draws all three on one axis. That is where the family/role distinction stops being a claim you have to take on trust and becomes something you can see.
+
 ---
 
 #### Part C: The Posterior — Combining Prior and Data
@@ -314,6 +322,12 @@ $$\text{Posterior}_B = \text{Beta}(2+34, \; 48+566) = \text{Beta}(36, 614)$$
 Posterior mean: 36/(36+614) = 36/650 = **0.0554** ≈ 5.5%
 
 Notice: The posterior mean (5.5%) is pulled slightly toward the prior (4.0%) compared to the raw observed rate (5.7%). The prior is exerting a small moderating influence — as it should with only 600 observations.
+
+![Variant B's update on one axis: the prior Beta(2, 48) and the posterior Beta(36, 614) drawn solid because they are the same family, and the likelihood dashed because its area is not 1 — scaled for display](figures/lecture_01_prior_likelihood_posterior.png)
+
+**Reading the figure — this is the family-versus-role picture from "Which Symbol Is Which".** The prior and the posterior are drawn the same way because they *are* the same kind of object: two Beta curves, two genuine densities, each enclosing an area of exactly 1. All that differs is position and width — the data pushed the curve right and made it far narrower. The likelihood is drawn differently because it *is* different: it ranks how well each θ explains k = 34 of n = 600, and the area under it is not 1.
+
+⚠️ **The likelihood's height on this axis is meaningless, and that is the honest version of the picture.** It has been multiplied by a constant purely so all three curves fit one frame. It has **not** been normalised — deliberately. Normalising it would make its area 1 and turn it into precisely the thing Part A said it is not: a distribution over θ.
 
 ---
 
