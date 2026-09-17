@@ -1169,6 +1169,7 @@ margin-right: 0; }
 <li>Multiply a state vector by a transition matrix by hand</li>
 <li>Iterate toward the steady-state distribution</li>
 <li>Identify absorbing states and their implications</li>
+<li>Compute expected time to absorption by first-step analysis</li>
 <li>Work out what an intervention does — and does not — change about the long run</li>
 <li>Explain why steady-state is not necessarily where you want to be</li>
 </ul>
@@ -1176,6 +1177,19 @@ margin-right: 0; }
 <section class="slide level2">
 <h2>Transition Matrix</h2>
 <p>Three states: Active, Dormant, Churned</p>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p><strong><code>Dormant</code> and <code>At_Risk</code> are the same state under two names.</strong> These slides and the lecture notes say <em>Dormant</em>; the homework dataset and notebook say <em>At_Risk</em>. Same row of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>, same role. The label is a modelling choice — there is no fourth state.</p>
+</div>
+</div>
+</div>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.80</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.15</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.05</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.30</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.50</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.20</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.00</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.00</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1.00</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">P = \begin{pmatrix} 0.80 &amp; 0.15 &amp; 0.05 \\ 0.30 &amp; 0.50 &amp; 0.20 \\ 0.00 &amp; 0.00 &amp; 1.00 \end{pmatrix}</annotation></semantics></math></p>
 <div class="two-col">
 <div>
@@ -1248,6 +1262,29 @@ Each row sums to 1.</p>
 <p><strong>Critical insight:</strong> Under current dynamics, ALL customers eventually churn.<br>
 The steady-state characterises the long-run trajectory under current dynamics, not a normative target.<br>
 Use steady-state to <strong>motivate intervention</strong> — not to describe a desirable outcome.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Expected Time to Absorption</h2>
+<p>If the destination is always Churned, the only thing left to measure is <strong>how long the journey takes</strong>. Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mi>i</mi></msub><annotation encoding="application/x-tex">t_i</annotation></semantics></math> = expected periods from state <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> to absorption (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mtext mathvariant="normal">Churned</mtext></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t_{\text{Churned}} = 0</annotation></semantics></math>).</p>
+<p><strong>First-step analysis</strong> — one period elapses, then you face <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mi>j</mi></msub><annotation encoding="application/x-tex">t_j</annotation></semantics></math> from wherever you land:</p>
+<div class="formula-box">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>+</mo><munder><mo>∑</mo><mrow><mi>j</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> transient</mtext></mrow></mrow></munder><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mspace width="0.167em"></mspace><msub><mi>t</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">t_i = 1 + \sum_{j \text{ transient}} P_{ij}\, t_j</annotation></semantics></math></p>
+</div>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>A</mi></msub><mo>=</mo><mn>1</mn><mo>+</mo><mn>0.80</mn><mspace width="0.167em"></mspace><msub><mi>t</mi><mi>A</mi></msub><mo>+</mo><mn>0.15</mn><mspace width="0.167em"></mspace><msub><mi>t</mi><mi>D</mi></msub><mspace width="0.278em"></mspace><mo>⇒</mo><mspace width="0.278em"></mspace><mn>0.20</mn><mspace width="0.167em"></mspace><msub><mi>t</mi><mi>A</mi></msub><mo>−</mo><mn>0.15</mn><mspace width="0.167em"></mspace><msub><mi>t</mi><mi>D</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t_A = 1 + 0.80\,t_A + 0.15\,t_D \;\Rightarrow\; 0.20\,t_A - 0.15\,t_D = 1</annotation></semantics></math> <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>D</mi></msub><mo>=</mo><mn>1</mn><mo>+</mo><mn>0.30</mn><mspace width="0.167em"></mspace><msub><mi>t</mi><mi>A</mi></msub><mo>+</mo><mn>0.50</mn><mspace width="0.167em"></mspace><msub><mi>t</mi><mi>D</mi></msub><mspace width="0.278em"></mspace><mo>⇒</mo><mspace width="0.278em"></mspace><mo>−</mo><mn>0.30</mn><mspace width="0.167em"></mspace><msub><mi>t</mi><mi>A</mi></msub><mo>+</mo><mn>0.50</mn><mspace width="0.167em"></mspace><msub><mi>t</mi><mi>D</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t_D = 1 + 0.30\,t_A + 0.50\,t_D \;\Rightarrow\; -0.30\,t_A + 0.50\,t_D = 1</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>A</mi></msub><mo>=</mo><mrow><mn mathvariant="bold">11.8</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="bold"> 𝐦𝐨𝐧𝐭𝐡𝐬</mtext></mrow></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>t</mi><mi>D</mi></msub><mo>=</mo><mrow><mn mathvariant="bold">9.1</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="bold"> 𝐦𝐨𝐧𝐭𝐡𝐬</mtext></mrow></mrow></mrow><annotation encoding="application/x-tex">t_A = \mathbf{11.8 \text{ months}}, \qquad t_D = \mathbf{9.1 \text{ months}}</annotation></semantics></math></p>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>Matrix form (what code returns): strip the absorbing row/column to get the transient block <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>, then <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐭</mi><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>I</mi><mo>−</mo><mi>Q</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><mn>𝟏</mn></mrow><annotation encoding="application/x-tex">\mathbf{t} = (I - Q)^{-1}\mathbf{1}</annotation></semantics></math> — the <strong>fundamental matrix</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>I</mi><mo>−</mo><mi>Q</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">N = (I-Q)^{-1}</annotation></semantics></math>, row-summed. Sanity check: all <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>i</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t_i &gt; 0</annotation></semantics></math>, and the healthier state has the larger <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mi>i</mi></msub><annotation encoding="application/x-tex">t_i</annotation></semantics></math>.</p>
 </div>
 </div>
 </div>

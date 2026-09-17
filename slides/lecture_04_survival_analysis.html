@@ -1168,6 +1168,7 @@ margin-right: 0; }
 <ul>
 <li>Compute a Kaplan-Meier survival curve step by step</li>
 <li>Interpret conditional vs. unconditional churn probabilities</li>
+<li>Read the median survival time off a KM curve</li>
 <li>Read a Cox model output and understand hazard ratios</li>
 <li>Handle censored observations correctly</li>
 <li>Detect when the proportional hazards assumption fails</li>
@@ -1276,6 +1277,26 @@ The conditional rate is what a retention campaign manager needs.</p>
 </div>
 </section>
 <section class="slide level2">
+<h2>Median Survival Time</h2>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>S</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\hat{S}(t)</annotation></semantics></math> is a <strong>step</strong> function — it jumps past <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math> rather than touching it, so the median needs a stated convention:</p>
+<div class="formula-box">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">median</mtext><mo>=</mo><mo>min</mo><mo stretchy="false" form="prefix">{</mo><mspace width="0.167em"></mspace><mi>t</mi><mo>:</mo><mover><mi>S</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>≤</mo><mn>0.5</mn><mspace width="0.167em"></mspace><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\text{median} = \min\{\,t : \hat{S}(t) \leq 0.5\,\}</annotation></semantics></math></p>
+</div>
+<p>The <strong>first</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> at or below <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math> — not the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> before the crossing, and not an interpolation.</p>
+<div class="two-col">
+<div>
+<p><strong>Example</strong></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>S</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mn>6</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0.55</mn></mrow><annotation encoding="application/x-tex">\hat{S}(6) = 0.55</annotation></semantics></math> (above)<br>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>S</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mn>7</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0.46</mn></mrow><annotation encoding="application/x-tex">\hat{S}(7) = 0.46</annotation></semantics></math> (at-or-below → <strong>median = 7 months</strong>)</p>
+</div>
+<div>
+<p><strong>Edge cases</strong></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>S</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\hat{S}(t)</annotation></semantics></math> exactly <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math> → that <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> is the median (rule is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≤</mo><annotation encoding="application/x-tex">\leq</annotation></semantics></math>).</p>
+<p>Curve never reaches <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math> → <strong>“median not reached”</strong>, not the last observed time.</p>
+</div>
+</div>
+</section>
+<section class="slide level2">
 <h2>Cox Proportional Hazards Model</h2>
 <p>Baseline hazard × covariate effect:</p>
 <div class="formula-box">
@@ -1332,6 +1353,7 @@ Exponentiation makes it multiplicative.</p>
 <div>
 <p><strong>Identification assumptions</strong></p>
 <p>Cox HRs are <strong>associational</strong>. A covariate with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">HR</mtext><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\text{HR} &gt; 1</annotation></semantics></math> predicts faster churn but does not establish causation. Causal identification requires randomization (Lecture 7).<br>
+<strong>Self-selection</strong> is the live case: customers <em>choose</em> their plan, so an annual-vs-monthly KM gap confounds the plan’s effect with the kind of customer who picks it. Controlling for <code>plan_type</code> adjusts only for what you measured, never for the intent that did the selecting.<br>
 <strong>Proportional hazards</strong> must hold: verify with log-log plots or Schoenfeld residuals.</p>
 </div>
 </div>

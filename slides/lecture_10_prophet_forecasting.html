@@ -1283,7 +1283,20 @@ margin-right: 0; }
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>Each component is estimated separately and additively combined. This makes the model <strong>interpretable</strong> — you can see what each component contributes.</p>
+<p>Each component is estimated separately and additively combined, <strong>in the units of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math></strong> — <code>s(t) = +$180k</code> means “$180k above trend this week”. This makes the model <strong>interpretable</strong>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>Additive components, chained multipliers.</strong> A “+35% lift” is not a component — it is a <em>ratio to a stated base</em>. When one lift is quoted <strong>on top of</strong> another, the second one’s base is the first one’s result, so the multipliers <strong>multiply</strong>. <code>seasonality_mode=&#39;multiplicative&#39;</code> would make the decomposition itself a product; the default is <code>&#39;additive&#39;</code> and this course never changes it.</p>
 </div>
 </div>
 </div>
@@ -1312,7 +1325,7 @@ Default in Prophet: <math display="inline" xmlns="http://www.w3.org/1998/Math/Ma
 </section>
 <section class="slide level2">
 <h2>Trend Changepoints</h2>
-<p>Prophet places <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> potential changepoints at regular intervals in the training data. It uses L1 regularization (sparse prior) to detect which ones represent real trend changes.</p>
+<p>Prophet places a <strong>fixed</strong> number of potential changepoints at regular intervals — <code>n_changepoints</code>, default <strong>25</strong>, over the first 80% of the training data (<code>changepoint_range=0.8</code>). It does <strong>not</strong> search for them. A sparse (Laplace) prior then shrinks each candidate’s slope adjustment toward <strong>zero</strong>; the ones the data pay for survive, the rest switch off.</p>
 <div class="two-col">
 <div>
 <p><strong><code>changepoint_prior_scale</code></strong></p>
@@ -1335,9 +1348,9 @@ Low value → model is smooth, resists noise</p>
 <p>Base trend: 100,000 units/week, growing +2%/week.</p>
 <p><strong>After 4 weeks:</strong></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mo>,</mo><mn>000</mn><mo>×</mo><msup><mn>1.02</mn><mn>4</mn></msup><mo>=</mo><mn>100</mn><mo>,</mo><mn>000</mn><mo>×</mo><mn>1.0824</mn><mo>=</mo><mrow><mn>𝟏𝟎𝟖</mn><mo mathvariant="bold">,</mo><mn>𝟐𝟒𝟑</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="bold"> 𝐮𝐧𝐢𝐭𝐬</mtext></mrow></mrow></mrow><annotation encoding="application/x-tex">100{,}000 \times 1.02^4 = 100{,}000 \times 1.0824 = \mathbf{108{,}243 \text{ units}}</annotation></semantics></math></p>
-<p><strong>Q4 seasonal effect (+35%):</strong></p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>108</mn><mo>,</mo><mn>243</mn><mo>×</mo><mn>1.35</mn><mo>=</mo><mrow><mn>𝟏𝟒𝟔</mn><mo mathvariant="bold">,</mo><mn>𝟏𝟐𝟖</mn></mrow><mo>≈</mo><mn>135</mn><mo>,</mo><mn>000</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> (from base)</mtext></mrow></mrow><annotation encoding="application/x-tex">108{,}243 \times 1.35 = \mathbf{146{,}128} \approx 135{,}000 \text{ (from base)}</annotation></semantics></math></p>
-<p><strong>Black Friday on top of Q4 (+45%):</strong></p>
+<p><strong>Q4 seasonal effect (+35%) — quoted off the base, not off the trended value:</strong></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mo>,</mo><mn>000</mn><mo>×</mo><mn>1.35</mn><mo>=</mo><mrow><mn>𝟏𝟑𝟓</mn><mo mathvariant="bold">,</mo><mn>𝟎𝟎𝟎</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="bold"> 𝐮𝐧𝐢𝐭𝐬</mtext></mrow></mrow></mrow><annotation encoding="application/x-tex">100{,}000 \times 1.35 = \mathbf{135{,}000 \text{ units}}</annotation></semantics></math></p>
+<p><strong>Black Friday on top of Q4 (+45%) — quoted off the Q4 level:</strong></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>135</mn><mo>,</mo><mn>000</mn><mo>×</mo><mn>1.45</mn><mo>=</mo><mrow><mn>𝟏𝟗𝟓</mn><mo mathvariant="bold">,</mo><mn>𝟕𝟓𝟎</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="bold"> 𝐮𝐧𝐢𝐭𝐬</mtext></mrow></mrow></mrow><annotation encoding="application/x-tex">135{,}000 \times 1.45 = \mathbf{195{,}750 \text{ units}}</annotation></semantics></math></p>
 <div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
@@ -1348,7 +1361,7 @@ Low value → model is smooth, resists noise</p>
 <p><strong>Warning</strong></p>
 </div>
 <div class="callout-content">
-<p>Seasonal multipliers <strong>compound</strong> — multiply, don’t add.</p>
+<p><strong>Read which base each percentage names.</strong> “+35%” here is a lift on the annual baseline (100,000); “+45% on top of Q4” takes the Q4 level (135,000) as <em>its</em> base, so the two multipliers chain. They are not both lifts on the same number, and they are not added.</p>
 </div>
 </div>
 </div>

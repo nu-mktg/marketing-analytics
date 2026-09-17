@@ -1232,7 +1232,7 @@ margin-right: 0; }
 <p><strong>Learning Objectives</strong></p>
 <ul>
 <li>Apply the adstock transformation to model advertising carryover</li>
-<li>Evaluate a channel’s efficiency using the Hill function</li>
+<li>Evaluate a channel’s efficiency using the Hill function, on the adstock scale</li>
 <li>Interpret MMM outputs: decay parameters, EC50, marginal ROI</li>
 <li>Recommend budget reallocations from model output</li>
 <li>Explain why last-touch attribution misleads budget decisions</li>
@@ -1316,55 +1316,106 @@ Short memory</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><mo accent="false">∞</mo></munderover><msup><mi>λ</mi><mi>t</mi></msup><mo>⋅</mo><mi>S</mi><mo>=</mo><mfrac><mi>S</mi><mrow><mn>1</mn><mo>−</mo><mi>λ</mi></mrow></mfrac><mo>=</mo><mfrac><mn>200</mn><mrow><mn>1</mn><mo>−</mo><mn>0.6</mn></mrow></mfrac><mo>=</mo><mn>𝟓𝟎𝟎</mn></mrow><annotation encoding="application/x-tex">\sum_{t=0}^{\infty} \lambda^t \cdot S = \frac{S}{1-\lambda} = \frac{200}{1-0.6} = \mathbf{500}</annotation></semantics></math></p>
 </section>
 <section class="slide level2">
-<h2>Hill Function: Diminishing Returns</h2>
-<p>More spend → more impact, but each additional dollar contributes less.</p>
+<h2>Hill Function: Saturation</h2>
+<p>More spend → more impact, up to a ceiling the curve never passes.</p>
 <div class="formula-box">
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><msup><mi>s</mi><mi>α</mi></msup><mrow><msubsup><mtext mathvariant="normal">EC</mtext><mn>50</mn><mi>α</mi></msubsup><mo>+</mo><msup><mi>s</mi><mi>α</mi></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">H(s) = \frac{s^\alpha}{\text{EC}_{50}^\alpha + s^\alpha}</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><msup><mi>s</mi><mi>α</mi></msup><mrow><msubsup><mtext mathvariant="normal">EC</mtext><mn>50</mn><mi>α</mi></msubsup><mo>+</mo><msup><mi>s</mi><mi>α</mi></msup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>s</mi><mo>=</mo><msub><mi>A</mi><mi>t</mi></msub><mspace width="0.278em"></mspace><mtext mathvariant="normal">(adstock, not raw spend)</mtext></mrow><annotation encoding="application/x-tex">H(s) = \frac{s^\alpha}{\text{EC}_{50}^\alpha + s^\alpha}, \qquad s = A_t \;\text{(adstock, not raw spend)}</annotation></semantics></math></p>
 </div>
 <div class="two-col">
 <div>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mtext mathvariant="normal">EC</mtext><mn>50</mn></msub><annotation encoding="application/x-tex">\text{EC}_{50}</annotation></semantics></math> = spend level at 50% of max impact<br>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mtext mathvariant="normal">EC</mtext><mn>50</mn></msub><annotation encoding="application/x-tex">\text{EC}_{50}</annotation></semantics></math> = <strong>adstocked</strong> spend level at 50% of max impact<br>
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mtext mathvariant="normal">EC</mtext><mn>50</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">H(\text{EC}_{50}) = 0.5</annotation></semantics></math>, always)</li>
-<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math> = steepness of the curve<br>
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha &gt; 1</annotation></semantics></math>: S-shape, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha \leq 1</annotation></semantics></math>: concave)</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math> = shape of the curve<br>
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha \leq 1</annotation></semantics></math>: concave from the first dollar;<br>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha &gt; 1</annotation></semantics></math>: <strong>S-shaped</strong>)</li>
 </ul>
 </div>
 <div>
-<p><strong>Output <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">H(s) \in [0, 1]</annotation></semantics></math>:</strong></p>
+<p><strong>Output <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>∈</mo><mrow><mo stretchy="true" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">H(s) \in [0, 1]</annotation></semantics></math></strong> (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">EC</mtext><mn>50</mn></msub><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">\text{EC}_{50} = 100</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha = 2</annotation></semantics></math>)<strong>:</strong></p>
 <table class="caption-top">
 <thead>
 <tr class="header">
 <th><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math></th>
 <th><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">H(s)</annotation></semantics></math></th>
+<th>step</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td>0</td>
+<td>0.000</td>
+<td>—</td>
+</tr>
+<tr class="even">
 <td>50</td>
 <td>0.200</td>
-</tr>
-<tr class="even">
-<td>100 (EC₅₀)</td>
-<td><strong>0.500</strong></td>
+<td>+0.200</td>
 </tr>
 <tr class="odd">
-<td>200</td>
-<td>0.800</td>
+<td>100 (EC₅₀)</td>
+<td><strong>0.500</strong></td>
+<td><strong>+0.300</strong></td>
 </tr>
 <tr class="even">
+<td>200</td>
+<td>0.800</td>
+<td>+0.300</td>
+</tr>
+<tr class="odd">
 <td>300</td>
 <td>0.900</td>
+<td>+0.100</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>Look at the step column: the second $50k buys MORE than the first.</strong> With <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha = 2</annotation></semantics></math> the curve is S-shaped and returns <em>increase</em> until the inflection at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">EC</mtext><mn>50</mn></msub><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac displaystyle="false"><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>α</mi><mo>+</mo><mn>1</mn></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mn>1</mn><mi>/</mi><mi>α</mi></mrow></msup><mo>=</mo><msub><mtext mathvariant="normal">EC</mtext><mn>50</mn></msub><mi>/</mi><msqrt><mn>3</mn></msqrt><mo>≈</mo><mn>58</mn></mrow><annotation encoding="application/x-tex">\text{EC}_{50}\left(\tfrac{\alpha-1}{\alpha+1}\right)^{1/\alpha} = \text{EC}_{50}/\sqrt{3} \approx 58</annotation></semantics></math>. “Saturating” ≠ “concave everywhere” — only <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha \leq 1</annotation></semantics></math> is concave from the first dollar, and this course uses <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha = 2</annotation></semantics></math>.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>EC₅₀ Lives on the Adstock Scale</h2>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>The Hill function is applied to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">H(A_t)</annotation></semantics></math>, never <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">H(S_t)</annotation></semantics></math>. So <strong>EC₅₀ is an <em>adstocked</em> spend level</strong>, and “spend” next to a Hill response always means adstocked spend in this course.</p>
+</div>
+</div>
+</div>
+<p>Since <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>t</mi></msub><mo>=</mo><msub><mi>S</mi><mi>t</mi></msub><mo>+</mo><mi>λ</mi><msub><mi>A</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">A_t = S_t + \lambda A_{t-1}</annotation></semantics></math> with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda \geq 0</annotation></semantics></math>, <strong>adstock <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>≥</mo><annotation encoding="application/x-tex">\geq</annotation></semantics></math> raw spend</strong> — at steady state <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mi>S</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">A = S/(1-\lambda)</annotation></semantics></math>, which is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>×</mo></mrow><annotation encoding="application/x-tex">4\times</annotation></semantics></math> raw spend at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0.75</mn></mrow><annotation encoding="application/x-tex">\lambda = 0.75</annotation></semantics></math>.</p>
+<div class="two-col">
+<div>
+<p><strong>Consequence for reading output</strong></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mn>0.82</mn></mrow><annotation encoding="application/x-tex">H = 0.82</annotation></semantics></math> tells you your <strong>adstock</strong> is well above EC₅₀. It does not tell you the weekly cheque is.</p>
+</div>
+<div>
+<p><strong>The standard misreading</strong></p>
+<p>Comparing a fitted EC₅₀ against the raw spend column. It always errs the same way: you think you have more headroom than you do.</p>
+</div>
+</div>
 </section>
 <section class="slide level2">
 <h2>Marginal ROI and Budget Allocation</h2>
-<p><strong>Marginal ROI:</strong> revenue gained from the next $1 of spend at current adstock level</p>
+<p><strong>Marginal ROI:</strong> revenue gained from the next $1 of spend, evaluated at the current <strong>adstock</strong> level <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><msub><mi>A</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">s = A_t</annotation></semantics></math></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">MR</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>β</mi><mi>j</mi></msub><mo>⋅</mo><mfrac><mrow><mi>d</mi><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>d</mi><mi>s</mi></mrow></mfrac><mo>=</mo><msub><mi>β</mi><mi>j</mi></msub><mo>⋅</mo><mfrac><mrow><mi>α</mi><mo>⋅</mo><msubsup><mtext mathvariant="normal">EC</mtext><mn>50</mn><mi>α</mi></msubsup><mo>⋅</mo><msup><mi>s</mi><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mtext mathvariant="normal">EC</mtext><mn>50</mn><mi>α</mi></msubsup><mo>+</mo><msup><mi>s</mi><mi>α</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mfrac></mrow><annotation encoding="application/x-tex">\text{MR}(s) = \beta_j \cdot \frac{dH(s)}{ds} = \beta_j \cdot \frac{\alpha \cdot \text{EC}_{50}^\alpha \cdot s^{\alpha-1}}{(\text{EC}_{50}^\alpha + s^\alpha)^2}</annotation></semantics></math></p>
 <div class="formula-box">
 <p><strong>Budget reallocation rule:</strong></p>
@@ -1420,7 +1471,7 @@ Equalizing marginal ROI ≠ equal budget allocation.</p>
 <ul>
 <li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\beta_j</annotation></semantics></math>: channel contribution coefficient (scale factor)</li>
 <li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\lambda_j</annotation></semantics></math>: fitted decay rate per channel</li>
-<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mtext mathvariant="normal">EC</mtext><mrow><mn>50</mn><mo>,</mo><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">\text{EC}_{50,j}</annotation></semantics></math>: saturation point per channel</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mtext mathvariant="normal">EC</mtext><mrow><mn>50</mn><mo>,</mo><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">\text{EC}_{50,j}</annotation></semantics></math>: half-saturation point per channel, <strong>on the adstock scale</strong></li>
 <li>Marginal ROI curve at any budget level</li>
 </ul>
 </section>
