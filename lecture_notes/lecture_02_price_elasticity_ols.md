@@ -8,7 +8,7 @@
 **Business question:** If you raise prices by 10%, will revenue go up or down? By how much?
 
 **What you will be able to do after this lecture:**
-- Derive the OLS slope formula using only addition and multiplication
+- Compute the OLS slope and intercept by hand, using only addition and multiplication
 - Fit a log-log regression that directly gives you the price elasticity coefficient
 - Interpret elasticity: whether demand is elastic, inelastic, or unit-elastic
 - Identify the revenue-maximizing price
@@ -76,6 +76,9 @@ More practically: in a log-log regression, the slope coefficient equals the *per
 You manage a grocery chain. A category manager wants to raise the price of a product. Before changing the price, you need to know: will revenue go up or down?
 
 The answer depends on **price elasticity of demand** — how sensitive customers are to price changes.
+Economists write the elasticity as **ε** (epsilon): the percentage change in quantity sold caused by a
+1% change in price. It is normally negative — raise the price, sell fewer — so what matters for the
+decision below is its size, written **|ε|**.
 
 | Elasticity |ε| | Type | 10% price increase → |
 |---|---|---|
@@ -118,11 +121,38 @@ A demand curve describes the relationship between price and quantity sold. As pr
 
 #### Part A: OLS in Plain Algebra
 
-We have n observations of (price, units sold). We want to find the line ŷ = β₀ + β₁x that best fits the data — where "best" means minimizing the sum of squared errors.
+We have n observations of (price, units sold), and we want the straight line that best fits them.
+Before writing any formula, two pieces of notation have to mean something, because the rest of this
+lecture — and all of Section 1.4C — depends on them.
 
-The formula for the slope is:
+> ⚠️ **The hat is not decoration. It marks the difference between what is true and what you computed.**
+> Write the true relationship in the population as **y = β₀ + β₁x + u**. You never see any of those
+> three things. What you compute from your n observations is an *estimate* of each, and estimates
+> wear hats:
+>
+> | Symbol | What it is | Can you ever see it? |
+> |---|---|---|
+> | β₁ | the **true** slope in the population | **No.** Never. |
+> | β̂₁ ("beta-one-hat") | the **estimate** of β₁ that OLS computes from your data | Yes — it is a number you calculate |
+> | u | the **error**: how far a real observation sits from the **true** line | **No.** Never. |
+> | ŷ | the **fitted value**: what the estimated line predicts | Yes |
+> | y − ŷ | the **residual**: how far an observation sits from the **estimated** line | Yes |
+>
+> ⚠️ **So "error" and "residual" are not two words for one thing**, even though they are often used
+> loosely as if they were. The error is the invisible gap from the true line; the residual is the
+> visible gap from the fitted line. OLS minimizes the sum of squared **residuals**, because those are
+> the only ones it can see. Keep the pair apart: **Section 1.4C is a statement about the *error*, not
+> the residual** — which is exactly why endogeneity cannot be spotted by staring at your residuals.
+
+"Best fit" now has a precise meaning: choose β̂₀ and β̂₁ to make the sum of squared *residuals* as
+small as possible. Doing that produces one formula for the slope:
 
 $$\hat{\beta}_1 = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2}$$
+
+**Where this formula comes from.** It is not a definition — it is the *solution* of that minimization,
+and deriving it takes calculus (set the derivative of the squared-residual sum to zero and solve).
+The Deep Dive below does that in four lines, and it is optional. **Using** the formula, which is what
+the rest of Part A does, needs nothing but addition, multiplication and division.
 
 **Plain English:** The slope equals (how much x and y move together) divided by (how much x varies on its own). If high prices consistently coincide with low sales, the numerator will be negative, and the slope will be negative — as expected for a demand curve.
 
@@ -145,11 +175,13 @@ Predicted line: Units = 329 − 27 × Price
 > ### 🔍 Deep Dive: Where Does the Formula Come From?
 > *Skip if you are comfortable using the formula. Read if you want to know why it is the right formula.*
 >
-> OLS minimizes the sum of squared residuals: SSR = Σ(yᵢ − β₀ − β₁xᵢ)². To find the minimum, we take the derivative with respect to β₁ and set it equal to zero:
+> OLS minimizes the sum of squared residuals over the **estimates** — note the hats, since these are
+> the quantities we get to choose: SSR = Σ(yᵢ − β̂₀ − β̂₁xᵢ)². To find the minimum, we take the
+> derivative with respect to β̂₁ and set it equal to zero:
 >
-> ∂SSR/∂β₁ = −2Σ(yᵢ − β₀ − β₁xᵢ)xᵢ = 0
+> ∂SSR/∂β̂₁ = −2Σ(yᵢ − β̂₀ − β̂₁xᵢ)xᵢ = 0
 >
-> Substituting β₀ = ȳ − β₁x̄ (from the other first-order condition) and rearranging gives:
+> Substituting β̂₀ = ȳ − β̂₁x̄ (from the other first-order condition) and rearranging gives:
 >
 > Σ(xᵢ − x̄)(yᵢ − ȳ) = β₁ × Σ(xᵢ − x̄)²
 >
@@ -161,13 +193,31 @@ Predicted line: Units = 329 − 27 × Price
 
 The OLS above gives "units fall by 27 for every $1 price increase" — a constant slope that does not make economic sense for large price changes. The log-log model fixes this by working in percentage terms:
 
-$$\ln(\text{units}) = \beta_0 + \beta_1 \ln(\text{price}) + \varepsilon$$
+$$\ln(\text{units}) = \beta_0 + \beta_1 \ln(\text{price}) + u$$
+
+> ⚠️ **Why the error is written `u` here, when most books write it `ε`.** Because **ε is already
+> taken on this page.** Since Section 1.2, |ε| has meant the **elasticity** — the number you compare
+> to 1 to decide whether a price rise helps or hurts revenue. The error term is a completely
+> different object: the unobservable gap between a real observation and the true line. Writing both
+> as ε is the single easiest way to misread this lecture, so in these notes:
+> **ε is always the elasticity. `u` is always the error term.**
+> Outside this course you will meet ε in the error's slot constantly — when you do, check which of
+> the two an author means before you trust the sentence around it.
 
 **Why log-log?** In this model, β₁ has a specific interpretation:
 
 > A 1% increase in price is associated with a β₁% change in units sold.
 
 This is the definition of price elasticity. β₁ is the elasticity directly — no additional calculation needed.
+
+> ⚠️ **ε and β₁ are the same number.** Section 1.2 called the elasticity ε because that is the
+> economics convention; Part B calls it β₁ because that is the name the regression output prints.
+> In a log-log model they are one quantity with two labels: **ε = β₁.** So when Section 1.5 says
+> "|ε| = 1.84" and the worked example in Part 2 reports "β₁ ≈ −0.96", those are the same kind of
+> object measured on two different datasets — not two different statistics. Part 2 additionally
+> writes it **β₁^log** at the moment it is computed, purely to stress that it is the slope from the
+> *logged* regression and not the levels slope β̂₁ = −27 from Part A. **Three notations, one
+> elasticity** — and only the levels slope is a different quantity.
 
 **The revenue-maximizing price:** Revenue = Price × Quantity. Revenue is maximized where elasticity |β₁| = 1. When |β₁| > 1 (elastic), revenue increases as you lower price. When |β₁| < 1 (inelastic), revenue increases as you raise price. **This rule describes a demand curve whose elasticity varies with price** — read the log-log estimate as a local approximation near the prices you observe (see Misconception 3).
 
@@ -186,7 +236,13 @@ This is the definition of price elasticity. β₁ is the elasticity directly —
 
 #### Part C: The Endogeneity Problem
 
-If prices are set partly in response to demand conditions (managers lower prices during slow periods, raise them during busy ones), then price and the error term in the regression are correlated. OLS requires that predictors are uncorrelated with errors. When this fails, the estimate is **biased** — typically toward zero, making demand appear less elastic than it truly is.
+If prices are set partly in response to demand conditions (managers lower prices during slow periods, raise them during busy ones), then price and the error term **u** are correlated — in symbols, Cov(price, u) ≠ 0. OLS needs that covariance to be zero. When it is not, the estimate is **biased** — typically toward zero, making demand appear less elastic than it truly is.
+
+> ⚠️ **This is why Part A insisted that the error and the residual are different things.** The
+> condition that fails here is about **u**, the gap from the *true* line — which you can never
+> observe or plot. Your residuals will look perfectly well-behaved while this is happening. **There
+> is no diagnostic plot for endogeneity**; you find it by knowing how the prices in your data were
+> actually set. That is a question about the business, not about the regression output.
 
 **What this means practically:** If your regression returns elasticity = −0.3 but you know managers are cutting prices when sales are slow, the true elasticity is probably more negative. You are underestimating how much customers care about price.
 
@@ -203,6 +259,10 @@ If prices are set partly in response to demand conditions (managers lower prices
 - The current price is ABOVE the revenue-maximizing price — lowering price would increase revenue
 
 **R² = 0.87: What does this mean?**
+
+R² (*R-squared*) is the share of the variation in the outcome that the model's predictors account
+for: 0 means they explain none of it, 1 means they explain all of it. So here:
+
 - 87% of the variation in log(units) is explained by the regression predictors
 - This is R-squared for explained variation, NOT causation
 - High R² does not mean the elasticity estimate is unbiased
@@ -455,7 +515,7 @@ An elasticity of −0.8 (inelastic) means revenue increases when price increases
 | Prints coefficient on log_price | Section 1.4B — elasticity = β_1 in log-log model |
 | Prints p-values | Section 2.2 — statistical significance check |
 | Prints R-squared | Section 2.2 — proportion of variance explained |
-| Plots predicted vs. actual | Direct visualization of residuals from Section 1.3 |
+| Plots predicted vs. actual | Section 1.4A — the residuals y − ŷ, plotted |
 
 **What to verify before trusting the agent's elasticity estimate:**
 1. Does the coefficient on log(price) have the expected sign (negative)?
