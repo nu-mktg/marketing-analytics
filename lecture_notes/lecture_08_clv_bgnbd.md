@@ -12,7 +12,7 @@
 - Interpret P(alive) estimates from BG/NBD output
 - Compute a simple CLV estimate from model outputs
 - Identify when the Gamma-Gamma independence assumption is violated
-- Use CLV by acquisition channel to set channel-specific CAC targets
+- Define CAC and the CLV:CAC ratio, and use CLV by acquisition channel to set channel-specific CAC targets (Section 1.4D)
 
 ---
 
@@ -92,6 +92,22 @@ For each customer, compute:
 - **t_x** = time of most recent purchase (in whatever unit: months, weeks)
 - **T** = total observation period length (same unit as t_x)
 
+⚠️ **x and "purchase count" are two different numbers, and the gap is exactly 1.** Dashboards,
+finance decks and this lecture's own business prose all say "purchases" meaning the **total**; the
+model always means the **repeats**. A customer with 12 *repeat* purchases made 13 purchases in
+total, and their historical revenue is 13 × AOV, not 12 × AOV. Watch for it in both directions:
+- **Reading tables:** a column headed $x$ or `frequency` is repeats; a column headed "orders" or
+  "purchases" is the total.
+- **Writing code:** `lifetimes`' `summary_data_from_transaction_data()` has
+  `include_first_transaction=False` by **default**, which is the definition above and the one this
+  course wants. Flipping it to `True` silently changes what the model is fitted on and moves the
+  fitted (r, α, a, b) substantially. Leave it alone.
+
+The reason the model is built this way: BG/NBD's dropout process is a coin flip **after each
+purchase**, so the acquiring purchase cannot carry any dropout information — a customer who has
+never repeated has had no opportunity to drop out at all. (That is also why such a customer's
+P(alive) comes out at exactly 1.0; see the Common Misconceptions section.)
+
 **Example:** Customer B bought 12 times over 24 months. Last purchase at month 5 (19 months before the observation end at month 24):
 > x = 11, t_x = 5, T = 24
 
@@ -135,6 +151,54 @@ Two numbers used to appear in this lecture for this one decision (a −0.30 "mat
 
 > ### 🔍 Deep Dive: The Full BG/NBD Likelihood
 > The BG/NBD models each customer's purchase process as a Poisson process (events arriving randomly at rate λ) and their dropout process as a Bernoulli trial after each purchase (drop out with probability p). Both λ and p vary across customers: λ ~ Gamma(r, α) and p ~ Beta(a, b). The likelihood for a customer (x, t_x, T) involves computing the probability of observing exactly x purchases, with the last at t_x, given that the customer either dropped out sometime after t_x or is still alive at T. This likelihood has a closed-form expression involving the Beta function — which is why the model is tractable. The four parameters (r, α, a, b) are estimated by maximizing the sum of log-likelihoods across all customers.
+
+---
+
+#### Part D: CLV:CAC — Turning CLV Into an Acquisition Decision
+
+A CLV number on its own does not tell you whether to spend. The Overview promised you would use CLV
+by channel to set channel-specific acquisition budgets; this is the arithmetic that does it.
+
+**Customer Acquisition Cost (CAC)** for a channel is the total spend on that channel over a period
+divided by the number of customers it acquired in that period:
+
+> CAC = (channel spend) / (customers acquired through that channel)
+
+It is a *per-customer cost*, in the same dollars as CLV, which is what makes the two comparable.
+
+**The CLV:CAC ratio** (also written **LTV:CAC** — same thing; "LTV" and "CLV" are interchangeable
+names for lifetime value, and this course uses both) is:
+
+$$\text{CLV:CAC} = \frac{\text{predicted CLV per acquired customer}}{\text{CAC}}$$
+
+**CLV on top, CAC underneath** — so a *bigger* number is a *better* channel, and the ratio reads as
+"dollars of lifetime value bought per dollar of acquisition spend." Inverting it is the common
+error; a ratio below 1 means you are paying more to acquire a customer than they will ever be worth.
+
+**Example:** a channel with CAC = \$40 and predicted 12-month CLV = \$120 has CLV:CAC = 120/40 =
+**3.0**.
+
+**The 3:1 benchmark, and what it is worth.** The widely quoted rule of thumb is that **CLV:CAC > 3**
+is a sustainable channel and CLV:CAC < 1 is value-destroying. It is a *convention*, not a result:
+the 3 is there to absorb gross margin (CLV is usually quoted on revenue, not contribution), the
+delay between paying CAC today and collecting CLV over years, and the risk that the CLV prediction
+is wrong. Businesses with high margins, fast payback or cheap capital defend lower ratios; the
+honest version of the rule is "compare channels against each other and against your own payback
+period, and treat 3 as the default only when you have nothing better."
+
+**Two traps.**
+1. **The horizon has to match.** A ratio built from a *12-month* CLV is a 12-month statement, and it
+   is not comparable to one built from a lifetime CLV — the same channel scores far higher on the
+   longer window. Always say which window the CLV came from, and note separately whether the payback
+   period is short enough for the business to survive it.
+2. **Aggregate CAC hides the decision.** One blended CAC across all channels averages a \$8 organic
+   customer with a \$45 paid-search one and tells you to do nothing. Compute it per channel — that
+   is the entire point of segmenting CLV by acquisition channel.
+
+**The scalability caveat.** A spectacular ratio is not automatically a place to put more money.
+Organic channels routinely show CLV:CAC above 20 and cannot simply be bought more of; a paid channel
+at 3:1 that absorbs another \$500k of budget may create more total value than an organic one at 26:1
+that is already saturated. Ratio ranks efficiency; it does not measure headroom.
 
 ---
 
@@ -231,17 +295,20 @@ Does the ranking match your intuition from Part A? What explains each customer's
 
 **Expected ranking: Valentina > Priya > Marcus**
 
-- **Valentina:** 12 purchases in 24 months (high frequency), last purchase 0.5 months ago (very recent). Almost certainly alive. High predicted CLV.
-- **Priya:** Only 2 purchases, but recent (4 months ago). Low frequency suggests either new or slow buyer. Probably alive, moderate CLV.
-- **Marcus:** 12 purchases — but all crammed into the first 6 months, then 18 months of complete silence. Despite high historical frequency, very likely churned. Low predicted CLV.
+(Read the table's 12s and 2 as $x$ — **repeat** purchases. Valentina and Marcus each made 13
+purchases in total, Priya 3.)
+
+- **Valentina:** x = 12 repeats in 24 months (high frequency), last purchase 0.5 months ago (very recent). Almost certainly alive. High predicted CLV.
+- **Priya:** Only x = 2 repeats, but recent (4 months ago). Low frequency suggests either new or slow buyer. Probably alive, moderate CLV.
+- **Marcus:** x = 12 repeats — but all crammed into the first 6 months, then 18 months of complete silence. Despite high historical frequency, very likely churned. Low predicted CLV.
 
 **Part B: Model Output Analysis**
 
 The ranking matches the intuition: Valentina ($182) > Priya ($61) > Marcus ($19).
 
-**Valentina** (P(alive)=0.94): Recent purchase confirms she is almost certainly active. High frequency means high expected future transactions (4.8 over 12 months). At roughly one purchase every two months historically (12 in 24) and mostly still active, 4.8 over the next 12 months is consistent — one *per* month would imply about twice that.
+**Valentina** (P(alive)=0.94): Recent purchase confirms she is almost certainly active. High frequency means high expected future transactions (4.8 over 12 months). At roughly one purchase every two months historically (13 purchases in 24) and mostly still active, 4.8 over the next 12 months is consistent — one *per* month would imply about twice that.
 
-**Marcus** (P(alive)=0.11): Despite identical total purchases as Valentina, his 18-month silence is overwhelming evidence of dropout. Even if the model thinks there is an 11% chance he is still alive, that translates to only 0.5 expected purchases. Historical CLV = 12 × $38 = $456; future CLV = $19. This is a 24:1 ratio — the past massively overstates his future value.
+**Marcus** (P(alive)=0.11): Despite identical purchase counts to Valentina, his 18-month silence is overwhelming evidence of dropout. Even if the model thinks there is an 11% chance he is still alive, that translates to only 0.5 expected purchases. Historical revenue = 13 purchases (x = 12 repeats **plus** the acquiring purchase) × $38 = $494; future CLV = $19. That is a 26:1 ratio — the past massively overstates his future value. Note which count each side uses: the model runs on the 12, the revenue you already banked runs on the 13.
 
 **Priya** (P(alive)=0.73): Low frequency (2 purchases in 24 months) but recent. The model estimates a 73% chance she is still active. With a low base rate, her expected 1.6 purchases in 12 months is reasonable. Her low CLV reflects low frequency, not imminent churn.
 
@@ -333,6 +400,7 @@ CLV is an expected value — the cost of interventions must be weighed against t
 | Fits Gamma-Gamma, computes E[spend] | Section 1.3 + 1.4C — Gamma-Gamma model |
 | Multiplies E[transactions] × E[spend] × discount | Section 1.4B — CLV formula and discount factor |
 | Plots spend vs. frequency (assumption check) | Section 2.2 — Gamma-Gamma independence |
+| Summarises CLV by acquisition channel against channel CAC | Section 1.4D — CAC and the CLV:CAC ratio |
 
 **What to verify:**
 1. BG/NBD parameters in plausible ranges: $r \in [0.1, 3]$, $\alpha \in [1, 30]$, $a \in [0.1, 2]$, $b \in [1, 10]$

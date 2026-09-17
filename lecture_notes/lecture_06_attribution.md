@@ -44,7 +44,29 @@ The marginal contribution of channel C to a coalition S is the increase in conve
 
 > MC(C, S) = v(S ∪ C) − v(S)
 
-where v(S) = conversion rate when only the channels in S are present.
+**v is the *value function*** (some texts, and this course's slides, say *characteristic function* —
+same object, two names). It takes a set of channels S and returns a number: the conversion value the
+business gets when only the channels in S are available. Everything in this lecture is built on it,
+so it has to be pinned down exactly:
+
+> $$v(S) = \frac{\text{number of converting paths whose channels all lie inside } S}{\text{total number of paths}}$$
+
+**Read the denominator carefully: it is *all* paths, always — it does not change with S.** Only the
+numerator moves. This is the definition the homework pins, and it is not optional:
+
+- **It makes v monotone.** Enlarging S can only let more paths into the numerator, so
+  $v(S \cup C) \ge v(S)$ and **every marginal contribution is ≥ 0**. Shapley values then come out
+  non-negative, which is what lets Section 2.2's diagnostic treat a negative φ as a red flag.
+- **It makes the efficiency axiom mean something.** With this denominator $v(\text{all channels})$
+  *is* the overall conversion rate across the whole dataset, so "the Shapley values sum to the
+  overall conversion rate" (below) is a true statement rather than a near-miss.
+
+⚠️ **The tempting alternative is wrong here, and it is wrong in a way that shows up in your graded
+output.** "The conversion *rate among* the paths confined to S" — i.e. dividing by the *number of
+paths that use only S* rather than by all paths — has a denominator that shrinks as S shrinks. That
+v is not monotone on real path data: adding a channel can *lower* it, marginal contributions go
+negative, and $v(\text{all})$ is no longer the overall conversion rate. If your Shapley values come
+back with a negative entry, this is the first thing to check.
 
 ---
 

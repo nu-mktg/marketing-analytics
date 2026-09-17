@@ -34,6 +34,22 @@ A −15% seasonal dip means 0.85× the baseline.
 
 Multipliers compound: a 38% lift on a 5% growth trend = 1.38 × 1.05 = 1.449 = 44.9% above prior-year baseline.
 
+⚠️ **A percentage is meaningless until you say what it is a percentage *of*.** "The baseline" is
+not one fixed number in this lecture — it is whatever level the lift is being quoted against, and
+which level that is changes from sentence to sentence. Read every lift as *"× this multiplier,
+applied to the base named in the same sentence."*
+
+That is the whole rule for stacking lifts. When one lift is quoted **on top of** another, the second
+one's base is the *result* of the first, so the multipliers **multiply**:
+
+> Base $500k, holiday-quarter lift = +20%, launch-week lift = +60% **on top of the holiday quarter**
+> → holiday-quarter level = $500k × 1.20 = $600k; launch week = $600k × 1.60 = **$960k**.
+> Not $500k × (1 + 0.20 + 0.60) = $900k — that would be the answer if *both* percentages were
+> quoted off the same $500k base, which is not what "on top of" says.
+
+Both readings are arithmetically fine; only one of them matches the words. Section 1.3 returns to
+this, because Prophet's own decomposition equation is written the other way round.
+
 ---
 
 #### Tool 2: Mean Absolute Percentage Error (MAPE)
@@ -65,7 +81,7 @@ Jess Lachs, who built the data team at DoorDash, crystallizes the challenge:
 
 Demand forecasting is this principle in practice. A Prophet model decomposes your revenue into trend + seasonality + holiday effects. The decomposition output — not the point forecast — is where the business insight lives.
 
-Knowing that your trend is growing 12% annually, Q4 is 38% above the average, and Black Friday week adds 45% on top of that Q4 baseline lets you make better operational decisions than knowing only "expected sales next quarter = $2.3M." The components are actionable; the single number is not.
+For a retailer, say, knowing that the trend is growing 12% annually, that Q4 runs 38% above the annual average, and that Black Friday week adds 45% on top of *that* Q4 level lets you make better operational decisions than knowing only "expected sales next quarter = $2.3M." The components are actionable; the single number is not. (The 38% and the 45% are quoted off different bases — see Section 1.1.)
 
 Sri Batchu, who led growth at Instacart and Ramp, describes the channel allocation analog:
 
@@ -85,13 +101,39 @@ Prophet decomposes a time series into three components:
 
 $$y(t) = \text{trend}(t) + \text{seasonality}(t) + \text{holidays}(t) + \varepsilon$$
 
-**Trend:** The underlying growth or decline direction. Prophet allows for changepoints — moments when the trend shifts. It detects these automatically or you can specify them manually.
+⚠️ **The plus signs are not in tension with the multipliers of Section 1.1 — but you have to be told
+why, because on the face of it they contradict each other.** The equation is **additive in the
+components**: each of the three terms is measured in the *units of y* (dollars, units), and Prophet
+literally adds them. `seasonality(t) = +$180k` means "this week runs $180k above the trend line."
+A **percentage** lift is a different object: it is a *ratio* to a stated base. The two meet like
+this — a $180k seasonal component on a $500k trend *is* a +36% lift, and a second lift quoted "on
+top of" that one takes $680k as its base, which is why the multipliers chain. **Additive components
+in the model; chained multipliers when lifts are quoted as percentages of each other.** Whenever a
+question hands you percentages, work in multipliers and read which base each one names.
 
-**Seasonality:** Recurring patterns within a year (e.g., Q4 is consistently higher). Prophet models these patterns using a flexible curve that captures peaks and troughs without you specifying their exact shape. You do not need to know trigonometry — Prophet fits this automatically.
+Prophet can also be told to make the decomposition genuinely multiplicative,
+`Prophet(seasonality_mode='multiplicative')`, in which case the seasonal and holiday terms are
+*fractions of the trend* rather than amounts added to it. **The default is `'additive'`, and this
+course never changes it** — the homework's agent prompt sets no `seasonality_mode`, so every model
+you fit here is the additive one, and the plus signs above are the model you are actually running.
+
+**Trend:** The underlying growth or decline direction. Prophet allows for changepoints — moments when the trend shifts. Section 1.4B says what Prophet actually does with them; the one-word summary "detects" is wrong in a way that matters.
+
+**Seasonality:** Recurring patterns within a year. Prophet models these patterns using a flexible curve that captures peaks and troughs without you specifying their exact shape. You do not need to know trigonometry — Prophet fits this automatically.
+
+⚠️ **The shape of "seasonality" is an empirical finding, not a fact you bring with you.** The
+textbook picture — a Q4 peak, a summer dip — is a *retail* pattern, and this lecture's own worked
+example in Section 2.1 is a consumer-goods series that has it. Plenty of real businesses run the
+other way: gym and fitness subscriptions, tax preparation, and any business whose contracts renew
+in January peak in **Q1**, and for some of them Q4 is the *trough* — the quarter customers spend
+their money somewhere else. A single Black-Friday week can spike hard inside a quarter whose
+average is the lowest of the four, so a visible holiday spike is not evidence of a Q4-peaking
+season. Read the fitted component and let it tell you the shape; "it must peak in Q4" is not a
+check, it is an assumption.
 
 **Holidays:** Custom one-off effects for known events (Black Friday, Christmas, product launches). You specify the event dates; Prophet estimates the impact.
 
-**Why decomposition matters:** The component plot is often more valuable than the point forecast. A business that knows TV spend peaks in Q4 (+38%), drops in Q2 (−15%), and spikes around Black Friday (+45% on top of Q4) can plan inventory, staffing, and marketing budgets with far more precision than one that has only a quarterly revenue estimate.
+**Why decomposition matters:** The component plot is often more valuable than the point forecast. A business that knows *its own* peak quarter (+38%), its own trough quarter (−15%), and its own event spikes (+45% on top of the peak-quarter level) can plan inventory, staffing, and marketing budgets with far more precision than one that has only a quarterly revenue estimate. Which quarter is which is the thing the model tells you.
 
 > ### 🔍 Deep Dive: How Prophet Models Seasonality Internally
 > Internally, Prophet represents seasonal patterns using Fourier series — sums of sine and cosine curves at different frequencies. A full-year seasonal pattern might use 10 Fourier terms (5 sine + 5 cosine curves at harmonics 1/year, 2/year, 3/year, 4/year, 5/year). The coefficients on these terms are fit from the data. The resulting curve can capture any smooth repeating pattern without you specifying its shape in advance. This is why you do not see "seasonality = sin(2πt/52)" in your model output — Prophet shows you the resulting seasonal curve, not the internal Fourier components.
@@ -125,7 +167,25 @@ Uncertainty grows with forecast horizon because errors compound over time. A wid
 
 #### Part B: Changepoints
 
-A changepoint is a moment when the trend changes direction or magnitude. Prophet detects these automatically in the training data.
+A changepoint is a moment when the trend changes direction or magnitude.
+
+**Prophet does not *detect* changepoints — it places them and then shrinks most of them to nothing.**
+The mechanism is worth stating exactly, because "detects them automatically" leads you to the wrong
+sanity check:
+
+1. Before it sees anything about your trend, Prophet lays down a **fixed number of *potential*
+   changepoints at evenly spaced dates** — `n_changepoints`, whose default is **25** — across the
+   **first 80%** of the training period (`changepoint_range=0.8`; the last 20% is left alone so the
+   model does not chase a slope change it has no data to confirm).
+2. Each potential changepoint gets its own slope adjustment δ, with a sparse (Laplace) prior
+   centred on zero whose width is `changepoint_prior_scale` (default 0.05). Fitting therefore pushes
+   every δ toward **exactly zero** unless the data pay for it. The ones the data support survive;
+   the rest are effectively switched off.
+
+So the count you would report for "how many changepoints does Prophet place by default" is the
+number it **laid down** — the fixed 25 — not a number of shifts it went looking for and found. And
+the useful diagnostic is not "did it find the right dates?" but "of the dates it was *offered*, are
+the ones it kept the ones I can explain?"
 
 **When to add manual changepoints:** If you know the data-generating process changed at a specific moment (e.g., a competitor launched aggressively, a major promotional campaign ran), you should add a changepoint at that date. A model trained without this changepoint will misattribute the trend shift and produce biased forecasts.
 
@@ -279,11 +339,11 @@ $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 #### (~10 minutes)
 
 **The `plot_components()` output:** Prophet automatically generates a 3-panel plot:
-- **Trend panel:** Shows the fitted trend line with changepoints marked as vertical dashed lines. A sudden change in slope at a changepoint represents a detected structural shift in growth rate.
-- **Yearly seasonality panel:** Shows the estimated seasonal effect for each day/week of the year. Q4 peaks should be clearly visible for holiday-driven businesses.
+- **Trend panel:** Shows the fitted trend line with changepoints marked as vertical dashed lines. Only the ones the data paid for are visible as an actual kink — the other potential changepoints are still there, shrunk to a zero slope change (Section 1.4B). A visible kink means the data supported a shift in growth rate at one of the dates Prophet offered.
+- **Yearly seasonality panel:** Shows the estimated seasonal effect for each day/week of the year. **Read the peak off this panel rather than assuming it.** A holiday-driven retailer peaks in Q4; a January-renewal, tax-season or budget-cycle business peaks in Q1 with Q4 as its trough. Both are ordinary.
 - **Holiday panel:** Shows the estimated effect of each specified holiday. Positive values indicate sales lift; negative values indicate drag.
 
-**Interpreting changepoints:** Each vertical line in the trend panel marks where the trend slope changed. If a changepoint coincides with a known business event (new product launch, competitor entry), this is reassuring. If changepoints appear in the middle of otherwise stable periods, it may indicate the model is overfitting.
+**Interpreting changepoints:** Each vertical line in the trend panel marks one of the evenly spaced dates Prophet offered (Section 1.4B); the ones with a visible slope change are the ones the data kept. Because the candidate dates were placed on a calendar grid *before* the fit, a kept changepoint will rarely land exactly on a known business event — read "within a few periods of a real event" as the reassuring case. If large slope changes survive in the middle of otherwise stable periods, the prior is too loose (lower `changepoint_prior_scale`); if a shift you know happened shows no kink at all, it is too tight.
 
 **Interpreting uncertainty intervals:** Uncertainty intervals in the forecast plot should widen as you forecast further ahead. A constant-width interval is a warning — the model may be underestimating long-run uncertainty. Intervals that are very narrow (much less than the historical variation) are also suspect.
 
@@ -291,8 +351,8 @@ $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 
 **Before trusting the agent output:**
 1. Does the trend direction match your business knowledge? If Prophet shows a declining trend when you know the market is growing, the model is wrong.
-2. Does the yearly seasonality pattern match domain knowledge? Holiday peaks, summer dips?
-3. Are changepoints located near real business events, or do they appear arbitrary?
+2. Does the yearly seasonality pattern match **this business's** calendar — its renewal months, its buying season, its quiet months? Do not check it against retail's Q4 peak unless this is a retailer; a Q1-peaking series is not a red flag.
+3. Do the changepoints the model kept sit near real business events? (It chose from a fixed calendar grid, so expect "near", not "on".)
 4. Is MAPE from cross-validation within acceptable bounds for your use case?
 
 ---
@@ -348,10 +408,10 @@ Training MAPE measures fit, not forecast accuracy. A model that memorizes the tr
 
 **What to verify before trusting the output:**
 1. Trend direction matches domain knowledge
-2. Seasonality pattern matches historical patterns
+2. Seasonality pattern matches **this series' own history** — not retail's Q4-peak template
 3. Holiday effects have correct signs (promotions positive, no unexpected negatives)
 4. MAPE from cross-validation is within acceptable range for your decision horizon
-5. Changepoints are located near known business events, not arbitrary periods
+5. The changepoints the fit kept sit near known business events, not in otherwise stable stretches
 
 ---
 

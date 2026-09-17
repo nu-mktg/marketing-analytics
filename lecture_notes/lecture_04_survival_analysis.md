@@ -12,7 +12,9 @@
 - Interpret conditional vs. unconditional churn probabilities
 - Read a Cox model output and understand what hazard ratios mean
 - Handle censored observations correctly
+- Read the median survival time off a KM curve, using the stated convention
 - Identify when the proportional hazards assumption may be violated
+- Say why a difference between two self-selected groups is not a treatment effect
 
 **Prerequisites:** Basic probability from Lecture 1. Everything else is built here.
 
@@ -113,6 +115,23 @@ $$P(\text{churn between } t_1, t_2 \mid T > t_1) = 1 - \frac{\hat{S}(t_2)}{\hat{
 1 − Ŝ(9)/Ŝ(5) = 1 − 0.7855/0.8977 = 1 − 0.875 = **12.5%**
 
 Note: this is much lower than the *unconditional* churn rate 1 − Ŝ(9) = 21.45%, which includes early-tenure churners.
+
+**Median survival time** is the single headline number read off a KM curve, and it needs a stated
+convention because Ŝ(t) is a *step* function — it usually jumps straight past 0.5 without ever
+equalling it, so "the t where Ŝ(t) = 0.5" is typically no t at all.
+
+> **Convention (this course, `lifelines`, and standard practice):** the median survival time is the
+> **smallest tabulated t at which Ŝ(t) ≤ 0.5** — i.e. the *first* time the curve has reached or
+> dropped below half. Not the t before the crossing; not an interpolation between them.
+
+**Example.** A curve with Ŝ(6) = 0.55 and Ŝ(7) = 0.46 has median survival **7 months**: month 6 is
+still above 0.5, month 7 is the first month at or below it. Read it as "half the cohort has churned
+by month 7". You do not need the survival table's other rows — only the two that bracket 0.5.
+
+Two edge cases worth knowing. If Ŝ lands *exactly* on 0.5 at some t, that t is the median (the rule
+is ≤, not <). And if Ŝ never reaches 0.5 within the observation window — common with heavy censoring
+— the median is **undefined, not the last observed time**: you report "median not reached", which is
+itself a finding about retention.
 
 > ### 🔍 Deep Dive: Why Multiply Rather Than Subtract?
 > The product formula arises because each interval is conditioned on surviving the previous one. The probability of surviving through month 9 = P(survive to 2) × P(survive 2→5 | survived to 2) × P(survive 5→9 | survived to 5). Each conditional probability is (n_t − d_t)/n_t. Multiplying them gives the joint probability of surviving all intervals — which is Ŝ(t).
@@ -274,6 +293,37 @@ $$e^{-0.052} \approx 0.949, \qquad e^{0.148} \approx 1.160, \qquad e^{-0.002} \a
 
 **Log-rank test:** When comparing curves for two groups (e.g., basic vs. enterprise plan), the log-rank test p-value tells you whether the survival curves are significantly different. p < 0.05 indicates the groups have genuinely different survival patterns.
 
+🚨 **"Different" is not "because of." Name the alternative explanation before you name the cause —
+and for plan-type comparisons that alternative has a name: *self-selection*.**
+
+**Self-selection** is what happens when the units decide for themselves which group they are in.
+Customers are not *assigned* to the annual plan — they *choose* it, and the kind of customer who
+commits to twelve months up front is already the kind who was going to stay. So when the annual
+curve sits above the monthly curve, at least two stories fit the same picture:
+
+1. **The plan caused it** — the annual commitment, or the sunk cost, keeps people from leaving.
+2. **The customers caused it** — committed customers selected into annual, and would have retained
+   better on *any* plan.
+
+The KM comparison and the log-rank p-value cannot tell these apart, because both groups are
+*self-selected samples*, not randomised ones. A small p-value says the curves differ; it says
+nothing about which story produced the difference. When a difference between self-selected groups
+is read as an effect of the group, that is **selection bias** — a systematic error that no amount
+of extra data fixes, because collecting more self-selected customers only measures the same
+selection more precisely.
+
+**What "controlling for it" does and does not buy.** Putting `plan_type` in a Cox model alongside
+other covariates adjusts for the covariates you *measured*. It cannot adjust for the ones you did
+not — intent to stay, budget stability, how the customer was acquired — and those are usually the
+variables doing the selecting. A Cox hazard ratio on a self-selected variable stays
+**associational**. This is the general point Lecture 7 is built on, and the honest answer here is
+"the two groups differ, and part of that difference is who chose which plan."
+
+**How you would actually settle it:** randomise. Offer a randomly chosen subset of new customers a
+discount to take the annual plan and compare *those* who take it under the offer with the controls,
+or run a holdout. Absent that, report the gap and say plainly that it is not identified as a plan
+effect.
+
 **Concordance index (c-index):** The Cox model's analog of AUC. It measures how well the model ranks customers by their actual churn timing — what fraction of customer pairs is correctly ranked (higher hazard for the one who churned sooner). A c-index of 0.5 is no better than chance; 1.0 is perfect. Values of 0.65–0.80 are typical for subscription churn models.
 
 **Proportional hazards check:** The `check_assumptions()` function in `lifelines` tests whether hazard ratios are constant over time. If a predictor fails this test (p < 0.05 in the Schoenfeld residual test), the hazard ratio changes over time and the Cox coefficient should be interpreted as an average effect only.
@@ -321,6 +371,17 @@ HR = 0.95 means the hazard is reduced by 5% (not 95%). The reduction is $1 - 0.9
 **5. "Proportional hazards means the hazard is constant over time."**
 It means the *ratio* of two customers' hazards is constant over time — not that any single hazard is constant. The baseline hazard $h_0(t)$ can take any shape.
 
+**6. "The annual-plan curve is above the monthly curve, so the annual plan improves retention."**
+Customers **self-select** into plans — they choose, they are not assigned — so the committed
+customers were already concentrated in the annual group before the plan could do anything. The gap
+is real; its cause is not identified. Adding `plan_type` to a Cox model adjusts only for the
+covariates you measured, not for the intent that did the selecting. See Section 2.2.
+
+**7. "The median survival time is the last month before the curve crosses 0.5."**
+It is the **first** month at which Ŝ(t) ≤ 0.5 — the curve is a step function that jumps past 0.5
+rather than touching it, so the convention has to pick a side, and it picks the one at or below.
+See Section 1.4A.
+
 ---
 
 ### From Theory to Agent
@@ -338,3 +399,5 @@ It means the *ratio* of two customers' hazards is constant over time — not tha
 2. All hazard ratios positive
 3. C-index above 0.6
 4. Engagement predictors have HR < 1; friction predictors have HR > 1
+5. Any group the customer **chose** (plan type, opt-in programme) is reported as an association, not
+   an effect — self-selection, Section 2.2

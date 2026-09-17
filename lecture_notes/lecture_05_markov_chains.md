@@ -11,6 +11,7 @@
 - Multiply a state vector by a transition matrix by hand
 - Iterate toward the steady-state distribution
 - Identify absorbing states and explain what they imply
+- Compute the expected time to absorption from each state, and use it to price a retention campaign
 - Work out what an intervention to the transition matrix does — and does not — change about the
   long run
 - Explain why the steady-state is not necessarily where you want to be
@@ -73,9 +74,19 @@ A Markov chain models a system that moves between a fixed set of **states** at d
 
 For customer engagement, typical states might be:
 - **Active** (regular engagement)
-- **Dormant** (occasional engagement, declining)
-- **At-Risk** (minimal engagement, likely to churn soon)
+- **Dormant** or **At-Risk** (declining engagement — see the naming note below)
 - **Churned** (cancelled or lapsed)
+
+⚠️ **Naming note — because you will meet both words and they are the same state.** Practitioners
+split the middle ground either way: some shops run a four-state model with *Dormant* (occasional
+engagement, declining) and *At-Risk* (minimal engagement, likely to churn soon) as separate states;
+most run three states and use whichever of the two names their team prefers for the single
+declining-engagement state. **This lecture's worked examples and checkpoint use three states and
+call the middle one `Dormant`. The homework dataset and notebook use the same three states and call
+it `At_Risk`.** Same state, same row of P, same role in every calculation — the label is a modelling
+choice, not a modelling difference, and Section 1.2's lesson is exactly that you choose state
+definitions to fit the business. Do not go looking for a fourth state in the homework; there isn't
+one.
 
 The **transition matrix P** has one row per state. P[i][j] = probability of moving from state i to state j in one period.
 
@@ -146,6 +157,60 @@ sensitive to.
 
 > ### 🔍 Deep Dive: Eigenvalues and the Steady State
 > For a matrix without absorbing states, the steady-state distribution is the eigenvector corresponding to eigenvalue λ = 1. All Markov chains have at least one eigenvalue equal to 1. The other eigenvalues (< 1 in absolute value) determine how quickly the distribution converges to steady state — larger gaps between 1 and the second-largest eigenvalue mean faster convergence.
+
+---
+
+#### Part C: Expected Time to Absorption
+
+Part B ended on a promise it did not keep: when Churned is absorbing the steady state is always
+`[0, 0, 1]`, so the only thing an intervention can move is **how long the journey takes** — and we
+had no number for that. This is the number.
+
+**Expected time to absorption** from state *i* is the average number of periods a customer starting
+in *i* takes to reach the absorbing state. With Churned absorbing and months as the time step, this
+is the customer's **expected remaining lifetime in months**, and it is the quantity an
+absorbing-chain analysis actually reports.
+
+**How to compute it: first-step analysis.** Write $t_i$ for the expected time to absorption starting
+from state *i*. One period always elapses; after it, you are in some state *j* with probability
+$P_{ij}$ and face $t_j$ more periods (with $t_{\text{Churned}} = 0$, since you have arrived). So:
+
+$$t_i = 1 + \sum_{j \text{ not absorbing}} P_{ij}\, t_j$$
+
+That is one equation per transient state. Two transient states → two equations → solve the pair.
+
+**Worked example** with the lecture's P (Active = [0.80, 0.15, 0.05], Dormant = [0.30, 0.50, 0.20]):
+
+$$t_A = 1 + 0.80\,t_A + 0.15\,t_D \qquad\Longrightarrow\qquad 0.20\,t_A - 0.15\,t_D = 1$$
+$$t_D = 1 + 0.30\,t_A + 0.50\,t_D \qquad\Longrightarrow\qquad -0.30\,t_A + 0.50\,t_D = 1$$
+
+Solving: $t_A = 0.65 / 0.055 \approx \mathbf{11.8}$ months, $t_D = 0.50 / 0.055 \approx \mathbf{9.1}$
+months. **A currently-Active customer is worth about 11.8 more months; a Dormant one about 9.1.**
+The gap is the whole argument for triaging retention effort toward the declining-engagement
+state — there is less time left in which to act.
+
+**Sanity check it every time:** every $t_i$ must be **positive**, and a healthier state must have the
+**larger** $t_i$. If Dormant comes out above Active, the fitted matrix is letting Dormant customers
+return to Active too readily, or the rows are transposed.
+
+**What the campaign actually bought.** Re-run the same two equations on P' (Dormant → Active = 0.45,
+Dormant → Dormant = 0.35): $t_A = 0.80/0.0625 = \mathbf{12.8}$ months and
+$t_D = 0.65/0.0625 = \mathbf{10.4}$ months. The destination is unchanged — it always was — but every
+customer now takes about **a month longer** to get there, and a Dormant one takes **1.3 months**
+longer. *That* is the campaign's effect, stated in a unit finance will accept, and it is invisible in
+the steady state.
+
+> ### 🔍 Deep Dive: The Fundamental Matrix
+> The same calculation in matrix form, which is what code will hand you. Strip the absorbing row and
+> column out of P and call the remaining transient block **Q** (here the 2×2 matrix
+> [[0.80, 0.15], [0.30, 0.50]]). Then the **fundamental matrix** is $N = (I - Q)^{-1}$, and the
+> vector of expected times is $\mathbf{t} = N\mathbf{1}$ — row sums of N. For the P above,
+> $N = $ [[9.09, 2.73], [5.45, 3.64]], whose row sums are 11.82 and 9.09: the same two answers.
+> $N_{ij}$ has its own reading — the expected number of periods spent in state *j* before absorption,
+> starting from *i* — so $N_{AA} = 9.09$ says an Active customer spends about 9 of their 11.8
+> remaining months Active. In `numpy`: `t = numpy.linalg.inv(numpy.eye(2) - Q) @ numpy.ones(2)`.
+> Why the inverse appears: $\mathbf{t} = \mathbf{1} + Q\mathbf{t}$ is exactly the system above
+> written in one line, and solving it for $\mathbf{t}$ gives $(I - Q)^{-1}\mathbf{1}$.
 
 ---
 
@@ -330,6 +395,7 @@ The steady state is an asymptotic property. Convergence may take months or years
 | Computes state distribution after $n$ months via $\pi_0 P^n$ | Section 1.4B — $P^n$ interpretation |
 | Solves $\pi P = \pi$ for steady state | Section 1.4B — the steady-state distribution (found by iterating $P$) |
 | Identifies absorbing states | Section 1.3 — absorbing states ($P_{ii} = 1$) |
+| Computes expected months-until-absorption per starting state | Section 1.4C — first-step analysis; Deep Dive — the fundamental matrix $N = (I-Q)^{-1}$ |
 | Simulation of 500 journeys | Section 2.2 — Monte Carlo approximation to $P^n$ |
 
 **What to verify:**
@@ -337,3 +403,4 @@ The steady state is an asymptotic property. Convergence may take months or years
 2. The steady-state vector satisfies $\pi P \approx \pi$ — multiply it out and check
 3. If Churned is absorbing: $(P)_{Churned,Churned} = 1.0$, all other entries in that row = 0
 4. Transition probabilities are directionally sensible (Dormant → Churned > Active → Churned)
+5. Every expected time to absorption is positive, and the healthier state's is the larger of the two (Section 1.4C)

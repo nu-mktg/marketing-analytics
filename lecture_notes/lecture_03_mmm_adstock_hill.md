@@ -81,7 +81,15 @@ MMM handles two effects that make simple regression inadequate:
 
 **1. Carryover (Adstock):** Advertising effects do not disappear instantly. A TV spot seen on Monday influences purchase decisions through the week. The adstock transformation models this decay explicitly.
 
-**2. Diminishing Returns (Saturation):** The first $10,000 spent on a channel has more impact than the $100,001st dollar. Doubling spend does not double revenue. The Hill function models this concave relationship.
+**2. Diminishing Returns (Saturation):** The first $10,000 spent on a channel has more impact than the $100,001st dollar. Doubling spend does not double revenue. The Hill function models this **saturating** relationship — a curve that rises toward a ceiling it never passes.
+
+⚠️ **"Saturating" is not the same as "concave everywhere," and this course's Hill curves are not concave everywhere.** The Hill function has a shape parameter α (Section 1.4B). It is concave from the very first dollar only when **α ≤ 1**. With **α > 1** — and every worked example and homework in this course uses **α = 2** — the curve is **S-shaped**: returns *increase* over an initial stretch, then turn over and diminish. The turning point (the inflection) sits at
+
+$$s^* = EC_{50}\left(\frac{\alpha - 1}{\alpha + 1}\right)^{1/\alpha}, \qquad \text{which for } \alpha = 2 \text{ is } \frac{EC_{50}}{\sqrt{3}} \approx 0.577 \times EC_{50}.$$
+
+So with EC50 = 200 and α = 2, the first 100 buys +0.20 of effectiveness and the *second* 100 buys **+0.30** — more, not less. Diminishing returns only take over above ≈115. The Part 1 Checkpoint's own numbers (H(100) = 0.20, H(200) = 0.50, H(400) = 0.80) show exactly this, and it is why the budget rule in Section 1.4C is "shift incrementally and re-check the marginal return" rather than "returns always fall, so overshooting is safe."
+
+**Why an S-shape is the realistic story, not a nuisance:** at very low spend a channel has not reached enough people often enough to register — a handful of impressions builds no awareness — so the first dollars genuinely under-deliver, the middle of the range is where reach and frequency compound, and only then does the audience run out. The concave-everywhere picture is the special case α ≤ 1.
 
 Understanding both is essential for budget optimization: you want to find the allocation where marginal ROI across all channels is equalized — the point where moving one more dollar from any channel to another cannot improve total revenue.
 
@@ -117,18 +125,41 @@ where S_t is spend in period t and λ (lambda) is the decay parameter (0 < λ < 
 
 #### Part B: Hill Function — Modeling Saturation
 
-The Hill function maps spend to effectiveness on a 0-to-1 scale:
+The Hill function maps a spend level to effectiveness on a 0-to-1 scale:
 
 $$H(s) = \frac{s^\alpha}{EC_{50}^\alpha + s^\alpha}$$
 
-where EC50 is the spend level at which the channel is at 50% of its maximum effectiveness, and α controls how quickly diminishing returns set in.
+where **EC50** is the spend level at which the channel is at 50% of its maximum effectiveness, and
+**α** is the shape parameter: α ≤ 1 gives a concave curve, α > 1 an S-shaped one that inflects at
+$EC_{50}((\alpha-1)/(\alpha+1))^{1/\alpha}$ (Section 1.3). This course uses α = 2 throughout.
+
+🚨 **Which "spend level"? Say it once, here: the argument $s$ is always the channel's ADSTOCK $A_t$,
+never the raw weekly cheque.** In Part C below, and in every model you or the agent will fit, the
+Hill function is applied to $H(A_t)$ — the output of Section 1.4A's recursion, not $S_t$. So EC50
+lives on the **adstock scale** too: it is the *adstocked* spend level at which the channel is half
+saturated.
+
+**Convention for the rest of this course:** wherever "spend level" appears next to EC50, a Hill
+response or a saturation claim, it means **adstocked spend** $A_t$. This is worth stating explicitly
+rather than leaving to inference, because the two scales differ by a lot and in a fixed direction:
+since $A_t = S_t + \lambda A_{t-1}$ and $\lambda \geq 0$, **adstock is always at least as large as
+raw spend**, and at steady state $A = S/(1-\lambda)$ — four times raw spend at λ = 0.75. Read an
+EC50 of 51.5 against raw spend and a channel can look starved; read it against adstock and the same
+channel can be well past half-saturation. (Section 2.2's "EC50 values" paragraph is this same
+statement applied to a fitted model, not a second, different rule.)
 
 **Key property:** H(EC50) = 0.5 always. This is because at s = EC50, the numerator and denominator are equal (EC50^α / 2×EC50^α = 0.5).
 
-**Interpretation:**
-- H < 0.5: current spend is below EC50 — high marginal return, increasing spend is efficient
+**Interpretation** — all three read on the adstock scale, per the convention above:
+- H < 0.5: current adstocked spend is below EC50 — the channel is on the early part of its curve
 - H = 0.5: at EC50 — the channel is at half its maximum effect
-- H > 0.5: above EC50 — diminishing returns have set in, marginal ROI is falling
+- H > 0.5: above EC50 — past half-saturation; the marginal return is falling
+
+⚠️ **H alone does fix your position relative to EC50 — that is the whole point of the 0-to-1 scale
+— but it fixes the position of your *adstock*, not of your raw spend.** Because adstock ≥ spend,
+"H = 0.82, so we are well above EC50" is a statement about $A_t$; the corresponding raw weekly
+cheque is smaller and may sit below EC50 on its own. Both halves of that matter: do not refuse to
+answer "above or below?" from H (you can), and do not read the answer as being about the cheque.
 
 > ### 🔍 Deep Dive: Why H(EC50) = 0.5 Regardless of α
 > Substituting s = EC50: H(EC50) = EC50^α / (EC50^α + EC50^α) = EC50^α / (2 × EC50^α) = 1/2. The α terms cancel completely. This is a mathematical identity, not an approximation.
@@ -262,7 +293,7 @@ Digital drops far faster in week 2 (100 → 20 vs. 100 → 60 for TV). TV accumu
 
 If paid search shows $\lambda = 0.85$, investigate — this likely reflects a data or model problem.
 
-**EC50 values:** Compare to the actual **adstock** range in your data — adstock, not raw spend, is what the Hill function takes as input, and adstock is always the larger of the two. If EC50 is far above your maximum adstock, you are far from saturation and still on the high-marginal-return part of the curve. If EC50 is below your minimum adstock, you are already past the half-saturation point.
+**EC50 values:** Compare to the actual **adstock** range in your data — this is Section 1.4B's convention applied to a fitted model, not a new rule: adstock, not raw spend, is what the Hill function takes as input, and adstock is always the larger of the two. If EC50 is far above your maximum adstock, you are far from saturation and still on the high-marginal-return part of the curve. If EC50 is below your minimum adstock, you are already past the half-saturation point. Comparing a fitted EC50 against the raw spend column instead is the single most common misreading of an MMM output, and it biases every conclusion the same way — toward thinking you have more headroom than you do.
 
 **β coefficients:** The maximum revenue attributable to each channel. A channel with β = \$500k can contribute at most \$500k in weekly revenue (when its Hill response approaches 1).
 
@@ -319,6 +350,6 @@ Equal marginal ROI across channels is exactly the optimal condition. The model i
 
 **What to verify in the agent output:**
 1. All λ values between 0 and 1
-2. EC50 values in plausible range relative to actual spend
+2. EC50 values in plausible range relative to the fitted **adstock** series — not relative to raw spend (Section 1.4B)
 3. Predicted revenue at current spend ≈ actual average revenue (model fit sanity check)
 4. Budget recommendation moves spending toward the channel with the higher **marginal ROI** — β × the Hill slope at its current adstock — and not simply toward whichever channel sits lower relative to its own EC50. A large β can outweigh being further up the saturation curve.
