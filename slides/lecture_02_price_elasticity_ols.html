@@ -1250,6 +1250,19 @@ margin-right: 0; }
 </section>
 <section class="slide level2">
 <h2>The OLS Slope Formula — Derived</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>The hat means “estimated from data”.</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\beta_1</annotation></semantics></math> is the <strong>true</strong> slope in the population and you never see it; <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><annotation encoding="application/x-tex">\hat{\beta}_1</annotation></semantics></math> is what OLS computes from your sample. Same for the <strong>error</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mi>i</mi></msub><annotation encoding="application/x-tex">u_i</annotation></semantics></math> (gap from the true line, unobservable) versus the <strong>residual</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">y_i - \hat{y}_i</annotation></semantics></math> (gap from the fitted line, which you can plot). The endogeneity slide later is about <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>, not the residual.</p>
+</div>
+</div>
+</div>
 <p>We minimize the sum of squared residuals:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>min</mo><mrow><msub><mi>β</mi><mn>0</mn></msub><mo>,</mo><msub><mi>β</mi><mn>1</mn></msub></mrow></munder><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>β</mi><mn>0</mn></msub><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\min_{\beta_0, \beta_1} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2</annotation></semantics></math></p>
 <p>Taking the derivative and setting to zero gives:</p>
@@ -1282,10 +1295,24 @@ Elasticity requires knowing the price and quantity at the point of evaluation.</
 <section class="slide level2">
 <h2>Log-Log Regression: Direct Elasticity</h2>
 <p>Transform both variables with natural log:</p>
-<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>ln</mo><mi>Q</mi><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mo>ln</mo><mi>P</mi><mo>+</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">\ln Q = \beta_0 + \beta_1 \ln P + \varepsilon</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>ln</mo><mi>Q</mi><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mo>ln</mo><mi>P</mi><mo>+</mo><mi>u</mi></mrow><annotation encoding="application/x-tex">\ln Q = \beta_0 + \beta_1 \ln P + u</annotation></semantics></math></p>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p><strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math> is the elasticity in this lecture — never the error.</strong> Most textbooks write the regression error as <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>; we cannot, because <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">|</mo><mi>ε</mi><mo stretchy="true" form="postfix">|</mo></mrow><annotation encoding="application/x-tex">|\varepsilon|</annotation></semantics></math> has already meant the <strong>elasticity</strong> since the first slide. Two different objects, one symbol, and mixing them is the easiest way to misread this deck. Here: <strong><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math> = elasticity, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math> = error term.</strong></p>
+</div>
+</div>
+</div>
 <div class="formula-box">
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>1</mn></msub><mo>=</mo><mfrac><mrow><mi>d</mi><mo>ln</mo><mi>Q</mi></mrow><mrow><mi>d</mi><mo>ln</mo><mi>P</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>d</mi><mi>Q</mi><mi>/</mi><mi>Q</mi></mrow><mrow><mi>d</mi><mi>P</mi><mi>/</mi><mi>P</mi></mrow></mfrac><mo>=</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">\beta_1 = \frac{d \ln Q}{d \ln P} = \frac{dQ/Q}{dP/P} = \varepsilon</annotation></semantics></math></p>
 </div>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\beta_1</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math> are <strong>the same number</strong> — <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math> is the economics name, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\beta_1</annotation></semantics></math> is what the regression prints.</p>
 <p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\beta_1</annotation></semantics></math> <strong>is</strong> the price elasticity — constant at every price point.</p>
 <div class="two-col">
 <div>
@@ -1367,7 +1394,7 @@ inelastic on the other</p>
 </div>
 <div>
 <p><strong>Identification assumption</strong></p>
-<p>Exogeneity: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Cov</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>P</mi><mi>i</mi></msub><mo>,</mo><msub><mi>ε</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\text{Cov}(P_i, \varepsilon_i) = 0</annotation></semantics></math>.<br>
+<p>Exogeneity: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Cov</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>P</mi><mi>i</mi></msub><mo>,</mo><msub><mi>u</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\text{Cov}(P_i, u_i) = 0</annotation></semantics></math> — price is uncorrelated with the <strong>error</strong>.<br>
 Violated when prices are set in response to demand shocks (endogeneity). Instrumental variables estimation is required in that case.</p>
 </div>
 </div>
