@@ -257,15 +257,10 @@ same instruction. The fit shown is the log-log fit of Part A's own five rows.
 > price of \$1, far outside the \$5–\$9 the data covers, which is exactly the extrapolation
 > §1.3's figure warns about.
 
-> ⚠️ **−1.33 here and −1.35 in the next figure are two different objects, not a rounding error.**
-> **−1.33** is the slope of *this* line: the log-log fit, which is **one elasticity for every
-> price** — that is what "constant elasticity" means, and it is why the line is straight.
-> **−1.35** is the elasticity of the **levels** fit $\hat{\beta}_1$ = −27 **evaluated at one price**, the mean
-> \$7: ε = $\hat{\beta}_1$ × P/Q = −27 × 7/140. That one **changes with price** — the next figure shows it
-> running from 0.70 at \$5 to 2.83 at \$9. On this data the two happen to land 0.02 apart, which
-> is a coincidence of these five rows and not a general fact. **If you ever have to choose: the
-> log-log slope is a single summary of the whole price range; the levels elasticity is a local
-> reading at one point on it.**
+> 📌 **Note what this slope does NOT depend on: the price.** −1.33 is the slope of a straight
+> line, so it is the same number at \$5 as at \$9. That is the defining property of the log-log
+> model — **one elasticity, every price** — and it is worth holding onto, because the very next
+> thing this section does is fit a model where that is not true.
 
 > ⚠️ **ε and β₁ are the same number.** Section 1.2 called the elasticity ε because that is the
 > economics convention; Part B calls it β₁ because that is the name the regression output prints.
@@ -283,10 +278,19 @@ has now given you two fitted demand curves for the same five weeks, and they dis
 whether elasticity is one number or many. That is not a contradiction to resolve; it is a choice
 of tool, and the two tools answer different questions:
 
-| The question you are asking | The model that answers it | What it hands you |
+| | **log-log** (§1.4B) | **levels** (§1.4A) |
 |---|---|---|
-| *"How price-sensitive is demand around the prices we charge?"* | **log-log** | **one** elasticity for the whole observed range — constant by construction, which is what makes it reportable as a single number |
-| *"What price maximises revenue?"* | **levels** (or any curve whose elasticity varies) | an elasticity that **changes** with price, so revenue has a peak to find |
+| What you fit | ln q = β₀ + β₁ ln p | q = β₀ + β₁p |
+| Here | ln q = 7.47 − 1.33 ln p | q̂ = 329 − 27p |
+| Its elasticity | ε = β₁ | ε = β₁ × p / q̂(p) |
+| **Constant or varying?** | **CONSTANT** — β₁ alone, no p in it, so −1.33 at every price | **VARIES** — p is in the formula, so 0.70 at \$5 and 2.83 at \$9 |
+| Answers | *"how price-sensitive is demand around the prices we charge?"* — one number you can report | *"what price maximises revenue?"* — an elasticity that moves, so revenue has a peak |
+
+**Read the two elasticity formulas against each other — that is where the difference lives.**
+The log-log elasticity is β₁ and nothing else; no price appears in it, so no price can change it.
+The levels elasticity is β₁ multiplied by p / q̂(p), and that ratio moves as you walk along the
+line. Same five weeks, same OLS formula, two different answers to "is elasticity one number or
+many" — because you fitted two different shapes to them.
 
 **The |ε| = 1 rule is a property of the revenue curve, not of the log-log model.** Asking a
 log-log fit where revenue peaks is a category error: its elasticity is the same at every price, so
@@ -315,8 +319,15 @@ curve whose elasticity varies, and only inside the price range you actually obse
 and the |ε| = 1 crossing in the bottom panel are the *same price*. It is drawn on the straight-line
 fit precisely because that fit's elasticity changes with price (from 0.70 at $5 to 2.83 at $9) —
 the condition the Deep Dive just named. A strict log-log fit would give one elasticity at every
-price and no peak to find. The **1.35** marked at \$7 is that same levels fit read at the mean
-price — the local reading of the previous figure's −1.33, not a second estimate of it.
+price and no peak to find.
+
+> ⚠️ **Now that both numbers are on the page: −1.33 and −1.35 are two different objects, not a
+> rounding error.** **−1.33** is the log-log slope from the previous figure — constant, one number
+> for the whole price range. **−1.35** is the levels fit read at a single price, the mean \$7, and
+> it is 0.70 at \$5 and 2.83 at \$9. On these five rows they happen to land 0.02 apart; that is a
+> coincidence of this data, not a general fact, and on a different dataset they can differ a lot.
+> **If you have to choose which to quote:** the log-log slope is a single summary of the whole
+> range; the levels elasticity is a local reading at one point on it.
 
 > **How to get an elasticity at one price, since the bottom panel is a curve and not a number.**
 > Elasticity is the percentage change in quantity per percentage change in price, which for a
