@@ -111,6 +111,14 @@ A demand curve describes the relationship between price and quantity sold. As pr
 
 **The challenge:** we cannot see the true demand curve. We only observe the prices we actually charged and the quantities actually sold. We use regression to estimate the demand curve from this data.
 
+![The five observations of Section 1.4's worked example, with two curves fitted to the same five dots: the straight line q̂ = 329 − 27p, and a constant-elasticity curve with exponent −1.33. They agree across the observed $5–$9 range and separate outside it — the line reaches exactly zero units at $12.19, the curve never reaches zero](figures/lecture_02_demand_curve_inferred.png)
+
+**Reading the figure.** The five dots are the entire dataset — that is all you ever see. Both
+curves are consistent with them, and *nothing in the data* chooses between the two. Inside the
+$5–$9 band they give nearly the same answer, so the choice barely matters; outside it they diverge,
+which is why an elasticity estimated here should not be used to price at $12. (This is
+Misconception 3, and Misconception 5, seen from the side.)
+
 **The endogeneity problem (preview):** If you raise prices when demand is high and lower them when demand is slow, then observed prices and observed demand are correlated in a way that biases the regression estimate. This is one of the most important practical problems in pricing analytics — we will return to it in Section 1.4.
 
 ---
@@ -210,6 +218,13 @@ $$\ln(\text{units}) = \beta_0 + \beta_1 \ln(\text{price}) + u$$
 
 This is the definition of price elasticity. β₁ is the elasticity directly — no additional calculation needed.
 
+![The same five observations on two sets of axes. In levels the fitted relationship is a curve; in logs it is a straight line, and its slope — −1.33 — is the elasticity itself. A run of +0.20 in ln(price) forces a fall of 0.267 in ln(units)](figures/lecture_02_loglog_transform.png)
+
+**Reading the figure.** Nothing is re-measured between the two panels: the same five weeks are
+re-plotted on logged axes, and the curve straightens out. The slope of the right-hand line is the
+number you would report as the elasticity — so "take logs" and "estimate an elasticity" are the
+same instruction. The fit shown is the log-log fit of Part A's own five rows.
+
 > ⚠️ **ε and β₁ are the same number.** Section 1.2 called the elasticity ε because that is the
 > economics convention; Part B calls it β₁ because that is the name the regression output prints.
 > In a log-log model they are one quantity with two labels: **ε = β₁.** So when Section 1.5 says
@@ -231,6 +246,14 @@ This is the definition of price elasticity. β₁ is the elasticity directly —
 > This equals zero when ε = −1. Since Q > 0 always, the condition reduces to 1 + ε = 0, or ε = −1 (equivalently |ε| = 1).
 >
 > Note what this requires: ε must *change* with P for dR/dP to cross zero. In a strict constant-elasticity model it never does — if |ε| ≠ 1, revenue rises (or falls) with price without limit.
+
+![Revenue and elasticity on one price axis, both from Part A's fitted line q̂ = 329 − 27p. Revenue peaks at $6.09, and |ε| crosses 1 at that same $6.09. At the average observed price of $7 the fit gives |ε| = 1.35 — elastic, so a price cut would raise revenue](figures/lecture_02_revenue_and_elasticity.png)
+
+**Reading the figure.** The dotted vertical line is the whole argument: the peak in the top panel
+and the |ε| = 1 crossing in the bottom panel are the *same price*. It is drawn on the straight-line
+fit precisely because that fit's elasticity changes with price (from 0.70 at $5 to 2.83 at $9) —
+the condition the Deep Dive just named. A strict log-log fit would give one elasticity at every
+price and no peak to find.
 
 ---
 
