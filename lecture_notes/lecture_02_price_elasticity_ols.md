@@ -183,6 +183,29 @@ the rest of Part A does, needs nothing but addition, multiplication and division
 
 Predicted line: Units = 329 − 27 × Price
 
+**From a slope to an elasticity — the conversion §1.2's definition forces.** β̂₁ = −27 is *not* an
+elasticity. It is units per dollar, and §1.2 defined the elasticity as a **percentage** change in
+quantity per **percentage** change in price. Getting from one to the other is a single line of
+algebra, and it is worth doing slowly, because the result is the number the slides quote and the
+thing §1.5 asks you to interpret. Write each percentage as a change over what you started with:
+
+$$\varepsilon = \frac{\%\,\Delta q}{\%\,\Delta p} = \frac{\Delta q / q}{\Delta p / p} = \frac{\Delta q}{\Delta p} \times \frac{p}{q}$$
+
+Now look at the first factor. **Δq/Δp is exactly what the fitted slope means** — "27 fewer units
+for each extra dollar" *is* a change in q over a change in p — so Δq/Δp = β̂₁, and
+
+$$\varepsilon = \hat{\beta}_1 \times \frac{p}{q}$$
+
+**Two consequences, both of which come back later.**
+
+1. **A slope on its own is not an elasticity.** You cannot answer "is demand elastic?" from
+   β̂₁ = −27 alone — you must also say *at which price*, because the conversion needs p and q.
+2. **This elasticity changes as you move along the line.** β̂₁ is one fixed number, but p/q is not.
+   At the average price \$7 the line predicts q̂ = 329 − 27(7) = 140, so
+   ε = −27 × 7/140 = **−1.35**. At \$5 it is −27 × 5/194 = **−0.70**; at \$9, −27 × 9/86 = **−2.83**.
+   Same line, same slope, three different elasticities — because 27 units is a small slice of 194
+   and a large slice of 86.
+
 > ### 🔍 Deep Dive: Where Does the Formula Come From?
 > *Skip if you are comfortable using the formula. Read if you want to know why it is the right formula.*
 >
@@ -226,7 +249,10 @@ $$\ln(\text{units}) = \beta_0 + \beta_1 \ln(\text{price}) + u$$
 
 > A 1% increase in price is associated with a β₁% change in units sold.
 
-This is the definition of price elasticity. β₁ is the elasticity directly — no additional calculation needed.
+This is the definition of price elasticity. β₁ is the elasticity **directly** — and "directly" is
+the whole point, measured against the work §1.4A just made you do: there, converting a slope into
+an elasticity meant multiplying by p/q and naming a price, and you got a different answer at every
+price. Here the regression prints the elasticity itself, and there is no price to name.
 
 ![The same five observations on two sets of axes. In levels the fitted relationship is a curve; in logs it is a straight line, and its slope — −1.33 — is the elasticity itself. A run of +0.20 in ln(price) forces a fall of 0.267 in ln(units)](figures/lecture_02_loglog_transform.png)
 
@@ -282,7 +308,7 @@ of tool, and the two tools answer different questions:
 |---|---|---|
 | What you fit | ln q = β₀ + β₁ ln p | q = β₀ + β₁p |
 | Here | ln q = 7.47 − 1.33 ln p | q̂ = 329 − 27p |
-| Its elasticity | ε = β₁ | ε = β₁ × p / q̂(p) |
+| Its elasticity | ε = β₁ (it is the slope) | ε = β₁ × p / q̂(p) (derived at the end of §1.4A) |
 | **Constant or varying?** | **CONSTANT** — β₁ alone, no p in it, so −1.33 at every price | **VARIES** — p is in the formula, so 0.70 at \$5 and 2.83 at \$9 |
 | Answers | *"how price-sensitive is demand around the prices we charge?"* — one number you can report | *"what price maximises revenue?"* — an elasticity that moves, so revenue has a peak |
 
@@ -329,23 +355,13 @@ price and no peak to find.
 > **If you have to choose which to quote:** the log-log slope is a single summary of the whole
 > range; the levels elasticity is a local reading at one point on it.
 
-> **How to get an elasticity at one price, since the bottom panel is a curve and not a number.**
-> Elasticity is the percentage change in quantity per percentage change in price, which for a
-> fitted line is its slope re-expressed in percentage terms:
->
-> $$\varepsilon(p) = \hat{\beta}_1 \times \frac{p}{\hat{q}(p)} \qquad\text{where } \hat{q}(p) = 329 - 27p$$
->
-> Read it as: *27 fewer units per dollar, expressed as a share of the units you were selling.* So
-> at \$7 the fitted quantity is $\hat{q} = 329 - 27(7) = 140$, and
-> $\varepsilon = -27 \times 7/140 = -1.35$. At \$5: $\hat{q} = 194$, so
-> $\varepsilon = -27 \times 5/194 = -0.70$. At \$9: $\hat{q} = 86$, so
-> $\varepsilon = -27 \times 9/86 = -2.83$.
->
-> **The slope never changes — the ratio does.** Losing 27 units is a small slice of 194 and a large
-> slice of 86, which is the entire reason a *straight* demand line has an elasticity that varies
-> with price. Note the quantity is the **fitted** $\hat{q}(p)$, not the observed units that week.
-> (\$7 looks special only because the OLS line always passes through the means, so at \$7 the
-> fitted 140 and the mean 140 coincide.)
+> **The bottom panel is §1.4A's conversion, drawn.** Every point on that orange curve is
+> $\varepsilon = \hat{\beta}_1 \times p / \hat{q}(p)$ — the formula derived at the end of §1.4A —
+> evaluated at each price in turn, with $\hat{q}(p) = 329 - 27p$. The three values worked there are
+> the three you can read off it: −0.70 at \$5, −1.35 at \$7, −2.83 at \$9. Two details the curve
+> depends on: the quantity is the **fitted** $\hat{q}(p)$, not the units actually sold that week,
+> and \$7 looks special only because an OLS line always passes through the means, so there the
+> fitted 140 and the observed mean 140 coincide.
 
 ---
 
