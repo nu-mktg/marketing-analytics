@@ -323,7 +323,7 @@ A negative coefficient means customers prefer the reference level over the coded
 |---|---|
 | Fits MNLogit via MLE | Sections 1.1 and 1.4A — the softmax choice probability and the utility model being fitted (the lecture does not derive the MLE itself) |
 | Reports β coefficients + standard errors | Section 1.4A — part-worth utilities; Section 2.2 — standard errors |
-| Computes WTP = β_attr / |β_price| | Section 1.4A — indifference derivation |
+| Computes WTP = β_attr / \|β_price\| | Section 1.4A — indifference derivation |
 | Runs market simulation using softmax | Section 1.4B — softmax formula |
 | Reports significance (p-values) | Section 2.2 — standard errors and statistical significance |
 

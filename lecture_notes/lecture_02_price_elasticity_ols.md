@@ -80,7 +80,7 @@ Economists write the elasticity as **ε** (epsilon): the percentage change in qu
 1% change in price. It is normally negative — raise the price, sell fewer — so what matters for the
 decision below is its size, written **|ε|**.
 
-| Elasticity |ε| | Type | 10% price increase → |
+| Elasticity \|ε\| | Type | 10% price increase → |
 |---|---|---|
 | Greater than 1 | Elastic | Revenue decreases (quantity falls more than price rises) |
 | Exactly 1 | Unit-elastic | Revenue unchanged |

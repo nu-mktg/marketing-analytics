@@ -59,12 +59,14 @@ MAPE measures how far off a forecast is, on average, as a percentage of actual v
 > MAPE = (1/n) × Σ |actual − predicted| / actual × 100%
 
 **Example:** 4 weeks of actuals vs. predictions:
-| Actual | Predicted | |Actual−Pred|/Actual |
+
+| Actual | Predicted | \|Actual−Pred\|/Actual |
 |---|---|---|
 | 100 | 95 | 5.0% |
 | 120 | 130 | 8.3% |
 | 80 | 88 | 10.0% |
 | 110 | 115 | 4.5% |
+
 MAPE = (5.0 + 8.3 + 10.0 + 4.5)/4 = 27.8/4 = **7.0%**
 
 ---
