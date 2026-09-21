@@ -1197,6 +1197,30 @@ BG/NBD predicts <em>future</em> transaction frequency — that’s the upgrade.<
 </div>
 </section>
 <section class="slide level2">
+<h2>Mean CLV vs Median CLV</h2>
+<p>A CLV distribution is almost never symmetric, so the <em>average</em> customer and the <em>typical</em> customer are two different people.</p>
+<p><strong>Median</strong> = the middle value after sorting — half at or below, half at or above. Odd count: the middle value. Even count: the average of the two middle values (<code>Series.median()</code>).</p>
+<p>Five customers: $25, $40, $60, $85, $540</p>
+<ul>
+<li>median = <strong>$60</strong> · mean = 750/5 = <strong>$150</strong></li>
+<li>make the top customer $5,400 → mean <strong>$1,122</strong>, median still <strong>$60</strong></li>
+</ul>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>mean &gt; median → right-skewed</strong> (the normal case for CLV): the mean is pulled up by a small top tail, so it <em>overstates</em> the typical customer. <strong>mean ≈ median</strong> → symmetric. <strong>mean &lt; median</strong> → left-skewed.<br>
+Quote the median when asked what “a customer” is worth; use the mean when you need a total.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
 <h2>Why We Need BG/NBD</h2>
 <p><strong>Problem:</strong> We don’t know which customers are still active.</p>
 <p>A customer who bought 12 times last year but nothing in 18 months — are they still a customer?</p>
