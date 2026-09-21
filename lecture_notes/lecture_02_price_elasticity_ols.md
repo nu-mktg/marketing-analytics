@@ -113,8 +113,11 @@ A demand curve describes the relationship between price and quantity sold. As pr
 
 ![The five observations of Section 1.4's worked example, with two curves fitted to the same five dots: the straight line q̂ = 329 − 27p, and a constant-elasticity curve with exponent −1.33. They agree across the observed $5–$9 range and separate outside it — the line reaches exactly zero units at $12.19, the curve never reaches zero](figures/lecture_02_demand_curve_inferred.png)
 
-**Reading the figure.** The five dots are the entire dataset — that is all you ever see. Both
-curves are consistent with them, and *nothing in the data* chooses between the two. Inside the
+**Reading the figure.** The five dots are the entire dataset — that is all you ever see. The
+straight line is the one Part A fits below; the curved one is the **constant-elasticity model of
+Section 1.4B**, and both of its numbers are derived there — nothing here asks you to take them on
+trust. Both curves are consistent with the dots, and *nothing in the data* chooses between the two.
+Inside the
 $5–$9 band they give nearly the same answer, so the choice barely matters; outside it they diverge,
 which is why an elasticity estimated here should not be used to price at $12. (This is
 Misconception 3, and Misconception 5, seen from the side.)
@@ -203,6 +206,13 @@ The OLS above gives "units fall by 27 for every $1 price increase" — a constan
 
 $$\ln(\text{units}) = \beta_0 + \beta_1 \ln(\text{price}) + u$$
 
+> **"In levels" vs "in logs" — the two phrases this section keeps using.** A regression run **in
+> levels** uses the variables in their original units: dollars on one axis, units sold on the
+> other. That is Part A's $\hat{q} = 329 - 27p$. A regression run **in logs** replaces each
+> variable with its natural logarithm and fits a straight line to *those*. Same five observations,
+> same OLS formula, different axes — and, as the rest of this section shows, a slope that means
+> something different.
+
 > ⚠️ **Why the error is written `u` here, when most books write it `ε`.** Because **ε is already
 > taken on this page.** Since Section 1.2, |ε| has meant the **elasticity** — the number you compare
 > to 1 to decide whether a price rise helps or hurts revenue. The error term is a completely
@@ -225,6 +235,28 @@ re-plotted on logged axes, and the curve straightens out. The slope of the right
 number you would report as the elasticity — so "take logs" and "estimate an elasticity" are the
 same instruction. The fit shown is the log-log fit of Part A's own five rows.
 
+> **Where the curve's two numbers come from** — because the figures print
+> $q = 1758\,p^{-1.33}$ and you should never have to take a number on trust. It is Part A's slope
+> formula, applied to the logged columns instead of the raw ones:
+>
+> | | ln(price) | ln(units) |
+> |---|---|---|
+> | mean | 1.9248 | 4.9031 |
+> | sum of (dev)(dev) | | −0.2879 |
+> | sum of (dev)² | 0.2157 | |
+>
+> Slope: $\beta_1 = -0.2879 / 0.2157 = -1.3346$ — the elasticity, rounded to −1.33 on the figures.
+> Intercept: $\beta_0 = 4.9031 - (-1.3346)(1.9248) = 7.4719$.
+>
+> That gives $\ln q = 7.4719 - 1.3346 \ln p$. **Undo the logarithm on both sides** — the step that
+> turns the line back into a curve:
+>
+> $$q = e^{7.4719} \times p^{-1.3346} = 1758\,p^{-1.33}$$
+>
+> The intercept only looks large because it is ln(units) at ln(price) = 0 — the fitted units at a
+> price of \$1, far outside the \$5–\$9 the data covers, which is exactly the extrapolation
+> §1.3's figure warns about.
+
 > ⚠️ **−1.33 here and −1.35 in the next figure are two different objects, not a rounding error.**
 > **−1.33** is the slope of *this* line: the log-log fit, which is **one elasticity for every
 > price** — that is what "constant elasticity" means, and it is why the line is straight.
@@ -244,7 +276,27 @@ same instruction. The fit shown is the log-log fit of Part A's own five rows.
 > *logged* regression and not the levels slope $\hat{\beta}_1$ = −27 from Part A. **Three notations, one
 > elasticity** — and only the levels slope is a different quantity.
 
-**The revenue-maximizing price:** Revenue = Price × Quantity. Revenue is maximized where elasticity |β₁| = 1. When |β₁| > 1 (elastic), revenue increases as you lower price. When |β₁| < 1 (inelastic), revenue increases as you raise price. **This rule describes a demand curve whose elasticity varies with price** — read the log-log estimate as a local approximation near the prices you observe (see Misconception 3).
+**The revenue-maximizing price:** Revenue = Price × Quantity. Revenue is maximized where elasticity |β₁| = 1. When |β₁| > 1 (elastic), revenue increases as you lower price. When |β₁| < 1 (inelastic), revenue increases as you raise price.
+
+**Which model answers which question — and why you cannot use one model for both.** This section
+has now given you two fitted demand curves for the same five weeks, and they disagree about
+whether elasticity is one number or many. That is not a contradiction to resolve; it is a choice
+of tool, and the two tools answer different questions:
+
+| The question you are asking | The model that answers it | What it hands you |
+|---|---|---|
+| *"How price-sensitive is demand around the prices we charge?"* | **log-log** | **one** elasticity for the whole observed range — constant by construction, which is what makes it reportable as a single number |
+| *"What price maximises revenue?"* | **levels** (or any curve whose elasticity varies) | an elasticity that **changes** with price, so revenue has a peak to find |
+
+**The |ε| = 1 rule is a property of the revenue curve, not of the log-log model.** Asking a
+log-log fit where revenue peaks is a category error: its elasticity is the same at every price, so
+if |β₁| ≠ 1 it says revenue rises — or falls — forever, and never turns. The Deep Dive below shows
+exactly where that breaks algebraically.
+
+So: **report** the elasticity from the log-log fit; **locate** a revenue-maximising price on a
+curve whose elasticity varies, and only inside the price range you actually observed. Section
+1.4A's own fit does this in the figure below — it peaks at \$6.09, and its elasticity runs from
+0.70 at \$5 to 2.83 at \$9. (See also Misconception 3.)
 
 > ### 🔍 Deep Dive: Why |ε| = 1 Maximizes Revenue
 > *Skip this if the result makes intuitive sense. Read it if you want the algebraic proof.*
@@ -271,6 +323,19 @@ price — the local reading of the previous figure's −1.33, not a second estim
 #### Part C: The Endogeneity Problem
 
 If prices are set partly in response to demand conditions (managers lower prices during slow periods, raise them during busy ones), then price and the error term **u** are correlated — in symbols, Cov(price, u) ≠ 0. OLS needs that covariance to be zero. When it is not, the estimate is **biased** — typically toward zero, making demand appear less elastic than it truly is.
+
+> ⚠️ **"Biased" is not "noisy", and the difference is the whole point of this section.** Your
+> $\hat{\beta}_1$ is computed from *one* sample of weeks. Collect a different sample and you get a
+> different number — that spread is **noise**, and it shrinks as you collect more data.
+> **Bias is the centre of that spread sitting in the wrong place:** on average, across every sample
+> you could have drawn, the estimate lands somewhere other than the true $\beta_1$. An unbiased
+> estimator is one whose average *is* the truth.
+>
+> **More data does not fix bias.** A million rows of prices that were set in response to demand
+> give you a very precise estimate of the wrong number — tight standard errors around a value that
+> is still off-centre. That is why Section 1.5 warns that a high R² does not make an estimate
+> unbiased: R² and the standard error describe how tightly the data sits around *your* line, and
+> neither of them can see that the line itself is in the wrong place.
 
 > ⚠️ **This is why Part A insisted that the error and the residual are different things.** The
 > condition that fails here is about **u**, the gap from the *true* line — which you can never
@@ -534,7 +599,7 @@ In most business regression applications, the intercept has no direct interpreta
 R² can be artificially inflated by adding more variables. A model with 50 irrelevant variables will have a higher R² than a model with 1 relevant variable. What matters is whether the model generalizes to new data.
 
 **3. "The log-log model's elasticity is constant everywhere."**
-The log-log model assumes a constant elasticity across all price levels. In reality, elasticity may vary — consumers might be more sensitive to price changes at high prices than at low prices. The log-log model is a useful approximation, not a perfect description.
+The log-log model assumes the same elasticity at every price. In reality, elasticity may vary — consumers might be more sensitive to price changes at high prices than at low prices. The log-log model is a useful approximation, not a perfect description. Section 1.4B's *"Which model answers which question"* says what to do about it: report the elasticity from the log-log fit, but find a revenue-maximising price on a curve whose elasticity varies.
 
 **4. "If the regression coefficient is negative, price causes sales to fall."**
 Correlation and causation are different. A negative coefficient tells you that weeks with higher prices tend to have lower sales. It does not prove that raising price causes sales to fall — there could be reverse causation (prices are set low when demand is expected to be low) or omitted variables.
