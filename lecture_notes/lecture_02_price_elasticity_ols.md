@@ -225,6 +225,16 @@ re-plotted on logged axes, and the curve straightens out. The slope of the right
 number you would report as the elasticity — so "take logs" and "estimate an elasticity" are the
 same instruction. The fit shown is the log-log fit of Part A's own five rows.
 
+> ⚠️ **−1.33 here and −1.35 in the next figure are two different objects, not a rounding error.**
+> **−1.33** is the slope of *this* line: the log-log fit, which is **one elasticity for every
+> price** — that is what "constant elasticity" means, and it is why the line is straight.
+> **−1.35** is the elasticity of the **levels** fit β̂₁ = −27 **evaluated at one price**, the mean
+> \$7: ε = β̂₁ × P/Q = −27 × 7/140. That one **changes with price** — the next figure shows it
+> running from 0.70 at \$5 to 2.83 at \$9. On this data the two happen to land 0.02 apart, which
+> is a coincidence of these five rows and not a general fact. **If you ever have to choose: the
+> log-log slope is a single summary of the whole price range; the levels elasticity is a local
+> reading at one point on it.**
+
 > ⚠️ **ε and β₁ are the same number.** Section 1.2 called the elasticity ε because that is the
 > economics convention; Part B calls it β₁ because that is the name the regression output prints.
 > In a log-log model they are one quantity with two labels: **ε = β₁.** So when Section 1.5 says
@@ -253,7 +263,8 @@ same instruction. The fit shown is the log-log fit of Part A's own five rows.
 and the |ε| = 1 crossing in the bottom panel are the *same price*. It is drawn on the straight-line
 fit precisely because that fit's elasticity changes with price (from 0.70 at $5 to 2.83 at $9) —
 the condition the Deep Dive just named. A strict log-log fit would give one elasticity at every
-price and no peak to find.
+price and no peak to find. The **1.35** marked at \$7 is that same levels fit read at the mean
+price — the local reading of the previous figure's −1.33, not a second estimate of it.
 
 ---
 
