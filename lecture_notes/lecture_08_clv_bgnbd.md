@@ -131,6 +131,40 @@ Once the agent provides E[purchases in next 12 months] and E[order value], CLV i
 
 **Example:** E[transactions] = 2.4, E[order value] = $55 → CLV = 2.4 × $55 = **$132**
 
+**The mean is not the typical customer.** CLV₁₂ above is an *average*, and a CLV distribution is
+almost never symmetric — so "the average customer" and "the typical customer" are two different
+people. Quoting one CLV figure means choosing which of the two you mean, and the second one is the
+**median**.
+
+> **Convention (this course, `numpy`, `pandas`):** the **median** of a set of values is the middle
+> one after sorting — half the customers sit at or below it, half at or above. With an **odd**
+> count it is the middle value itself; with an **even** count it is the average of the two middle
+> values. That is what `Series.median()` returns, and it is what "median CLV" means.
+
+**Example.** Five customers with 12-month CLVs of \$25, \$40, \$60, \$85 and \$540:
+- sorted, the middle of the five is the third → **median = \$60**
+- the mean is (25 + 40 + 60 + 85 + 540)/5 = 750/5 = **\$150**
+
+The mean is more than twice the median, and *no customer in the set is worth anything like the
+mean*. Now make the top customer worth \$5,400 instead of \$540: the mean moves to \$1,122 and
+**the median does not move at all**. The median ignores how far the upper tail reaches; the mean is
+dragged along by it. That robustness is the reason to report it.
+
+**Reading the gap between them — this is the diagnostic.**
+
+| What you see | What the distribution is doing | What it means for CLV |
+|---|---|---|
+| mean > median | **right-skewed** — a long upper tail, i.e. a small number of very high-value customers | the normal case for CLV: the mean is pulled up by the top tail, so it *overstates* the typical customer |
+| mean ≈ median | roughly symmetric | the mean is a fair summary of the typical customer |
+| mean < median | left-skewed — a long lower tail, i.e. a cluster of very low-value customers | rare for CLV; usually a mostly-healthy base with a damaged tail |
+
+Which way the gap points is a fact about the customer base, not about the model, and it is the
+first thing to establish before quoting any single CLV figure. When the mean exceeds the median —
+for CLV, the normal state of affairs — a budget set against the mean overpays for the customers who
+are actually typical. Report both: quote the **median** when someone asks what "a customer" is
+worth, and the **mean** when you need a total, because mean × customer count is the portfolio
+value and median × count is not.
+
 ---
 
 #### Part C: The Gamma-Gamma Independence Assumption
@@ -339,6 +373,11 @@ For Marcus: threshold = 15/19 = 0.789 (not exceeded — P(alive) = 0.11)
 **P(alive) by customer:** Examine the distribution of P(alive) across your customer base. A healthy base has many customers with P(alive) > 0.7. If the majority are below 0.3, your customer base may be churning faster than expected.
 
 **CLV decile analysis:** Sort customers by predicted CLV and examine the top decile (top 10%) vs. the bottom decile. The ratio of top-to-bottom CLV is a measure of customer heterogeneity. Ratios above 10× are common in e-commerce.
+
+**Mean vs median CLV:** Report both, and read the gap the way Part B's table does. A base with a
+long upper tail has mean above median, so quoting the mean alone systematically overstates what a
+typical customer is worth — and the ratio between the two is itself a compact measure of how
+concentrated value is in the top customers.
 
 **"Hidden gems":** Customers with low historical CLV but high predicted CLV. These are often new or recently reactivated customers — their purchase history is short but recent. The BG/NBD identifies them as valuable future customers that historical analysis would underrank.
 
