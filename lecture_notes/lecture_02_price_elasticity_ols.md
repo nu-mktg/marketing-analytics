@@ -318,6 +318,24 @@ the condition the Deep Dive just named. A strict log-log fit would give one elas
 price and no peak to find. The **1.35** marked at \$7 is that same levels fit read at the mean
 price — the local reading of the previous figure's −1.33, not a second estimate of it.
 
+> **How to get an elasticity at one price, since the bottom panel is a curve and not a number.**
+> Elasticity is the percentage change in quantity per percentage change in price, which for a
+> fitted line is its slope re-expressed in percentage terms:
+>
+> $$\varepsilon(p) = \hat{\beta}_1 \times \frac{p}{\hat{q}(p)} \qquad\text{where } \hat{q}(p) = 329 - 27p$$
+>
+> Read it as: *27 fewer units per dollar, expressed as a share of the units you were selling.* So
+> at \$7 the fitted quantity is $\hat{q} = 329 - 27(7) = 140$, and
+> $\varepsilon = -27 \times 7/140 = -1.35$. At \$5: $\hat{q} = 194$, so
+> $\varepsilon = -27 \times 5/194 = -0.70$. At \$9: $\hat{q} = 86$, so
+> $\varepsilon = -27 \times 9/86 = -2.83$.
+>
+> **The slope never changes — the ratio does.** Losing 27 units is a small slice of 194 and a large
+> slice of 86, which is the entire reason a *straight* demand line has an elasticity that varies
+> with price. Note the quantity is the **fitted** $\hat{q}(p)$, not the observed units that week.
+> (\$7 looks special only because the OLS line always passes through the means, so at \$7 the
+> fitted 140 and the mean 140 coincide.)
+
 ---
 
 #### Part C: The Endogeneity Problem
@@ -345,7 +363,15 @@ If prices are set partly in response to demand conditions (managers lower prices
 
 **What this means practically:** If your regression returns elasticity = −0.3 but you know managers are cutting prices when sales are slow, the true elasticity is probably more negative. You are underestimating how much customers care about price.
 
-**The fix (preview):** An instrumental variable — something that affects price but not demand directly — can break the correlation. **Input cost changes** (a wholesale-price or commodity-cost shock) are the standard example in retail pricing research: they move what the retailer charges without themselves changing how much customers want the product.
+> 📌 **What this section is responsible for.** The part you are assessed on is the **idea**: that
+> price set in response to demand breaks OLS's assumption, and that the estimate is then biased
+> rather than merely noisy. That is `homework_02` Q17 and it appears on Quiz 1. **Everything below
+> this line about instrumental variables is background** — read it for orientation, not for
+> mastery. No graded question in this course asks you to choose, justify or compute an instrument,
+> and we do not cover IV estimation. If the rest of this section feels thin, that is deliberate:
+> recognising the problem is this week's job; fixing it is a later course's.
+
+**The fix (preview — reference only):** An instrumental variable — something that affects price but not demand directly — can break the correlation. **Input cost changes** (a wholesale-price or commodity-cost shock) are the standard example in retail pricing research: they move what the retailer charges without themselves changing how much customers want the product.
 
 > ⚠️ **A tempting instrument that is not one: in-store display promotions.** Displays are a *demand shifter*, not a price shifter — they lift units at an unchanged price, which is exactly what the exclusion restriction forbids. That is why `display_flag` appears on the **right-hand side as a control** in this week's homework regression, not as an instrument. A variable you have to control for cannot also be your instrument.
 
