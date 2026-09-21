@@ -324,7 +324,9 @@ for: 0 means they explain none of it, 1 means they explain all of it. So here:
 
 *Common wrong answer:* "Elastic means demand responds a lot, so −1.84 must be inelastic since it's less than 1." The elasticity is compared to 1 in absolute value, not as a raw number. ε = −1.84 means |ε| = 1.84 > 1 → elastic.
 
-> **Also asked on the slides:** *"The log-log regression gives β̂₁ = −1.42. Is demand elastic or inelastic? What happens to revenue if price rises 5%?"* — Elastic: |−1.42| = 1.42 > 1. In a log-log model β₁ **is** the elasticity, so a 5% price rise is associated with a 1.42 × 5% ≈ **7.1% fall in units**. Revenue = price × units, so revenue moves by roughly +5% − 7.1% ≈ **−2.1%** — revenue falls. Same rule as Q1: when demand is elastic, raising price reduces revenue.
+> **Also asked on the slides:** *"A **different** store's log-log regression gives β̂₁ = −1.42 — not the five rows above, which fit −1.33. Is demand elastic or inelastic? What happens to revenue if price rises 5%?"* — Elastic: |−1.42| = 1.42 > 1. In a log-log model β₁ **is** the elasticity, so a 5% price rise is associated with a 1.42 × 5% ≈ **7.1% fall in units**. Revenue = price × units, so revenue moves by roughly +5% − 7.1% ≈ **−2.1%** — revenue falls. Same rule as Q1: when demand is elastic, raising price reduces revenue.
+>
+> ⚠️ **Why the slide says a *different* store.** The deck's five-row table ([5,6,7,8,9] / [200,160,140,110,90]) has a **log-log fit of −1.33**, and the figure on that slide prints −1.33 on the curve. −1.42 is a fresh number for the student to apply the rule to, not a value derivable from the table — the wording keeps the two apart. Note also that −1.33 (the log-log slope, constant by construction) and **−1.35** (the *level-level* fit's point elasticity at the mean, −27 × 7/140) are different objects that happen to be close here; that is the constant-vs-varying elasticity point, not a rounding discrepancy.
 
 **Q2.** x̄ = 10, ȳ = 90. Deviations: (−2, −1, 0, +1, +2) and (+30, +10, 0, −15, −25).
 Numerator = (−2)(30) + (−1)(10) + (0)(0) + (1)(−15) + (2)(−25) = −60 − 10 + 0 − 15 − 50 = −135.
