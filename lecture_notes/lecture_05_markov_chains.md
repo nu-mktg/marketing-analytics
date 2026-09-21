@@ -109,6 +109,7 @@ This implies: if Churned is absorbing, retention matters because it determines h
 Starting distribution v₀ = [Active=0.70, Dormant=0.20, Churned=0.10]
 
 Transition matrix P:
+
 | From \ To | Active | Dormant | Churned |
 |---|---|---|---|
 | Active | 0.80 | 0.15 | 0.05 |
