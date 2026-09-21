@@ -140,8 +140,8 @@ lecture — and all of Section 1.4C — depends on them.
 >
 > | Symbol | What it is | Can you ever see it? |
 > |---|---|---|
-> | β₁ | the **true** slope in the population | **No.** Never. |
-> | β̂₁ ("beta-one-hat") | the **estimate** of β₁ that OLS computes from your data | Yes — it is a number you calculate |
+> | $\beta_1$ | the **true** slope in the population | **No.** Never. |
+> | $\hat{\beta}_1$ ("beta-one-hat") | the **estimate** of $\beta_1$ that OLS computes from your data | Yes — it is a number you calculate |
 > | u | the **error**: how far a real observation sits from the **true** line | **No.** Never. |
 > | ŷ | the **fitted value**: what the estimated line predicts | Yes |
 > | y − ŷ | the **residual**: how far an observation sits from the **estimated** line | Yes |
@@ -152,7 +152,7 @@ lecture — and all of Section 1.4C — depends on them.
 > the only ones it can see. Keep the pair apart: **Section 1.4C is a statement about the *error*, not
 > the residual** — which is exactly why endogeneity cannot be spotted by staring at your residuals.
 
-"Best fit" now has a precise meaning: choose β̂₀ and β̂₁ to make the sum of squared *residuals* as
+"Best fit" now has a precise meaning: choose $\hat{\beta}_0$ and $\hat{\beta}_1$ to make the sum of squared *residuals* as
 small as possible. Doing that produces one formula for the slope:
 
 $$\hat{\beta}_1 = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^{n}(x_i - \bar{x})^2}$$
@@ -184,12 +184,12 @@ Predicted line: Units = 329 − 27 × Price
 > *Skip if you are comfortable using the formula. Read if you want to know why it is the right formula.*
 >
 > OLS minimizes the sum of squared residuals over the **estimates** — note the hats, since these are
-> the quantities we get to choose: SSR = Σ(yᵢ − β̂₀ − β̂₁xᵢ)². To find the minimum, we take the
-> derivative with respect to β̂₁ and set it equal to zero:
+> the quantities we get to choose: $\text{SSR} = \sum(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)^2$. To find the minimum, we take the
+> derivative with respect to $\hat{\beta}_1$ and set it equal to zero:
 >
-> ∂SSR/∂β̂₁ = −2Σ(yᵢ − β̂₀ − β̂₁xᵢ)xᵢ = 0
+> $\partial \text{SSR} / \partial \hat{\beta}_1 = -2\sum(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)x_i = 0$
 >
-> Substituting β̂₀ = ȳ − β̂₁x̄ (from the other first-order condition) and rearranging gives:
+> Substituting $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$ (from the other first-order condition) and rearranging gives:
 >
 > Σ(xᵢ − x̄)(yᵢ − ȳ) = β₁ × Σ(xᵢ − x̄)²
 >
@@ -228,8 +228,8 @@ same instruction. The fit shown is the log-log fit of Part A's own five rows.
 > ⚠️ **−1.33 here and −1.35 in the next figure are two different objects, not a rounding error.**
 > **−1.33** is the slope of *this* line: the log-log fit, which is **one elasticity for every
 > price** — that is what "constant elasticity" means, and it is why the line is straight.
-> **−1.35** is the elasticity of the **levels** fit β̂₁ = −27 **evaluated at one price**, the mean
-> \$7: ε = β̂₁ × P/Q = −27 × 7/140. That one **changes with price** — the next figure shows it
+> **−1.35** is the elasticity of the **levels** fit $\hat{\beta}_1$ = −27 **evaluated at one price**, the mean
+> \$7: ε = $\hat{\beta}_1$ × P/Q = −27 × 7/140. That one **changes with price** — the next figure shows it
 > running from 0.70 at \$5 to 2.83 at \$9. On this data the two happen to land 0.02 apart, which
 > is a coincidence of these five rows and not a general fact. **If you ever have to choose: the
 > log-log slope is a single summary of the whole price range; the levels elasticity is a local
@@ -241,7 +241,7 @@ same instruction. The fit shown is the log-log fit of Part A's own five rows.
 > "|ε| = 1.84" and the worked example in Part 2 reports "β₁ ≈ −0.96", those are the same kind of
 > object measured on two different datasets — not two different statistics. Part 2 additionally
 > writes it **β₁^log** at the moment it is computed, purely to stress that it is the slope from the
-> *logged* regression and not the levels slope β̂₁ = −27 from Part A. **Three notations, one
+> *logged* regression and not the levels slope $\hat{\beta}_1$ = −27 from Part A. **Three notations, one
 > elasticity** — and only the levels slope is a different quantity.
 
 **The revenue-maximizing price:** Revenue = Price × Quantity. Revenue is maximized where elasticity |β₁| = 1. When |β₁| > 1 (elastic), revenue increases as you lower price. When |β₁| < 1 (inelastic), revenue increases as you raise price. **This rule describes a demand curve whose elasticity varies with price** — read the log-log estimate as a local approximation near the prices you observe (see Misconception 3).
@@ -335,7 +335,7 @@ for: 0 means they explain none of it, 1 means they explain all of it. So here:
 
 *Common wrong answer:* "Elastic means demand responds a lot, so −1.84 must be inelastic since it's less than 1." The elasticity is compared to 1 in absolute value, not as a raw number. ε = −1.84 means |ε| = 1.84 > 1 → elastic.
 
-> **Also asked on the slides:** *"A **different** store's log-log regression gives β̂₁ = −1.42 — not the five rows above, which fit −1.33. Is demand elastic or inelastic? What happens to revenue if price rises 5%?"* — Elastic: |−1.42| = 1.42 > 1. In a log-log model β₁ **is** the elasticity, so a 5% price rise is associated with a 1.42 × 5% ≈ **7.1% fall in units**. Revenue = price × units, so revenue moves by roughly +5% − 7.1% ≈ **−2.1%** — revenue falls. Same rule as Q1: when demand is elastic, raising price reduces revenue.
+> **Also asked on the slides:** *"A **different** store's log-log regression gives $\hat{\beta}_1$ = −1.42 — not the five rows above, which fit −1.33. Is demand elastic or inelastic? What happens to revenue if price rises 5%?"* — Elastic: |−1.42| = 1.42 > 1. In a log-log model β₁ **is** the elasticity, so a 5% price rise is associated with a 1.42 × 5% ≈ **7.1% fall in units**. Revenue = price × units, so revenue moves by roughly +5% − 7.1% ≈ **−2.1%** — revenue falls. Same rule as Q1: when demand is elastic, raising price reduces revenue.
 >
 > ⚠️ **Why the slide says a *different* store.** The deck's five-row table ([5,6,7,8,9] / [200,160,140,110,90]) has a **log-log fit of −1.33**, and the figure on that slide prints −1.33 on the curve. −1.42 is a fresh number for the student to apply the rule to, not a value derivable from the table — the wording keeps the two apart. Note also that −1.33 (the log-log slope, constant by construction) and **−1.35** (the *level-level* fit's point elasticity at the mean, −27 × 7/140) are different objects that happen to be close here; that is the constant-vs-varying elasticity point, not a rounding discrepancy.
 
@@ -345,7 +345,7 @@ Denominator = 4 + 1 + 0 + 1 + 4 = 10. β₁ = −135/10 = **−13.5 units per do
 
 *Common wrong answer:* Forgetting to compute deviations first, using raw values instead of (xᵢ − x̄) and (yᵢ − ȳ).
 
-> **Also asked on the slides:** *"From the data above, compute β̂₀ and verify it equals 329."* — The table on that slide is the Part A worked example in these notes: Prices [5, 6, 7, 8, 9], Units [200, 160, 140, 110, 90], x̄ = 7, ȳ = 140, Σ(x−x̄)(y−ȳ) = −270, Σ(x−x̄)² = 10. So β₁ = −270/10 = −27, and the intercept follows from β₀ = ȳ − β₁x̄ = 140 − (−27 × 7) = 140 + 189 = **329**, giving the fitted line Units = 329 − 27 × Price. Note that the checkpoint table in Q2 is a *different* dataset (β₁ = −13.5), so do not expect 329 from it.
+> **Also asked on the slides:** *"From the data above, compute $\hat{\beta}_0$ and verify it equals 329."* — The table on that slide is the Part A worked example in these notes: Prices [5, 6, 7, 8, 9], Units [200, 160, 140, 110, 90], x̄ = 7, ȳ = 140, Σ(x−x̄)(y−ȳ) = −270, Σ(x−x̄)² = 10. So β₁ = −270/10 = −27, and the intercept follows from β₀ = ȳ − β₁x̄ = 140 − (−27 × 7) = 140 + 189 = **329**, giving the fitted line Units = 329 − 27 × Price. Note that the checkpoint table in Q2 is a *different* dataset (β₁ = −13.5), so do not expect 329 from it.
 
 > **Also asked on the slides:** *"Why does log-log give a constant elasticity but level-level gives a varying elasticity?"* — Because of what the coefficient measures. In the level-level model the slope is a constant number of **units per dollar** (here −27, or −13.5 in Q2), so the *percentage* response depends on where you are: at a base of 200 units a 27-unit drop is 13.5%, at a base of 90 units the same 27-unit drop is 30%. Elasticity therefore changes along the line. In the log-log model both sides are in logs, so β₁ is a **percentage response to a percentage change** — the same at every price by construction. That is why log-log is the specification used for elasticity, and why the level-level slope "does not make economic sense for large price changes."
 
@@ -359,7 +359,7 @@ Denominator = 4 + 1 + 0 + 1 + 4 = 10. β₁ = −135/10 = **−13.5 units per do
 
 *Common wrong answer:* "The estimate will be more negative because cutting prices on slow days shows prices matter." The direction of endogeneity bias is counterintuitive — it depends on the correlation between the endogenous regressor (price) and the omitted variable (day-of-week demand), not on the direction of the price cut.
 
-> **Also asked on the slides:** *"A pricing analyst runs OLS on transaction data and gets β̂₁ = +3 (positive!). What's the most likely explanation?"* — The same endogeneity as in Q4, only larger. Prices in transaction data are set *in response to* demand: they are raised when demand is strong and discounted when it is weak, so high price and high volume appear together. Section 1.4 notes the resulting bias is "typically toward zero" — but when the demand-driven component dominates, the bias carries the estimate **past** zero and the fitted coefficient comes out positive. A positive β̂₁ is therefore a diagnostic of a broken identification assumption, not a discovery that customers buy more when things cost more. The fix is the one previewed in Section 1.4: an instrument that shifts price without reflecting demand (e.g. an input or wholesale cost shock — **not** a display promotion, which shifts demand directly and is therefore a control, not an instrument).
+> **Also asked on the slides:** *"A pricing analyst runs OLS on transaction data and gets $\hat{\beta}_1$ = +3 (positive!). What's the most likely explanation?"* — The same endogeneity as in Q4, only larger. Prices in transaction data are set *in response to* demand: they are raised when demand is strong and discounted when it is weak, so high price and high volume appear together. Section 1.4 notes the resulting bias is "typically toward zero" — but when the demand-driven component dominates, the bias carries the estimate **past** zero and the fitted coefficient comes out positive. A positive $\hat{\beta}_1$ is therefore a diagnostic of a broken identification assumption, not a discovery that customers buy more when things cost more. The fix is the one previewed in Section 1.4: an instrument that shifts price without reflecting demand (e.g. an input or wholesale cost shock — **not** a display promotion, which shifts demand directly and is therefore a control, not an instrument).
 
 **Q5.** Yes — this is a good thing for you. Cross-price elasticity of +0.62 means a 15% competitor price increase → approximately 15 × 0.62 = 9.3% increase in your units. You could consider whether to maintain your price (capturing volume) or raise yours slightly (capturing some of the competitor's pricing power). Do not be alarmed — positive cross-price elasticity means the competitor's higher price benefits you.
 
