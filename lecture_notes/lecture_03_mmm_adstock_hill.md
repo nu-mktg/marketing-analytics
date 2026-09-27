@@ -357,16 +357,6 @@ $$\Delta\text{Revenue} \;\approx\; (\text{MR}_A - \text{MR}_B) \times \Delta\tex
 **Q3.** Move budget from Digital (lower marginal ROI) to TV (higher). But **not the entire Digital budget at once**. As TV spend increases, TV marginal ROI falls along the Hill curve. The equalization principle says shift incrementally until marginal ROIs are equal.
 *Common wrong answer:* "Shift everything to TV since TV ROI is higher." Diminishing returns mean the last dollar moved to TV has a much lower marginal ROI than the first dollar.
 
-> **Also asked on the slides:** *"TV marginal ROI = \$3.20. Social marginal ROI = \$0.80. Shift
-> \$5,000 from Social to TV. Expected revenue gain?"* — Same first-order arithmetic as Section 1.4C:
->
-> $$\Delta\text{Revenue} \approx (\text{MR}_{TV} - \text{MR}_{Soc}) \times \Delta\text{Spend} = (3.20 - 0.80) \times 5{,}000 = \mathbf{\$12{,}000}$$
->
-> And the same ≈ applies: it holds both marginal ROIs fixed across the whole \$5,000, so \$12,000 is
-> an **upper** estimate of a small step. As TV's adstock rises its Hill slope falls and Social's
-> rises, which is why the very next checkpoint question asks why you cannot move the whole budget
-> at once.
-
 > **Also asked on the slides:** *"Last-touch attribution shows Digital = 70% of conversions, TV = 10%. MMM shows TV = 35% contribution. Which is right — and why might they differ?"* — Neither is "wrong"; they measure different things, and for a budget decision the MMM figure is the relevant one. Last-touch gives 100% of the credit to whatever the customer clicked last, so it systematically over-credits demand-harvesting channels and under-credits demand-creating ones: as Section 1.2 puts it: "Paid search captures demand. It does not create it." A customer may have learned about the brand from a TV spot, seen social posts, then clicked a digital ad — last touch records only the click. MMM models all channels simultaneously with their own adstock and saturation, so TV's carryover (high λ) shows up as contribution that last touch cannot see. The practical warning in Section 1.2 is exactly this case: shifting budget from TV to digital on last-touch evidence looks successful short-term while you are harvesting awareness TV built.
 
 **Q4.** **False.** λ = 0 means instant decay — each period's advertising effect disappears completely before the next period. The channel can still have immediate in-period impact (S_t contributes fully to A_t). λ = 0 means no carryover, not no effect.
