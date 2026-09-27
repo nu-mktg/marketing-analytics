@@ -151,7 +151,7 @@ where S_t is spend in period t and λ (lambda) is the decay parameter (0 ≤ λ 
 
 **Plain English:** This week's *effective spend* equals what you spent this week, plus a fraction λ of last week's effective spend that is still carrying over. Higher λ = slower decay = longer-lasting effects.
 
-🚨 **"Effect" means two different things in MMM, and this is the line where they meet.** A_t is **adstocked spend**: it is denominated in dollars of *spend*, not dollars of revenue. When the worked example below reports A₃ = 186, it means "week 3 behaves like a week in which you had spent \$186k", **not** "\$186k of revenue". The **revenue** effect of a channel is a different quantity built in Sections 1.4B and 1.4C: β · H(A_t), in dollars of revenue. Where this lecture says "advertising effect" without qualifying it, it means A_t on the spend scale; "revenue contribution" always means β · H. Both senses are called "effect" in practice, so when you read an MMM write-up, check which one is meant.
+🚨 **"Effect" means two different things in MMM, and this is the line where they meet.** A_t is **adstocked spend**: it is denominated in dollars of *spend*, not dollars of revenue. When the worked example below reports A₃ = 86, it means "week 3 behaves like a week in which you had spent \$86k", **not** "\$86k of revenue". The **revenue** effect of a channel is a different quantity built in Sections 1.4B and 1.4C: β · H(A_t), in dollars of revenue. Where this lecture says "advertising effect" without qualifying it, it means A_t on the spend scale; "revenue contribution" always means β · H. Both senses are called "effect" in practice, so when you read an MMM write-up, check which one is meant.
 
 **Worked example** (λ = 0.6, S = [100, 0, 50]):
 - A₁ = 100 + 0.6 × 0 = **100**
@@ -258,6 +258,17 @@ $$\text{MR}_j(s) \;=\; \beta_j \cdot H'(s) \;=\; \beta_j \cdot \frac{\alpha \cdo
 
 **Budget optimization:** Compute marginal ROI for each channel at its current adstock. The rule: shift budget from lower marginal ROI channels to higher ones, one step at a time. Stop when all marginal ROIs are equal — that is the optimal allocation.
 
+**Reporting the result — and say what the percentage is a percentage OF.** The headline number from
+a reallocation is the **revenue uplift**: predicted revenue under the optimal allocation minus
+predicted revenue under the current allocation, expressed as a **percentage of the current
+prediction**.
+
+$$\text{uplift \%} \;=\; \frac{\widehat{\text{Rev}}_{\text{optimal}} - \widehat{\text{Rev}}_{\text{current}}}{\widehat{\text{Rev}}_{\text{current}}} \times 100$$
+
+Both predictions are at the **same total budget** — reallocation, not extra spend (Misconception 4).
+Dividing by the *optimal* prediction instead, or reporting a percentage-**point** difference, gives a
+different number; Part B of the homework asks for this one.
+
 **The arithmetic of one step.** If channel A earns MR_A = \$4.00 of revenue per dollar and channel B earns MR_B = \$1.50, then moving \$1,000 from B to A gains roughly
 
 $$\Delta\text{Revenue} \;\approx\; (\text{MR}_A - \text{MR}_B) \times \Delta\text{Spend} \;=\; (4.00 - 1.50) \times 1{,}000 \;=\; \$2{,}500$$
@@ -295,10 +306,20 @@ $$\Delta\text{Revenue} \;\approx\; (\text{MR}_A - \text{MR}_B) \times \Delta\tex
 > H(200) = 200² / (200² + 200²) = **0.50** (the H(EC50) = 0.5 property, true for any EC50);
 >
 > H(400) = 400² / (200² + 400²) = 160,000 / 200,000 = **0.80**.
-> Doubling spend from 100 to 200 buys +0.30 of effectiveness; doubling again from 200 to 400 buys only +0.30 → +0.80, i.e. the same 0.30 for twice the incremental spend. That is saturation, and it is why the answer to Q3 is "shift incrementally," not "shift everything."
+> Doubling spend from 100 to 200 buys +0.30 of effectiveness; doubling again from 200 to 400 buys +0.30 as well (0.50 → 0.80) — the same 0.30 for twice the incremental spend, so **half as much per dollar**. That is saturation, and it is why the answer to Q3 is "shift incrementally," not "shift everything."
 
 **Q3.** Move budget from Digital (lower marginal ROI) to TV (higher). But **not the entire Digital budget at once**. As TV spend increases, TV marginal ROI falls along the Hill curve. The equalization principle says shift incrementally until marginal ROIs are equal.
 *Common wrong answer:* "Shift everything to TV since TV ROI is higher." Diminishing returns mean the last dollar moved to TV has a much lower marginal ROI than the first dollar.
+
+> **Also asked on the slides:** *"TV marginal ROI = \$3.20. Social marginal ROI = \$0.80. Shift
+> \$5,000 from Social to TV. Expected revenue gain?"* — Same first-order arithmetic as Section 1.4C:
+>
+> $$\Delta\text{Revenue} \approx (\text{MR}_{TV} - \text{MR}_{Soc}) \times \Delta\text{Spend} = (3.20 - 0.80) \times 5{,}000 = \mathbf{\$12{,}000}$$
+>
+> And the same ≈ applies: it holds both marginal ROIs fixed across the whole \$5,000, so \$12,000 is
+> an **upper** estimate of a small step. As TV's adstock rises its Hill slope falls and Social's
+> rises, which is why the very next checkpoint question asks why you cannot move the whole budget
+> at once.
 
 > **Also asked on the slides:** *"Last-touch attribution shows Digital = 70% of conversions, TV = 10%. MMM shows TV = 35% contribution. Which is right — and why might they differ?"* — Neither is "wrong"; they measure different things, and for a budget decision the MMM figure is the relevant one. Last-touch gives 100% of the credit to whatever the customer clicked last, so it systematically over-credits demand-harvesting channels and under-credits demand-creating ones: as Section 1.2 puts it: "Paid search captures demand. It does not create it." A customer may have learned about the brand from a TV spot, seen social posts, then clicked a digital ad — last touch records only the click. MMM models all channels simultaneously with their own adstock and saturation, so TV's carryover (high λ) shows up as contribution that last touch cannot see. The practical warning in Section 1.2 is exactly this case: shifting budget from TV to digital on last-touch evidence looks successful short-term while you are harvesting awareness TV built.
 
