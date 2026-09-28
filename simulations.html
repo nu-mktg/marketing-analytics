@@ -263,15 +263,15 @@ canvas {
   <h2>Hill Function (Saturation Curve) Explorer — Lecture 3</h2>
   <p>
     Adjust EC50 and the shape parameter α to see how diminishing returns changes.
-    Explore how marginal ROI falls as spend increases.
+    Explore how the Hill slope H′(s) — the extra H the next unit of spend buys — changes with spend: for α &gt; 1 it rises, peaks at the inflection, then falls; for α ≤ 1 it only falls.
     Relevant to Homework 3: Marketing Mix Modeling and budget reallocation.
   </p>
 
   <div class="sim-body">
 
     <div class="formula">
-      H(s) = s<sup>n</sup> / (EC50<sup>n</sup> + s<sup>n</sup>)<br>
-      EC50 = spend level at which response = 0.5 (half-maximum) &nbsp;&nbsp; n = Hill exponent / shape parameter (n=1 → hyperbolic, n&gt;1 → sigmoidal)
+      H(s) = s<sup>α</sup> / (EC50<sup>α</sup> + s<sup>α</sup>)<br>
+      EC50 = spend level at which response = 0.5 (half-maximum) &nbsp;&nbsp; α = shape parameter (α ≤ 1 → concave, α &gt; 1 → S-shaped)
     </div>
 
     <div class="controls">
@@ -280,7 +280,7 @@ canvas {
         <input type="range" id="hill-ec50" min="10" max="500" step="5" value="150">
       </div>
       <div class="ctrl">
-        <label>n (Hill exponent) <span class="val" id="hill-alpha-val">2.0</span></label>
+        <label>α (shape parameter) <span class="val" id="hill-alpha-val">2.0</span></label>
         <input type="range" id="hill-alpha" min="0.5" max="6" step="0.1" value="2.0">
       </div>
       <div class="ctrl">
@@ -297,8 +297,8 @@ canvas {
         <span class="stat-val" id="hill-h">—</span>
       </div>
       <div class="stat">
-        <span class="stat-label">Marginal ROI at spend</span>
-        <span class="stat-val" id="hill-mroi">—</span>
+        <span class="stat-label">Hill slope H′(spend)</span>
+        <span class="stat-val" id="hill-slope">—</span>
       </div>
       <div class="stat">
         <span class="stat-label">H(EC50)</span>
@@ -310,7 +310,7 @@ canvas {
       </div>
       <div class="stat">
         <span class="stat-label">Tangent line slope</span>
-        <span class="stat-val" id="hill-tangent-note">= marginal ROI at spend</span>
+        <span class="stat-val" id="hill-tangent-note">= H′(spend)</span>
       </div>
     </div>
 
@@ -756,8 +756,8 @@ function hillFn(s, ec50, alpha) {
   return Math.pow(s, alpha) / (Math.pow(ec50, alpha) + Math.pow(s, alpha));
 }
 
-// Marginal ROI ≈ derivative of Hill(s) w.r.t. s
-function hillMarginal(s, ec50, alpha) {
+// Hill slope H′(s) ≈ derivative of Hill(s) w.r.t. s (marginal ROI = β·H′/(1−λ), not this alone)
+function hillSlope(s, ec50, alpha) {
   const eps = 0.1;
   // Use symmetric finite difference for numerical derivative
   const sLo = Math.max(eps, s - eps);
@@ -774,10 +774,11 @@ function drawHill() {
   hillVals.spend.textContent = spend;
 
   const hAtSpend  = hillFn(spend, ec50, alpha);
-  const mroi      = hillMarginal(spend, ec50, alpha);
+  const hSlope    = hillSlope(spend, ec50, alpha);
 
   document.getElementById('hill-h').textContent    = hAtSpend.toFixed(4);
-  document.getElementById('hill-mroi').textContent = mroi.toFixed(5);
+  document.getElementById('hill-slope').textContent = hSlope.toFixed(5);
+  document.getElementById('hill-tangent-note').textContent = hSlope.toFixed(5) + ' ΔH / unit spend';
   document.getElementById('hill-pct').textContent  = (hAtSpend * 100).toFixed(1) + '%';
 
   // Canvas
@@ -886,24 +887,29 @@ function drawHill() {
     ctx.arc(toX(spend), toY(hS), 5, 0, 2 * Math.PI);
     ctx.fill();
 
-    // Tangent line (marginal ROI slope) — shows the instantaneous slope = marginal return
-    const slope = mroi;
+    // Tangent line — its slope is the Hill slope H′(spend)
+    const slope = hSlope;
     const dsRange = maxS * 0.08;
     const x1 = spend - dsRange, x2 = spend + dsRange;
-    const cs = 1 / maxS * plotW;  // canvas units per spend unit
-    const tangY1 = toY(hS) + slope * cs * (x1 - spend) * -1;
-    const tangY2 = toY(hS) + slope * cs * (x2 - spend) * -1;
-    const tY1clamp = Math.max(PAD.top, Math.min(PAD.top + plotH, tangY1));
-    const tY2clamp = Math.max(PAD.top, Math.min(PAD.top + plotH, tangY2));
+    // Endpoints in data space (H + slope·Δs), then mapped with toY — slope is ΔH per spend
+    // unit, so it must go through the vertical scale, not the horizontal one.
+    const tangY1 = toY(hS + slope * (x1 - spend));
+    const tangY2 = toY(hS + slope * (x2 - spend));
+    // Clip to the plot area rather than clamping each endpoint (clamping bends the slope)
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(PAD.left, PAD.top, plotW, plotH);
+    ctx.clip();
     ctx.beginPath();
     ctx.strokeStyle = 'rgba(192,57,43,0.5)'; ctx.lineWidth = 1;
-    ctx.moveTo(toX(x1), tY1clamp);
-    ctx.lineTo(toX(x2), tY2clamp);
+    ctx.moveTo(toX(x1), tangY1);
+    ctx.lineTo(toX(x2), tangY2);
     ctx.stroke();
+    ctx.restore();
     // Label the tangent line
     ctx.fillStyle = 'rgba(192,57,43,0.7)'; ctx.font = `8px 'IBM Plex Mono', monospace`;
     ctx.textAlign = 'left';
-    ctx.fillText('← tangent (marginal ROI)', toX(x2) + 4, toY(hS) - 2);
+    ctx.fillText('← tangent (slope = H′)', toX(x2) + 4, toY(hS) - 2);
   }
 
   // Axis labels
