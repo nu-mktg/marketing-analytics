@@ -602,5 +602,5 @@ Equal marginal ROI across the funded channels is what the best interior allocati
 **What to verify in the agent output:**
 1. All λ values between 0 and 1
 2. EC50 values in plausible range relative to the fitted **adstock** series — not relative to raw spend (Section 1.4B)
-3. Predicted revenue at current spend ≈ actual average revenue (model fit sanity check)
+3. The model's fitted weekly revenue tracks actual weekly revenue (in-sample R²) — not "predicted revenue at average spend ≈ average revenue": under bursty spend the steady-state prediction differs from the weekly mean even for a model that fits (H is nonlinear)
 4. Budget recommendation moves spending toward the channel with the higher **marginal ROI** — β × the Hill slope at its current adstock ÷ (1 − λ) (defined in Section 1.4C; the Hill slope itself is Section 1.1, Tool 3) — and not simply toward whichever channel sits lower relative to its own EC50. A large β can outweigh being further up the saturation curve.
