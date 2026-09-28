@@ -301,10 +301,17 @@ $$\text{MR}_j \;=\; \frac{d\,\text{Rev}}{dS_j} \;=\; \underbrace{\beta_j}_{d\tex
 
 The first link is immediate: revenue is β_j times H. The other two need a line each.
 
-**Link 2 — deriving the Hill slope H′.** Write k = EC50^α to save ink. Adding and subtracting k in the
-numerator, H(s) = s^α/(k + s^α) = 1 − k/(k + s^α), and only the second term moves with s. Call
-u = s^α: the derivative of −k/(k + u) with respect to u is k/(k + u)², and du/ds = α s^(α−1) — the
-chain rule again. Multiplying,
+**Link 2 — deriving the Hill slope H′.** To save ink, write $k = EC_{50}^{\alpha}$. Adding and
+subtracting $k$ in the numerator rewrites H so that $s$ appears only once:
+
+$$H(s) \;=\; \frac{s^{\alpha}}{k + s^{\alpha}} \;=\; \frac{(k + s^{\alpha}) - k}{k + s^{\alpha}} \;=\; 1 - \frac{k}{k + s^{\alpha}}$$
+
+The 1 is a constant, so only the fraction changes with $s$. Differentiate it with the chain rule
+again, treating $u = s^{\alpha}$ as the inner piece:
+
+$$\frac{d}{du}\left(-\frac{k}{k+u}\right) \;=\; \frac{k}{(k+u)^{2}}, \qquad \frac{du}{ds} \;=\; \alpha\, s^{\alpha-1}$$
+
+Multiplying the two, and putting $u = s^{\alpha}$ back:
 
 $$H'(s) \;=\; \frac{\alpha\, k\, s^{\alpha-1}}{\left(k + s^{\alpha}\right)^{2}} \;=\; \frac{\alpha \cdot EC_{50}^{\alpha} \cdot s^{\alpha-1}}{\left(EC_{50}^{\alpha} + s^{\alpha}\right)^{2}}, \qquad s = A_{j,t}$$
 
@@ -312,12 +319,26 @@ Check it against Tool 3: at EC50 = 200, α = 2, s = 100 it gives 2 × 40,000 × 
 
 > ### 🔍 Deep Dive: Where the Inflection Formula Comes From
 > The inflection is where H′ stops rising and starts falling — the peak of the bottom panel in
-> Section 1.3's figure — so set the derivative of H′ to zero. It is easiest on the logarithm, which
-> peaks where H′ does: ln H′ = constant + (α − 1) ln s − 2 ln(k + s^α), with derivative
-> (α − 1)/s − 2α s^(α−1)/(k + s^α). Setting that to zero and multiplying through by s(k + s^α) gives
-> (α − 1)(k + s^α) = 2α s^α, i.e. (α − 1)k = (α + 1)s^α, so
+> Section 1.3's figure. At a peak the slope is zero, so we want the derivative of H′ and set it to 0.
 >
-> $$s^* \;=\; EC_{50}\left(\frac{\alpha-1}{\alpha+1}\right)^{1/\alpha}$$
+> **A shortcut: take the log of H′ — not of H — and differentiate that.** Differentiating H′ directly
+> means a quotient rule on an already messy fraction. But the logarithm is strictly increasing, so
+> $\ln H'$ rises exactly when H′ rises and peaks at the same $s$; and the log turns H′'s products and
+> quotient into a sum, which differentiates one term at a time. Taking the log of the H′ above:
+>
+> $$\ln H'(s) \;=\; \underbrace{\ln(\alpha k)}_{\text{constant}} \;+\; (\alpha-1)\ln s \;-\; 2\ln\!\left(k + s^{\alpha}\right)$$
+>
+> Differentiate each term (the last by the chain rule: the derivative of $\ln(k + s^{\alpha})$ is $\alpha s^{\alpha-1}/(k + s^{\alpha})$):
+>
+> $$\frac{d}{ds}\ln H'(s) \;=\; \frac{\alpha-1}{s} \;-\; \frac{2\alpha\, s^{\alpha-1}}{k + s^{\alpha}}$$
+>
+> Set this to zero and multiply both sides by $s\,(k + s^{\alpha})$:
+>
+> $$(\alpha-1)\left(k + s^{\alpha}\right) \;=\; 2\alpha\, s^{\alpha} \quad\Longrightarrow\quad (\alpha-1)\,k \;=\; (\alpha+1)\,s^{\alpha}$$
+>
+> Solve for $s$, remembering $k = EC_{50}^{\alpha}$:
+>
+> $$s^{\alpha} \;=\; EC_{50}^{\alpha}\,\frac{\alpha-1}{\alpha+1} \quad\Longrightarrow\quad s^* \;=\; EC_{50}\left(\frac{\alpha-1}{\alpha+1}\right)^{1/\alpha}$$
 >
 > — Section 1.3's formula. It only exists for α > 1: at α ≤ 1 the bracket is zero or negative, there
 > is no peak, and H′ falls from the first dollar.
@@ -361,14 +382,12 @@ much adstock a dollar buys in the first place. A big-β channel deep into satura
 *less* at the margin than a small-β channel still early on its curve — which is why the rule below
 ranks on MR and not on any single one of them — not β, not EC50, not H, and not λ.
 
-**Budget optimization — and why revenue, not profit.** The homework holds the total budget fixed.
-Then cost is the same under every allocation, so profit = margin × revenue − budget is maximized by
-the allocation that maximizes revenue: **at a fixed budget, maximizing revenue *is* maximizing
-profit** (given one margin across the revenue the channels drive).¹
+**Budget optimization — why revenue, not profit.** The total budget is fixed, so cost is the same
+under every allocation; the split that maximizes revenue therefore also maximizes profit. This
+assumes the cost side is constant.¹
 
-> ¹ *If the total budget can change, a different rule applies: keep adding spend to a channel while
-> margin × MR_j > 1 — that is, while MR_j > 1/margin — because the next dollar must bring back at
-> least a dollar of margin. At a 40% margin a channel needs MR above \$2.50. Not used in this course.*
+> ¹ *If the total budget can change, the question becomes how much to spend in total, not how to
+> split it — a different decision, not covered here.*
 
 **The rule.** Compute marginal ROI — the full β_j · H′(A_j)/(1 − λ_j), not just the first two factors
 — for each channel at its current adstock. Move one small step of budget from the lowest-MR channel
@@ -385,8 +404,8 @@ one channel is starved below its inflection, where its MR is still low but risin
 50 and it gets starker — the only equal-MR split is a minimum, and the best allocation is a
 **corner**: all 50 to the long-memory channel (revenue 86.2), the other dropped. So compare the
 candidates' predicted revenue, corners included, instead of stopping at the first split where the
-MRs match. That is what Part B's optimizer does: it searches the allocations for the highest
-predicted revenue directly, rather than solving "MRs equal".
+MRs match. A numerical optimizer that searches the allocations for the highest predicted revenue
+does this automatically, because it never solves "MRs equal" at all.
 
 **Reporting the result — and say what the percentage is a percentage OF.** The headline number from
 a reallocation is the **revenue uplift**: predicted revenue under the optimal allocation minus
@@ -563,7 +582,7 @@ No. Adstock includes current spend plus a weighted sum of all past spend. Curren
 No. The Hill function returns a number between 0 and 1. To get revenue, multiply by β. The Hill function only tells you what proportion of the channel's maximum contribution is being achieved at the current adstock level.
 
 **4. "Budget optimization tells us how much to spend in total."**
-Budget optimization tells you how to allocate a fixed total budget — it does not tell you whether to spend more or less overall. That needs a different rule — keep adding spend while MR exceeds 1/margin (the footnote in Section 1.4C).
+Budget optimization tells you how to allocate a fixed total budget — it does not tell you whether to spend more or less overall. That is a different decision (the footnote in Section 1.4C).
 
 **5. "If marginal ROI is equal across channels, the model is wrong."**
 Equal marginal ROI across the funded channels is what the best interior allocation looks like, so seeing it is not a warning sign. But it is necessary, not sufficient (Section 1.4C): with S-shaped curves a split can have equal MRs and still be among the worst, and the best allocation can be a corner that drops a channel. Judge an allocation by its predicted revenue, not by the equality alone.
