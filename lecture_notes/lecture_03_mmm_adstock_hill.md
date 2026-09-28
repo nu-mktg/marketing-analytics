@@ -125,7 +125,7 @@ MMM handles two effects that make simple regression inadequate:
 
 **1. Carryover (Adstock):** Advertising effects do not disappear instantly. A TV spot seen on Monday influences purchase decisions through the week. The adstock transformation models this decay explicitly.
 
-**2. Diminishing Returns (Saturation):** The first $10,000 spent on a channel has more impact than the $100,001st dollar. Doubling spend does not double revenue. The Hill function models this **saturating** relationship — a curve that rises toward a ceiling it never passes.
+**2. Diminishing Returns (Saturation):** Past some point, each extra dollar buys less than the one before: the \$10,000 that takes a channel from \$100,000 to \$110,000 adds less revenue than the \$10,000 that took it from \$50,000 to \$60,000. Doubling spend does not double revenue. The Hill function models this **saturating** relationship — a curve that rises toward a ceiling it never passes.
 
 ⚠️ **"Saturating" is not the same as "concave everywhere," and a Hill curve need not be concave everywhere.** The Hill function has a shape parameter α (Section 1.4B). It is concave from the very first dollar only when **α ≤ 1**. With **α > 1** — including α = 2, the value every worked example in this lecture chooses — the curve is **S-shaped**: returns *increase* over an initial stretch, then turn over and diminish. The turning point (the inflection) sits at
 
