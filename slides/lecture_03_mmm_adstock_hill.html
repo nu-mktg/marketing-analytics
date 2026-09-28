@@ -1362,7 +1362,7 @@ Short memory</p>
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mtext mathvariant="normal">EC</mtext><mn>50</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">H(\text{EC}_{50}) = 0.5</annotation></semantics></math>, always)</li>
 <li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math> = the <strong>exponent</strong> on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math> and EC<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi></mi><mn>50</mn></msub><annotation encoding="application/x-tex">_{50}</annotation></semantics></math> — the shape parameter. Unitless; never moves EC<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi></mi><mn>50</mn></msub><annotation encoding="application/x-tex">_{50}</annotation></semantics></math><br>
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha \leq 1</annotation></semantics></math>: concave from the first dollar;<br>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha &gt; 1</annotation></semantics></math>: <strong>S-shaped</strong>. This course: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha = 2</annotation></semantics></math>)</li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha &gt; 1</annotation></semantics></math>: <strong>S-shaped</strong>. Examples here choose <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha = 2</annotation></semantics></math>; Part B <strong>fits</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>)</li>
 </ul>
 </div>
 <div>
@@ -1451,18 +1451,19 @@ Short memory</p>
 <div class="two-col">
 <div>
 <p><strong>Consequence for reading output</strong></p>
-<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mn>0.82</mn></mrow><annotation encoding="application/x-tex">H = 0.82</annotation></semantics></math> tells you your <strong>adstock</strong> is well above EC₅₀. It does not tell you the weekly cheque is.</p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>&gt;</mo><mn>0.5</mn><mo>⇔</mo></mrow><annotation encoding="application/x-tex">H &gt; 0.5 \Leftrightarrow</annotation></semantics></math> <strong>adstock</strong> above EC₅₀. It says nothing about this week’s spend <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>S</mi><mi>t</mi></msub><annotation encoding="application/x-tex">S_t</annotation></semantics></math>.</p>
 </div>
 <div>
 <p><strong>The standard misreading</strong></p>
-<p>Comparing a fitted EC₅₀ against the raw spend column. It always errs the same way: you think you have more headroom than you do.</p>
+<p>Comparing a fitted EC₅₀ against the raw spend column. It always errs the same way: you think you have more <strong>headroom</strong> — room to add spend before the curve flattens — than you do.</p>
 </div>
 </div>
 </section>
 <section class="slide level2">
 <h2>Marginal ROI: What the Next Dollar Buys</h2>
-<p><strong>Marginal ROI</strong> = the revenue gained from the next $1 of <strong>spend</strong>. Two steps, and the second is the one everyone drops.</p>
-<p><strong>Step 1 — revenue per unit of <em>adstock</em>:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>⋅</mo><mi>H</mi><mi>′</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\beta_j \cdot H&#39;(A_j)</annotation></semantics></math>, where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">H&#39;</annotation></semantics></math> is the <em>per unit</em> column two slides back:</p>
+<p><strong>Marginal ROI</strong> = the revenue gained from the next $1 of <strong>weekly spend</strong> — a derivative with respect to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>S</mi><mi>j</mi></msub><annotation encoding="application/x-tex">S_j</annotation></semantics></math>, taken by the chain rule (derived in full in the notes, §1.4C):</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">MR</mtext><mi>j</mi></msub><mo>=</mo><mfrac><mrow><mi>d</mi><mspace width="0.167em"></mspace><mtext mathvariant="normal">Rev</mtext></mrow><mrow><mi>d</mi><msub><mi>S</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><munder><munder><msub><mi>β</mi><mi>j</mi></msub><mo accent="true">⏟</mo></munder><mrow><mi>d</mi><mtext mathvariant="normal">Rev</mtext><mi>/</mi><mi>d</mi><mi>H</mi></mrow></munder><mo>×</mo><munder><munder><mrow><mi>H</mi><mi>′</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mo accent="true">⏟</mo></munder><mrow><mi>d</mi><mi>H</mi><mi>/</mi><mi>d</mi><mi>A</mi></mrow></munder><mo>×</mo><munder><munder><mfrac><mrow><mi>d</mi><msub><mi>A</mi><mi>j</mi></msub></mrow><mrow><mi>d</mi><msub><mi>S</mi><mi>j</mi></msub></mrow></mfrac><mo accent="true">⏟</mo></munder><mrow><mi>d</mi><mi>A</mi><mi>/</mi><mi>d</mi><mi>S</mi></mrow></munder></mrow><annotation encoding="application/x-tex">\text{MR}_j = \frac{d\,\text{Rev}}{dS_j} = \underbrace{\beta_j}_{d\text{Rev}/dH} \times \underbrace{H&#39;(A_j)}_{dH/dA} \times \underbrace{\frac{dA_j}{dS_j}}_{dA/dS}</annotation></semantics></math></p>
+<p><strong>Link 2 — the Hill slope,</strong> the <em>per unit</em> column two slides back (from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mn>1</mn><mo>−</mo><mi>k</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo>+</mo><msup><mi>s</mi><mi>α</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">H = 1 - k/(k+s^\alpha)</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><msubsup><mtext mathvariant="normal">EC</mtext><mn>50</mn><mi>α</mi></msubsup></mrow><annotation encoding="application/x-tex">k = \text{EC}_{50}^\alpha</annotation></semantics></math>):</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>′</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>α</mi><mo>⋅</mo><msubsup><mtext mathvariant="normal">EC</mtext><mn>50</mn><mi>α</mi></msubsup><mo>⋅</mo><msup><mi>s</mi><mrow><mi>α</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mtext mathvariant="normal">EC</mtext><mn>50</mn><mi>α</mi></msubsup><mo>+</mo><msup><mi>s</mi><mi>α</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>s</mi><mo>=</mo><msub><mi>A</mi><mrow><mi>j</mi><mo>,</mo><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">H&#39;(s) = \frac{\alpha \cdot \text{EC}_{50}^\alpha \cdot s^{\alpha-1}}{(\text{EC}_{50}^\alpha + s^\alpha)^2}, \qquad s = A_{j,t}</annotation></semantics></math></p>
 <div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
@@ -1473,13 +1474,16 @@ Short memory</p>
 <p><strong>Important</strong></p>
 </div>
 <div class="callout-content">
-<p><strong>Step 2 — you buy spend, not adstock.</strong> At steady state <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mi>S</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">A = S/(1-\lambda)</annotation></semantics></math>, so one extra dollar of weekly spend buys <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">1/(1-\lambda)</annotation></semantics></math> units of adstock — <strong>5.6 for TV at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0.82</mn></mrow><annotation encoding="application/x-tex">\lambda = 0.82</annotation></semantics></math>, 1.2 for paid search at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0.19</mn></mrow><annotation encoding="application/x-tex">\lambda = 0.19</annotation></semantics></math>.</strong> Hence</p>
+<p><strong>Link 3 — you buy spend, not adstock.</strong> At steady state <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mi>S</mi><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">A = S/(1-\lambda)</annotation></semantics></math>, so one extra dollar of weekly spend, every week, buys <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">1/(1-\lambda)</annotation></semantics></math> units of adstock — <strong>5.6 for TV at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0.82</mn></mrow><annotation encoding="application/x-tex">\lambda = 0.82</annotation></semantics></math>, 1.2 for paid search at <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0.19</mn></mrow><annotation encoding="application/x-tex">\lambda = 0.19</annotation></semantics></math>.</strong> Hence</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">MR</mtext><mi>j</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>⋅</mo><mi>H</mi><mi>′</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mn>1</mn><mo>−</mo><msub><mi>λ</mi><mi>j</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{MR}_j = \frac{\beta_j \cdot H&#39;(A_j)}{1 - \lambda_j}</annotation></semantics></math></p>
-<p>Rank on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>⋅</mo><mi>H</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">\beta \cdot H&#39;</annotation></semantics></math> alone and you compare channels on a scale neither of them buys in — the long-memory channel is under-credited. On a two-channel example differing <em>only</em> in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>, that misallocates the budget 2-to-1 and gives up ~14% of the achievable revenue.</p>
+<p>Rank on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>⋅</mo><mi>H</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">\beta \cdot H&#39;</annotation></semantics></math> alone and you compare channels on a scale neither of them buys in — the long-memory channel is under-credited. Two channels differing <em>only</em> in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math> (0.8 vs 0.2; <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">\beta = 100</annotation></semantics></math>, EC₅₀ <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">= 100</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha = 2</annotation></semantics></math>, budget 100): the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mi>H</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">\beta H&#39;</annotation></semantics></math> rule splits <strong>20 / 80</strong>, the full MR <strong>40.7 / 59.3</strong> — 2-to-1, and 13.8% of achievable revenue lost (worked in the notes).</p>
 </div>
 </div>
 </div>
-<p>Three factors, none sufficient alone: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\beta_j</annotation></semantics></math> is how much the channel <em>could</em> produce, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">H&#39;</annotation></semantics></math> is how hard the next unit of adstock works <strong>now</strong>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>λ</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">1/(1-\lambda_j)</annotation></semantics></math> is how much adstock a dollar buys.</p>
+</section>
+<section class="slide level2">
+<h2>Marginal ROI: Three Factors, None Sufficient</h2>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\beta_j</annotation></semantics></math> is how much the channel <em>could</em> produce, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">H&#39;</annotation></semantics></math> is how hard the next unit of adstock works <strong>now</strong>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>λ</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">1/(1-\lambda_j)</annotation></semantics></math> is how much adstock a dollar buys.</p>
 <div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1498,8 +1502,9 @@ Short memory</p>
 <h2>Budget Allocation</h2>
 <div class="formula-box">
 <p><strong>Budget reallocation rule:</strong></p>
-<p>Move dollars from the channel with <strong>lower</strong> marginal ROI to the channel with <strong>higher</strong> marginal ROI until they equalize — marginal ROI being the full <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mi>H</mi><mi>′</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>λ</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\beta_j H&#39;(A_j)/(1-\lambda_j)</annotation></semantics></math>, not just the first two factors.</p>
+<p>Move a small step of budget from the <strong>lowest</strong>-MR channel to the <strong>highest</strong>, recompute, repeat — MR being the full <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mi>H</mi><mi>′</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>/</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>λ</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\beta_j H&#39;(A_j)/(1-\lambda_j)</annotation></semantics></math>. At the best split every funded channel shares one MR; any dropped channel’s MR is no higher.</p>
 </div>
+<p><strong>Why revenue, not profit:</strong> the total budget is fixed, so cost is the same under every split and the revenue-maximizing split is also the profit-maximizing one.¹</p>
 <div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1509,9 +1514,12 @@ Short memory</p>
 <p><strong>Warning</strong></p>
 </div>
 <div class="callout-content">
-<p>Never shift the <strong>entire</strong> budget at once — marginal ROI falls as spend rises (diminishing returns).</p>
+<p><strong>Equal MR is necessary, not sufficient.</strong> With S-shaped curves several splits can have equal MRs, some of them revenue <em>minima</em>, and the best split can be a <strong>corner</strong> that drops a channel. Compare predicted revenue — which is what Part B’s optimizer does. And never shift the <strong>entire</strong> budget at once: past the inflection, MR falls as spend rises.</p>
 </div>
 </div>
+</div>
+<div class="muted">
+<p>¹ If the budget can change: keep adding spend while MR &gt; 1/margin. Not used in this course.</p>
 </div>
 </section>
 <section class="slide level2">
@@ -1529,7 +1537,7 @@ Channel B: MR = $1.50 per dollar spent</p>
 <p><strong>Warning</strong></p>
 </div>
 <div class="callout-content">
-<p><strong>Read that ≈ sign.</strong> It holds both MRs <em>fixed</em> across the whole $1,000, and the last slide just said they are not. With both channels on the diminishing-returns part of their curves the true gain is <strong>less</strong> than $2,500, and the bigger the shift the worse the estimate — so this is a first-order estimate of a <strong>small</strong> step. Hence “one step, then re-compute”.</p>
+<p><strong>Read that ≈ sign.</strong> It holds both MRs <em>fixed</em> across the whole $1,000, and they are not. Past both inflections the true gain is <strong>less</strong> than $2,500; below them it can be <strong>more</strong>; and over a big enough shift the MRs cross and further dollars <em>lose</em> revenue. So it is a first-order estimate of a <strong>small</strong> step — small meaning neither MR changes much across it. Hence “one step, then re-compute”.</p>
 </div>
 </div>
 </div>
@@ -1542,27 +1550,26 @@ Channel B: MR = $1.50 per dollar spent</p>
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>Stop when marginal ROIs equalize — that’s the optimum. Equalizing marginal ROI ≠ equal budget allocation.</p>
+<p>Equal marginal ROI ≠ equal budget — and equal MR marks a candidate optimum, to be checked on predicted revenue.</p>
 </div>
 </div>
 </div>
 </section>
 <section class="slide level2">
 <h2>Estimation Procedure</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># Typical MMM estimation procedure (simplified)</span></span>
-<span id="cb1-2"><a aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Transform spend with adstock</span></span>
-<span id="cb1-3"><a aria-hidden="true" tabindex="-1"></a>adstock_tv <span class="op">=</span> adstock(spend_tv, lam<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb1-4"><a aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Apply Hill saturation</span></span>
-<span id="cb1-6"><a aria-hidden="true" tabindex="-1"></a>hill_tv <span class="op">=</span> hill(adstock_tv, ec50<span class="op">=</span><span class="dv">500_000</span>, alpha<span class="op">=</span><span class="fl">2.0</span>)</span>
-<span id="cb1-7"><a aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Fit regression on transformed spend</span></span>
-<span id="cb1-9"><a aria-hidden="true" tabindex="-1"></a>revenue <span class="op">~</span> beta_0 <span class="op">+</span> beta_tv <span class="op">*</span> hill_tv <span class="op">+</span> beta_digital <span class="op">*</span> hill_digital <span class="op">+</span> ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a aria-hidden="true" tabindex="-1"></a><span class="co"># What Part B&#39;s agent does (simplified): lambda, EC50, alpha are ESTIMATED, not chosen</span></span>
+<span id="cb1-2"><a aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sse(params):                      <span class="co"># params = (lam, ec50, alpha) for each of 3 channels</span></span>
+<span id="cb1-3"><a aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> [hill(adstock(spend_c, lam_c), ec50_c, alpha_c) <span class="cf">for</span> each channel c]</span>
+<span id="cb1-4"><a aria-hidden="true" tabindex="-1"></a>    betas <span class="op">=</span> least_squares(revenue, X)  <span class="co"># beta_0 + 3 betas: Lecture 2&#39;s OLS</span></span>
+<span id="cb1-5"><a aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>((revenue <span class="op">-</span> predict(betas, X))<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb1-6"><a aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a aria-hidden="true" tabindex="-1"></a>best <span class="op">=</span> differential_evolution(sse, bounds, seed<span class="op">=</span><span class="dv">42</span>)   <span class="co"># search the 9 curve parameters jointly</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Least squares, <strong>not Bayesian</strong> — one best fit, not a distribution. (Meridian and PyMC-Marketing are Bayesian; Robyn uses ridge regression plus the Nevergrad optimizer.)</p>
 <p><strong>What the model returns:</strong></p>
 <ul>
 <li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\beta_j</annotation></semantics></math>: channel contribution coefficient — the channel’s revenue <strong>plateau</strong>, since <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">H \leq 1</annotation></semantics></math></li>
 <li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\beta_0</annotation></semantics></math>: the <strong>intercept</strong> — baseline revenue with every channel’s <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math> at 0. Not a channel’s plateau; reading it as one overstates what advertising does</li>
-<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\lambda_j</annotation></semantics></math>: fitted decay rate per channel</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\lambda_j</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\alpha_j</annotation></semantics></math>: fitted decay rate and shape per channel</li>
 <li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mtext mathvariant="normal">EC</mtext><mrow><mn>50</mn><mo>,</mo><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">\text{EC}_{50,j}</annotation></semantics></math>: half-saturation point per channel, <strong>on the adstock scale</strong></li>
 <li>Marginal ROI curve at any budget level</li>
 </ul>
@@ -1573,7 +1580,7 @@ Channel B: MR = $1.50 per dollar spent</p>
 <div>
 <p><strong>Estimands</strong></p>
 <ul>
-<li>Channel contribution to revenue, net of adstock carryover and saturation</li>
+<li>Channel contribution to revenue, accounting for adstock carryover and saturation</li>
 <li>Marginal return to spend at current adstock level per channel</li>
 <li>Optimal reallocation direction given current marginal returns</li>
 </ul>
