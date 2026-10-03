@@ -16,7 +16,7 @@
 - Identify when the proportional hazards assumption may be violated
 - Say why a difference between two self-selected groups is not a treatment effect
 
-**Prerequisites:** Basic probability from Lecture 1. Everything else is built here.
+**Prerequisites:** Basic probability and the exponent multiplication rule from Lecture 1 (Tool 2); the natural log from Lecture 2 (Tool 3), whose inverse is $e^x$. The hazard, the one new idea everything else rests on, is built here (Tool 3 below).
 
 ---
 
@@ -45,6 +45,25 @@ The Kaplan-Meier estimator multiplies fractions together step by step:
 > Ŝ(t) = (surviving at t₁ / at-risk at t₁) × (surviving at t₂ / at-risk at t₂) × ...
 
 Each fraction is slightly less than 1. Multiplying them gives the cumulative survival probability.
+
+---
+
+#### Tool 3: The Hazard — a Rate Among Those Still at Risk
+
+Write **T** for a customer's churn time — the month they cancel. The survival function is $S(t) = P(T > t)$: the probability a customer is still subscribed after month $t$.
+
+Of the customers still subscribed at the start of a month, what share cancel during it? That share is the month's **discrete hazard**:
+
+$$h_t = \frac{d_t}{n_t} = \frac{\text{churned at } t}{\text{still at risk just before } t}$$
+
+Netflix's "10% canceled every month" (Section 1.2) is a hazard: 10% of *those still subscribed*, not 10% of everyone who ever joined.
+
+The **hazard** $h(t)$ is the same idea for an instant instead of a month: the rate at which customers who have survived to $t$ churn right at $t$, per unit of time. Two properties carry the rest of this lecture:
+
+- **It is conditional on survival.** The denominator is only the customers still at risk, never the original cohort.
+- **It is a rate, not a probability.** It is "per month", so its number changes when the time unit changes. Over a short stretch $\Delta t$, the probability of churning in that stretch, given still subscribed, is approximately $h(t) \times \Delta t$.
+
+In this lecture, **churn rate** always means a per-month hazard, and **churn probability** always means a cumulative share, 1 − Ŝ(t). Section 1.4A shows how the two are tied together.
 
 ---
 
@@ -107,14 +126,24 @@ where n_t is the number of customers at risk just before time t, and d_t is the 
 
 **Reading the table:** Ŝ(9) = 0.7855 means 78.55% of customers survived at least 9 months. Equivalently, 21.45% churned within the first 9 months.
 
-**Conditional churn probability** between any two times t₁ and t₂, given survival to t₁:
+![The Kaplan-Meier estimate from the worked table drawn as a step function: flat at 1.0 until month 2, then dropping to 0.96, flat until month 5, dropping to 0.8977, flat until month 9, dropping to 0.7855. Under each drop the risk set is printed — 200, 185 and 160 — and the gaps between them show customers leaving the risk set between event times, by churning or by being censored](figures/lecture_04_km_step_function.png)
+
+**Survival and the hazard, side by side.** The table already contains the hazard. Each step's $d_t/n_t$ is that step's discrete hazard (Tool 3): 8/200 = 0.0400, 12/185 = 0.0649, 20/160 = 0.1250. Each survival factor is one minus it, so
+
+$$\hat{S}(t) = \prod_{t_j \leq t} \left(1 - h_{t_j}\right)$$
+
+The hazard is what acts at each step; survival is what is left after it has acted. They are different objects and can move in different directions. Here the hazard **rises**, from 4.0% to 6.5% to 12.5%, while Ŝ only falls. Each drop in Ŝ is the hazard applied to the survivors only: $\hat{S}(t_{\text{prev}}) \times h_t$ = 0.0400, then 0.0623, then 0.1122.
+
+![Two stacked panels on one month axis from 0 to 10. The top panel repeats the Kaplan-Meier step function 1.0, 0.96, 0.8977, 0.7855. The bottom panel shows the discrete hazard at each event time as a bar — 0.040 at month 2, 0.065 at month 5, 0.125 at month 9 — rising while the survival curve above it falls](figures/lecture_04_hazard_and_survival.png)
+
+**Conditional churn probability** between any two times t₁ and t₂, given survival to t₁ (T is the churn time, Tool 3):
 
 $$P(\text{churn between } t_1, t_2 \mid T > t_1) = 1 - \frac{\hat{S}(t_2)}{\hat{S}(t_1)}$$
 
 **Example:** Conditional churn between months 5 and 9, given survival to month 5:
 1 − Ŝ(9)/Ŝ(5) = 1 − 0.7855/0.8977 = 1 − 0.875 = **12.5%**
 
-Note: this is much lower than the *unconditional* churn rate 1 − Ŝ(9) = 21.45%, which includes early-tenure churners.
+Note: this is much lower than the *unconditional* churn probability 1 − Ŝ(9) = 21.45%, which includes early-tenure churners.
 
 **Median survival time** is the single headline number read off a KM curve, and it needs a stated
 convention because Ŝ(t) is a *step* function — it usually jumps straight past 0.5 without ever
@@ -148,7 +177,11 @@ $$h(t | X) = h_0(t) \times e^{\beta_1 X_1 + \beta_2 X_2 + ...}$$
 
 **Plain English:** Each customer has a baseline churn hazard h₀(t) (shared across everyone). Their features multiply that baseline by e^(β₁X₁ + β₂X₂ + ...). The model estimates the βs from data.
 
-**Hazard ratios:** We report e^β for each predictor, not β itself.
+**Hazard ratios:** We report e^β for each predictor, not β itself. Here is why. Take two customers who are identical except that one has $X_1$ one unit higher, and divide their hazards:
+
+$$\frac{h_0(t)\, e^{\beta_1 (x+1)}}{h_0(t)\, e^{\beta_1 x}} = e^{\beta_1 (x+1) - \beta_1 x} = e^{\beta_1}$$
+
+The baseline $h_0(t)$ cancels, so the ratio is the same at every $t$. That is the *proportional* in proportional hazards. For a gap of $k$ units, the same division gives $e^{\beta_1 k} = (e^{\beta_1})^k$ by the exponent rule (Lecture 1, Tool 2). So $k$ extra tickets multiply the hazard by $\text{HR}^k$, not by $k \times \text{HR}$.
 
 The two hazard ratios below are **illustrative round numbers**, not this course's fitted values — the
 model fitted on `survival_data.csv` returns HR ≈ 1.47 for `support_tickets` and ≈ 0.72 for
@@ -156,12 +189,19 @@ model fitted on `survival_data.csv` returns HR ≈ 1.47 for `support_tickets` an
 
 | HR interpretation | Meaning |
 |---|---|
-| HR = 1.42 for support_tickets | Each additional support ticket multiplies churn hazard by 1.42 — a 42% increase in churn risk per ticket |
-| HR = 0.74 for workouts_per_week | Each additional workout/week multiplies hazard by 0.74 — a 26% reduction in churn risk per workout |
+| HR = 1.42 for support_tickets | Each additional support ticket multiplies the churn hazard by 1.42 — a 42% higher hazard at every t, per ticket |
+| HR = 0.74 for workouts_per_week | Each additional workout/week multiplies the churn hazard by 0.74 — a 26% lower hazard at every t, per workout |
 | HR < 1 | The feature is protective — higher values reduce churn hazard |
 | HR > 1 | The feature is a risk factor — higher values increase churn hazard |
 
-**The proportional hazards assumption:** The ratio of hazards between any two customers stays constant over time. If customer A has twice the churn hazard as customer B at month 1, they must have twice the hazard at month 12, month 24, and every other time. To check: plot log(-log(Ŝ(t))) vs log(t) for each group — parallel lines confirm the assumption.
+> ⚠️ **An HR is a ratio of hazards, not of churn probabilities.** "Higher churn risk" is fine for
+> the *direction*. For the *size*, name the hazard. Survival compounds the hazard step by step, so
+> under the Cox model a customer's survival curve is the baseline curve raised to the power HR:
+> $S(t \mid x) = S_0(t)^{\text{HR}}$. Treat the worked table as the baseline: Ŝ(9) = 0.7855, so
+> 21.45% churned by month 9. A customer with HR = 1.42 has Ŝ(9) = 0.7855^1.42 = 0.7098, so 29.0%
+> churned. That is 1.35 times the churn probability, not 1.42 times.
+
+**The proportional hazards assumption:** The ratio of hazards between any two customers stays constant over time. If customer A has twice the churn hazard as customer B at month 1, they must have twice the hazard at month 12, month 24, and every other time. The standard check is the **Schoenfeld residual test** that `lifelines` runs in `check_assumptions()` (Section 2.2 says what it measures). An older visual check tests the same thing: plot log(−log Ŝ(t)) against log t for each group. Taking logs twice of $S(t \mid x) = S_0(t)^{\text{HR}}$ gives $\log(-\log S(t \mid x)) = \log \text{HR} + \log(-\log S_0(t))$, so under proportional hazards the two curves sit a constant $\log \text{HR}$ apart. They are parallel. Curves that converge or cross mean the HR is changing over time.
 
 > ### 🔍 Deep Dive: The Partial Likelihood Trick
 > The Cox model estimates β without needing to know the baseline hazard h₀(t) — a nuisance function that would be very hard to estimate. The partial likelihood uses only the ordering of event times: "given that someone churned at month 5, which customer in the risk set was it?" The probability of each observed event provides information about β without touching h₀(t). This is why Cox is called a semi-parametric model: parametric for the effect of covariates, non-parametric for the baseline.
@@ -201,8 +241,8 @@ model fitted on `survival_data.csv` returns HR ≈ 1.47 for `support_tickets` an
 
 > **Also asked on the slides:** *"Compute the conditional churn probability from month 2 to month 9."* — The same formula, applied to the slide's KM table (events at months 2, 5 and 9, with Ŝ = 0.9600, 0.8977 and 0.7855): 1 − Ŝ(9)/Ŝ(2) = 1 − 0.7855/0.9600 = 1 − 0.8182 = **18.2%**. Read it as "of the customers still subscribed at month 2, about 18% churn by month 9" — the denominator is the survivors at month 2, not the original cohort. The unconditional figure, 1 − 0.7855 = 21.5%, answers a different question.
 
-**Q3.** HR = 1.42 per ticket. For 3 tickets: relative hazard = 1.42³ = **2.86** — nearly 3× higher churn risk.
-*Common wrong answer:* 1.42 × 3 = 4.26. Hazard ratios compound multiplicatively (each ticket multiplies by 1.42), not additively.
+**Q3.** HR = 1.42 per ticket. For 3 tickets: relative hazard = 1.42³ = **2.86** — nearly 3× the hazard of a customer with 0 tickets, at every t.
+*Common wrong answer:* 1.42 × 3 = 4.26. Hazard ratios compound multiplicatively (each ticket multiplies by 1.42), not additively — Section 1.4B shows why: a gap of k units gives $e^{\beta k} = \text{HR}^k$. Also not "2.86× as likely to churn": that would be a ratio of churn probabilities, which is smaller (the ⚠️ note in Section 1.4B).
 
 > **Also asked on the slides:** *"'Customers who call support churn faster, so we should stop offering phone support.' What's wrong with this reasoning?"* — It reads an association as a cause. A Cox hazard ratio is **associational**: HR > 1 says the covariate *predicts* faster churn, not that it *causes* it, and establishing cause would require randomising who receives support (Lecture 7). Support contacts are what Part B of the worked example calls "a meaningful early-warning signal of potential churn" — customers call *because* something has already gone wrong. Removing phone support removes the signal, not the problem, and plausibly makes churn worse by closing the one channel where the problem could still be fixed. The analytics response is to **use** the signal: trigger a retention intervention when a customer's ticket volume rises.
 
@@ -326,7 +366,7 @@ effect.
 
 **Concordance index (c-index):** The Cox model's analog of AUC. It measures how well the model ranks customers by their actual churn timing — what fraction of customer pairs is correctly ranked (higher hazard for the one who churned sooner). A c-index of 0.5 is no better than chance; 1.0 is perfect. Values of 0.65–0.80 are typical for subscription churn models.
 
-**Proportional hazards check:** The `check_assumptions()` function in `lifelines` tests whether hazard ratios are constant over time. If a predictor fails this test (p < 0.05 in the Schoenfeld residual test), the hazard ratio changes over time and the Cox coefficient should be interpreted as an average effect only.
+**Proportional hazards check:** The `check_assumptions()` function in `lifelines` tests whether hazard ratios are constant over time, using **Schoenfeld residuals**. At each churn event, the model predicts what the churner's covariate value should be: the average over everyone still at risk, weighted by each customer's fitted hazard. The Schoenfeld residual is the actual churner's value minus that prediction. If the HR is truly constant, these residuals show no trend over time. If, say, ticket-filers churn disproportionately early, the residuals for `support_tickets` are positive early and negative late. The test asks whether that trend is larger than chance. If a predictor fails it (p < 0.05), the hazard ratio changes over time and the Cox coefficient should be interpreted as an average effect only. This is the same question the log(−log Ŝ) plot in Section 1.4B asks by eye, but it is answered per covariate and with a p-value.
 
 **Before trusting the agent output, verify:**
 1. KM curve starts at 1.0 and decreases monotonically
@@ -366,7 +406,7 @@ Censored observations contain real information: the customer has survived at lea
 The KM curve is a population-level estimate. It describes the distribution of survival times across a group, not a prediction for a specific individual.
 
 **4. "A hazard ratio of 0.95 means the predictor reduces churn by 95%."**
-HR = 0.95 means the hazard is reduced by 5% (not 95%). The reduction is $1 - 0.95 = 0.05 = 5\%$.
+HR = 0.95 means the hazard is reduced by 5% (not 95%). The reduction is 1 − 0.95 = 0.05 = 5%.
 
 **5. "Proportional hazards means the hazard is constant over time."**
 It means the *ratio* of two customers' hazards is constant over time — not that any single hazard is constant. The baseline hazard $h_0(t)$ can take any shape.
