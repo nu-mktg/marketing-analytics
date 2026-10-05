@@ -186,7 +186,7 @@ $$\frac{h_0(t)\, e^{\beta_1 (x+1)}}{h_0(t)\, e^{\beta_1 x}} = e^{\beta_1 (x+1) -
 
 The baseline $h_0(t)$ cancels, so the ratio is the same at every $t$. That is the *proportional* in proportional hazards. For a gap of $k$ units, the same division gives $e^{\beta_1 k} = (e^{\beta_1})^k$ by the exponent rule (Lecture 1, Tool 2). So $k$ extra tickets multiply the hazard by $\text{HR}^k$, not by $k \times \text{HR}$.
 
-The two hazard ratios below are **illustrative round numbers**, not this course's fitted values — the
+The two hazard ratios below are **illustrative numbers**, not this course's fitted values — the
 model fitted on `survival_data.csv` returns HR ≈ 1.47 for `support_tickets` and ≈ 0.72 for
 `workouts_per_week`. (1.42 recurs elsewhere as a *given* constant in hand-calculations.)
 
