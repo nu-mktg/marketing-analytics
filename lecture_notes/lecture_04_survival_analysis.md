@@ -62,6 +62,7 @@ The **hazard** $h(t)$ is the same idea for an instant instead of a month: the ra
 
 - **It is conditional on survival.** The denominator is only the customers still at risk, never the original cohort.
 - **It is a rate, not a probability.** It is "per month", so its number changes when the time unit changes. Over a short stretch $\Delta t$, the probability of churning in that stretch, given still subscribed, is approximately $h(t) \times \Delta t$.
+  The bounds differ. The monthly share $d_t/n_t$ counts people, so it always lies between 0 and 1. The instantaneous $h(t)$ has no upper bound and changes with the time unit: 0.1 per month is 1.2 per year. So a churn rate of 10% a month does not mean 120% churn in a year. The probability of churning within 12 months is 1 − 0.9¹² = 71.8%. A rate keeps adding up over time; a probability levels off below 1.
 
 In this lecture, **churn rate** always means a per-month hazard, and **churn probability** always means a cumulative share, 1 − Ŝ(t). Section 1.4A shows how the two are tied together.
 
@@ -134,6 +135,8 @@ $$\hat{S}(t) = \prod_{t_j \leq t} \left(1 - h_{t_j}\right)$$
 
 The hazard is what acts at each step; survival is what is left after it has acted. They are different objects and can move in different directions. Here the hazard **rises**, from 4.0% to 6.5% to 12.5%, while Ŝ only falls. Each drop in Ŝ is the hazard applied to the survivors only: $\hat{S}(t_{\text{prev}}) \times h_t$ = 0.0400, then 0.0623, then 0.1122.
 
+**Ŝ can never rise.** Every factor 1 − h_t lies between 0 and 1, so each step either lowers Ŝ or leaves it flat. Censoring never raises it either: a censored customer leaves the risk set, so each later churn event is a larger share of a smaller group and the later drops get bigger. Two groups' curves can cross, but each curve on its own only falls.
+
 ![Two stacked panels on one month axis from 0 to 10. The top panel repeats the Kaplan-Meier step function 1.0, 0.96, 0.8977, 0.7855. The bottom panel shows the discrete hazard at each event time as a bar — 0.040 at month 2, 0.065 at month 5, 0.125 at month 9 — rising while the survival curve above it falls](figures/lecture_04_hazard_and_survival.png)
 
 **Conditional churn probability** between any two times t₁ and t₂, given survival to t₁ (T is the churn time, Tool 3):
@@ -201,10 +204,10 @@ model fitted on `survival_data.csv` returns HR ≈ 1.47 for `support_tickets` an
 > 21.45% churned by month 9. A customer with HR = 1.42 has Ŝ(9) = 0.7855^1.42 = 0.7098, so 29.0%
 > churned. That is 1.35 times the churn probability, not 1.42 times.
 
-**The proportional hazards assumption:** The ratio of hazards between any two customers stays constant over time. If customer A has twice the churn hazard as customer B at month 1, they must have twice the hazard at month 12, month 24, and every other time. The standard check is the **Schoenfeld residual test** that `lifelines` runs in `check_assumptions()` (Section 2.2 says what it measures). An older visual check tests the same thing: plot log(−log Ŝ(t)) against log t for each group. Taking logs twice of $S(t \mid x) = S_0(t)^{\text{HR}}$ gives $\log(-\log S(t \mid x)) = \log \text{HR} + \log(-\log S_0(t))$, so under proportional hazards the two curves sit a constant $\log \text{HR}$ apart. They are parallel. Curves that converge or cross mean the HR is changing over time.
+**The proportional hazards assumption:** The ratio of hazards between any two customers stays constant over time. If customer A has twice the churn hazard as customer B at month 1, they must have twice the hazard at month 12, month 24, and every other time. The standard check is the **Schoenfeld residual test** that `lifelines` runs in `check_assumptions()` (Section 2.2 says what it measures). An older visual check tests the same thing: plot log(−log Ŝ(t)) against log t for each group. Ŝ lies between 0 and 1, so log Ŝ is negative; the minus sign makes it positive so it can be logged a second time. The quantity −log Ŝ(t) is the **cumulative hazard** H(t), the hazard added up from month 0 to t (on the worked table, −log 0.7855 = 0.2414). Taking logs twice of $S(t \mid x) = S_0(t)^{\text{HR}}$ gives $\log(-\log S(t \mid x)) = \log \text{HR} + \log(-\log S_0(t))$, so under proportional hazards the two curves sit a constant $\log \text{HR}$ apart. In words: if one group's hazard is always 1.42 times the other's, its accumulated hazard is also always 1.42 times, and on a log scale a constant multiple becomes a constant gap. They are parallel. Curves that converge or cross mean the HR is changing over time. Plotting against log t is a convention; any time axis keeps a constant gap constant.
 
 > ### 🔍 Deep Dive: The Partial Likelihood Trick
-> The Cox model estimates β without needing to know the baseline hazard h₀(t) — a nuisance function that would be very hard to estimate. The partial likelihood uses only the ordering of event times: "given that someone churned at month 5, which customer in the risk set was it?" The probability of each observed event provides information about β without touching h₀(t). This is why Cox is called a semi-parametric model: parametric for the effect of covariates, non-parametric for the baseline.
+> The Cox model estimates β without needing to know the baseline hazard h₀(t) — a nuisance function that would be very hard to estimate. The partial likelihood uses only the ordering of event times: "given that someone churned at month 5, which customer in the risk set was it?" If it was customer $i$, that answer has probability $e^{\beta x_i} / \sum_{j \in R} e^{\beta x_j}$, where $R$ is everyone still at risk. Each term is really $h_0(t)\, e^{\beta x}$, and $h_0(t)$ cancels top and bottom, the same cancellation as in the hazard-ratio derivation above. The probability of each observed event provides information about β without touching h₀(t). Only the order of events is used, not the gaps between them; a customer censored later still counts in every earlier risk set; and tied event times need an approximation (`lifelines` uses Efron's). This is why Cox is called a semi-parametric model: parametric for the effect of covariates, non-parametric for the baseline.
 
 ---
 
@@ -214,6 +217,8 @@ model fitted on `survival_data.csv` returns HR ≈ 1.47 for `support_tickets` an
 > then work through them together, and you will be asked to **explain your reasoning, not
 > just state the answer.** Using Copilot or Claude to reach the answer is expected — what
 > you cannot outsource is the explanation.
+
+The slides ask five different questions (only Q3 repeats). Their answers are the "Also asked on the slides" notes in the answer key below.
 
 1. 500 customers at risk. At month 6: 25 churned. At month 12: 40 churned from the remaining risk set. Compute Ŝ(6) and Ŝ(12).
 
@@ -232,7 +237,7 @@ model fitted on `survival_data.csv` returns HR ≈ 1.47 for `support_tickets` an
 **Q1.** Ŝ(6) = (500−25)/500 = 475/500 = **0.950**. For Ŝ(12): the risk set after month 6 = 500 − 25 = 475. Ŝ(12) = 0.950 × (475−40)/475 = 0.950 × 435/475 = 0.950 × 0.916 = **0.870**.
 *Common wrong answer:* Using 500 as the risk set at month 12 (forgetting to subtract the 25 who churned at month 6 from the risk set).
 
-> **Also asked on the slides:** *"A customer has been active for 14 months. The KM table has no event at month 14. What is Ŝ(14)?"* — Ŝ(14) equals the last value recorded before month 14. The Kaplan-Meier estimator is a product taken over **event times only**, so when no churn event occurs between the previous event and month 14 no new factor enters the product and the curve is flat: as Section 2.2 puts it, the KM plot is "a step function that drops at each churn event, with flat sections between events." On the slide's table (events at months 2, 5 and 9, with Ŝ = 0.9600, 0.8977 and 0.7855) that gives Ŝ(14) = **0.7855**. On the checkpoint table above, with events only at months 6 and 12, it would give Ŝ(14) = Ŝ(12) = 0.870. *Common wrong answer:* interpolating between event times, or assuming Ŝ must keep falling every month.
+> **Also asked on the slides:** *"A customer has been active for 14 months. The KM table has no event at month 14. What is Ŝ(14)?"* — Ŝ(14) equals the last value recorded before month 14. The Kaplan-Meier estimator is a product taken over **event times only**, so when no churn event occurs between the previous event and month 14 no new factor enters the product and the curve is flat: as Section 2.2 puts it, the KM plot is "a step function that drops at each churn event, with flat sections between events." On the slide's table (events at months 2, 5 and 9, with Ŝ = 0.9600, 0.8977 and 0.7855) that gives Ŝ(14) = **0.7855**. On the checkpoint table above, with events only at months 6 and 12, it would give Ŝ(14) = Ŝ(12) = 0.870. *Common wrong answer:* interpolating between event times, or assuming Ŝ drops in months with no churn events.
 
 > **Also asked on the slides:** *"A customer has Ŝ(24) = 0.32. In plain English, what does this mean?"* — "About a 32% chance that this customer is still a subscriber 24 months in — equivalently, about a 68% chance they have churned by month 24." Ŝ(t) is the cumulative product of conditional survival probabilities (Section 1.4), so it is a survival *probability* for one customer, or the expected surviving *share* of a cohort. It is not a churn rate, not a retained-revenue figure, and it says nothing about *when* inside those 24 months the churn would occur.
 
