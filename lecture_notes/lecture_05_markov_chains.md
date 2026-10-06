@@ -174,11 +174,11 @@ That is one equation per transient state. Two transient states → two equations
 
 **Worked example** with the lecture's P (Active = [0.80, 0.15, 0.05], At-Risk = [0.30, 0.50, 0.20]):
 
-$$t_A = 1 + 0.80\,t_A + 0.15\,t_D \qquad\Longrightarrow\qquad 0.20\,t_A - 0.15\,t_D = 1$$
-$$t_D = 1 + 0.30\,t_A + 0.50\,t_D \qquad\Longrightarrow\qquad -0.30\,t_A + 0.50\,t_D = 1$$
+$$t_A = 1 + 0.80\,t_A + 0.15\,t_R \qquad\Longrightarrow\qquad 0.20\,t_A - 0.15\,t_R = 1$$
+$$t_R = 1 + 0.30\,t_A + 0.50\,t_R \qquad\Longrightarrow\qquad -0.30\,t_A + 0.50\,t_R = 1$$
 
-Solving: $t_A = 0.65 / 0.055 \approx \mathbf{11.8}$ months, $t_D = 0.50 / 0.055 \approx \mathbf{9.1}$
-months. **A currently-Active customer is worth about 11.8 more months; a At-Risk one about 9.1.**
+Solving: $t_A = 0.65 / 0.055 \approx \mathbf{11.8}$ months, $t_R = 0.50 / 0.055 \approx \mathbf{9.1}$
+months. **A currently-Active customer is worth about 11.8 more months; an At-Risk one about 9.1.**
 The gap is the whole argument for triaging retention effort toward the declining-engagement
 state — there is less time left in which to act.
 
@@ -188,8 +188,8 @@ return to Active too readily, or the rows are transposed.
 
 **What the campaign actually bought.** Re-run the same two equations on P' (At-Risk → Active = 0.45,
 At-Risk → At-Risk = 0.35): $t_A = 0.80/0.0625 = \mathbf{12.8}$ months and
-$t_D = 0.65/0.0625 = \mathbf{10.4}$ months. The destination is unchanged — it always was — but every
-customer now takes about **a month longer** to get there, and a At-Risk one takes **1.3 months**
+$t_R = 0.65/0.0625 = \mathbf{10.4}$ months. The destination is unchanged — it always was — but every
+customer now takes about **a month longer** to get there, and an At-Risk one takes **1.3 months**
 longer. *That* is the campaign's effect, stated in a unit finance will accept, and it is invisible in
 the steady state.
 
@@ -204,6 +204,89 @@ the steady state.
 > remaining months Active. In `numpy`: `t = numpy.linalg.inv(numpy.eye(2) - Q) @ numpy.ones(2)`.
 > Why the inverse appears: $\mathbf{t} = \mathbf{1} + Q\mathbf{t}$ is exactly the system above
 > written in one line, and solving it for $\mathbf{t}$ gives $(I - Q)^{-1}\mathbf{1}$.
+
+---
+
+#### Part D: One Worked Example, Start to Finish
+
+*For working through on your own, with every step shown. It covers each calculation the homework asks
+for, on a **different** chain: copy the method, not the numbers.*
+
+**The setting.** A meal-kit subscription, measured monthly, with three states and Churned absorbing:
+
+| From \ To | Active | At-Risk | Churned |
+|---|---|---|---|
+| Active | 0.55 | 0.25 | 0.20 |
+| At-Risk | 0.10 | 0.50 | 0.40 |
+| Churned | 0 | 0 | 1 |
+
+Today's distribution is v₀ = [Active 0.40, At-Risk 0.35, Churned 0.25].
+
+**Step 0 — check that P is valid.** Row sums: 0.55 + 0.25 + 0.20 = 1.00; 0.10 + 0.50 + 0.40 = 1.00;
+0 + 0 + 1 = 1.00 ✓. No entry is negative ✓.
+
+**Step 1 — one month ahead, for a customer who is Active today.** Her distribution is [1, 0, 0].
+Multiplying by P just picks out the Active row: next month she is **Active 0.55, At-Risk 0.25,
+Churned 0.20**. A row of P *is* the one-month forecast for one customer in that state.
+
+**Step 2 — two months ahead, for the same customer.** Multiply [0.55, 0.25, 0.20] by P once more:
+- Active = 0.55×0.55 + 0.25×0.10 + 0.20×0 = 0.3025 + 0.025 = **0.3275**
+- At-Risk = 0.55×0.25 + 0.25×0.50 + 0.20×0 = 0.1375 + 0.125 = **0.2625**
+- Churned = 0.55×0.20 + 0.25×0.40 + 0.20×1 = 0.11 + 0.10 + 0.20 = **0.41**
+
+Sum = 1.00 ✓. The two-month Active probability (0.3275) is **not** 0.55 × 0.55 = 0.3025. The extra
+0.025 is customers who slip to At-Risk in month 1 and come back in month 2, and squaring the diagonal
+entry misses them.
+
+**Step 3 — find the absorbing state.** Churned's row is [0, 0, 1]: a 1 on its own diagonal and nothing
+going out, so Churned is absorbing. Active and At-Risk each have a path into it (0.20 and 0.40 a month),
+so the steady state is **[0, 0, 1] — 100% Churned**. That is where this P leads if it never changes. It
+says nothing about *how soon*, and Steps 5 and 6 are the numbers that answer that.
+
+**Step 4 — next month's churned fraction for the whole base.** Multiply each share of v₀ by its
+probability of being Churned next month (the Churned column of P), then add:
+0.40×0.20 + 0.35×0.40 + 0.25×1 = 0.08 + 0.14 + 0.25 = **0.47**. Do not drop the last term: the 25%
+already churned stay churned. Only 0.08 + 0.14 = 0.22 of the 0.47 are *new* churners. The other two
+entries of v₁ come from the same multiplication: Active = 0.40×0.55 + 0.35×0.10 = 0.22 + 0.035 =
+**0.255**, and At-Risk = 0.40×0.25 + 0.35×0.50 = 0.10 + 0.175 = **0.275**. So v₁ = [0.255, 0.275, 0.47],
+and the sum is 1.00 ✓.
+
+**Step 5 — expected months until churn.** The counting convention is the one Part C uses (and the
+homework uses): $t_i$ counts **the current month as month 1** and stops at the month the customer
+enters Churned, which is not counted. First-step analysis gives one equation per transient state:
+
+$$t_A = 1 + 0.55\,t_A + 0.25\,t_R \qquad\Longrightarrow\qquad 0.45\,t_A - 0.25\,t_R = 1$$
+$$t_R = 1 + 0.10\,t_A + 0.50\,t_R \qquad\Longrightarrow\qquad -0.10\,t_A + 0.50\,t_R = 1$$
+
+The matrix form gives the same answer and is what code returns. The transient block is
+Q = [[0.55, 0.25], [0.10, 0.50]], so I − Q = [[0.45, −0.25], [−0.10, 0.50]], whose determinant is
+0.45×0.50 − 0.25×0.10 = 0.225 − 0.025 = 0.200. Invert a 2×2 matrix by swapping the diagonal, negating
+the off-diagonal, and dividing by the determinant:
+N = (I − Q)⁻¹ = [[0.50, 0.25], [0.10, 0.45]] / 0.200 = **[[2.50, 1.25], [0.50, 2.25]]**.
+
+The row sums are the expected times: $t_A$ = 2.50 + 1.25 = **3.75 months** and $t_R$ = 0.50 + 2.25 =
+**2.75 months**. Sanity check: both are positive, and the healthier state has the longer time ✓. N's
+entries have their own reading. $N_{AA}$ = 2.50 says a customer who is Active today spends, on average,
+2.5 of their 3.75 remaining months Active and the other 1.25 At-Risk.
+
+**Step 6 — project the whole base forward.** Repeat v_{k+1} = v_k × P. For month 2, start from v₁:
+Active = 0.255×0.55 + 0.275×0.10 = 0.14025 + 0.0275 = 0.16775; At-Risk = 0.255×0.25 + 0.275×0.50 =
+0.06375 + 0.1375 = 0.20125; Churned = 0.255×0.20 + 0.275×0.40 + 0.47×1 = 0.051 + 0.11 + 0.47 = 0.631.
+
+| Month | Active | At-Risk | Churned |
+|---|---|---|---|
+| 0 (today) | 40.0% | 35.0% | 25.0% |
+| 1 | 25.5% | 27.5% | 47.0% |
+| 2 | 16.8% | 20.1% | 63.1% |
+| 3 | 11.2% | 14.3% | 74.5% |
+| 6 | 3.5% | 4.7% | 91.7% |
+| 12 | 0.4% | 0.5% | 99.1% |
+
+In code this is `v = v0` followed by twelve rounds of `v = v @ P`. It is deterministic, so there is
+nothing to simulate and no seed to choose. The table and Step 5 are two views of one fact: a typical
+customer here is gone within about four months, so by month 12 almost nobody is left. A retention
+change would show up as a slower table and a larger $t_A$, and **not** in the steady state, which stays
+at 100% Churned for any P whose Churned row is [0, 0, 1].
 
 ---
 
