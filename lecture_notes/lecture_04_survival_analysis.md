@@ -34,7 +34,7 @@ P(A | B) means "the probability of A given that B has already happened."
 
 **Key formula:** P(A | B) = P(A and B) / P(B)
 
-**Why this matters for churn:** "60% of customers churned by month 24" (unconditional) is a very different statement from "60% of customers who survived to month 12 churned by month 24" (conditional). The first includes early churners; the second asks about long-tenured customers specifically.
+**Why this matters for churn:** "60% of customers churned within 24 months of signing up" (unconditional) is a very different statement from "60% of customers who survived to month 12 churned by month 24" (conditional). The first includes early churners; the second asks about long-tenured customers specifically.
 
 ---
 
@@ -50,7 +50,7 @@ Each fraction is slightly less than 1. Multiplying them gives the cumulative sur
 
 #### Tool 3: The Hazard — a Rate Among Those Still at Risk
 
-Write **T** for a customer's churn time — the month they cancel. The survival function is $S(t) = P(T > t)$: the probability a customer is still subscribed after month $t$.
+Write **T** for a customer's churn time: their **age** when they cancel, in months since that customer signed up. The survival function is $S(t) = P(T > t)$: the probability a customer is still subscribed at age $t$. Every $t$ in this lecture is customer age, not a calendar date. "Month 2" means two months after *that customer* signed up: March 2024 for a customer who joined in January 2024, August 2026 for one who joined in June 2026. Section 1.3 shows the two clocks side by side.
 
 Of the customers still subscribed at the start of a month, what share cancel during it? That share is the month's **discrete hazard**:
 
@@ -98,13 +98,21 @@ Survival analysis gives you both: the long-run picture (the survival curve) and 
 
 Traditional regression requires observing the outcome for every observation. But with churn, many customers are still active when you run the analysis — you do not know when (or whether) they will eventually churn.
 
-A customer who joined 18 months ago and is still active is **censored**: you know they survived at least 18 months, but not how long they will ultimately stay. Throwing away censored observations would bias your survival estimates downward (making churn appear faster than it is). Treating them as churned at the censoring point would be wrong too.
+**Who is censored.** Every customer still active on the analysis date is **right-censored at their current age**: the analysis date minus their join date, in months. You know they survived at least that long, but not how long they will ultimately stay. This is not only the customers who joined just before the analysis. A customer who joined 32 months ago and is still active is censored at 32. Customers join on many dates and the analysis has one date, so censoring happens at many ages: long-tenured customers are censored old, recent joiners are censored young.
 
-**Kaplan-Meier handles censoring correctly** by updating the risk set at each event time: a customer censored at month 18 contributes to the risk set at all earlier event times but not later ones.
+**A second cause: lost to follow-up.** A customer is also censored, earlier, when you stop being able to observe them: a gap in the data, or an account migrated to another system. They are censored at their age when the record ends. HW04's data has only the first kind.
+
+In this lecture, **t is always customer age** (months since sign-up), never a calendar month. Panel (a) below shows eight illustrative customers on the calendar; panel (b) slides each line back to start at sign-up, which is the axis Kaplan-Meier uses.
 
 ![Two panels showing the same eight illustrative customers A to H. Panel (a), calendar time from Jan 2024 to Oct 2026: each customer is a line from their join date; B, C, E and G end in a cross (churned); A, D and H run to a dashed analysis-date line at Oct 2026 and end in an open circle (still active, censored); F ends in an open circle in Mar 2026, lost to follow-up. Panel (b): the same lines slid back to start at 0 on a customer-age axis, months since sign-up: churned at ages 8, 24, 3 and 7; censored at ages 32, 25, 10 and 4.](figures/lecture_04_calendar_vs_age.png)
 
+**Two common mistakes, both made before any survival model is run.** (1) Keeping only the customers who cancelled, for example computing "average customer lifetime" as the average tenure of cancelled customers. Everyone left has churned, so Ŝ must reach 0 at the last churn age, however loyal the customer base is. The bias is worst for recent cohorts: a cohort that joined four months ago can only show churns within four months, so it is described entirely by its fastest leavers. (2) Treating censored customers as churned at their current age, for example averaging `tenure_months` over everyone. Every still-active customer is counted as leaving today. Both make survival look shorter than it is.
+
+**Kaplan-Meier handles censoring correctly**: a censored customer counts in the risk set at every churn age up to their censoring age, then leaves it without making Ŝ step down.
+
 ![Kaplan-Meier step function for the same eight customers on a customer-age axis: 1.0 until age 3, then 0.875 (8 at risk), 0.7292 at age 7 (6 at risk), 0.5833 at age 8 (5 at risk), 0.3889 at age 24 (3 at risk), with tick marks where H, F, D and A are censored at ages 4, 10, 25 and 32. Two more lines show two wrong ways. Orange dashed, using only the four who cancelled: 0.75, 0.50, 0.25 and 0 by age 24. Green dotted, treating everyone's tenure so far as if it ended today: a step down at every one of the eight exits, 0.875 to 0 by age 32.](figures/lecture_04_km_eight_customers.png)
+
+**The assumption behind it.** Kaplan-Meier assumes censoring is **non-informative**: a customer censored at age t would have churned like the customers still at risk at age t. With censoring at the analysis date, that means newer cohorts are assumed to churn the way older cohorts did at the same age. If a recent cohort churns faster (say it was acquired with a deep discount), the curve's later ages, estimated only from older cohorts, will overstate its survival.
 
 ---
 
@@ -122,7 +130,7 @@ where n_t is the number of customers at risk just before time t, and d_t is the 
 
 **Worked example:**
 
-| Month | Events (churned) | At risk | Survival step | Ŝ(t) |
+| Age t (months since sign-up) | Events (churned) | At risk | Survival step | Ŝ(t) |
 |---|---|---|---|---|
 | 0 | — | 200 | — | 1.0000 |
 | 2 | 8 | 200 | (200−8)/200 = 0.9600 | **0.9600** |
@@ -230,7 +238,7 @@ The slides ask five different questions (only Q3 repeats). Their answers are the
 
 3. A Cox model reports HR = 1.42 for support_tickets_last_30d. A customer filed 3 tickets. What is their relative hazard compared to a customer with 0 tickets?
 
-4. A customer has been inactive for 18 months but has not formally cancelled. Are they: (a) censored, (b) churned at month 18, (c) still fully in the risk set?
+4. A customer joined 30 months ago, has not logged in for the last 6 months, and has not cancelled. On today's analysis date, are they (a) censored, (b) churned, or (c) neither? If censored, at what age?
 
 5. The proportional hazards assumption says hazard ratios are constant over time. Why would this assumption fail for the "age of subscription" feature?
 
@@ -255,8 +263,8 @@ The slides ask five different questions (only Q3 repeats). Their answers are the
 
 > **Also asked on the slides:** *"'Customers who call support churn faster, so we should stop offering phone support.' What's wrong with this reasoning?"* — It reads an association as a cause. A Cox hazard ratio is **associational**: HR > 1 says the covariate *predicts* faster churn, not that it *causes* it, and establishing cause would require randomising who receives support (Lecture 7). Support contacts are what Part B of the worked example calls "a meaningful early-warning signal of potential churn" — customers call *because* something has already gone wrong. Removing phone support removes the signal, not the problem, and plausibly makes churn worse by closing the one channel where the problem could still be fixed. The analytics response is to **use** the signal: when a customer's ticket volume rises, find and fix the problem behind the tickets. An intervention that misses the cause, such as a blanket discount, leaves the risk in place.
 
-**Q4.** **(a) Censored.** If the customer has not formally cancelled, you observe them as active up to your analysis date. They are censored at 18 months — you know they survived at least 18 months but not what happens afterward.
-*Common wrong answer:* Churned at month 18. Censoring means you lost track of the outcome, not that the outcome was bad. Treating censored customers as churned biases the survival curve downward.
+**Q4.** **(a) Censored, at age 30.** Churn here means cancelling, and they have not cancelled, so there is no churn event. They are still active on the analysis date, so they are censored at their current age: 30 months since sign-up. You know they survived at least 30 months but not what happens afterward. The 6 months of inactivity do not change their age; they are a warning sign you could feed into a Cox model, not a churn.
+*Common wrong answer:* "Not censored: only customers who joined just before the analysis date are censored." Every customer still active on the analysis date is censored, at their current age; recent joiners are only censored *younger*. Two other slips: "censored at 6" (inactivity time is not age) and "churned at 24" (when they went quiet; that would be a different churn definition, which you would have to adopt for every customer before the analysis). Treating censored customers as churned biases the survival curve downward.
 
 **Q5.** New subscribers typically have high churn hazard (many try and leave quickly). Long-tenured subscribers have lower hazard (they've demonstrated loyalty). The hazard of a new subscriber relative to a 3-year subscriber is very high at month 1 but converges over time — the ratio is not constant. Any feature that is correlated with customer lifecycle stage will likely violate proportional hazards.
 *Common wrong answer:* "It fails because some customers are more loyal than others." Heterogeneity in levels of loyalty does not violate the assumption — it's about the ratio of hazards being constant over time, not about absolute hazard levels.
@@ -276,7 +284,7 @@ The slides ask five different questions (only Q3 repeats). Their answers are the
 
 Seven subscription customers, observed from signup:
 
-| Customer | Tenure (months) | Status |
+| Customer | Age at churn or censoring (months since sign-up) | Status |
 |---|---|---|
 | C1 | 2 | Churned |
 | C2 | 4 | Churned |
