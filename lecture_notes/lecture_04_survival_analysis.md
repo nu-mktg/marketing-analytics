@@ -102,6 +102,10 @@ A customer who joined 18 months ago and is still active is **censored**: you kno
 
 **Kaplan-Meier handles censoring correctly** by updating the risk set at each event time: a customer censored at month 18 contributes to the risk set at all earlier event times but not later ones.
 
+![Two panels showing the same eight illustrative customers A to H. Panel (a), calendar time from Jan 2024 to Oct 2026: each customer is a line from their join date; B, C, E and G end in a cross (churned); A, D and H run to a dashed analysis-date line at Oct 2026 and end in an open circle (still active, censored); F ends in an open circle in Mar 2026, lost to follow-up. Panel (b): the same lines slid back to start at 0 on a customer-age axis, months since sign-up: churned at ages 8, 24, 3 and 7; censored at ages 32, 25, 10 and 4.](figures/lecture_04_calendar_vs_age.png)
+
+![Kaplan-Meier step function for the same eight customers on a customer-age axis: 1.0 until age 3, then 0.875 (8 at risk), 0.7292 at age 7 (6 at risk), 0.5833 at age 8 (5 at risk), 0.3889 at age 24 (3 at risk), with tick marks where H, F, D and A are censored at ages 4, 10, 25 and 32. A dashed line shows the wrong way, dropping the four censored customers: 0.75, 0.50, 0.25 and 0 by age 24.](figures/lecture_04_km_eight_customers.png)
+
 ---
 
 ### Section 1.4 — Mathematical Framework
