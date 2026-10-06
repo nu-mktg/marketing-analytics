@@ -225,6 +225,12 @@ Active customer now takes about **2.2 months longer** to get there, and an At-Ri
 **2.8 months** longer. *That* is the campaign's effect, stated in a unit finance will accept, and it is invisible in
 the steady state.
 
+**One caveat before that number goes to finance.** Everything above *assumes* the campaign moves
+At-Risk → Active from 0.20 to 0.35. A transition matrix fitted to past data describes what customers
+did; it cannot show what a new campaign will cause them to do. To show that the campaign itself
+produces the rise, compare customers who received it with a randomly held-out group who did not, the
+same logic as the A/B test in Module 1.
+
 > ### 🔍 Deep Dive: The Fundamental Matrix
 > The same calculation in matrix form, which is what code will hand you. Strip the absorbing row and
 > column out of P and call the remaining transient block **Q**. Rows are still "from" and columns
