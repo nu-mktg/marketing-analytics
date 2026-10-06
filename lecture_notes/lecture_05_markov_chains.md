@@ -114,6 +114,8 @@ Transition matrix P:
 | At-Risk | 0.30 | 0.50 | 0.20 |
 | Churned | 0.00 | 0.00 | 1.00 |
 
+![State diagram of Section 1.4A's transition matrix. Three circles: Active, At-Risk, Churned. Active has a self-loop of 0.80, an arrow of 0.15 to At-Risk and an arrow of 0.05 to Churned. At-Risk has a self-loop of 0.50, an arrow of 0.30 back to Active and an arrow of 0.20 to Churned. Churned has a self-loop of 1.00 and no arrow out, marked absorbing.](figures/lecture_05_state_diagram.png)
+
 After one period (v₀ × P):
 - New Active = 0.70×0.80 + 0.20×0.30 + 0.10×0 = 0.56 + 0.06 = **0.62**
 - New At-Risk = 0.70×0.15 + 0.20×0.50 + 0.10×0 = 0.105 + 0.10 = **0.205**
@@ -139,6 +141,8 @@ The steady-state distribution π is the distribution that one more period leaves
 **How to find it numerically:** Repeatedly apply P to any starting distribution until it stops changing. Where it settles depends on whether the chain has an **absorbing state** — a state with a 1 on its own diagonal, so nobody who enters it ever leaves.
 
 **The critical insight:** The steady-state is where the current transition dynamics are pointing — not necessarily where you want to be. **If no state is absorbing** — say some churned customers are won back each month — the chain settles at a mix of all three states. If that mix has 40% Active while 75% are Active today, then without any intervention Active% will decline from 75% toward 40% over time. **If Churned is absorbing, as in our P,** the same logic gives a starker answer: the steady state is 100% Churned, and Active% declines toward 0. The next paragraph shows what that means for interventions.
+
+![Line chart over 24 months starting from v0 = 0.70 Active, 0.20 At-Risk, 0.10 Churned under Section 1.4A's P. Active falls steadily from 0.70 (0.62 after one month) to about 7% at month 24; At-Risk edges up to 0.205 then falls to about 3%; Churned rises every month from 0.10 to about 91%. A reference line at 100% is labelled steady state: 100% Churned, reached only in the limit.](figures/lecture_05_distribution_drain.png)
 
 **Interventions change the transition matrix — but check what that actually moves.** If a
 re-engagement campaign increases At-Risk → Active from 0.30 to 0.45, a new matrix P' applies, and you
@@ -238,8 +242,8 @@ Today's distribution is v₀ = [Active 0.40, At-Risk 0.35, Churned 0.25].
 **Step 0 — check that P is valid.** Row sums: 0.55 + 0.25 + 0.20 = 1.00; 0.10 + 0.50 + 0.40 = 1.00;
 0 + 0 + 1 = 1.00 ✓. No entry is negative ✓.
 
-**Step 1 — one month ahead, for a customer who is Active today.** Her distribution is [1, 0, 0].
-Multiplying by P just picks out the Active row: next month she is **Active 0.55, At-Risk 0.25,
+**Step 1 — one month ahead, for a customer who is Active today.** Their distribution is [1, 0, 0].
+Multiplying by P just picks out the Active row: next month they are **Active 0.55, At-Risk 0.25,
 Churned 0.20**. A row of P *is* the one-month forecast for one customer in that state.
 
 **Step 2 — two months ahead, for the same customer.** Multiply [0.55, 0.25, 0.20] by P once more:
