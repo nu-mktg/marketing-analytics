@@ -30,13 +30,13 @@
 
 A matrix has rows and columns. To multiply a vector v by a matrix P, multiply each element of v by the corresponding element in each column of P and sum.
 
-**Example:** v = [0.7, 0.2, 0.1], P = [[0.8, 0.1, 0.1], [0.3, 0.5, 0.2], [0, 0, 1]]
+**Example:** v = [0.5, 0.3, 0.2], P = [[0.6, 0.3, 0.1], [0.2, 0.5, 0.3], [0, 0, 1]]
 
-New state 1 = 0.7×0.8 + 0.2×0.3 + 0.1×0 = 0.56 + 0.06 + 0 = **0.62**
-New state 2 = 0.7×0.1 + 0.2×0.5 + 0.1×0 = 0.07 + 0.10 + 0 = **0.17**
-New state 3 = 0.7×0.1 + 0.2×0.2 + 0.1×1 = 0.07 + 0.04 + 0.10 = **0.21**
+New state 1 = 0.5×0.6 + 0.3×0.2 + 0.2×0 = 0.30 + 0.06 + 0 = **0.36**
+New state 2 = 0.5×0.3 + 0.3×0.5 + 0.2×0 = 0.15 + 0.15 + 0 = **0.30**
+New state 3 = 0.5×0.1 + 0.3×0.3 + 0.2×1 = 0.05 + 0.09 + 0.20 = **0.34**
 
-Result: v₁ = [0.62, 0.17, 0.21]. All three values sum to 1. ✓
+Result: v₁ = [0.36, 0.30, 0.34]. All three values sum to 1. ✓
 
 **Why the recipe works.** It is the law of total probability. To be in state *j* next period, a
 customer must be in *some* state *i* now and then move from *i* to *j*. So you add up the
@@ -104,26 +104,26 @@ This implies: if Churned is absorbing, retention matters because it determines h
 
 #### Part A: One Period of Transition
 
-Starting distribution v₀ = [Active=0.70, At-Risk=0.20, Churned=0.10]
+Starting distribution v₀ = [Active=0.85, At-Risk=0.10, Churned=0.05]
 
 Transition matrix P:
 
 | From \ To | Active | At-Risk | Churned |
 |---|---|---|---|
-| Active | 0.80 | 0.15 | 0.05 |
-| At-Risk | 0.30 | 0.50 | 0.20 |
+| Active | 0.90 | 0.08 | 0.02 |
+| At-Risk | 0.20 | 0.40 | 0.40 |
 | Churned | 0.00 | 0.00 | 1.00 |
 
-![State diagram of Section 1.4A's transition matrix. Three circles: Active, At-Risk, Churned. Active has a self-loop of 0.80, an arrow of 0.15 to At-Risk and an arrow of 0.05 to Churned. At-Risk has a self-loop of 0.50, an arrow of 0.30 back to Active and an arrow of 0.20 to Churned. Churned has a self-loop of 1.00 and no arrow out, marked absorbing.](figures/lecture_05_state_diagram.png)
+![State diagram of Section 1.4A's transition matrix. Three circles: Active, At-Risk, Churned. Active has a self-loop of 0.90, an arrow of 0.08 to At-Risk and an arrow of 0.02 to Churned. At-Risk has a self-loop of 0.40, an arrow of 0.20 back to Active and an arrow of 0.40 to Churned. Churned has a self-loop of 1.00 and no arrow out, marked absorbing.](figures/lecture_05_state_diagram.png)
 
 After one period (v₀ × P):
-- New Active = 0.70×0.80 + 0.20×0.30 + 0.10×0 = 0.56 + 0.06 = **0.62**
-- New At-Risk = 0.70×0.15 + 0.20×0.50 + 0.10×0 = 0.105 + 0.10 = **0.205**
-- New Churned = 0.70×0.05 + 0.20×0.20 + 0.10×1 = 0.035 + 0.04 + 0.10 = **0.175**
+- New Active = 0.85×0.90 + 0.10×0.20 + 0.05×0 = 0.765 + 0.02 = **0.785**
+- New At-Risk = 0.85×0.08 + 0.10×0.40 + 0.05×0 = 0.068 + 0.04 = **0.108**
+- New Churned = 0.85×0.02 + 0.10×0.40 + 0.05×1 = 0.017 + 0.04 + 0.05 = **0.107**
 
-v₁ = [0.62, 0.205, 0.175]. Sum = 1.00 ✓
+v₁ = [0.785, 0.108, 0.107]. Sum = 1.00 ✓
 
-Active decreased from 70% to 62%. Churned increased from 10% to 17.5%.
+Active decreased from 85% to 78.5%. Churned increased from 5% to 10.7%.
 
 **Several periods at once: $P^n$.** Two periods ahead is v₂ = v₁ × P = v₀ × P × P. The product P × P
 is written $P^2$. Each of its entries is a row of P times a column of P, the same row-times-column
@@ -142,18 +142,18 @@ The steady-state distribution π is the distribution that one more period leaves
 
 **The critical insight:** The steady-state is where the current transition dynamics are pointing — not necessarily where you want to be. **If no state is absorbing** — say some churned customers are won back each month — the chain settles at a mix of all three states. If that mix has 40% Active while 75% are Active today, then without any intervention Active% will decline from 75% toward 40% over time. **If Churned is absorbing, as in our P,** the same logic gives a starker answer: the steady state is 100% Churned, and Active% declines toward 0. The next paragraph shows what that means for interventions.
 
-![Line chart over 24 months starting from v0 = 0.70 Active, 0.20 At-Risk, 0.10 Churned under Section 1.4A's P. Active falls steadily from 0.70 (0.62 after one month) to about 7% at month 24; At-Risk edges up to 0.205 then falls to about 3%; Churned rises every month from 0.10 to about 91%. A reference line at 100% is labelled steady state: 100% Churned, reached only in the limit.](figures/lecture_05_distribution_drain.png)
+![Line chart over 36 months starting from v0 = 0.85 Active, 0.10 At-Risk, 0.05 Churned under Section 1.4A's P. Active falls steadily from 0.85 (0.785 after one month) to about 6% at month 36; At-Risk edges up to about 0.11 then falls to about 1%; Churned rises every month from 0.05 to about 93%. A reference line at 100% is labelled steady state: 100% Churned, reached only in the limit.](figures/lecture_05_distribution_drain.png)
 
 **Interventions change the transition matrix — but check what that actually moves.** If a
-re-engagement campaign increases At-Risk → Active from 0.30 to 0.45, a new matrix P' applies, and you
+re-engagement campaign increases At-Risk → Active from 0.20 to 0.35, a new matrix P' applies, and you
 find its steady state by iterating P' to convergence. P' is row 2 re-balanced — At-Risk → Active rises
-0.30 → 0.45 and At-Risk → At-Risk falls 0.50 → 0.35, so the row still sums to 1. Do that and the result
+0.20 → 0.35 and At-Risk → At-Risk falls 0.40 → 0.25, so the row still sums to 1. Do that and the result
 is worth pausing on:
 
-| | steady state | Active after 12 periods (from v₀ = [0.60, 0.30, 0.10]) |
+| | steady state | Active after 12 periods (from v₀ = [0.45, 0.40, 0.15]) |
 |---|---|---|
-| P (At-Risk→Active = 0.30) | [0, 0, 1] | 0.208 |
-| P' (At-Risk→Active = 0.45) | [0, 0, 1] | 0.250 |
+| P (At-Risk→Active = 0.20) | [0, 0, 1] | 0.239 |
+| P' (At-Risk→Active = 0.35) | [0, 0, 1] | 0.295 |
 
 **The steady state does not budge.** As long as Churned is absorbing, *every* path leads there
 eventually, so no change to the Active and At-Risk rows can alter the destination — it can only change
@@ -189,13 +189,13 @@ $$t_i = 1 + \sum_{j \text{ not absorbing}} P_{ij}\, t_j$$
 
 That is one equation per transient state. Two transient states → two equations → solve the pair.
 
-**Worked example** with the lecture's P (Active = [0.80, 0.15, 0.05], At-Risk = [0.30, 0.50, 0.20]):
+**Worked example** with the lecture's P (Active = [0.90, 0.08, 0.02], At-Risk = [0.20, 0.40, 0.40]):
 
-$$t_A = 1 + 0.80\,t_A + 0.15\,t_R \qquad\Longrightarrow\qquad 0.20\,t_A - 0.15\,t_R = 1$$
-$$t_R = 1 + 0.30\,t_A + 0.50\,t_R \qquad\Longrightarrow\qquad -0.30\,t_A + 0.50\,t_R = 1$$
+$$t_A = 1 + 0.90\,t_A + 0.08\,t_R \qquad\Longrightarrow\qquad 0.10\,t_A - 0.08\,t_R = 1$$
+$$t_R = 1 + 0.20\,t_A + 0.40\,t_R \qquad\Longrightarrow\qquad -0.20\,t_A + 0.60\,t_R = 1$$
 
-Solving: $t_A = 0.65 / 0.055 \approx \mathbf{11.8}$ months, $t_R = 0.50 / 0.055 \approx \mathbf{9.1}$
-months. **A currently-Active customer is worth about 11.8 more months; an At-Risk one about 9.1.**
+Solving: $t_A = 0.68 / 0.044 \approx \mathbf{15.5}$ months, $t_R = 0.30 / 0.044 \approx \mathbf{6.8}$
+months. **A currently-Active customer is worth about 15.5 more months; an At-Risk one about 6.8.**
 The gap is the whole argument for triaging retention effort toward the declining-engagement
 state — there is less time left in which to act.
 
@@ -203,21 +203,21 @@ state — there is less time left in which to act.
 **larger** $t_i$. If At-Risk comes out above Active, the fitted matrix is letting At-Risk customers
 return to Active too readily, or the rows are transposed.
 
-**What the campaign actually bought.** Re-run the same two equations on P' (At-Risk → Active = 0.45,
-At-Risk → At-Risk = 0.35): $t_A = 0.80/0.0625 = \mathbf{12.8}$ months and
-$t_R = 0.65/0.0625 = \mathbf{10.4}$ months. The destination is unchanged — it always was — but every
-customer now takes about **a month longer** to get there, and an At-Risk one takes **1.3 months**
-longer. *That* is the campaign's effect, stated in a unit finance will accept, and it is invisible in
+**What the campaign actually bought.** Re-run the same two equations on P' (At-Risk → Active = 0.35,
+At-Risk → At-Risk = 0.25): $t_A = 0.83/0.047 = \mathbf{17.7}$ months and
+$t_R = 0.45/0.047 = \mathbf{9.6}$ months. The destination is unchanged — it always was — but an
+Active customer now takes about **2.2 months longer** to get there, and an At-Risk one takes
+**2.8 months** longer. *That* is the campaign's effect, stated in a unit finance will accept, and it is invisible in
 the steady state.
 
 > ### 🔍 Deep Dive: The Fundamental Matrix
 > The same calculation in matrix form, which is what code will hand you. Strip the absorbing row and
 > column out of P and call the remaining transient block **Q** (here the 2×2 matrix
-> [[0.80, 0.15], [0.30, 0.50]]). Then the **fundamental matrix** is $N = (I - Q)^{-1}$, and the
+> [[0.90, 0.08], [0.20, 0.40]]). Then the **fundamental matrix** is $N = (I - Q)^{-1}$, and the
 > vector of expected times is $\mathbf{t} = N\mathbf{1}$ — row sums of N. For the P above,
-> $N = $ [[9.09, 2.73], [5.45, 3.64]], whose row sums are 11.82 and 9.09: the same two answers.
+> $N = $ [[13.64, 1.82], [4.55, 2.27]], whose row sums are 15.45 and 6.82: the same two answers.
 > $N_{ij}$ has its own reading — the expected number of periods spent in state *j* before absorption,
-> starting from *i* — so $N_{AA} = 9.09$ says an Active customer spends about 9 of their 11.8
+> starting from *i* — so $N_{AA} = 13.64$ says an Active customer spends about 13.6 of their 15.5
 > remaining months Active. In `numpy`: `t = numpy.linalg.inv(numpy.eye(2) - Q) @ numpy.ones(2)`.
 > Why the inverse appears: $\mathbf{t} = \mathbf{1} + Q\mathbf{t}$ is exactly the system above
 > written in one line, and solving it for $\mathbf{t}$ gives $(I - Q)^{-1}\mathbf{1}$.
@@ -314,7 +314,7 @@ at 100% Churned for any P whose Churned row is [0, 0, 1].
 > just state the answer.** Using Copilot or Claude to reach the answer is expected — what
 > you cannot outsource is the explanation.
 
-1. Transition matrix P: Active=[0.80, 0.15, 0.05], At-Risk=[0.30, 0.50, 0.20], Churned=[0, 0, 1]. Starting from v₀=[0.60, 0.30, 0.10], compute v₁.
+1. Transition matrix P: Active=[0.90, 0.08, 0.02], At-Risk=[0.20, 0.40, 0.40], Churned=[0, 0, 1]. Starting from v₀=[0.45, 0.40, 0.15], compute v₁.
 
 2. Using v₁ from Q1, compute v₂ = v₁ × P.
 
@@ -322,25 +322,25 @@ at 100% Churned for any P whose Churned row is [0, 0, 1].
 
 4. A *different* company's chain has **no absorbing state** — some churned customers come back each month. Its current Active% = 70% and its steady-state Active% = 35%. If nothing changes, will Active% increase or decrease over time?
 
-5. A re-engagement campaign increases At-Risk→Active from 0.30 to 0.45, with Churned still absorbing. What happens to the steady-state Active%, and what does the campaign actually change?
+5. A re-engagement campaign increases At-Risk→Active from 0.20 to 0.35, with Churned still absorbing. What happens to the steady-state Active%, and what does the campaign actually change?
 
 ---
 
 ### Checkpoint Answer Key
 
-**Q1.** v₀ = [0.60, 0.30, 0.10].
-New Active = 0.60×0.80 + 0.30×0.30 + 0.10×0 = 0.48 + 0.09 = **0.57**
-New At-Risk = 0.60×0.15 + 0.30×0.50 + 0.10×0 = 0.09 + 0.15 = **0.24**
-New Churned = 0.60×0.05 + 0.30×0.20 + 0.10×1 = 0.03 + 0.06 + 0.10 = **0.19**
-v₁ = [0.57, 0.24, 0.19]. Sum = 1.00 ✓
+**Q1.** v₀ = [0.45, 0.40, 0.15].
+New Active = 0.45×0.90 + 0.40×0.20 + 0.15×0 = 0.405 + 0.08 = **0.485**
+New At-Risk = 0.45×0.08 + 0.40×0.40 + 0.15×0 = 0.036 + 0.16 = **0.196**
+New Churned = 0.45×0.02 + 0.40×0.40 + 0.15×1 = 0.009 + 0.16 + 0.15 = **0.319**
+v₁ = [0.485, 0.196, 0.319]. Sum = 1.00 ✓
 
 *Common wrong answer:* Multiplying row × row instead of vector × matrix. Always multiply each element of the current distribution by the corresponding entry in each column of P.
 
-**Q2.** v₁ = [0.57, 0.24, 0.19].
-New Active = 0.57×0.80 + 0.24×0.30 + 0.19×0 = 0.456 + 0.072 = **0.528**
-New At-Risk = 0.57×0.15 + 0.24×0.50 + 0.19×0 = 0.0855 + 0.12 = **0.2055**
-New Churned = 0.57×0.05 + 0.24×0.20 + 0.19×1 = 0.0285 + 0.048 + 0.19 = **0.2665**
-v₂ ≈ [0.528, 0.206, 0.267]. Sum ≈ 1.00 ✓
+**Q2.** v₁ = [0.485, 0.196, 0.319].
+New Active = 0.485×0.90 + 0.196×0.20 + 0.319×0 = 0.4365 + 0.0392 = **0.4757**
+New At-Risk = 0.485×0.08 + 0.196×0.40 + 0.319×0 = 0.0388 + 0.0784 = **0.1172**
+New Churned = 0.485×0.02 + 0.196×0.40 + 0.319×1 = 0.0097 + 0.0784 + 0.319 = **0.4071**
+v₂ = [0.4757, 0.1172, 0.4071]. Sum = 1.00 ✓
 
 **Q3.** Yes, Churned is absorbing — its row is [0, 0, 1], meaning once churned, the probability of staying churned is 1. Long-run implication: all customers eventually end up in Churned. The steady-state has 100% in Churned. Retention strategy determines how slowly or quickly the distribution drains into the absorbing state.
 
@@ -352,7 +352,7 @@ v₂ ≈ [0.528, 0.206, 0.267]. Sum ≈ 1.00 ✓
 
 *Contrast with Q3:* our P has an absorbing Churned, so its steady state is 0% Active and Active% decreases toward 0. Same rule — move toward the steady state — different destination.
 
-**Q5.** **It does not change — the steady state stays at 0% Active / 100% Churned.** Churned is still absorbing, so every customer still ends up there eventually; raising At-Risk→Active cannot alter the destination. What the campaign changes is the **speed**: starting from [0.60, 0.30, 0.10], Active after 12 periods is 0.208 under the original P and 0.250 under P'. That improvement is real and is worth paying for — you just have to measure it at a **finite horizon**, not in the steady state.
+**Q5.** **It does not change — the steady state stays at 0% Active / 100% Churned.** Churned is still absorbing, so every customer still ends up there eventually; raising At-Risk→Active cannot alter the destination. What the campaign changes is the **speed**: starting from [0.45, 0.40, 0.15], Active after 12 periods is 0.239 under the original P and 0.295 under P'. That improvement is real and is worth paying for — you just have to measure it at a **finite horizon**, not in the steady state.
 
 *Common wrong answer:* "The steady-state Active% will be higher, because more customers are returning to Active each period." This is the trap the absorbing state sets. It is true that more customers return to Active each period, and true that the distribution is healthier at every finite horizon — but the steady state answers a different question ("where does this end up?"), and with an absorbing Churned the answer is always the same. The only intervention that moves the steady state is one that makes Churned **non-absorbing** — a win-back programme with a non-zero Churned → Active probability.
 
@@ -374,7 +374,7 @@ A mobile gaming company tracks player engagement monthly. The transition count m
 | From↓ \ To→ | Active | At-Risk | Churned |
 |---|---|---|---|
 | Active | 560 | 140 | 100 |
-| At-Risk | 180 | 200 | 120 |
+| At-Risk | 180 | 170 | 150 |
 | Churned | 0 | 0 | 800 |
 
 **Part A:** Build the transition probability matrix $P$ by normalizing each row. Verify all rows sum to 1.
@@ -391,19 +391,19 @@ A mobile gaming company tracks player engagement monthly. The transition count m
 
 Row sums: Active = 800, At-Risk = 500, Churned = 800.
 
-$$P = \begin{bmatrix} 560/800 & 140/800 & 100/800 \\ 180/500 & 200/500 & 120/500 \\ 0/800 & 0/800 & 800/800 \end{bmatrix} = \begin{bmatrix} 0.700 & 0.175 & 0.125 \\ 0.360 & 0.400 & 0.240 \\ 0.000 & 0.000 & 1.000 \end{bmatrix}$$
+$$P = \begin{bmatrix} 560/800 & 140/800 & 100/800 \\ 180/500 & 170/500 & 150/500 \\ 0/800 & 0/800 & 800/800 \end{bmatrix} = \begin{bmatrix} 0.700 & 0.175 & 0.125 \\ 0.360 & 0.340 & 0.300 \\ 0.000 & 0.000 & 1.000 \end{bmatrix}$$
 
-Row sums: $0.700+0.175+0.125 = 1.000$; $0.360+0.400+0.240 = 1.000$; $0+0+1 = 1.000$ ✓
+Row sums: $0.700+0.175+0.125 = 1.000$; $0.360+0.340+0.300 = 1.000$; $0+0+1 = 1.000$ ✓
 
 **Part B: Active Row of $P^2$**
 
 $$(P^2)_{A,A} = 0.700 \times 0.700 + 0.175 \times 0.360 + 0.125 \times 0.000 = 0.490 + 0.063 + 0.000 = \mathbf{0.553}$$
 
-$$(P^2)_{A,R} = 0.700 \times 0.175 + 0.175 \times 0.400 + 0.125 \times 0.000 = 0.1225 + 0.070 + 0.000 = \mathbf{0.193}$$
+$$(P^2)_{A,R} = 0.700 \times 0.175 + 0.175 \times 0.340 + 0.125 \times 0.000 = 0.1225 + 0.0595 + 0.000 = \mathbf{0.182}$$
 
-$$(P^2)_{A,C} = 0.700 \times 0.125 + 0.175 \times 0.240 + 0.125 \times 1.000 = 0.0875 + 0.042 + 0.125 = \mathbf{0.255}$$
+$$(P^2)_{A,C} = 0.700 \times 0.125 + 0.175 \times 0.300 + 0.125 \times 1.000 = 0.0875 + 0.0525 + 0.125 = \mathbf{0.265}$$
 
-Check: $0.553 + 0.193 + 0.255 = 1.001 \approx 1.000$ ✓ (rounding)
+Check: $0.553 + 0.182 + 0.265 = 1.000$ ✓
 
 **Part C: Churn Progression from Active State**
 
@@ -411,12 +411,12 @@ Check: $0.553 + 0.193 + 0.255 = 1.001 \approx 1.000$ ✓ (rounding)
 |---|---|---|---|
 | 0 | 1.000 | 0.000 | 0.000 |
 | 1 | 0.700 | 0.175 | 0.125 |
-| 2 | 0.553 | 0.193 | 0.255 |
+| 2 | 0.553 | 0.182 | 0.265 |
 
 The probability of being in a non-Churned state (Active + At-Risk):
 - Month 0: 1.000 (all survive)
 - Month 1: 0.700 + 0.175 = 0.875
-- Month 2: 0.553 + 0.193 = 0.746
+- Month 2: 0.553 + 0.182 = 0.735
 
 This is exactly the survival function $\hat{S}(t)$ from Lecture 4, computed here via Markov chain dynamics. The connection between survival analysis and Markov chains is not a coincidence — they model the same phenomenon from different angles.
 
@@ -430,7 +430,7 @@ This is exactly the survival function $\hat{S}(t)$ from Lecture 4, computed here
 - Heavy off-diagonal flows toward Churned: dangerous — many customers flowing out
 - Unexpected flows (e.g., Churned → Active > 0): may indicate data quality issues or intentional win-back programs
 
-**The steady-state vector:** Represents the long-run customer mix. If the current distribution is better than steady state, expect deterioration over time. If worse, expect improvement. Use this for long-run capacity and revenue planning.
+**The steady-state vector:** For a chain with **no** absorbing state, it is the long-run customer mix: if the current distribution is better than the steady state, expect deterioration over time; if worse, expect improvement. With an absorbing Churned, as in this lecture and the homework, it is always [0, 0, 1], so it carries no planning information. Read the expected time to absorption (Part C) and the finite-horizon projection instead.
 
 **Simulation output:** Plotting the fraction in each state over 24 simulated months starting from a realistic initial distribution. Look for:
 - How quickly does the distribution converge to steady state?
@@ -466,7 +466,7 @@ This is exactly the survival function $\hat{S}(t)$ from Lecture 4, computed here
 ### Common Misconceptions
 
 **1. "The steady-state distribution tells us what will happen next month."**
-The steady state is the long-run equilibrium — it describes what the distribution converges to over many periods, not what happens in one period. For short-run predictions, use $\pi_0 P^n$ where $\pi_0$ is today's distribution.
+The steady state is the long-run equilibrium — it describes what the distribution converges to over many periods, not what happens in one period. For short-run predictions, use $v_0 P^n$ where $v_0$ is today's distribution.
 
 **2. "The Markov property means history does not matter at all."**
 The Markov property means the transition probabilities depend only on the current state — but the current state itself summarizes the relevant history. A customer who is "At-Risk" has implicitly communicated their recent behavior through their state assignment.
@@ -477,7 +477,7 @@ More states can capture finer distinctions but increase estimation error (fewer 
 **4. "Rows of $P^n$ are computed by multiplying each row element of $P$ by $n$."**
 $P^n$ requires actual matrix multiplication ($n-1$ times), not element-wise scaling. The elements of $P^n$ are not simply $n$ times the elements of $P$.
 
-**5. "If the steady state shows 40% Active, I can guarantee 40% Active customers tomorrow."**
+**5. "If the steady state shows 40% Active, I can guarantee 40% Active customers tomorrow."** (A 40% Active steady state needs a chain with no absorbing state, one where churned customers can return.)
 The steady state is an asymptotic property. Convergence may take months or years, and if the transition matrix itself changes (due to seasonality, product changes, or campaigns), the system may never actually reach the theoretical steady state.
 
 ---
