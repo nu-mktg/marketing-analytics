@@ -246,7 +246,7 @@ Three validation checks:
 ### Context Prompt
 ```
 I am a retention analyst. I have monthly snapshots of customer engagement states
-for a subscription service. States are: Active, Dormant, and Churned (absorbing).
+for a subscription service. States are: Active, At-Risk, and Churned (absorbing).
 Each row represents a customer-month-state observation. I want to estimate the
 transition probability matrix and use it to project the customer state distribution
 forward and compute the steady state.
@@ -259,14 +259,14 @@ Using the engagement dataset:
 1. Compute the transition matrix P by counting transitions between consecutive months
    and normalising each row to sum to 1. Report the full 3×3 matrix.
 
-2. Starting from the current state distribution v₀ = [fraction Active, fraction Dormant,
+2. Starting from the current state distribution v₀ = [fraction Active, fraction At-Risk,
    fraction Churned], compute v₁ and v₂ using matrix-vector multiplication:
    v_{t+1} = v_t · P
 
 3. Compute the steady-state distribution π* by solving π·P = π, Σπᵢ = 1.
    Report what fraction of customers will eventually be in each state.
 
-4. Show what happens to the state distribution if P[Dormant → Active] is increased
+4. Show what happens to the state distribution if P[At-Risk → Active] is increased
    by 15 percentage points (a retention campaign effect). Recompute v₁ and v₂.
    What is the change in the Active fraction at t = 2?
 
@@ -285,7 +285,7 @@ Three validation checks:
    Show the shape of the operation explicitly.
 
 3. ABSORBING STATE: If Churned is an absorbing state, P[Churned → Churned] should equal
-   1.0 and P[Churned → Active] = P[Churned → Dormant] = 0. Verify this holds.
+   1.0 and P[Churned → Active] = P[Churned → At-Risk] = 0. Verify this holds.
    If the steady state has all customers eventually Churned, confirm this is expected
    (not a modelling error) for a chain with a single absorbing state.
 ```
