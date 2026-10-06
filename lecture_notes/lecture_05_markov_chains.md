@@ -528,7 +528,7 @@ The steady state is an asymptotic property. Convergence may take months or years
 | Simulation of 500 journeys | Section 2.2 — Monte Carlo approximation to $P^n$ |
 
 **What to verify:**
-1. All rows of $P$ sum to 1.0 (within 0.001 tolerance)
+1. All **rows** of $P$ sum to 1.0 (within 0.001 tolerance). If the *columns* sum to 1 instead, the agent used the transposed convention (Pv); ask it to use this lecture's: rows = current state, v @ P
 2. The steady-state vector satisfies $\pi P \approx \pi$ — multiply it out and check
 3. If Churned is absorbing: $(P)_{Churned,Churned} = 1.0$, all other entries in that row = 0
 4. Transition probabilities are directionally sensible (At-Risk → Churned > Active → Churned)

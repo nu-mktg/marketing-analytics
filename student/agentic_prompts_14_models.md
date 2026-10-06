@@ -256,14 +256,21 @@ forward and compute the steady state.
 ```
 Using the engagement dataset:
 
+Convention, used in every step: P[i, j] = P(next month = j | this month = i).
+Rows are the CURRENT state, columns the NEXT state, and every ROW sums to 1.
+A distribution is a ROW vector, so one month ahead is v @ P -- never P @ v, and
+never transpose P.
+
 1. Compute the transition matrix P by counting transitions between consecutive months
-   and normalising each row to sum to 1. Report the full 3×3 matrix.
+   and normalising each row to sum to 1. Report the full 3×3 matrix with row labels
+   (current state) and column labels (next state).
 
 2. Starting from the current state distribution v₀ = [fraction Active, fraction At-Risk,
-   fraction Churned], compute v₁ and v₂ using matrix-vector multiplication:
-   v_{t+1} = v_t · P
+   fraction Churned], compute v₁ and v₂ using vector-matrix multiplication
+   (row vector on the left): v_{t+1} = v_t @ P
 
-3. Compute the steady-state distribution π* by solving π·P = π, Σπᵢ = 1.
+3. Compute the steady-state distribution π* by solving π @ P = π, Σπᵢ = 1
+   (π is a row vector: a LEFT eigenvector of P, i.e. an eigenvector of P.T).
    Report what fraction of customers will eventually be in each state.
 
 4. Show what happens to the state distribution if P[At-Risk → Active] is increased
@@ -280,9 +287,10 @@ Three validation checks:
 1. ROW SUMS: Verify every row of P sums to exactly 1.00 (within floating-point tolerance).
    Report: PASS or FAIL for each row.
 
-2. MULTIPLICATION DIRECTION: Confirm you computed v_{t+1} = v_t · P (row vector times
-   matrix), NOT P · v_t (matrix times column vector). These give different results.
-   Show the shape of the operation explicitly.
+2. MULTIPLICATION DIRECTION: Confirm you computed v_{t+1} = v_t @ P (row vector times
+   matrix), NOT P @ v_t (matrix times column vector). These give different results.
+   Show the shape of the operation explicitly: (1×3) @ (3×3) -> (1×3). Confirm that
+   P's ROWS, not its columns, sum to 1 — if the columns do, P has been transposed.
 
 3. ABSORBING STATE: If Churned is an absorbing state, P[Churned → Churned] should equal
    1.0 and P[Churned → Active] = P[Churned → At-Risk] = 0. Verify this holds.
