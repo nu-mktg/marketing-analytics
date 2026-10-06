@@ -104,7 +104,7 @@ A customer who joined 18 months ago and is still active is **censored**: you kno
 
 ![Two panels showing the same eight illustrative customers A to H. Panel (a), calendar time from Jan 2024 to Oct 2026: each customer is a line from their join date; B, C, E and G end in a cross (churned); A, D and H run to a dashed analysis-date line at Oct 2026 and end in an open circle (still active, censored); F ends in an open circle in Mar 2026, lost to follow-up. Panel (b): the same lines slid back to start at 0 on a customer-age axis, months since sign-up: churned at ages 8, 24, 3 and 7; censored at ages 32, 25, 10 and 4.](figures/lecture_04_calendar_vs_age.png)
 
-![Kaplan-Meier step function for the same eight customers on a customer-age axis: 1.0 until age 3, then 0.875 (8 at risk), 0.7292 at age 7 (6 at risk), 0.5833 at age 8 (5 at risk), 0.3889 at age 24 (3 at risk), with tick marks where H, F, D and A are censored at ages 4, 10, 25 and 32. A dashed line shows the wrong way, dropping the four censored customers: 0.75, 0.50, 0.25 and 0 by age 24.](figures/lecture_04_km_eight_customers.png)
+![Kaplan-Meier step function for the same eight customers on a customer-age axis: 1.0 until age 3, then 0.875 (8 at risk), 0.7292 at age 7 (6 at risk), 0.5833 at age 8 (5 at risk), 0.3889 at age 24 (3 at risk), with tick marks where H, F, D and A are censored at ages 4, 10, 25 and 32. A dashed line shows the wrong way, excluding the four censored customers: 0.75, 0.50, 0.25 and 0 by age 24.](figures/lecture_04_km_eight_customers.png)
 
 ---
 
@@ -131,15 +131,15 @@ where n_t is the number of customers at risk just before time t, and d_t is the 
 
 **Reading the table:** Ŝ(9) = 0.7855 means 78.55% of customers survived at least 9 months. Equivalently, 21.45% churned within the first 9 months.
 
-![The Kaplan-Meier estimate from the worked table drawn as a step function: flat at 1.0 until month 2, then dropping to 0.96, flat until month 5, dropping to 0.8977, flat until month 9, dropping to 0.7855. Under each drop the risk set is printed — 200, 185 and 160 — and the gaps between them show customers leaving the risk set between event times, by churning or by being censored](figures/lecture_04_km_step_function.png)
+![The Kaplan-Meier estimate from the worked table drawn as a step function: flat at 1.0 until month 2, then stepping down to 0.96, flat until month 5, stepping down to 0.8977, flat until month 9, stepping down to 0.7855. Under each step the risk set is printed — 200, 185 and 160 — and the gaps between them show customers leaving the risk set between event times, by churning or by being censored](figures/lecture_04_km_step_function.png)
 
 **Survival and the hazard, side by side.** The table already contains the hazard. Each step's $d_t/n_t$ is that step's discrete hazard (Tool 3): 8/200 = 0.0400, 12/185 = 0.0649, 20/160 = 0.1250. Each survival factor is one minus it, so
 
 $$\hat{S}(t) = \prod_{t_j \leq t} \left(1 - h_{t_j}\right)$$
 
-The hazard is what acts at each step; survival is what is left after it has acted. They are different objects and can move in different directions. Here the hazard **rises**, from 4.0% to 6.5% to 12.5%, while Ŝ only falls. Each drop in Ŝ is the hazard applied to the survivors only: $\hat{S}(t_{\text{prev}}) \times h_t$ = 0.0400, then 0.0623, then 0.1122.
+The hazard is what acts at each step; survival is what is left after it has acted. They are different objects and can move in different directions. Here the hazard **rises**, from 4.0% to 6.5% to 12.5%, while Ŝ only falls. Each step down in Ŝ is the hazard applied to the survivors only: $\hat{S}(t_{\text{prev}}) \times h_t$ = 0.0400, then 0.0623, then 0.1122.
 
-**Ŝ can never rise.** Every factor 1 − h_t lies between 0 and 1, so each step either lowers Ŝ or leaves it flat. Censoring never raises it either: a censored customer leaves the risk set, so each later churn event is a larger share of a smaller group and the later drops get bigger. Two groups' curves can cross, but each curve on its own only falls.
+**Ŝ can never rise.** Every factor 1 − h_t lies between 0 and 1, so each step either lowers Ŝ or leaves it flat. Censoring never raises it either: a censored customer leaves the risk set, so each later churn event is a larger share of a smaller group and the later steps down get bigger. Two groups' curves can cross, but each curve on its own only falls.
 
 ![Two stacked panels on one month axis from 0 to 10. The top panel repeats the Kaplan-Meier step function 1.0, 0.96, 0.8977, 0.7855. The bottom panel shows the discrete hazard at each event time as a bar — 0.040 at month 2, 0.065 at month 5, 0.125 at month 9 — rising while the survival curve above it falls](figures/lecture_04_hazard_and_survival.png)
 
@@ -158,7 +158,7 @@ equalling it, so "the t where Ŝ(t) = 0.5" is typically no t at all.
 
 > **Convention (this course, `lifelines`, and standard practice):** the median survival time is the
 > **smallest tabulated t at which Ŝ(t) ≤ 0.5** — i.e. the *first* time the curve has reached or
-> dropped below half. Not the t before the crossing; not an interpolation between them.
+> fallen below half. Not the t before the crossing; not an interpolation between them.
 
 **Example.** A curve with Ŝ(6) = 0.55 and Ŝ(7) = 0.46 has median survival **7 months**: month 6 is
 still above 0.5, month 7 is the first month at or below it. Read it as "half the cohort has churned
@@ -241,7 +241,7 @@ The slides ask five different questions (only Q3 repeats). Their answers are the
 **Q1.** Ŝ(6) = (500−25)/500 = 475/500 = **0.950**. For Ŝ(12): the risk set after month 6 = 500 − 25 = 475. Ŝ(12) = 0.950 × (475−40)/475 = 0.950 × 435/475 = 0.950 × 0.916 = **0.870**.
 *Common wrong answer:* Using 500 as the risk set at month 12 (forgetting to subtract the 25 who churned at month 6 from the risk set).
 
-> **Also asked on the slides:** *"A customer has been active for 14 months. The KM table has no event at month 14. What is Ŝ(14)?"* — Ŝ(14) equals the last value recorded before month 14. The Kaplan-Meier estimator is a product taken over **event times only**, so when no churn event occurs between the previous event and month 14 no new factor enters the product and the curve is flat: as Section 2.2 puts it, the KM plot is "a step function that drops at each churn event, with flat sections between events." On the slide's table (events at months 2, 5 and 9, with Ŝ = 0.9600, 0.8977 and 0.7855) that gives Ŝ(14) = **0.7855**. On the checkpoint table above, with events only at months 6 and 12, it would give Ŝ(14) = Ŝ(12) = 0.870. *Common wrong answer:* interpolating between event times, or assuming Ŝ drops in months with no churn events.
+> **Also asked on the slides:** *"A customer has been active for 14 months. The KM table has no event at month 14. What is Ŝ(14)?"* — Ŝ(14) equals the last value recorded before month 14. The Kaplan-Meier estimator is a product taken over **event times only**, so when no churn event occurs between the previous event and month 14 no new factor enters the product and the curve is flat: as Section 2.2 puts it, the KM plot is "a step function that steps down at each churn event, with flat sections between events." On the slide's table (events at months 2, 5 and 9, with Ŝ = 0.9600, 0.8977 and 0.7855) that gives Ŝ(14) = **0.7855**. On the checkpoint table above, with events only at months 6 and 12, it would give Ŝ(14) = Ŝ(12) = 0.870. *Common wrong answer:* interpolating between event times, or assuming Ŝ falls in months with no churn events.
 
 > **Also asked on the slides:** *"A customer has Ŝ(24) = 0.32. In plain English, what does this mean?"* — "About a 32% chance that this customer is still a subscriber 24 months in — equivalently, about a 68% chance they have churned by month 24." Ŝ(t) is the cumulative product of conditional survival probabilities (Section 1.4), so it is a survival *probability* for one customer, or the expected surviving *share* of a cohort. It is not a churn rate, not a retained-revenue figure, and it says nothing about *when* inside those 24 months the churn would occur.
 
@@ -317,7 +317,7 @@ Event times (churn only): t = 2, 4, 7, 10. Censored observations at t = 5, 8, 12
 | 10 | Churn | 2 | 1 | 1/2 | 15/28 × 1/2 = 15/56 ≈ **0.268** |
 | 12 | Censored | — | — | — | 15/56 (unchanged) |
 
-**Why does at-risk drop from 6 to 4 between t=4 and t=7?**
+**Why does the number at risk shrink from 6 to 4 between t=4 and t=7?**
 After t=4: C1 and C2 have churned (5 remain). C3 is censored at t=5 and leaves the risk set. So at t=7, only 4 customers remain at risk: C4, C5, C6, C7.
 
 **Interpretation:** $\hat{S}(12) = 15/56 \approx 0.268$. About 27% of customers are estimated to still be active after 12 months. Note: with only 7 customers, the confidence intervals around this estimate would be very wide.
@@ -338,7 +338,7 @@ $$e^{-0.052} \approx 0.949, \qquad e^{0.148} \approx 1.160, \qquad e^{-0.002} \a
 ### Section 2.2 — Interpretation Guide
 #### (~10 minutes)
 
-**The Kaplan-Meier plot:** A step function that drops at each churn event, with flat sections between events. Confidence bands widen over time as fewer customers remain. Steeper early drops indicate high early churn risk. A flat tail indicates loyal long-tenure customers.
+**The Kaplan-Meier plot:** A step function that steps down at each churn event, with flat sections between events. Confidence bands widen over time as fewer customers remain. Large early steps down indicate high early churn risk. A flat tail indicates loyal long-tenure customers.
 
 **Log-rank test:** When comparing curves for two groups (e.g., basic vs. enterprise plan), the log-rank test p-value tells you whether the survival curves are significantly different. p < 0.05 indicates the groups have genuinely different survival patterns.
 
