@@ -28,21 +28,36 @@
 
 #### Tool 1: Matrix–Vector Multiplication (Row × Column)
 
-A matrix has rows and columns. To multiply a vector v by a matrix P, multiply each element of v by the corresponding element in each column of P and sum.
+**How to read P.** P is a stack of **row vectors**, one row per state *today*. Row *i* says where
+the customers who are in state *i* now go next period, so the entry in row *i*, column *j* is
+P(i → j), the probability of moving from state *i* to state *j*. Rows are "from" and columns are "to".
 
-**Example:** v = [0.5, 0.3, 0.2], P = [[0.6, 0.3, 0.1], [0.2, 0.5, 0.3], [0, 0, 1]]
+**How to read v.** v is a **row vector** with one entry per state: the share of customers in each
+state today. Because it is a row, it multiplies P **from the left**, written v × P (or vP).
 
-New state 1 = 0.5×0.6 + 0.3×0.2 + 0.2×0 = 0.30 + 0.06 + 0 = **0.36**
-New state 2 = 0.5×0.3 + 0.3×0.5 + 0.2×0 = 0.15 + 0.15 + 0 = **0.30**
-New state 3 = 0.5×0.1 + 0.3×0.3 + 0.2×1 = 0.05 + 0.09 + 0.20 = **0.34**
+**Example:**
 
-Result: v₁ = [0.36, 0.30, 0.34]. All three values sum to 1. ✓
+$$v = \begin{pmatrix} 0.5 & 0.3 & 0.2 \end{pmatrix}, \qquad
+P = \begin{pmatrix} 0.6 & 0.3 & 0.1 \\ 0.2 & 0.5 & 0.3 \\ 0 & 0 & 1 \end{pmatrix}
+\begin{matrix} \leftarrow \text{from state 1} \\ \leftarrow \text{from state 2} \\ \leftarrow \text{from state 3} \end{matrix}$$
+
+Entry *j* of the result is v times **column** *j* of P, entry by entry, then summed:
+
+$$\begin{aligned}
+(vP)_1 &= 0.5 \times 0.6 + 0.3 \times 0.2 + 0.2 \times 0 = 0.30 + 0.06 + 0 = \mathbf{0.36} \\
+(vP)_2 &= 0.5 \times 0.3 + 0.3 \times 0.5 + 0.2 \times 0 = 0.15 + 0.15 + 0 = \mathbf{0.30} \\
+(vP)_3 &= 0.5 \times 0.1 + 0.3 \times 0.3 + 0.2 \times 1 = 0.05 + 0.09 + 0.20 = \mathbf{0.34}
+\end{aligned}$$
+
+$$v_1 = vP = \begin{pmatrix} 0.36 & 0.30 & 0.34 \end{pmatrix}$$
+
+All three values sum to 1 ✓. The result is again a row vector: next period's share in each state.
 
 **Why the recipe works.** It is the law of total probability. To be in state *j* next period, a
 customer must be in *some* state *i* now and then move from *i* to *j*. So you add up the
 "start in *i*, then move to *j*" probabilities over every *i*:
-P(next = j) = Σᵢ P(now = i) · P(i → j). Each "New state" line above is that sum for one *j*: the
-entries of v are the P(now = i), and column *j* of P holds the P(i → j).
+P(next = j) = Σᵢ P(now = i) · P(i → j). Each line of the calculation above is that sum for one *j*: the
+entries of v are the P(now = i), and column *j* of P holds the P(i → j) for every *i*.
 
 ---
 
@@ -212,10 +227,17 @@ the steady state.
 
 > ### 🔍 Deep Dive: The Fundamental Matrix
 > The same calculation in matrix form, which is what code will hand you. Strip the absorbing row and
-> column out of P and call the remaining transient block **Q** (here the 2×2 matrix
-> [[0.90, 0.08], [0.20, 0.40]]). Then the **fundamental matrix** is $N = (I - Q)^{-1}$, and the
-> vector of expected times is $\mathbf{t} = N\mathbf{1}$ — row sums of N. For the P above,
-> $N = $ [[13.64, 1.82], [4.55, 2.27]], whose row sums are 15.45 and 6.82: the same two answers.
+> column out of P and call the remaining transient block **Q**. Rows are still "from" and columns
+> "to", now over Active and At-Risk only:
+>
+> $$Q = \begin{pmatrix} 0.90 & 0.08 \\ 0.20 & 0.40 \end{pmatrix}$$
+>
+> Then the **fundamental matrix** is $N = (I - Q)^{-1}$, and the vector of expected times is
+> $\mathbf{t} = N\mathbf{1}$ — row sums of N. For the P above,
+>
+> $$N = \begin{pmatrix} 13.64 & 1.82 \\ 4.55 & 2.27 \end{pmatrix}$$
+>
+> whose row sums are 15.45 and 6.82: the same two answers.
 > $N_{ij}$ has its own reading — the expected number of periods spent in state *j* before absorption,
 > starting from *i* — so $N_{AA} = 13.64$ says an Active customer spends about 13.6 of their 15.5
 > remaining months Active. In `numpy`: `t = numpy.linalg.inv(numpy.eye(2) - Q) @ numpy.ones(2)`.
@@ -275,11 +297,17 @@ enters Churned, which is not counted. First-step analysis gives one equation per
 $$t_A = 1 + 0.55\,t_A + 0.25\,t_R \qquad\Longrightarrow\qquad 0.45\,t_A - 0.25\,t_R = 1$$
 $$t_R = 1 + 0.10\,t_A + 0.50\,t_R \qquad\Longrightarrow\qquad -0.10\,t_A + 0.50\,t_R = 1$$
 
-The matrix form gives the same answer and is what code returns. The transient block is
-Q = [[0.55, 0.25], [0.10, 0.50]], so I − Q = [[0.45, −0.25], [−0.10, 0.50]], whose determinant is
-0.45×0.50 − 0.25×0.10 = 0.225 − 0.025 = 0.200. Invert a 2×2 matrix by swapping the diagonal, negating
-the off-diagonal, and dividing by the determinant:
-N = (I − Q)⁻¹ = [[0.50, 0.25], [0.10, 0.45]] / 0.200 = **[[2.50, 1.25], [0.50, 2.25]]**.
+The matrix form gives the same answer and is what code returns. The transient block (rows "from",
+columns "to", over Active and At-Risk) and I − Q are
+
+$$Q = \begin{pmatrix} 0.55 & 0.25 \\ 0.10 & 0.50 \end{pmatrix}, \qquad
+I - Q = \begin{pmatrix} 0.45 & -0.25 \\ -0.10 & 0.50 \end{pmatrix}$$
+
+whose determinant is 0.45×0.50 − 0.25×0.10 = 0.225 − 0.025 = 0.200. Invert a 2×2 matrix by swapping
+the diagonal, negating the off-diagonal, and dividing by the determinant:
+
+$$N = (I - Q)^{-1} = \frac{1}{0.200}\begin{pmatrix} 0.50 & 0.25 \\ 0.10 & 0.45 \end{pmatrix}
+= \begin{pmatrix} \mathbf{2.50} & \mathbf{1.25} \\ \mathbf{0.50} & \mathbf{2.25} \end{pmatrix}$$
 
 The row sums are the expected times: $t_A$ = 2.50 + 1.25 = **3.75 months** and $t_R$ = 0.50 + 2.25 =
 **2.75 months**. Sanity check: both are positive, and the healthier state has the longer time ✓. N's
