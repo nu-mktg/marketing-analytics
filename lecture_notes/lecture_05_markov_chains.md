@@ -38,6 +38,12 @@ New state 3 = 0.7×0.1 + 0.2×0.2 + 0.1×1 = 0.07 + 0.04 + 0.10 = **0.21**
 
 Result: v₁ = [0.62, 0.17, 0.21]. All three values sum to 1. ✓
 
+**Why the recipe works.** It is the law of total probability. To be in state *j* next period, a
+customer must be in *some* state *i* now and then move from *i* to *j*. So you add up the
+"start in *i*, then move to *j*" probabilities over every *i*:
+P(next = j) = Σᵢ P(now = i) · P(i → j). Each "New state" line above is that sum for one *j*: the
+entries of v are the P(now = i), and column *j* of P holds the P(i → j).
+
 ---
 
 #### Tool 2: Row Sums Must Equal 1
@@ -117,11 +123,18 @@ v₁ = [0.62, 0.205, 0.175]. Sum = 1.00 ✓
 
 Active decreased from 70% to 62%. Churned increased from 10% to 17.5%.
 
+**Several periods at once: $P^n$.** Two periods ahead is v₂ = v₁ × P = v₀ × P × P. The product P × P
+is written $P^2$. Each of its entries is a row of P times a column of P, the same row-times-column
+recipe as Tool 1, and row *i* of $P^2$ is the two-period distribution of a customer who starts in
+state *i*. In general, $P^n$ is P multiplied by itself *n* times and vₙ = v₀ × $P^n$. Part D's Step 2
+works one row of $P^2$ out by hand. (Multiplying the vector by P *n* times gives the same vₙ, and is
+how the homework asks you to project.)
+
 ---
 
 #### Part B: The Steady-State Distribution
 
-The steady-state distribution π is the distribution where v × P = v. In other words: after one more period, the distribution does not change. The system has reached equilibrium.
+The steady-state distribution π is the distribution that one more period leaves unchanged: π × P = π, written πP = π in code and textbooks. We keep the letter **v** for the distribution at a given time (v₀ today, v₁ next period) and **π** only for the steady state. The system has reached equilibrium.
 
 **How to find it numerically:** Repeatedly apply P to any starting distribution until it stops changing. Where it settles depends on whether the chain has an **absorbing state** — a state with a 1 on its own diagonal, so nobody who enters it ever leaves.
 
@@ -382,7 +395,7 @@ Row sums: $0.700+0.175+0.125 = 1.000$; $0.360+0.400+0.240 = 1.000$; $0+0+1 = 1.0
 
 $$(P^2)_{A,A} = 0.700 \times 0.700 + 0.175 \times 0.360 + 0.125 \times 0.000 = 0.490 + 0.063 + 0.000 = \mathbf{0.553}$$
 
-$$(P^2)_{A,D} = 0.700 \times 0.175 + 0.175 \times 0.400 + 0.125 \times 0.000 = 0.1225 + 0.070 + 0.000 = \mathbf{0.193}$$
+$$(P^2)_{A,R} = 0.700 \times 0.175 + 0.175 \times 0.400 + 0.125 \times 0.000 = 0.1225 + 0.070 + 0.000 = \mathbf{0.193}$$
 
 $$(P^2)_{A,C} = 0.700 \times 0.125 + 0.175 \times 0.240 + 0.125 \times 1.000 = 0.0875 + 0.042 + 0.125 = \mathbf{0.255}$$
 
@@ -470,7 +483,7 @@ The steady state is an asymptotic property. Convergence may take months or years
 | Agent step | Corresponds to |
 |---|---|
 | Counts transitions, normalizes rows → matrix $P$ | Sections 1.3 and 1.1 — building $P$; Tool 2: row sums must equal 1 |
-| Computes state distribution after $n$ months via $\pi_0 P^n$ | Section 1.4B — $P^n$ interpretation |
+| Computes state distribution after $n$ months via $v_0 P^n$ | Section 1.4A — $P^n$ (several periods at once) |
 | Solves $\pi P = \pi$ for steady state | Section 1.4B — the steady-state distribution (found by iterating $P$) |
 | Identifies absorbing states | Section 1.3 — absorbing states ($P_{ii} = 1$) |
 | Computes expected months-until-absorption per starting state | Section 1.4C — first-step analysis; Deep Dive — the fundamental matrix $N = (I-Q)^{-1}$ |
