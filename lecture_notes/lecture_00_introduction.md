@@ -574,3 +574,17 @@ and own the result.
 question asks WHY the rule exists, and the reason is that Part A is the only part that
 builds the judgement you need to supervise an AI everywhere else.
 
+#### Slide Checkpoint Answers
+
+Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
+
+**Slide Q1.** *"Finding: customers who use **Feature X** churn 40% less. Name two questions you'd ask before pushing Feature X — and what answer to each would stop you."* — Same question as Q1 above — see that answer.
+
+**Slide Q2.** *"Which collaboration rule applies to Part A? Which to Part C?"* — Same question as Q2 above — see that answer.
+
+**Slide Q3.** *"Name the three steps to stop a Codespace when you're done — and why stopping matters."* — Same question as Q3 above — see that answer.
+
+**Slide Q4.** *"In Jupyter: what runs the current cell and moves to the next? What is "command mode" vs "edit mode"?"* — Same question as Q4 above — see that answer.
+
+**Slide Q5.** *"You are expected to use an AI assistant for Parts B and C, but **not Part A**. Why is Part A the exception? Give one concrete example of an AI-generated answer you would still need to check before submitting it."* — Same question as Q5 above — see that answer.
+

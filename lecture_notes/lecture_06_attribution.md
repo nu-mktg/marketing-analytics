@@ -188,13 +188,25 @@ A customer who would have converted through paid search even without seeing the 
 **Q3.** By the efficiency axiom, Shapley values sum to the overall conversion rate. 0.275 + 0.200 + 0.075 = **0.550** = 55%.
 *Common wrong answer:* Need additional information to compute the conversion rate. No — the sum of Shapley values IS the conversion rate, guaranteed by the efficiency axiom.
 
-> **Also asked on the slides:** *"Under what conditions could a Shapley value be negative?"* — When the **value function is non-monotone**: some coalition got *worse* when the channel joined, so that channel's average marginal contribution across orderings comes out negative. Section 2.2 makes this diagnostic check number 2, immediately after the efficiency check in Q3 — a negative Shapley value "can be a genuine finding or a specification artefact, so investigate the value function rather than assuming a coding bug" (`homework_06` pins a monotone v for exactly this reason). The slide goes on to ask you to *construct* a characteristic function v that produces φᵢ < 0; attempt that one and bring your example to class.
-
 **Q4.** **False.** Shapley measures marginal contribution within observed paths — it is correlation-based. It cannot distinguish between "Social caused this conversion" and "Social appeared on the path of customers who would have converted anyway." Causal incrementality requires a holdout experiment.
 *Common wrong answer:* True, because Shapley accounts for the full path, not just the last touch. Path accounting ≠ causal identification.
 
 **Q5.** Paid Search is likely **under-invested**. Last-touch assigns only 8% of credit to PS, so budgets built on last-touch would have cut PS spend. But Shapley shows PS contributes 50% of conversion credit — it is a high-value channel that rarely appears last. Under-investment in PS means you are getting less from it than you should.
 *Common wrong answer:* Paid Search should be cut because it only gets 8% of last-touch credit. This is precisely the error that last-touch attribution causes.
+
+#### Slide Checkpoint Answers
+
+Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
+
+**Slide Q1.** *"For 4 channels, how many orderings must you evaluate?"* — Same question as Q1 above — see that answer.
+
+**Slide Q2.** *"Channel E has Shapley value 0.08 but last-touch credit of 40%. What does this suggest?"* — Same reasoning as Q2 above, which uses Email (65% last-touch, 13.6% Shapley); the slide's Channel E has 40% last-touch and a Shapley value of 0.08.
+
+**Slide Q3.** *"Verify the efficiency axiom: if $\phi_{PS}=0.275$, $\phi_S=0.200$, $\phi_E=0.075$, what is the overall conversion rate implied?"* — Same question as Q3 above — see that answer.
+
+**Slide Q4.** *"Paid Search: Shapley = 0.28, incrementality holdout = 0.04. What does the gap tell you?"* — Same reasoning as Q4 above: Shapley credit is not incrementality, and only a holdout measures incremental conversions. Q4 asks about Paid Social in general; the slide gives Paid Search's two numbers.
+
+**Slide Q5.** *"Under what conditions could a Shapley value be negative?"* — When the **value function is non-monotone**: some coalition got *worse* when the channel joined, so that channel's average marginal contribution across orderings comes out negative. Section 2.2 makes this diagnostic check number 2, immediately after the efficiency check in Q3 — a negative Shapley value "can be a genuine finding or a specification artefact, so investigate the value function rather than assuming a coding bug" (`homework_06` pins a monotone v for exactly this reason). The slide goes on to ask you to *construct* a characteristic function v that produces φᵢ < 0; attempt that one and bring your example to class.
 
 ## PART 2: Application
 ### (~1 hour 40 minutes)

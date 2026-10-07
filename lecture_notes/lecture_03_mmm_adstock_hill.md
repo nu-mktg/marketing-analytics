@@ -449,24 +449,34 @@ $$\Delta\text{Revenue} \;\approx\; (\text{MR}_A - \text{MR}_B) \times \Delta\tex
 **Q2.** **Above EC50.** H = 0.73 > 0.5, and H > 0.5 if and only if current **adstock** > EC50 — per Section 1.4B's convention, the "spend" in the question is adstocked spend, and H says nothing on its own about this week's raw spend. The channel is on the diminishing-returns portion of the curve.
 *Common wrong answer:* "H = 0.73 means we're at 73% efficiency, which is below the maximum." True, but the relevant threshold for the EC50 question is H = 0.5, not H = 1.0.
 
-> **Also asked on the slides:** *"Channel EC₅₀ = 200, α = 2. Compute H(100), H(200), H(400)."* — Substituting into H(s) = sᵃ / (EC50ᵃ + sᵃ) with α = 2:
-> H(100) = 100² / (200² + 100²) = 10,000 / 50,000 = **0.20**;
->
-> H(200) = 200² / (200² + 200²) = **0.50** (the H(EC50) = 0.5 property, true for any EC50);
->
-> H(400) = 400² / (200² + 400²) = 160,000 / 200,000 = **0.80**.
-> Doubling spend from 100 to 200 buys +0.30 of effectiveness; doubling again from 200 to 400 buys +0.30 as well (0.50 → 0.80) — the same 0.30 for twice the incremental spend, so **half as much per dollar**. That is saturation, and it is why the answer to Q3 is "shift incrementally," not "shift everything."
-
 **Q3.** Move budget from Digital (lower marginal ROI) to TV (higher). But **not the entire Digital budget at once**. As TV spend rises, TV's adstock rises, and — past its inflection — its Hill slope H′ falls, so TV's MR = β·H′/(1 − λ) falls with it; Digital's MR rises as its spend is cut. Shift a step at a time, recomputing both, until the MRs meet — and then check the predicted revenue, because equal MRs are necessary but not sufficient for the best split (Section 1.4C).
 *Common wrong answer:* "Shift everything to TV since TV ROI is higher." Diminishing returns mean the last dollar moved to TV has a much lower marginal ROI than the first dollar.
-
-> **Also asked on the slides:** *"Last-touch attribution shows Digital = 70% of conversions, TV = 10%. MMM shows TV = 35% contribution. Which is right — and why might they differ?"* — Neither is "wrong"; they measure different things, and for a budget decision the MMM figure is the relevant one. Last-touch gives 100% of the credit to whatever the customer clicked last, so it systematically over-credits demand-harvesting channels and under-credits demand-creating ones: as Section 1.2 puts it: "Paid search captures demand. It does not create it." A customer may have learned about the brand from a TV spot, seen social posts, then clicked a digital ad — last touch records only the click. MMM models all channels simultaneously with their own adstock and saturation, so TV's carryover (high λ) shows up as contribution that last touch cannot see. The practical warning in Section 1.2 is exactly this case: shifting budget from TV to digital on last-touch evidence looks successful short-term while you are harvesting awareness TV built.
 
 **Q4.** **False.** λ = 0 means instant decay — each period's advertising effect disappears completely before the next period. The channel can still have immediate in-period impact (S_t contributes fully to A_t). λ = 0 means no carryover, not no effect.
 *Common wrong answer:* True. Confusing "no carryover" with "no effect."
 
 **Q5.** TV campaigns should be **spaced further apart** than paid search campaigns. High λ = slow decay = the effects of one TV campaign persist for weeks. You don't need to run TV every week to maintain impact. Paid search (λ = 0.19) decays quickly — its effects are mostly exhausted within 1–2 weeks, so continuous presence is needed.
 *Common wrong answer:* "TV should run continuously since it has a higher λ." High λ means the campaign persists longer, so you can run *less frequently* and still maintain cumulative impact.
+
+#### Slide Checkpoint Answers
+
+Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
+
+**Slide Q1.** *"$\lambda = 0.6$, spend sequence $S_1 = 200$, $S_2 = 0$, $S_3 = 50$. Compute $A_1$, $A_2$, $A_3$."* — Same question as Q1 above — see that answer.
+
+**Slide Q2.** *"Channel EC₅₀ = 200, α = 2. Compute H(100), H(200), H(400)."* — Substituting into H(s) = sᵃ / (EC50ᵃ + sᵃ) with α = 2:
+H(100) = 100² / (200² + 100²) = 10,000 / 50,000 = **0.20**;
+
+H(200) = 200² / (200² + 200²) = **0.50** (the H(EC50) = 0.5 property, true for any EC50);
+
+H(400) = 400² / (200² + 400²) = 160,000 / 200,000 = **0.80**.
+Doubling spend from 100 to 200 buys +0.30 of effectiveness; doubling again from 200 to 400 buys +0.30 as well (0.50 → 0.80) — the same 0.30 for twice the incremental spend, so **half as much per dollar**. That is saturation, and it is why the answer to Q3 is "shift incrementally," not "shift everything."
+
+**Slide Q3.** *"A model fits TV's decay at $\lambda = 0.82$ and paid search's at $\lambda = 0.19$. What does that say about how the two should be **scheduled**?"* — Same question as Q5 above — see that answer.
+
+**Slide Q4.** *"Why can't you shift the entire social budget to TV immediately?"* — Same reasoning as Q3 above, which shifts budget from Digital to TV; the slide shifts it from Social to TV.
+
+**Slide Q5.** *"Last-touch attribution shows Digital = 70% of conversions, TV = 10%. MMM shows TV = 35% contribution. Which is right — and why might they differ?"* — Neither is "wrong"; they measure different things, and for a budget decision the MMM figure is the relevant one. Last-touch gives 100% of the credit to whatever the customer clicked last, so it systematically over-credits demand-harvesting channels and under-credits demand-creating ones: as Section 1.2 puts it: "Paid search captures demand. It does not create it." A customer may have learned about the brand from a TV spot, seen social posts, then clicked a digital ad — last touch records only the click. MMM models all channels simultaneously with their own adstock and saturation, so TV's carryover (high λ) shows up as contribution that last touch cannot see. The practical warning in Section 1.2 is exactly this case: shifting budget from TV to digital on last-touch evidence looks successful short-term while you are harvesting awareness TV built.
 
 ## PART 2: Application
 ### (~1 hour 40 minutes)

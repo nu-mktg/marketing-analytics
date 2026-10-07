@@ -540,3 +540,17 @@ Be precise about *why* the manager is wrong, because "that is just the frequenti
 Note what P(B > A) = 0.76 already tells you about the interval, before computing anything: the 95% credible interval on lift **includes 0**. A 95% central interval sits entirely above 0 only when P(B > A) exceeds 0.975, because the lower bound *is* the 2.5th percentile — so at 0.76 the **direction** is unsettled, not merely the magnitude. The additional information that would help: how far the interval extends on the downside (how bad is the worst plausible case, not just how wide is the range), the expected revenue impact of each direction of error, and whether you can run the experiment longer before the change must be made.
 
 *Common wrong answer:* "Ship it — 76% is probably better than chance." This conflates P(better) with the expected value of the decision. A 76% probability that B is better implies a 24% probability that A is better. If A being better means losing three months of engineering work and alienating millions of customers, the asymmetry of consequences matters more than the raw probability.
+
+### Slide Checkpoint Answers
+
+Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
+
+**Slide Q1.** *"P(B>A) = 0.91. Your manager says "B wins 91 out of 100 repeated experiments." Correct?"* — Same question as Q1 above — see that answer.
+
+**Slide Q2.** *"Prior: Beta(2, 48). Observe: 56 conversions, 800 visitors. What is the posterior?"* — Same question as Q2 above — see that answer.
+
+**Slide Q3.** *"Would the posterior mean be above or below the raw rate 56/800 = 7.0%? Why?"* — Same question as Q3 above — see that answer.
+
+**Slide Q4.** *"A colleague demands a p-value < 0.05. What do you say?"* — Same question as Q4 above — see that answer.
+
+**Slide Q5.** *"P(B>A) = 0.76. The change takes 3 months to reverse. Do you implement the change?"* — Same question as Q5 above — see that answer.

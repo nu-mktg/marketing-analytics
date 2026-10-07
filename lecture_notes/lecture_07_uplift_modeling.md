@@ -152,8 +152,6 @@ broken model. Compare Qini only against numbers computed the same way.
 **Q2.** Threshold = 4/25 = **0.16** (16 percentage points of incremental conversion needed to break even).
 *Common wrong answer:* reading 0.16 as a **16% relative lift** in conversions rather than **16 percentage points** of *incremental* conversion probability. A customer converting 12% of the time without the offer needs to reach 28%, not 13.9%.
 
-> **Also asked on the slides:** *"Campaign reaches 10,000 customers. 12% are sleeping dogs. Campaign cost = \$4 each. What is the direct cost of targeting sleeping dogs?"* — 10,000 × 12% = 1,200 sleeping dogs, at \$4 each = **\$4,800** of campaign spend that should never have been sent. Note what "direct cost" does and does not cover: it is only the \$4 per contact. Sleeping Dogs are the segment that "converts anyway" without the campaign and does **not** convert with it (Section 1.3), so the real damage is the *lost conversions* their negative uplift causes — at v = \$25 a sleeping dog with τ̂ = −0.05 destroys a further 0.05 × \$25 = \$1.25 of expected value each, on top of the \$4. The \$4,800 is therefore a floor, not the full cost.
-
 **Q3.** **No.** Expected profit = 0.05 × $25 − $4 = $1.25 − $4 = **−$2.75**. The customer has positive predicted uplift but insufficient uplift to justify the cost. The threshold is 0.16; τ̂ = 0.05 < 0.16.
 *Common wrong answer:* Yes, because τ̂ > 0 means the campaign helps them. Positive τ̂ is necessary but not sufficient for profitable targeting.
 
@@ -162,6 +160,20 @@ broken model. Compare Qini only against numbers computed the same way.
 
 **Q5.** **Too high** (biased upward). High-value customers have higher baseline renewal rates (μ₀ is higher). The T-learner estimates μ₀ from the control group, which in this case consists of lower-value customers. It underestimates the control outcome for high-value treated customers, making the treatment effect appear larger than it is.
 *Common wrong answer:* Unbiased, because T-learner uses separate models for treated and control. The models are estimated on non-comparable groups, so the difference μ₁(X) − μ₀(X) is biased.
+
+#### Slide Checkpoint Answers
+
+Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
+
+**Slide Q1.** *"ATE = 0.108. Threshold = 0.12. Is the average customer profitable to target?"* — Not worked in the key. Q1 and Q2 above compute an ATE and a break-even threshold on other numbers (0.08 and 0.16); the slide asks you to compare its ATE with its threshold, the comparison Q3 makes for one customer.
+
+**Slide Q2.** *"A customer has $\hat{\tau}(x) = 0.05$, $c = \$4$, $v = \$25$. Target them?"* — Same question as Q3 above — see that answer.
+
+**Slide Q3.** *"The Qini coefficient = 0.00. What does this mean in plain language?"* — Same reasoning as Q4 above, which reads a Qini of 0.42 and says what Qini = 0 means.
+
+**Slide Q4.** *"Why does T-learner require random assignment for unbiased CATE estimates?"* — Same reasoning as Q5 above, which works through a campaign that was not randomly assigned.
+
+**Slide Q5.** *"Campaign reaches 10,000 customers. 12% are sleeping dogs. Campaign cost = \$4 each. What is the direct cost of targeting sleeping dogs?"* — 10,000 × 12% = 1,200 sleeping dogs, at \$4 each = **\$4,800** of campaign spend that should never have been sent. Note what "direct cost" does and does not cover: it is only the \$4 per contact. Sleeping Dogs are the segment that "converts anyway" without the campaign and does **not** convert with it (Section 1.3), so the real damage is the *lost conversions* their negative uplift causes — at v = \$25 a sleeping dog with τ̂ = −0.05 destroys a further 0.05 × \$25 = \$1.25 of expected value each, on top of the \$4. The \$4,800 is therefore a floor, not the full cost.
 
 ## PART 2: Application
 ### (~1 hour 40 minutes)

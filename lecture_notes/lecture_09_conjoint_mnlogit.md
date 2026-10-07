@@ -159,8 +159,6 @@ The multinomial logit model assumes IIA: **Independence of Irrelevant Alternativ
 **Q1.** WTP = 1.10 / 0.15 = **$7.33/month**.
 *Common wrong answer:* WTP = 0.15/1.10 = $0.136 (inverted formula). Always divide the feature coefficient by |β_price|, not the reverse.
 
-> **Also asked on the slides:** *"β_price = −0.18, β_annual_plan = +0.65. Compute WTP for annual plan."* — Same formula, run on the example coefficients in Section 1.4: WTP = 0.65 / 0.18 = **\$3.61/month**. Read it as "the average respondent values being on an annual plan rather than monthly at about \$3.61 of monthly price". Note the units: because β_price is per \$1 of *monthly* price, the WTP is also per month, not per year.
-
 **Q2.** e^(−1.5) = 0.223, e^(0.5) = 1.649. Sum = 1.872.
 Share A = 0.223/1.872 = **11.9%**. Share B = 1.649/1.872 = **88.1%**.
 *Common wrong answer:* Sharing proportional to utility values directly (−1.5 and 0.5), ignoring the softmax transformation.
@@ -173,6 +171,20 @@ Share A = 0.223/1.872 = **11.9%**. Share B = 1.649/1.872 = **88.1%**.
 
 **Q5.** Under IIA, the new product draws share from A and B proportionally to their current shares. If A currently has 11.9% and B has 88.1%, the new product takes 11.9% of its share from A and 88.1% from B — even though the new product is identical to A. Product A's share decreases by its proportion of the total.
 *Common wrong answer:* All of the new product's share comes from A (since they are identical). This is the realistic prediction — but IIA gives the proportional answer, which is why IIA is often wrong in near-substitute scenarios.
+
+#### Slide Checkpoint Answers
+
+Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
+
+**Slide Q1.** *"β_price = −0.18, β_annual_plan = +0.65. Compute WTP for annual plan."* — Same formula, run on the example coefficients in Section 1.4: WTP = 0.65 / 0.18 = **\$3.61/month**. Read it as "the average respondent values being on an annual plan rather than monthly at about \$3.61 of monthly price". Note the units: because β_price is per \$1 of *monthly* price, the WTP is also per month, not per year.
+
+**Slide Q2.** *"Two products with utilities $U_A = -1.5$ and $U_B = +0.5$. Compute market shares for both."* — Same question as Q2 above — see that answer.
+
+**Slide Q3.** *"You add Option D (similar to B). Under IIA, which existing option loses the most share?"* — Same reasoning as Q5 above, which adds a product like A; the slide adds Option D, like B.
+
+**Slide Q4.** *"WTP for "no ads" = \$10. Current base price = \$8. Optimal premium tier price = \$18? Defend or critique."* — Same reasoning as Q3 above, which uses WTP = \$12, a \$10 tier and a \$22 proposal; the slide uses \$10, \$8 and \$18.
+
+**Slide Q5.** *"$\beta_{\text{price}} = +0.05$ from the MNL fit. What went wrong — and how do you fix it?"* — Not answered in these notes. Bring your answer to class.
 
 ## PART 2: Application
 ### (~1 hour 40 minutes)

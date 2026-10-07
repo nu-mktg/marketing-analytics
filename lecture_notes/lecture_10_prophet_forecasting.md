@@ -237,8 +237,6 @@ Always validate on a held-out period before using a forecast for decisions.
 **Q1.** Q4 baseline = $1,200k × 1.42 = $1,704k. Black Friday = $1,704k × 1.38 = **$2,351k**.
 *Common wrong answer:* $1,200k × (1.42 + 1.38) = $1,200k × 2.80 = $3,360k. Seasonal lifts apply multiplicatively (each multiplied onto the previous result), not additively.
 
-> **Also asked on the slides:** *"Trend = +2.5%/week, base = 80,000 units. Forecast after 3 weeks."* — Trend compounds the same way the seasonal lifts do: 80,000 × 1.025³ = 80,000 × 1.0769 = **86,151 units**. *Common wrong answer:* 80,000 × (1 + 3 × 0.025) = 86,000 — adding three weeks of growth instead of compounding them. The gap is only 151 units over three weeks, which is the point worth making: additive and multiplicative growth are nearly indistinguishable over a short horizon and diverge sharply over a long one (at 26 weeks the same rate gives 152,023 compounded versus 132,000 added).
-
 **Q2.** **Not always.** MAPE usefulness depends on context. 18% may be excellent for rough planning (staffing, marketing budgets) where decisions have significant uncertainty anyway. It may be unacceptable for just-in-time inventory or financial commitments with tight margins. The manager's statement ignores that the alternative to an 18% MAPE model may be gut feel (no model), which typically has much higher effective error.
 *Common wrong answer:* The manager is correct — any MAPE above some threshold (like 10%) makes a model useless. There is no universal threshold; it depends on decision stakes.
 
@@ -250,6 +248,20 @@ Always validate on a held-out period before using a forecast for decisions.
 
 **Q5.** **Not necessarily for rough annual planning.** For annual budget planning, you aggregate weekly forecasts into a full-year estimate. Aggregation reduces percentage error (some weeks' overestimates offset underestimates). Both 8% and 22% MAPE may produce similar annual totals. Model B may be preferable if it is simpler to explain, update, or maintain — and the accuracy difference does not change any annual budget decision materially.
 *Common wrong answer:* Yes, lower MAPE is always better. Lower MAPE is better for granular decisions (weekly inventory orders) but may not matter for aggregate annual planning.
+
+#### Slide Checkpoint Answers
+
+Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
+
+**Slide Q1.** *"Trend = +2.5%/week, base = 80,000 units. Forecast after 3 weeks."* — Trend compounds the same way the seasonal lifts do: 80,000 × 1.025³ = 80,000 × 1.0769 = **86,151 units**. *Common wrong answer:* 80,000 × (1 + 3 × 0.025) = 86,000 — adding three weeks of growth instead of compounding them. The gap is only 151 units over three weeks, which is the point worth making: additive and multiplicative growth are nearly indistinguishable over a short horizon and diverge sharply over a long one (at 26 weeks the same rate gives 152,023 compounded versus 132,000 added).
+
+**Slide Q2.** *"Baseline weekly revenue = \$1,200k. Q4 seasonal = +42%. Black Friday adds another +38% on top of Q4. Estimate Black Friday week revenue."* — Same question as Q1 above — see that answer.
+
+**Slide Q3.** *"MAPE = 22%. Manager says "useless." What's your response, and what additional context do you need?"* — Same reasoning as Q2 above, which uses MAPE = 18%; the slide's is 22%.
+
+**Slide Q4.** *"The model missed a competitor launch in month 6 that caused a permanent 15% demand drop. What should you do to the model?"* — Closest answer: Q4 above, which covers a temporary promotion that ended; the slide's competitor drop is permanent.
+
+**Slide Q5.** *"The week-20 prediction interval is 4× wider than the week-1 interval. Is this a model defect?"* — Same reasoning as Q3 above, which compares week 26 with week 1; the slide compares week 20 with week 1.
 
 ## PART 2: Application
 ### (~1 hour 40 minutes)

@@ -260,8 +260,6 @@ that is already saturated. Ratio ranks efficiency; it does not measure headroom.
 **Q1.** A > B > C. With identical purchase frequency, P(alive) is entirely determined by recency. Customer A bought 1 month ago (very recent) → highest P(alive). Customer C bought 11 months ago (long silence relative to 12-month observation period) → lowest P(alive).
 *Common wrong answer:* All equal because they all made 8 purchases. Frequency and recency are both inputs to BG/NBD; when frequency is controlled, recency alone determines P(alive) differences.
 
-> **Also asked on the slides:** *"P(alive) = 0.12. CLV₁₂ = \$340. What is the **expected** value of this customer?"* — Roughly P(alive) × CLV = 0.12 × \$340 = **\$40.80**. The \$340 is what the customer is worth *if still active*; you only collect it if they are, so the decision-relevant figure discounts it by the probability they are alive. Part C of the worked example uses exactly this rule to justify retention spend ("the expected return is approximately P(alive) × CLV"). Spending \$50 to retain them would be a loss even though CLV₁₂ is \$340.
-
 **Q2.** CLV = 3.6 × $45 = **$162**.
 *Common wrong answer:* $162 × (1/(1+0.01))^6 ≈ $152.7 — applying a discount rate that was not asked for. The question specifies "no discounting."
 
@@ -273,6 +271,20 @@ that is already saturated. Ratio ranks efficiency; it does not measure headroom.
 
 **Q5.** The $210 average CLV masks enormous variation across customer segments and acquisition channels. CLV for customers acquired through a high-intent organic search keyword may be $400; CLV for customers acquired through a broad awareness campaign may be $80. Using the average to set CAC targets means overpaying for low-CLV segments and potentially underspending on high-CLV ones.
 *Common wrong answer:* Nothing is wrong — using the average is a reasonable simplification. The simplification is only reasonable if CLV does not vary by acquisition channel, which it almost always does.
+
+#### Slide Checkpoint Answers
+
+Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
+
+**Slide Q1.** *"$E[\text{trans in 12 months}] = 3.6$, $E[\text{order value}] = \$45$. Compute CLV₁₂ (no discounting)."* — Same question as Q2 above — see that answer.
+
+**Slide Q2.** *"Customer A: 20 purchases, last 3 months ago. Customer B: 2 purchases, last 2 weeks ago. Who has higher P(alive)?"* — Not answered in these notes. Q1 above holds frequency constant so that recency alone decides; the slide varies both. Bring your answer to class.
+
+**Slide Q3.** *"P(alive) = 0.12. CLV₁₂ = \$340. What is the **expected** value of this customer?"* — Roughly P(alive) × CLV = 0.12 × \$340 = **\$40.80**. The \$340 is what the customer is worth *if still active*; you only collect it if they are, so the decision-relevant figure discounts it by the probability they are alive. Part C of the worked example uses exactly this rule to justify retention spend ("the expected return is approximately P(alive) × CLV"). Spending \$50 to retain them would be a loss even though CLV₁₂ is \$340.
+
+**Slide Q4.** *"Frequency–spend correlation = −0.52. How does this affect CLV estimates?"* — Same reasoning as Q3 above, which uses a correlation of −0.48; the slide's is −0.52.
+
+**Slide Q5.** *""Our average CLV is \$280, so we can spend \$280 to acquire anyone." What's wrong?"* — Same reasoning as Q5 above, which uses an average CLV of \$210; the slide's is \$280.
 
 ## PART 2: Application
 ### (~1 hour 40 minutes)

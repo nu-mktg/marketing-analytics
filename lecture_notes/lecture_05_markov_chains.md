@@ -390,6 +390,20 @@ v₂ = [0.4757, 0.1172, 0.4071]. Sum = 1.00 ✓
 
 *Common wrong answer:* "The steady-state Active% will be higher, because more customers are returning to Active each period." This is the trap the absorbing state sets. It is true that more customers return to Active each period, and true that the distribution is healthier at every finite horizon — but the steady state answers a different question ("where does this end up?"), and with an absorbing Churned the answer is always the same. The only intervention that moves the steady state is one that makes Churned **non-absorbing** — a win-back programme with a non-zero Churned → Active probability.
 
+#### Slide Checkpoint Answers
+
+Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
+
+**Slide Q1.** *"Verify that row 2 of $P$ sums to 1."* — Not worked in the key. The rule is Tool 2 in Part 1 ("Every row of a valid transition matrix sums to 1"); row 2 is the At-Risk row of the $P$ in Q1 above.
+
+**Slide Q2.** *"Starting from $\mathbf{v}_0 = [0.45, 0.40, 0.15]$, compute $\mathbf{v}_1$."* — Same question as Q1 above — see that answer.
+
+**Slide Q3.** *"What does it mean for Churned to be an absorbing state? Give a business interpretation."* — Answered by Q3 above, which says what an absorbing Churned state means and what it implies in the long run.
+
+**Slide Q4.** *"The At-Risk → Active rate improves from 0.20 to 0.35. Without computing, in which direction does $\mathbf{v}_1$ change compared to the baseline?"* — Not worked in the key. The closest answer is Q5 above: the same 0.20 → 0.35 change, but it asks about the steady state and Active% after 12 periods, not about $\mathbf{v}_1$.
+
+**Slide Q5.** *"A manager says "Our steady-state shows 100% churn — the model must be broken." How do you respond?"* — Answered by Q3 above ("The steady-state has 100% in Churned") together with Q5 above (what a campaign can and cannot change when Churned is absorbing).
+
 ## PART 2: Application
 ### (~1 hour 40 minutes)
 
