@@ -284,7 +284,7 @@ Note: C7 (T=0, Y=1, $\hat{\tau}=0.18$) converted in the control group despite mo
 ---
 
 ### Section 2.3 — Homework Assignment
-#### (~55 minutes in class | Due: start of next week's lecture | Submit by pushing to your course repository)
+#### (~55 minutes in class | Due: 23:59 ET on the due date in the course schedule | Submit by pushing to your course repository)
 
 <!-- BEGIN GENERATED homework pointer -->
 

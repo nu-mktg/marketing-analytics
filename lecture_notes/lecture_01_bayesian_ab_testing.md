@@ -503,7 +503,7 @@ Please:
 
 ### Section 2.2 — Homework Assignment
 
-#### Due: start of next lecture
+#### Due: 23:59 ET on the due date in the course schedule
 
 See notebook: `homework_01_bayesian_ab.ipynb`
 

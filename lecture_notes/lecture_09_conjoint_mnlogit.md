@@ -293,7 +293,7 @@ $$P_1 = \frac{0.1423}{0.4062} \approx \mathbf{35.0\%}, \quad P_2 = \frac{0.2231}
 ---
 
 ### Section 2.3 — Homework Assignment
-#### (~55 minutes in class | Due: start of next week's lecture | Submit by pushing to your course repository)
+#### (~55 minutes in class | Due: 23:59 ET on the due date in the course schedule | Submit by pushing to your course repository)
 
 <!-- BEGIN GENERATED homework pointer -->
 
