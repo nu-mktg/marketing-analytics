@@ -8,11 +8,14 @@
 **Business question:** Your customer touched Paid Search, Social, and Email before converting. How much credit does each channel deserve — and does it match how your budget is currently allocated?
 
 **What you will be able to do:**
-- Enumerate all orderings for a 3- or 4-channel model
+- Enumerate all orderings for a 3-channel model, and count them for 4 or more
 - Compute Shapley values by hand for a simple example
 - Explain why last-touch attribution systematically misleads budget decisions
 - Interpret the Shapley efficiency axiom and what it guarantees
 - Distinguish between Shapley attribution and true incrementality measurement
+
+**Prerequisites:** Markov chains from Lecture 5 (transition matrix, rows that sum to 1, absorbing
+states), used in Section 1.4B. Factorials and the Shapley value are built here.
 
 ---
 
@@ -40,30 +43,34 @@ n! (read "n factorial") means multiply all integers from 1 to n together.
 
 #### Tool 2: Marginal Contribution
 
-The marginal contribution of channel C to a coalition S is the increase in conversion probability when C joins a group that previously did not include it.
+**Notation.** A *coalition* is a set of channels, written $T$ in this lecture. (We do not use $S$,
+because $S$ is the Social channel. The homework prompt writes the coalition as $S$ — same object.)
 
-> MC(C, S) = v(S ∪ C) − v(S)
+The marginal contribution of channel C to a coalition T that does not contain C is how much the value
+goes up when C joins T:
+
+> MC(C, T) = v(T ∪ {C}) − v(T)
 
 **v is the *value function*** (some texts, and this course's slides, say *characteristic function* —
-same object, two names). It takes a set of channels S and returns a number: the conversion value the
-business gets when only the channels in S are available. Everything in this lecture is built on it,
+same object, two names). It takes a coalition T and returns a number: the conversion value the
+business gets when only the channels in T are available. Everything in this lecture is built on it,
 so it has to be pinned down exactly:
 
-> $$v(S) = \frac{\text{number of converting paths whose channels all lie inside } S}{\text{total number of paths}}$$
+> $$v(T) = \frac{\text{number of converting paths whose channels all lie inside } T}{\text{total number of paths}}$$
 
-**Read the denominator carefully: it is *all* paths, always — it does not change with S.** Only the
+**Read the denominator carefully: it is *all* paths, always — it does not change with T.** Only the
 numerator moves. This is the definition the homework pins, and it is not optional:
 
-- **It makes v monotone.** Enlarging S can only let more paths into the numerator, so
-  $v(S \cup C) \ge v(S)$ and **every marginal contribution is ≥ 0**. Shapley values then come out
+- **It makes v monotone.** Enlarging T can only let more paths into the numerator, so
+  $v(T \cup \{C\}) \ge v(T)$ and **every marginal contribution is ≥ 0**. Shapley values then come out
   non-negative, which is what lets Section 2.2's diagnostic treat a negative φ as a red flag.
 - **It makes the efficiency axiom mean something.** With this denominator $v(\text{all channels})$
   *is* the overall conversion rate across the whole dataset, so "the Shapley values sum to the
   overall conversion rate" (below) is a true statement rather than a near-miss.
 
 ⚠️ **The tempting alternative is wrong here, and it is wrong in a way that shows up in your graded
-output.** "The conversion *rate among* the paths confined to S" — i.e. dividing by the *number of
-paths that use only S* rather than by all paths — has a denominator that shrinks as S shrinks. That
+output.** "The conversion *rate among* the paths confined to T" — i.e. dividing by the *number of
+paths that use only T* rather than by all paths — has a denominator that shrinks as T shrinks. That
 v is not monotone on real path data: adding a channel can *lower* it, marginal contributions go
 negative, and $v(\text{all})$ is no longer the overall conversion rate. If your Shapley values come
 back with a negative entry, this is the first thing to check.
@@ -99,11 +106,15 @@ Yuriy Timen, head of growth at Grammarly for 8.5 years, adds the channel testing
 
 #### The Shapley Value: Fair Credit Allocation
 
-The Shapley value from cooperative game theory asks: if each channel joins a "coalition" of channels in a random order, how much does each channel contribute on average when it joins?
+The Shapley value from cooperative game theory asks: if each channel joins a "coalition" of channels in a random order, how much does each channel contribute on average when it joins? We write channel C's Shapley value as $\phi_C$ ("phi").
 
-A channel that frequently *creates* the purchase intent earns high Shapley credit even if it never appears last in the path. A channel that consistently *closes* paths it did not open earns lower Shapley credit than its last-touch share would suggest.
+**The efficiency axiom:** Shapley values sum to $v(\text{all channels})$, which with Tool 2's v is the overall conversion rate. The reason takes one line. Fix any ordering and add up the marginal contributions along it: $[v(\{C_1\}) - v(\varnothing)] + [v(\{C_1,C_2\}) - v(\{C_1\})] + \dots$ Every middle term cancels, leaving $v(\text{all}) - v(\varnothing)$. Since $v(\varnothing) = 0$ (no channels, no converting paths), every ordering sums to $v(\text{all})$, and so does their average. This holds for any v with $v(\varnothing) = 0$, monotone or not.
 
-**The efficiency axiom:** Shapley values are mathematically guaranteed to sum to the overall conversion rate. This is not a coincidence — it is a property proven for any correctly computed Shapley attribution.
+**What Shapley does with path data.** With Tool 2's v, the Shapley value has a simple form: **each conversion is split equally among the distinct channels on its path, whatever their order.** Here is why. A converting path counts toward v(T) only once *all* of its channels are in T. So in any ordering, that path's value goes entirely to whichever of its channels joins last. Each of its k channels is the last one in 1/k of the orderings, so each gets 1/k of that conversion. Three consequences:
+
+- **Position does not matter.** A channel that often *opens* converting paths earns credit even if it never appears last. A channel that mostly *closes* paths other channels opened earns less than its last-touch share suggests, because it now shares each conversion.
+- **For a single path, Shapley = linear credit:** a TV → Instagram → Search conversion gives each channel one third.
+- **Non-converting paths never affect φ.** A channel that sits on many converting paths gets a lot of credit **whether or not it was needed** — Shapley cannot tell a channel that creates demand from one that just happens to be on the path. That question belongs to an experiment (Section 1.4C).
 
 ---
 
@@ -132,18 +143,22 @@ For 3 channels (Paid Search = PS, Social = S, Email = E), there are 3! = 6 order
 
 #### Part B: Markov Chain Removal Effects
 
-An alternative attribution approach: fit a Markov chain on customer paths, then compute the conversion rate if each channel is removed. The removal effect for channel C is:
+An alternative attribution approach uses Lecture 5's Markov chain. The states are a **Start** state, one state per channel, and two absorbing states: **Conversion** and **Null** (no conversion). Each path is read as a sequence of moves, for example Start → Social → Email → Conversion. Counting those moves gives the transition matrix, and each row sums to 1. P(convert | full model) is the probability that a journey from Start ends in Conversion.
+
+To **remove** channel C, send every transition *into* C to Null instead, and recompute the probability of reaching Conversion. The removal effect for channel C is the *relative* drop:
 
 > RE(C) = 1 − P(convert | channel C removed) / P(convert | full model)
 
-Channels with high removal effects are critically important to the journey.
+A high removal effect means many of the chain's converting journeys pass through C.
+
+⚠️ **"Removed" here means deleted from the fitted model, not switched off in the world.** The construction assumes that every journey through C would have ended without converting. A real customer who never saw C might still have converted through another channel. So the removal effect is not an incrementality estimate either (Part C).
 
 > ### 🔍 Deep Dive: Why Shapley Values Are Uniquely Fair
 > Shapley values are the unique attribution that satisfies four axioms simultaneously:
 > 1. **Efficiency:** Values sum to the total outcome
 > 2. **Symmetry:** Channels that contribute equally receive equal credit
 > 3. **Dummy:** A channel that never adds value receives zero credit
-> 4. **Additivity:** For two independent games, values add
+> 4. **Additivity:** For two value functions on the same channels, the Shapley values of their sum are the sums of their Shapley values
 > No other attribution method satisfies all four. Last-touch fails **symmetry** (position, not contribution, decides credit) and **dummy** (a channel that adds nothing still takes 100% whenever it happens to be last). ⚠️ Note what it does **not** fail: last-touch *does* satisfy **efficiency**, because efficiency only requires the credits to sum to v(N) — and giving one channel 100% of the total still sums to the total. So do first-touch and linear credit. **Efficiency alone is therefore not what makes Shapley fair; it is the only rule satisfying all four at once.**
 
 ---
@@ -167,7 +182,7 @@ A customer who would have converted through paid search even without seeing the 
 
 1. How many orderings must be enumerated for a 4-channel Shapley attribution?
 
-2. Attribution results: Email last-touch = 65%, Email Shapley = 13.6%. What does this divergence tell you about Email's role in the conversion journey?
+2. Attribution results: Email last-touch = 65%, Email Shapley = 25%. What does this divergence tell you about Email's role in the conversion journey?
 
 3. Shapley values: PS = 0.275, Social = 0.200, Email = 0.075. What is the overall conversion rate in this dataset?
 
@@ -180,9 +195,9 @@ A customer who would have converted through paid search even without seeing the 
 ### Checkpoint Answer Key
 
 **Q1.** 4! = 4 × 3 × 2 × 1 = **24** orderings.
-*Common wrong answer:* 4² = 16 (squaring instead of factorial) or 4 × 3 = 12 (omitting the last two terms).
+*Common wrong answer:* 4² = 16 (squaring instead of factorial) or 4 × 3 = 12 (omitting the last two terms). 16 is also 2⁴, the number of *coalitions* of 4 channels — a different count (Misconception 4).
 
-**Q2.** Email is **overcredited** under last-touch. It frequently appears as the final touchpoint before conversion but generates low marginal value when evaluated across all orderings — other channels created the intent that Email closes. Implication: budgets built on last-touch have over-invested in Email.
+**Q2.** Email is **overcredited** under last-touch. It frequently appears as the final touchpoint before conversion, but most of those paths also contain other channels, so across all orderings Email shares each of those conversions with them. Email mostly closes paths that other channels opened. Implication: budgets built on last-touch have probably over-invested in Email.
 *Common wrong answer:* Email is the most effective channel because it gets the most last-touch credit. High last-touch credit + low Shapley credit specifically indicates closing without creating.
 
 **Q3.** By the efficiency axiom, Shapley values sum to the overall conversion rate. 0.275 + 0.200 + 0.075 = **0.550** = 55%.
@@ -191,8 +206,8 @@ A customer who would have converted through paid search even without seeing the 
 **Q4.** **False.** Shapley measures marginal contribution within observed paths — it is correlation-based. It cannot distinguish between "Social caused this conversion" and "Social appeared on the path of customers who would have converted anyway." Causal incrementality requires a holdout experiment.
 *Common wrong answer:* True, because Shapley accounts for the full path, not just the last touch. Path accounting ≠ causal identification.
 
-**Q5.** Paid Search is likely **under-invested**. Last-touch assigns only 8% of credit to PS, so budgets built on last-touch would have cut PS spend. But Shapley shows PS contributes 50% of conversion credit — it is a high-value channel that rarely appears last. Under-investment in PS means you are getting less from it than you should.
-*Common wrong answer:* Paid Search should be cut because it only gets 8% of last-touch credit. This is precisely the error that last-touch attribution causes.
+**Q5.** Paid Search is **under-credited** by last-touch, so it may be **under-invested**. Last-touch assigns only 8% of credit to PS, so budgets built on last-touch would have cut PS spend. Shapley gives PS 50% of conversion credit: it sits on many converting paths but rarely appears last. That makes PS the first candidate for more budget — but not proof that more PS spend will produce more conversions. Shapley is not incrementality (Section 1.4C), so test PS with a holdout before moving money.
+*Common wrong answer:* Paid Search should be cut because it only gets 8% of last-touch credit. This is precisely the error that last-touch attribution causes. *The opposite error:* "Shapley proves PS drives conversions, so raise its budget." Shapley says last-touch under-credits PS; it does not say what extra spend would cause.
 
 #### Slide Checkpoint Answers
 
@@ -200,13 +215,19 @@ Numbered to match the Checkpoint slide in this lecture's deck. Where the slide a
 
 **Slide Q1.** *"For 4 channels, how many orderings must you evaluate?"* — Same question as Q1 above — see that answer.
 
-**Slide Q2.** *"Channel E has Shapley value 0.08 but last-touch credit of 40%. What does this suggest?"* — Same reasoning as Q2 above, which uses Email (65% last-touch, 13.6% Shapley); the slide's Channel E has 40% last-touch and a Shapley value of 0.08.
+**Slide Q2.** *"Channel E has Shapley value 0.08 but last-touch credit of 40%. What does this suggest?"* — Same reasoning as Q2 above, which uses Email (65% last-touch, 25% Shapley); the slide's Channel E has 40% last-touch and a Shapley value of 0.08.
 
 **Slide Q3.** *"Verify the efficiency axiom: if $\phi_{PS}=0.275$, $\phi_S=0.200$, $\phi_E=0.075$, what is the overall conversion rate implied?"* — Same question as Q3 above — see that answer.
 
 **Slide Q4.** *"Paid Search: Shapley = 0.28, incrementality holdout = 0.04. What does the gap tell you?"* — Same reasoning as Q4 above: Shapley credit is not incrementality, and only a holdout measures incremental conversions. Q4 asks about Paid Social in general; the slide gives Paid Search's two numbers.
 
-**Slide Q5.** *"Under what conditions could a Shapley value be negative?"* — When the **value function is non-monotone**: some coalition got *worse* when the channel joined, so that channel's average marginal contribution across orderings comes out negative. Section 2.2 makes this diagnostic check number 2, immediately after the efficiency check in Q3 — a negative Shapley value "can be a genuine finding or a specification artefact, so investigate the value function rather than assuming a coding bug" (`homework_06` pins a monotone v for exactly this reason). The slide goes on to ask you to *construct* a characteristic function v that produces φᵢ < 0; attempt that one and bring your example to class.
+**Slide Q5.** *"Under what conditions could a Shapley value be negative?"* — When the **value function is non-monotone**: some coalition got *worse* when the channel joined, so that channel's average marginal contribution across orderings comes out negative. Section 2.2 makes this diagnostic check number 2, immediately after the efficiency check in Q3 — a negative Shapley value "can be a genuine finding or a specification artefact, so investigate the value function rather than assuming a coding bug" (`homework_06` pins a monotone v for exactly this reason). The slide goes on to ask you to *construct* a characteristic function v that produces φᵢ < 0. Attempt it before reading on. One construction uses two channels:
+
+| Coalition | ∅ | {1} | {2} | {1, 2} |
+|---|---|---|---|---|
+| v | 0 | 0 | 10 | 0 |
+
+There are 2! = 2 orderings. In (1, 2), channel 1 joins the empty coalition and adds v({1}) − v(∅) = 0. In (2, 1), it joins {2} and adds v({1, 2}) − v({2}) = 0 − 10 = −10. So $\phi_1 = \tfrac{1}{2}(0) + \tfrac{1}{2}(-10) = \mathbf{-5}$. Likewise $\phi_2 = \tfrac{1}{2}(10) + \tfrac{1}{2}(0) = +5$, and efficiency holds: $\phi_1 + \phi_2 = 0 = v(\{1, 2\})$. Channel 1 destroys channel 2's value when it joins — a channel that cannibalises or annoys. Under the homework's v this cannot happen, because adding a channel can never remove a converting path.
 
 ## PART 2: Application
 ### (~1 hour 40 minutes)
@@ -221,20 +242,20 @@ Numbered to match the Checkpoint slide in this lecture's deck. Where the slide a
 
 **Problem Statement**
 
-A direct-to-consumer brand has 3 channels: Paid Search (P), Social (S), Email (E). From journey data, the value function is estimated as:
+A direct-to-consumer brand has 3 channels: Paid Search (PS), Social (S), Email (E). From journey data, the value function is estimated as:
 
-| Coalition | $v(S)$ |
+| Coalition $T$ | $v(T)$ |
 |---|---|
 | $\{\}$ | 0 |
-| $\{P\}$ | 0.25 |
+| $\{PS\}$ | 0.25 |
 | $\{S\}$ | 0.10 |
 | $\{E\}$ | 0.08 |
-| $\{P,S\}$ | 0.40 |
-| $\{P,E\}$ | 0.35 |
+| $\{PS,S\}$ | 0.40 |
+| $\{PS,E\}$ | 0.35 |
 | $\{S,E\}$ | 0.18 |
-| $\{P,S,E\}$ | 0.50 |
+| $\{PS,S,E\}$ | 0.50 |
 
-**Part A:** Compute $\phi_P$ by enumerating all 6 orderings. Show each marginal contribution.
+**Part A:** Compute $\phi_{PS}$ by enumerating all 6 orderings. Show each marginal contribution.
 
 **Part B:** Compute $\phi_S$ and $\phi_E$. Verify the efficiency condition.
 
@@ -244,48 +265,48 @@ A direct-to-consumer brand has 3 channels: Paid Search (P), Social (S), Email (E
 
 **Full Solution**
 
-**Part A: Paid Search ($\phi_P$)**
+**Part A: Paid Search ($\phi_{PS}$)**
 
-| Ordering | Coalition before P | Marginal: $v(S \cup \{P\}) - v(S)$ |
+| Ordering | Coalition $T$ before PS | Marginal: $v(T \cup \{PS\}) - v(T)$ |
 |---|---|---|
-| (P, S, E) | $\{\}$ | $0.25 - 0 = 0.25$ |
-| (P, E, S) | $\{\}$ | $0.25 - 0 = 0.25$ |
-| (S, P, E) | $\{S\}$ | $0.40 - 0.10 = 0.30$ |
-| (S, E, P) | $\{S,E\}$ | $0.50 - 0.18 = 0.32$ |
-| (E, P, S) | $\{E\}$ | $0.35 - 0.08 = 0.27$ |
-| (E, S, P) | $\{S,E\}$ | $0.50 - 0.18 = 0.32$ |
+| (PS, S, E) | $\{\}$ | $0.25 - 0 = 0.25$ |
+| (PS, E, S) | $\{\}$ | $0.25 - 0 = 0.25$ |
+| (S, PS, E) | $\{S\}$ | $0.40 - 0.10 = 0.30$ |
+| (S, E, PS) | $\{S,E\}$ | $0.50 - 0.18 = 0.32$ |
+| (E, PS, S) | $\{E\}$ | $0.35 - 0.08 = 0.27$ |
+| (E, S, PS) | $\{S,E\}$ | $0.50 - 0.18 = 0.32$ |
 
-$$\phi_P = \frac{0.25+0.25+0.30+0.32+0.27+0.32}{6} = \frac{1.71}{6} = \mathbf{0.285}$$
+$$\phi_{PS} = \frac{0.25+0.25+0.30+0.32+0.27+0.32}{6} = \frac{1.71}{6} = \mathbf{0.285}$$
 
 **Part B: Social ($\phi_S$) and Email ($\phi_E$)**
 
 For Social:
 
-| Ordering | Coalition before S | Marginal |
+| Ordering | Coalition $T$ before S | Marginal |
 |---|---|---|
-| (P,S,E) | $\{P\}$ | $0.40-0.25=0.15$ |
-| (P,E,S) | $\{P,E\}$ | $0.50-0.35=0.15$ |
-| (S,P,E) | $\{\}$ | $0.10-0=0.10$ |
-| (S,E,P) | $\{\}$ | $0.10-0=0.10$ |
-| (E,P,S) | $\{P,E\}$ | $0.50-0.35=0.15$ |
-| (E,S,P) | $\{E\}$ | $0.18-0.08=0.10$ |
+| (PS,S,E) | $\{PS\}$ | $0.40-0.25=0.15$ |
+| (PS,E,S) | $\{PS,E\}$ | $0.50-0.35=0.15$ |
+| (S,PS,E) | $\{\}$ | $0.10-0=0.10$ |
+| (S,E,PS) | $\{\}$ | $0.10-0=0.10$ |
+| (E,PS,S) | $\{PS,E\}$ | $0.50-0.35=0.15$ |
+| (E,S,PS) | $\{E\}$ | $0.18-0.08=0.10$ |
 
 $$\phi_S = \frac{0.15+0.15+0.10+0.10+0.15+0.10}{6} = \frac{0.75}{6} = \mathbf{0.125}$$
 
 For Email:
 
-| Ordering | Coalition before E | Marginal |
+| Ordering | Coalition $T$ before E | Marginal |
 |---|---|---|
-| (P,S,E) | $\{P,S\}$ | $0.50-0.40=0.10$ |
-| (P,E,S) | $\{P\}$ | $0.35-0.25=0.10$ |
-| (S,P,E) | $\{P,S\}$ | $0.50-0.40=0.10$ |
-| (S,E,P) | $\{S\}$ | $0.18-0.10=0.08$ |
-| (E,P,S) | $\{\}$ | $0.08-0=0.08$ |
-| (E,S,P) | $\{\}$ | $0.08-0=0.08$ |
+| (PS,S,E) | $\{PS,S\}$ | $0.50-0.40=0.10$ |
+| (PS,E,S) | $\{PS\}$ | $0.35-0.25=0.10$ |
+| (S,PS,E) | $\{PS,S\}$ | $0.50-0.40=0.10$ |
+| (S,E,PS) | $\{S\}$ | $0.18-0.10=0.08$ |
+| (E,PS,S) | $\{\}$ | $0.08-0=0.08$ |
+| (E,S,PS) | $\{\}$ | $0.08-0=0.08$ |
 
 $$\phi_E = \frac{0.10+0.10+0.10+0.08+0.08+0.08}{6} = \frac{0.54}{6} = \mathbf{0.090}$$
 
-**Efficiency check:** $0.285 + 0.125 + 0.090 = 0.500 = v(\{P,S,E\})$ ✓
+**Efficiency check:** $0.285 + 0.125 + 0.090 = 0.500 = v(\{PS,S,E\})$ ✓
 
 **Part C: Last-touch vs. Shapley for Email**
 
@@ -293,7 +314,7 @@ Under last-touch (Email always last): Email receives 100% of the 0.50 total valu
 
 Under Shapley: Email receives 0.090 / 0.500 = **18%** of total value.
 
-**Business implication:** Last-touch attribution would lead the marketing team to invest heavily in Email (cutting Paid Search and Social to fund more email campaigns). But Shapley reveals Paid Search generates 57% of value (0.285/0.500) — the single most important channel. A budget decision based on last-touch would significantly underinvest in the channel that actually drives the most conversions.
+**Business implication:** Last-touch attribution would lead the marketing team to invest heavily in Email (cutting Paid Search and Social to fund more email campaigns). Shapley gives Paid Search 57% of the value (0.285/0.500), the largest share, where last-touch gave it none. So last-touch badly under-credits Paid Search, and PS is the first candidate for more budget. Shapley does not show that extra PS spend would *cause* extra conversions (Section 1.4C). The next step is a holdout test on PS, not an immediate budget shift.
 
 ---
 
@@ -302,17 +323,17 @@ Under Shapley: Email receives 0.090 / 0.500 = **18%** of total value.
 
 **The attribution comparison table:** The most important output. Focus on channels where Shapley diverges substantially from last-touch or first-touch. These divergences represent misallocation risks.
 
-**Interpreting Shapley %:** A channel's Shapley share represents its average marginal contribution across all orderings. A channel with high Shapley % but low last-touch % is typically an "awareness" channel that warms up customers before a final-click channel closes the deal.
+**Interpreting Shapley %:** A channel's Shapley share represents its average marginal contribution across all orderings. A channel with high Shapley % but low last-touch % tends to appear early in converting paths. It may be an "awareness" channel that warms up customers before a final-click channel closes the deal — or it may just ride along early in journeys that would have converted anyway. Shapley cannot tell these two apart (check 4 below).
 
-**Interpreting the Markov removal effect:** A high removal effect (e.g., 0.45) means removing this channel would reduce conversions by 45%. Channels with low removal effects (close to 0) are redundant — the remaining channels would generate similar conversions without them.
+**Interpreting the Markov removal effect:** A high removal effect (e.g., 0.45) means that deleting this channel from the fitted chain removes 45% of the chain's conversions. A removal effect close to 0 means few of the chain's converting journeys pass through the channel. Both are statements about the model: the chain assumes a journey through a removed channel never converts, so a removal effect is not a forecast of what switching the channel off would do (Section 1.4B).
 
-**When the two methods agree:** If Shapley and Markov produce similar rankings, you can be more confident in the results. When they diverge substantially, investigate why — it often indicates that the path ordering matters a lot (Shapley may be more appropriate) or that data is sparse for some coalitions.
+**When the two methods agree:** If Shapley and Markov produce similar rankings, you can be more confident in the results. When they diverge substantially, investigate why — it often indicates that the path ordering matters a lot (Markov uses order; Shapley ignores it) or that data is sparse for some coalitions.
 
 **Before trusting the agent output:**
-1. Do Shapley values sum to approximately the observed overall conversion rate? (Efficiency axiom)
+1. Do Shapley values sum to approximately the observed overall conversion rate? (Efficiency axiom. It holds by construction, so it checks the *arithmetic*, never the business story.)
 2. Are all Shapley values non-negative? A negative value means the **value function is non-monotone** — some coalition got *worse* when a channel joined. That can be a genuine finding or a specification artefact, so investigate the value function rather than assuming a coding bug (`homework_06` pins a monotone v for exactly this reason).
 3. Are all removal effects between 0 and 1?
-4. Does the channel with the most touchpoints have the highest Shapley value? Not necessarily — a channel in many paths but always as redundant filler should have low Shapley value.
+4. Is the channel with the highest Shapley value simply the one on the most converting paths? With this v it usually is, because each conversion is split equally among the channels on its path (Section 1.3). A high Shapley value says a channel is *present* on converting paths, not that it was *needed*: a redundant channel that rides along on many converting paths still scores high. Only a holdout separates the two.
 
 ---
 
@@ -343,10 +364,10 @@ Shapley values measure marginal contribution in a cooperative game defined by ob
 Last-touch is sometimes appropriate — for example, if every conversion path consists of exactly one touchpoint, last-touch and Shapley give identical results. The bias of last-touch grows with the complexity and length of conversion paths.
 
 **3. "The channel with the most touchpoints deserves the most credit."**
-A channel that appears in many paths but never changes conversion probability has zero marginal contribution — the dummy player axiom assigns it zero Shapley value. Frequency of appearance is not the same as contribution.
+Two touches by the same channel on one path count once: Shapley splits each conversion among the *distinct* channels on its path. And appearances on paths that did not convert earn nothing. But do not over-correct. With this course's v, a channel on many *converting* paths does earn a lot of Shapley credit, even if it was redundant filler. The dummy axiom gives zero only to a channel that never changes v, which here means one that is on no converting path at all. Appearing on converting paths is not the same as causing them (Misconception 1).
 
 **4. "Shapley values work for any number of channels."**
-Exact Shapley computation requires $2^n$ coalition evaluations, growing exponentially. For $n = 20$ channels: over 1 million coalitions. In practice, approximate sampling-based Shapley methods are used for large channel sets.
+Exact Shapley computation has $n!$ orderings but only $2^n$ distinct coalitions. Every ordering reuses the same coalition values, so you evaluate $v$ $2^n$ times and then average over the orderings with the weights in the slides' formula. Both grow fast. For $n = 20$ channels: over 1 million coalitions ($2^{20}$) and about $2.4 \times 10^{18}$ orderings ($20!$). In practice, approximate sampling-based Shapley methods are used for large channel sets.
 
 **5. "Markov attribution is more accurate than Shapley."**
 They model different things. Markov uses path ordering and transition probabilities; Shapley uses coalition membership and marginal contributions. Neither is universally more accurate — the better method depends on whether path ordering or coalition composition is more important for your data.
@@ -357,7 +378,7 @@ They model different things. Markov uses path ordering and transition probabilit
 
 | Agent step | Corresponds to |
 |---|---|
-| Computes $v(S)$ for each coalition from path data | Section 1.1, Tool 2 — the $v(S)$ definition |
+| Computes $v(S)$ for each coalition from path data (the prompt writes the coalition as $S$) | Section 1.1, Tool 2 — the $v(T)$ definition |
 | Enumerates orderings, averages marginal contributions | Section 1.4 — full Shapley derivation |
 | Builds Markov transition matrix from journeys | Lecture 5, Section 1.1, Tool 2 — row sums must equal 1 |
 | Computes removal effect per channel | Section 1.4B — the removal effect RE(C) |
@@ -367,4 +388,4 @@ They model different things. Markov uses path ordering and transition probabilit
 1. Shapley values sum to approximately the observed overall conversion rate (efficiency)
 2. Shapley values are non-negative — or, if not, the value function is non-monotone (investigate v, not the code)
 3. All removal effects are between 0 and 1
-4. Channels in nearly every path do not automatically get the highest Shapley — a channel that appears everywhere as redundant filler should score low (efficiency is guaranteed by construction, so it is a check on the *arithmetic*, never on the business story)
+4. A high Shapley value means a channel is on many converting paths, not that it was needed — a redundant channel that rides along everywhere still scores high (Section 2.2, check 4). Efficiency (check 1) is guaranteed by construction, so it checks the *arithmetic*, never the business story
