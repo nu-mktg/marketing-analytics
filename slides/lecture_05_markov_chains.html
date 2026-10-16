@@ -1304,12 +1304,12 @@ Use steady-state to <strong>motivate intervention</strong> — not to describe a
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>Recompute <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝐯</mi><mn>1</mn></msub><mi>′</mi><mo>=</mo><msub><mi>𝐯</mi><mn>0</mn></msub><mo>⋅</mo><mi>P</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">\mathbf{v}_1&#39; = \mathbf{v}_0 \cdot P&#39;</annotation></semantics></math> and compare with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐯</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\mathbf{v}_1</annotation></semantics></math>.</p>
-<p>The difference in Active share after 1 month <strong>is the intervention effect</strong> — directly comparable to a CLV-weighted dollar impact.</p>
+<p>Project forward under both <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">P&#39;</annotation></semantics></math> and compare at a <strong>finite horizon</strong>, such as Active share after 12 months or the expected months until churn. The steady state does not move.</p>
+<p>This is the effect the campaign <strong>would</strong> have <strong>if</strong> it changes <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math> as assumed. A matrix fitted to past data cannot show that; a randomly held-out comparison group can (Lecture 1).</p>
 </div>
 </div>
 </div>
-<p>This is how Markov models inform retention campaign ROI.</p>
+<p>This is how Markov models inform a retention campaign’s business case, once a holdout has tested the assumption.</p>
 </section>
 <section class="slide level2">
 <h2>Scope and Limitations</h2>
@@ -1319,7 +1319,7 @@ Use steady-state to <strong>motivate intervention</strong> — not to describe a
 <ul>
 <li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐯</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">\mathbf{v}_{t+k}</annotation></semantics></math>: predicted state distribution <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math> periods ahead under current <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math></li>
 <li>Steady-state <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>𝛑</mi><mo>*</mo></msup><annotation encoding="application/x-tex">\boldsymbol{\pi}^*</annotation></semantics></math>: long-run distribution if <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math> remains stationary</li>
-<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>𝐯</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\Delta \mathbf{v}_1</annotation></semantics></math>: first-period distributional effect of an intervention on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math></li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>𝐯</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\Delta \mathbf{v}_k</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>t</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\Delta t_i</annotation></semantics></math>: what a change to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math> does at a finite horizon, <strong>if</strong> the change happens as assumed</li>
 </ul>
 </div>
 <div>
@@ -1328,6 +1328,7 @@ Use steady-state to <strong>motivate intervention</strong> — not to describe a
 <li><strong>Markov property:</strong> next state depends only on current state, not history</li>
 <li><strong>Stationarity:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math> is assumed constant over time</li>
 <li>Transition probabilities are estimated from data; standard errors on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>𝛑</mi><mo>*</mo></msup><annotation encoding="application/x-tex">\boldsymbol{\pi}^*</annotation></semantics></math> are rarely reported in practice</li>
+<li>A fitted <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math> describes past behaviour; whether a campaign <strong>causes</strong> a change in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math> needs a randomized holdout</li>
 </ul>
 </div>
 </div>
