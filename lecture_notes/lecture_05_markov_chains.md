@@ -183,7 +183,7 @@ transition among your surviving customers, and this is the distinction the stead
 sensitive to.
 
 > ### 🔍 Deep Dive: Eigenvalues and the Steady State
-> For a matrix without absorbing states, the steady-state distribution is the eigenvector corresponding to eigenvalue λ = 1. All Markov chains have at least one eigenvalue equal to 1. The other eigenvalues (< 1 in absolute value) determine how quickly the distribution converges to steady state — larger gaps between 1 and the second-largest eigenvalue mean faster convergence.
+> Every transition matrix has an eigenvalue λ = 1. The steady state is a **left** eigenvector for it: a row vector π with π × P = π, scaled so its entries sum to 1. (It is a left eigenvector because v multiplies P from the left; numpy's `eig(P)` returns right eigenvectors, so use `eig(P.T)`.) For a chain without absorbing states in which every state can reach every other and the chain does not cycle, that π is unique, every other eigenvalue is smaller than 1 in absolute value, and the second-largest of them sets the speed of convergence: the further it is below 1, the faster v settles. A chain that cycles is the exception. One that alternates between two states also has λ = −1, so v keeps flipping and never settles, even though a π with π × P = π still exists.
 
 ---
 
