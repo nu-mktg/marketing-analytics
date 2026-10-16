@@ -65,7 +65,9 @@ entries of v are the P(now = i), and column *j* of P holds the P(i → j) for ev
 
 Every row of a valid transition matrix sums to 1. This represents the fact that a customer must be in exactly one state next period.
 
-If any row sum ≠ 1, the matrix is incorrectly specified.
+Row sums of 1 are required but not enough on their own: every entry must also be **non-negative**,
+because each one is a probability. A row of [0.70, 0.40, −0.10] sums to 1 and is still invalid. If
+any row sum ≠ 1, or any entry is negative, the matrix is incorrectly specified.
 
 ---
 
@@ -466,7 +468,7 @@ The probability of being in a non-Churned state (Active + At-Risk):
 - Month 1: 0.700 + 0.175 = 0.875
 - Month 2: 0.553 + 0.182 = 0.735
 
-This is exactly the survival function $\hat{S}(t)$ from Lecture 4, computed here via Markov chain dynamics. The connection between survival analysis and Markov chains is not a coincidence — they model the same phenomenon from different angles.
+This is the survival function $S(t)$ from Lecture 4 for a cohort that starts Active: the share not yet churned at each month. Here the chain implies it; Lecture 4's Kaplan-Meier $\hat{S}(t)$ estimates it directly from churn times. The connection between survival analysis and Markov chains is not a coincidence — they model the same phenomenon from different angles.
 
 ---
 
@@ -480,7 +482,7 @@ This is exactly the survival function $\hat{S}(t)$ from Lecture 4, computed here
 
 **The steady-state vector:** For a chain with **no** absorbing state, it is the long-run customer mix: if the current distribution is better than the steady state, expect deterioration over time; if worse, expect improvement. With an absorbing Churned, as in this lecture and the homework, it is always [0, 0, 1], so it carries no planning information. Read the expected time to absorption (Part C) and the finite-horizon projection instead.
 
-**Simulation output:** Plotting the fraction in each state over 24 simulated months starting from a realistic initial distribution. Look for:
+**Projection output:** Plotting the fraction in each state over 24 months, computed by repeating v × P from a realistic initial distribution (deterministic, so there is nothing to simulate). Look for:
 - How quickly does the distribution converge to steady state?
 - Is there a transient "danger period" when Churned fraction rises sharply?
 - Does Active fraction drop below a threshold that triggers concern?
@@ -539,7 +541,7 @@ The steady state is an asymptotic property. Convergence may take months or years
 | Solves $\pi P = \pi$ for steady state | Section 1.4B — the steady-state distribution (found by iterating $P$) |
 | Identifies absorbing states | Section 1.3 — absorbing states ($P_{ii} = 1$) |
 | Computes expected months-until-absorption per starting state | Section 1.4C — first-step analysis; Deep Dive — the fundamental matrix $N = (I-Q)^{-1}$ |
-| Simulation of 500 journeys | Section 2.2 — Monte Carlo approximation to $P^n$ |
+| Projects the distribution forward month by month (`v @ P` repeated) | Section 1.4A — $P^n$; Part D Step 6 |
 
 **What to verify:**
 1. All **rows** of $P$ sum to 1.0 (within 0.001 tolerance). If the *columns* sum to 1 instead, the agent used the transposed convention (Pv); ask it to use this lecture's: rows = current state, v @ P
