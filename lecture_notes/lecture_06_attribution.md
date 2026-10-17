@@ -259,7 +259,7 @@ A direct-to-consumer brand has 3 channels: Paid Search (PS), Social (S), Email (
 
 **Part B:** Compute $\phi_S$ and $\phi_E$. Verify the efficiency condition.
 
-**Part C:** Under last-touch attribution (assume Email is always last), Email gets 100% of credit. Under Shapley, what percentage does Email actually receive? What does this difference mean for budget decisions?
+**Part C:** The table is built from journey data with Tool 2's v, so it also tells you which converting paths exist. (a) What share of all paths are converting paths with exactly {PS}? Exactly {PS, S}? Use differences of v. Find the share for every channel set. (b) The table does not record the order of touches. What range of last-touch credit can each channel have? (c) Compare each channel's Shapley share with its last-touch range. Why are they so close here, and what does that mean for budget decisions?
 
 ---
 
@@ -308,13 +308,32 @@ $$\phi_E = \frac{0.10+0.10+0.10+0.08+0.08+0.08}{6} = \frac{0.54}{6} = \mathbf{0.
 
 **Efficiency check:** $0.285 + 0.125 + 0.090 = 0.500 = v(\{PS,S,E\})$ ✓
 
-**Part C: Last-touch vs. Shapley for Email**
+**Part C: Last-touch vs. Shapley**
 
-Under last-touch (Email always last): Email receives 100% of the 0.50 total value = 0.50.
+**(a) The path mix.** v({PS}) counts converting paths that use only PS, so 0.25 of all paths are PS-only conversions. v({PS, S}) also counts PS-only and S-only paths, so the paths with exactly PS and S are 0.40 − 0.25 − 0.10 = 0.05. The same steps give:
 
-Under Shapley: Email receives 0.090 / 0.500 = **18%** of total value.
+| Converting paths with exactly | Share of all paths |
+|---|---|
+| {PS} | 0.25 |
+| {S} | 0.10 |
+| {E} | 0.08 |
+| {PS, S} | 0.40 − 0.25 − 0.10 = 0.05 |
+| {PS, E} | 0.35 − 0.25 − 0.08 = 0.02 |
+| {S, E} | 0.18 − 0.10 − 0.08 = 0.00 |
+| {PS, S, E} | 0.50 − (0.25 + 0.10 + 0.08 + 0.05 + 0.02 + 0.00) = 0.00 |
+| **Total** | **0.50** = v({PS, S, E}) ✓ |
 
-**Business implication:** Last-touch attribution would lead the marketing team to invest heavily in Email (cutting Paid Search and Social to fund more email campaigns). Shapley gives Paid Search 57% of the value (0.285/0.500), the largest share, where last-touch gave it none. So last-touch badly under-credits Paid Search, and PS is the first candidate for more budget. Shapley does not show that extra PS spend would *cause* extra conversions (Section 1.4C). The next step is a holdout test on PS, not an immediate budget shift.
+Check against Section 1.3's rule (each conversion is split equally among the channels on its path): $\phi_{PS} = 0.25 + 0.05/2 + 0.02/2 = 0.285$ ✓.
+
+**(b) Last-touch ranges.** A single-channel path always credits that channel. Only the two-channel paths depend on order. As a share of the 0.50 in conversions:
+
+| Channel | Last-touch: fewest → most | Last-touch share | Shapley share |
+|---|---|---|---|
+| PS | 0.25 → 0.25 + 0.05 + 0.02 = 0.32 | 50% – 64% | 0.285 / 0.50 = **57%** |
+| S | 0.10 → 0.10 + 0.05 = 0.15 | 20% – 30% | 0.125 / 0.50 = **25%** |
+| E | 0.08 → 0.08 + 0.02 = 0.10 | 16% – 20% | 0.090 / 0.50 = **18%** |
+
+**(c) Why they agree.** 0.43 of the 0.50 in conversions (86%) come from single-channel paths, and on those every method gives the same answer (Misconception 2). Here, last-touch and Shapley could not disagree by much whatever the order of touches. **Business implication:** in this data, switching from last-touch to Shapley would barely move the budget. Attribution matters when many conversions come from multi-channel paths, as in Checkpoint Q2, where Email is last on 65% of conversions but gets 25% under Shapley. Before choosing a model, check how many conversions are multi-channel. Even where the methods disagree, Shapley does not show what extra spend would *cause* (Section 1.4C); that takes a holdout.
 
 ---
 
