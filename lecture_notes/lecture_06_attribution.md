@@ -159,7 +159,7 @@ A high removal effect means many of the chain's converting journeys pass through
 > 2. **Symmetry:** Channels that contribute equally receive equal credit
 > 3. **Dummy:** A channel that never adds value receives zero credit
 > 4. **Additivity:** For two value functions on the same channels, the Shapley values of their sum are the sums of their Shapley values
-> No other attribution method satisfies all four. Last-touch fails **symmetry** (position, not contribution, decides credit) and **dummy** (a channel that adds nothing still takes 100% whenever it happens to be last). ⚠️ Note what it does **not** fail: last-touch *does* satisfy **efficiency**, because efficiency only requires the credits to sum to v(N) — and giving one channel 100% of the total still sums to the total. So do first-touch and linear credit. **Efficiency alone is therefore not what makes Shapley fair; it is the only rule satisfying all four at once.**
+> No other attribution method satisfies all four. Last-touch fails **symmetry** (position, not contribution, decides credit) and, for a general v, **dummy** (a channel that adds nothing can still take 100% whenever it happens to be last). With this course's path-data v, a channel that is last on a converting path always adds something, so there the failure is symmetry alone. ⚠️ Note what it does **not** fail: last-touch *does* satisfy **efficiency**, because efficiency only requires the credits to sum to v(N) — and giving one channel 100% of the total still sums to the total. So do first-touch and linear credit. **Efficiency alone is therefore not what makes Shapley fair; it is the only rule satisfying all four at once.**
 
 ---
 
@@ -198,7 +198,7 @@ A customer who would have converted through paid search even without seeing the 
 *Common wrong answer:* 4² = 16 (squaring instead of factorial) or 4 × 3 = 12 (omitting the last two terms). 16 is also 2⁴, the number of *coalitions* of 4 channels — a different count (Misconception 4).
 
 **Q2.** Email is **overcredited** under last-touch. It frequently appears as the final touchpoint before conversion, but most of those paths also contain other channels, so across all orderings Email shares each of those conversions with them. Email mostly closes paths that other channels opened. Implication: budgets built on last-touch have probably over-invested in Email.
-*Common wrong answer:* Email is the most effective channel because it gets the most last-touch credit. High last-touch credit + low Shapley credit specifically indicates closing without creating.
+*Common wrong answer:* Email is the most effective channel because it gets the most last-touch credit. High last-touch credit with a much lower Shapley share says the channel mostly closes paths that other channels opened. Whether it created any demand at all is a question for a holdout, not for Shapley (Section 1.3).
 
 **Q3.** By the efficiency axiom, Shapley values sum to the overall conversion rate. 0.275 + 0.200 + 0.075 = **0.550** = 55%.
 *Common wrong answer:* Need additional information to compute the conversion rate. No — the sum of Shapley values IS the conversion rate, guaranteed by the efficiency axiom.
@@ -215,7 +215,7 @@ Numbered to match the Checkpoint slide in this lecture's deck. Where the slide a
 
 **Slide Q1.** *"For 4 channels, how many orderings must you evaluate?"* — Same question as Q1 above — see that answer.
 
-**Slide Q2.** *"Channel E has Shapley value 0.08 but last-touch credit of 40%. What does this suggest?"* — Same reasoning as Q2 above, which uses Email (65% last-touch, 25% Shapley); the slide's Channel E has 40% last-touch and a Shapley value of 0.08.
+**Slide Q2.** *"Channel E gets 16% of Shapley credit but 40% of last-touch credit. What does this suggest?"* — Same reasoning as Q2 above, which uses Email (65% last-touch, 25% Shapley); the slide's Channel E has 40% last-touch and 16% Shapley. Compare shares with shares: a raw Shapley value like 0.08 cannot be set against a last-touch percentage until you divide by the overall conversion rate.
 
 **Slide Q3.** *"Verify the efficiency axiom: if $\phi_{PS}=0.275$, $\phi_S=0.200$, $\phi_E=0.075$, what is the overall conversion rate implied?"* — Same question as Q3 above — see that answer.
 
@@ -350,7 +350,7 @@ Check against Section 1.3's rule (each conversion is split equally among the cha
 
 **Before trusting the agent output:**
 1. Do Shapley values sum to approximately the observed overall conversion rate? (Efficiency axiom. It holds by construction, so it checks the *arithmetic*, never the business story.)
-2. Are all Shapley values non-negative? A negative value means the **value function is non-monotone** — some coalition got *worse* when a channel joined. That can be a genuine finding or a specification artefact, so investigate the value function rather than assuming a coding bug (`homework_06` pins a monotone v for exactly this reason).
+2. Are all Shapley values non-negative? A negative value means the **value function is non-monotone** — some coalition got *worse* when a channel joined. That can be a genuine finding or a specification artefact, so investigate the value function rather than assuming a coding bug (`homework_06` pins a monotone v for exactly this reason). **With the homework's v a negative φ cannot happen, so if you see one there, your code is using a different v — that one is a coding bug.**
 3. Are all removal effects between 0 and 1?
 4. Is the channel with the highest Shapley value simply the one on the most converting paths? With this v it usually is, because each conversion is split equally among the channels on its path (Section 1.3). A high Shapley value says a channel is *present* on converting paths, not that it was *needed*: a redundant channel that rides along on many converting paths still scores high. Only a holdout separates the two.
 
@@ -405,6 +405,6 @@ They model different things. Markov uses path ordering and transition probabilit
 
 **What to verify before trusting the output:**
 1. Shapley values sum to approximately the observed overall conversion rate (efficiency)
-2. Shapley values are non-negative — or, if not, the value function is non-monotone (investigate v, not the code)
+2. Shapley values are non-negative — with the homework's v they must be, so a negative one means the code implemented a different v
 3. All removal effects are between 0 and 1
 4. A high Shapley value means a channel is on many converting paths, not that it was needed — a redundant channel that rides along everywhere still scores high (Section 2.2, check 4). Efficiency (check 1) is guaranteed by construction, so it checks the *arithmetic*, never the business story
