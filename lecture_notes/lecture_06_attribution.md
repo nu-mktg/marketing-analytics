@@ -269,12 +269,12 @@ A direct-to-consumer brand has 3 channels: Paid Search (PS), Social (S), Email (
 
 | Ordering | Coalition $T$ before PS | Marginal: $v(T \cup \{PS\}) - v(T)$ |
 |---|---|---|
-| (PS, S, E) | $\{\}$ | $0.25 - 0 = 0.25$ |
-| (PS, E, S) | $\{\}$ | $0.25 - 0 = 0.25$ |
-| (S, PS, E) | $\{S\}$ | $0.40 - 0.10 = 0.30$ |
-| (S, E, PS) | $\{S,E\}$ | $0.50 - 0.18 = 0.32$ |
-| (E, PS, S) | $\{E\}$ | $0.35 - 0.08 = 0.27$ |
-| (E, S, PS) | $\{S,E\}$ | $0.50 - 0.18 = 0.32$ |
+| (PS, S, E) | $\{\}$ | ${0.25} - 0 = 0.25$ |
+| (PS, E, S) | $\{\}$ | ${0.25} - 0 = 0.25$ |
+| (S, PS, E) | $\{S\}$ | ${0.40} - 0.10 = 0.30$ |
+| (S, E, PS) | $\{S,E\}$ | ${0.50} - 0.18 = 0.32$ |
+| (E, PS, S) | $\{E\}$ | ${0.35} - 0.08 = 0.27$ |
+| (E, S, PS) | $\{S,E\}$ | ${0.50} - 0.18 = 0.32$ |
 
 $$\phi_{PS} = \frac{0.25+0.25+0.30+0.32+0.27+0.32}{6} = \frac{1.71}{6} = \mathbf{0.285}$$
 
@@ -284,12 +284,12 @@ For Social:
 
 | Ordering | Coalition $T$ before S | Marginal |
 |---|---|---|
-| (PS,S,E) | $\{PS\}$ | $0.40-0.25=0.15$ |
-| (PS,E,S) | $\{PS,E\}$ | $0.50-0.35=0.15$ |
-| (S,PS,E) | $\{\}$ | $0.10-0=0.10$ |
-| (S,E,PS) | $\{\}$ | $0.10-0=0.10$ |
-| (E,PS,S) | $\{PS,E\}$ | $0.50-0.35=0.15$ |
-| (E,S,PS) | $\{E\}$ | $0.18-0.08=0.10$ |
+| (PS,S,E) | $\{PS\}$ | ${0.40}-0.25=0.15$ |
+| (PS,E,S) | $\{PS,E\}$ | ${0.50}-0.35=0.15$ |
+| (S,PS,E) | $\{\}$ | ${0.10}-0=0.10$ |
+| (S,E,PS) | $\{\}$ | ${0.10}-0=0.10$ |
+| (E,PS,S) | $\{PS,E\}$ | ${0.50}-0.35=0.15$ |
+| (E,S,PS) | $\{E\}$ | ${0.18}-0.08=0.10$ |
 
 $$\phi_S = \frac{0.15+0.15+0.10+0.10+0.15+0.10}{6} = \frac{0.75}{6} = \mathbf{0.125}$$
 
@@ -297,16 +297,16 @@ For Email:
 
 | Ordering | Coalition $T$ before E | Marginal |
 |---|---|---|
-| (PS,S,E) | $\{PS,S\}$ | $0.50-0.40=0.10$ |
-| (PS,E,S) | $\{PS\}$ | $0.35-0.25=0.10$ |
-| (S,PS,E) | $\{PS,S\}$ | $0.50-0.40=0.10$ |
-| (S,E,PS) | $\{S\}$ | $0.18-0.10=0.08$ |
-| (E,PS,S) | $\{\}$ | $0.08-0=0.08$ |
-| (E,S,PS) | $\{\}$ | $0.08-0=0.08$ |
+| (PS,S,E) | $\{PS,S\}$ | ${0.50}-0.40=0.10$ |
+| (PS,E,S) | $\{PS\}$ | ${0.35}-0.25=0.10$ |
+| (S,PS,E) | $\{PS,S\}$ | ${0.50}-0.40=0.10$ |
+| (S,E,PS) | $\{S\}$ | ${0.18}-0.10=0.08$ |
+| (E,PS,S) | $\{\}$ | ${0.08}-0=0.08$ |
+| (E,S,PS) | $\{\}$ | ${0.08}-0=0.08$ |
 
 $$\phi_E = \frac{0.10+0.10+0.10+0.08+0.08+0.08}{6} = \frac{0.54}{6} = \mathbf{0.090}$$
 
-**Efficiency check:** $0.285 + 0.125 + 0.090 = 0.500 = v(\{PS,S,E\})$ ✓
+**Efficiency check:** ${0.285} + 0.125 + 0.090 = 0.500 = v(\{PS,S,E\})$ ✓
 
 **Part C: Last-touch vs. Shapley**
 
@@ -386,7 +386,7 @@ Last-touch is sometimes appropriate — for example, if every conversion path co
 Two touches by the same channel on one path count once: Shapley splits each conversion among the *distinct* channels on its path. And appearances on paths that did not convert earn nothing. But do not over-correct. With this course's v, a channel on many *converting* paths does earn a lot of Shapley credit, even if it was redundant filler. The dummy axiom gives zero only to a channel that never changes v, which here means one that is on no converting path at all. Appearing on converting paths is not the same as causing them (Misconception 1).
 
 **4. "Shapley values work for any number of channels."**
-Exact Shapley computation has $n!$ orderings but only $2^n$ distinct coalitions. Every ordering reuses the same coalition values, so you evaluate $v$ $2^n$ times and then average over the orderings with the weights in the slides' formula. Both grow fast. For $n = 20$ channels: over 1 million coalitions ($2^{20}$) and about $2.4 \times 10^{18}$ orderings ($20!$). In practice, approximate sampling-based Shapley methods are used for large channel sets.
+Exact Shapley computation has $n!$ orderings but only ${2}^n$ distinct coalitions. Every ordering reuses the same coalition values, so you evaluate $v$ ${2}^n$ times and then average over the orderings with the weights in the slides' formula. Both grow fast. For $n = 20$ channels: over 1 million coalitions (${2}^{20}$) and about ${2.4} \times 10^{18}$ orderings (${20}!$). In practice, approximate sampling-based Shapley methods are used for large channel sets.
 
 **5. "Markov attribution is more accurate than Shapley."**
 They model different things. Markov uses path ordering and transition probabilities; Shapley uses coalition membership and marginal contributions. Neither is universally more accurate — the better method depends on whether path ordering or coalition composition is more important for your data.
