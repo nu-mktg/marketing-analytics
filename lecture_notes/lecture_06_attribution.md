@@ -124,16 +124,16 @@ The Shapley value from cooperative game theory asks: if each channel joins a "co
 
 #### Part A: Enumerating Shapley Values
 
-For 3 channels (Paid Search = PS, Social = S, Email = E), there are 3! = 6 orderings:
+For 3 channels (Paid Search = PS, Social = S, Email = E), there are 3! = 6 orderings. Each cell is that channel's marginal contribution when it joins: v *with* the channel − v *without* it.
 
-| Order | PS joins: v with PS − v without | S joins: v with S − v without | E joins: v with E − v without |
+| Order of joining | PS joins | S joins | E joins |
 |---|---|---|---|
-| PS, S, E | v(PS)−v(∅) | v(PS,S)−v(PS) | v(PS,S,E)−v(PS,S) |
-| PS, E, S | v(PS)−v(∅) | v(PS,S,E)−v(PS,E) | v(PS,E)−v(PS) |
-| S, PS, E | v(PS,S)−v(S) | v(S)−v(∅) | v(PS,S,E)−v(PS,S) |
-| S, E, PS | v(PS,S,E)−v(S,E) | v(S)−v(∅) | v(S,E)−v(S) |
-| E, PS, S | v(PS,E)−v(E) | v(PS,S,E)−v(PS,E) | v(E)−v(∅) |
-| E, S, PS | v(PS,S,E)−v(S,E) | v(S,E)−v(E) | v(E)−v(∅) |
+| PS,&nbsp;S,&nbsp;E | v(PS)−v(∅) | v(PS,S)−v(PS) | v(PS,S,E)−v(PS,S) |
+| PS,&nbsp;E,&nbsp;S | v(PS)−v(∅) | v(PS,S,E)−v(PS,E) | v(PS,E)−v(PS) |
+| S,&nbsp;PS,&nbsp;E | v(PS,S)−v(S) | v(S)−v(∅) | v(PS,S,E)−v(PS,S) |
+| S,&nbsp;E,&nbsp;PS | v(PS,S,E)−v(S,E) | v(S)−v(∅) | v(S,E)−v(S) |
+| E,&nbsp;PS,&nbsp;S | v(PS,E)−v(E) | v(PS,S,E)−v(PS,E) | v(E)−v(∅) |
+| E,&nbsp;S,&nbsp;PS | v(PS,S,E)−v(S,E) | v(S,E)−v(E) | v(E)−v(∅) |
 
 **Shapley value for each channel = average of its column across all 6 orderings.**
 
