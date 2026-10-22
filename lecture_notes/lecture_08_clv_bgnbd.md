@@ -126,6 +126,8 @@ The model fits population-level parameters (r, α for purchase rate distribution
 
 Both bought 12 times (so x = 11 repeat purchases each, per the definition above). The difference in P(alive) comes entirely from recency. Customer B bought about every two weeks for five months and then stayed silent for 19. Under these parameters that is close to conclusive evidence of dropout: roughly 1 chance in 1,500 that B is still active.
 
+That answers the Overview's "by how much". The model expects A to make 3.86 purchases in the next 12 months and B 0.003. At the worked example's \$38 average order (Section 2.1), A is worth about **\$147** over the next year and B about **\$0.10**. They have the same purchase history, and recency alone makes A worth over a thousand times more.
+
 For x ≥ 1 the model gives P(alive) in closed form:
 
 $$P(\text{alive} \mid x, t_x, T) = \frac{1}{1 + \dfrac{a}{b + x - 1}\left(\dfrac{\alpha + T}{\alpha + t_x}\right)^{r + x}}$$
@@ -362,6 +364,13 @@ Three customers are to be evaluated:
 The last column is the model's CLV₁₂ (Section 1.4B), E[transactions] × E[spend/order]. The two transaction columns are
 linked by E[transactions] = P(alive) × E[transactions | still active], so Expected CLV = P(alive) × CLV if still
 active (0.96 × \$168 ≈ \$161).
+
+**Why every E[spend/order] is \$38.** Gamma-Gamma's estimate for one customer blends their own average order
+with the population's \$35, leaning on their own average more the more orders they have. With these parameters
+the weight on their own average is $p\,x/(p\,x + q - 1)$: 0.96 for Valentina and Marcus (x = 12) and 0.82 for Priya
+(x = 2). A customer whose own average is \$38 comes out at about \$38 either way. The example gives all three
+the same own average so that the comparison runs on P(alive) alone. In a real fit, this column differs from
+customer to customer.
 
 Does the ranking match your intuition from Part A? What explains each customer's position?
 
