@@ -14,6 +14,13 @@
 - Identify when the Gamma-Gamma independence assumption is violated
 - Define CAC and the CLV:CAC ratio, and use CLV by acquisition channel to set channel-specific CAC targets (Section 1.4D)
 
+**Prerequisites:** The Beta distribution from Lecture 1, reused here for each customer's dropout
+probability. The Gamma distribution is used only through its mean, which is given wherever it
+appears. ⚠️ **Letters carry over with new meanings.** **α** was a Beta shape in Lecture 1 and the
+Hill exponent in Lecture 3. Here it is the *scale* of the Gamma distribution of purchase rates,
+unrelated to either. **p** means two different things inside this lecture, flagged where the
+second one appears (Section 2.1's parameter table).
+
 ---
 
 ## PART 1: Concepts and Mathematics
@@ -36,7 +43,7 @@ A rate — how many times something happens — multiplied by a value — how mu
 #### Tool 2: Why Silence Is Evidence of Dropout
 
 A customer who bought 12 times in 2 years and then went silent for 19 months is probably not still an active customer — they have likely dropped out. The model must distinguish between:
-- A customer who buys infrequently (low λ) — could have a long gap naturally
+- A customer who buys infrequently (a low purchase rate, written λ) — could have a long gap naturally
 - A customer who has churned and will never buy again
 
 The BG/NBD model handles this formally. The key insight: the longer the silence relative to previous purchase cadence, the stronger the evidence of dropout.
@@ -59,7 +66,7 @@ Albert Cheng, who led growth at Duolingo, Grammarly, and Chess.com, frames the s
 
 > *"User retention is gold for consumer subscription companies. If you don't retain your users, then a lot of the onus is on getting them to pay on day one."*
 
-The BG/NBD model separates the "still retained" question (P(alive)) from the "how much will they spend" question (Gamma-Gamma). This is its core insight: historical cash flow and future value are different things.
+This lecture's two models split the "still retained" question (P(alive), from BG/NBD) from the "how much will they spend" question (a second model, Gamma-Gamma). This is its core insight: historical cash flow and future value are different things.
 
 ---
 
@@ -113,11 +120,19 @@ P(alive) comes out at exactly 1.0; see the Common Misconceptions section.)
 
 The model fits population-level parameters (r, α for purchase rate distribution; a, b for dropout probability distribution) by maximizing the likelihood across all customers. You do not need to perform this estimation by hand — the agent does it.
 
-**Reading P(alive):**
-- Customer A: x=11, t_x=23 (recent), T=24 → P(alive) ≈ 0.93
-- Customer B: x=11, t_x=5 (19 months ago), T=24 → P(alive) ≈ 0.09
+**Reading P(alive)** (at the fitted parameters of Section 2.1's worked example: r = 0.85, α = 8.20, a = 0.55, b = 3.80):
+- Customer A: x=11, t_x=23 (recent), T=24 → P(alive) ≈ 0.95
+- Customer B: x=11, t_x=5 (19 months ago), T=24 → P(alive) ≈ 0.0006
 
-Both bought 12 times (so x = 11 repeat purchases each, per the definition above). The difference in P(alive) comes entirely from recency. Customer B's 19 months of silence is strong evidence of dropout.
+Both bought 12 times (so x = 11 repeat purchases each, per the definition above). The difference in P(alive) comes entirely from recency. Customer B bought about every two weeks for five months and then stayed silent for 19. Under these parameters that is close to conclusive evidence of dropout: roughly 1 chance in 1,500 that B is still active.
+
+For x ≥ 1 the model gives P(alive) in closed form:
+
+$$P(\text{alive} \mid x, t_x, T) = \frac{1}{1 + \dfrac{a}{b + x - 1}\left(\dfrac{\alpha + T}{\alpha + t_x}\right)^{r + x}}$$
+
+Recency enters through $(\alpha + T)/(\alpha + t_x)$. It equals 1 when the last purchase is today ($t_x = T$) and grows with the silence. The exponent $r + x$ is why frequency cuts both ways: the more often a customer bought, the harder the same silence counts against them. For x = 0 the formula does not apply, and P(alive) is exactly 1 (Common Misconception 3).
+
+![P(alive) on the vertical axis against the month of the customer's last purchase on the horizontal axis, from 0 to 24, for customers observed for 24 months, at the worked example's fitted parameters. A solid curve for a customer with 11 repeat purchases stays flat at zero until about month 10, then rises steeply in an S-shape through 0.5 near month 16 to about 0.96 at month 24. Customer B sits on it at month 5 with P(alive) about 0.0006, and Customer A at month 23 with about 0.95. A dashed curve for a customer with only 2 repeat purchases rises gently from about 0.16 to about 0.90, and Priya sits on it at month 20 with about 0.86. The two curves cross near month 20: below that, the same silence costs the frequent buyer far more P(alive) than the infrequent one.](figures/lecture_08_palive_recency.png)
 
 ---
 
@@ -126,6 +141,10 @@ Both bought 12 times (so x = 11 repeat purchases each, per the definition above)
 Once the agent provides E[purchases in next 12 months] and E[order value], CLV is:
 
 > CLV₁₂ = E[transactions] × E[order value]
+
+Here E[transactions] is the model's prediction *averaged over whether the customer is still active*, so it already
+includes P(alive). Section 2.1's Part C shows why that matters: multiplying this CLV by P(alive) a second time is a
+common error.
 
 (For more precision, apply a monthly discount rate: CLV = Σ (E[purchases in month t] × E[order value]) / (1 + discount_rate)^t)
 
@@ -181,7 +200,7 @@ The Gamma-Gamma model for spend assumes that a customer's average order value is
 
 Two numbers used to appear in this lecture for this one decision (a −0.30 "material violation" line here and a 0.2 line in the checklist), which left the 0.2–0.3 range with two different answers depending on which passage you read. They are one scale, above.
 
-**What to do if violated:** The CLV estimates for high-frequency customers will be systematically overestimated. Add a note of caution to any recommendation based on CLV for high-frequency customer segments.
+**What to do if violated:** With a *negative* correlation (frequent buyers spend less per order, the usual case), CLV for high-frequency customers is systematically overestimated. With a positive one it is underestimated. Either way, add a note of caution to any recommendation based on CLV for high-frequency customer segments.
 
 > ### 🔍 Deep Dive: The Full BG/NBD Likelihood
 > The BG/NBD models each customer's purchase process as a Poisson process (events arriving randomly at rate λ) and their dropout process as a Bernoulli trial after each purchase (drop out with probability p). Both λ and p vary across customers: λ ~ Gamma(r, α) and p ~ Beta(a, b). The likelihood for a customer (x, t_x, T) involves computing the probability of observing exactly x purchases, with the last at t_x, given that the customer either dropped out sometime after t_x or is still alive at T. This likelihood has a closed-form expression involving the Beta function — which is why the model is tractable. The four parameters (r, α, a, b) are estimated by maximizing the sum of log-likelihoods across all customers.
@@ -261,7 +280,7 @@ that is already saturated. Ratio ranks efficiency; it does not measure headroom.
 *Common wrong answer:* All equal because they all made 8 purchases. Frequency and recency are both inputs to BG/NBD; when frequency is controlled, recency alone determines P(alive) differences.
 
 **Q2.** CLV = 3.6 × $45 = **$162**.
-*Common wrong answer:* $162 × (1/(1+0.01))^6 ≈ $152.7 — applying a discount rate that was not asked for. The question specifies "no discounting."
+*Common wrong answer:* $162 × (1/(1+0.01))^6 ≈ $152.6 — applying a discount rate that was not asked for. The question specifies "no discounting."
 
 **Q3.** **No — violated.** The Gamma-Gamma model assumes spend ⊥ frequency. A correlation of −0.48 (high-frequency buyers spend less per order) is a material violation. The model will overestimate CLV for high-frequency, low-spend customers.
 *Common wrong answer:* Satisfied because −0.48 is close to 0 (confusing "close to zero" with "close to negative one"). −0.48 is a moderately strong negative correlation — well past the −0.30 warning threshold.
@@ -278,9 +297,11 @@ Numbered to match the Checkpoint slide in this lecture's deck. Where the slide a
 
 **Slide Q1.** *"$E[\text{trans in 12 months}] = 3.6$, $E[\text{order value}] = \$45$. Compute CLV₁₂ (no discounting)."* — Same question as Q2 above — see that answer.
 
-**Slide Q2.** *"Customer A: 20 purchases, last 3 months ago. Customer B: 2 purchases, last 2 weeks ago. Who has higher P(alive)?"* — Not answered in these notes. Q1 above holds frequency constant so that recency alone decides; the slide varies both. Bring your answer to class.
+**Slide Q2.** *"Both observed for 12 months. Customer A: 20 purchases, last 3 months ago. Customer B: 2 purchases, last 2 weeks ago. Who has higher P(alive)?"* — **Customer B.** At the worked example's parameters (Section 2.1), and taking each customer's first purchase at the start of the 12 months, A has x = 19, t_x = 9, T = 12 and **P(alive) ≈ 0.62**. B has x = 1, t_x = 11.5, T = 12 and **P(alive) ≈ 0.87** (closed form in Section 1.4A). P(alive) reads a silence against the customer's *own* cadence. A bought about every two weeks while active (19 repeats in 9 months), so three quiet months is about six missed purchases. B buys about twice a year, so two quiet weeks is nothing. Unlike Q1 above, which holds frequency constant, this question varies both inputs, and the larger count *lowers* A's P(alive): the exponent r + x makes the same silence count more heavily against a heavy buyer.
+*The margin depends on the window:* observed for 24 months instead, A's 20 purchases are spread twice as thin, three months is a shorter gap relative to that cadence, and the two come out almost level (0.85 vs 0.87). "Who is more likely alive" is never answered by frequency or recency alone.
 
-**Slide Q3.** *"P(alive) = 0.12. CLV₁₂ = \$340. What is the **expected** value of this customer?"* — Roughly P(alive) × CLV = 0.12 × \$340 = **\$40.80**. The \$340 is what the customer is worth *if still active*; you only collect it if they are, so the decision-relevant figure discounts it by the probability they are alive. Part C of the worked example uses exactly this rule to justify retention spend ("the expected return is approximately P(alive) × CLV"). Spending \$50 to retain them would be a loss even though CLV₁₂ is \$340.
+**Slide Q3.** *"P(alive) = 0.12. If still active, this customer is worth \$340 over the next 12 months. What is their **expected** 12-month value?"* — P(alive) × (value if active) = 0.12 × \$340 = **\$40.80**. You only collect the \$340 if they are still active, so the expected figure weights it by that probability. Part C of the worked example uses the same rule to judge retention spend. Spending \$50 to retain this customer would be a loss even though they are worth \$340 if active.
+⚠️ The question says *if still active* on purpose. A CLV₁₂ that came out of the model (E[transactions] × E[order value], Section 1.4B) is already the expected value: it already includes P(alive). Had the \$340 been that number, the answer would be \$340, and multiplying by 0.12 would count dropout twice.
 
 **Slide Q4.** *"Frequency–spend correlation = −0.52. How does this affect CLV estimates?"* — Same reasoning as Q3 above, which uses a correlation of −0.48; the slide's is −0.52.
 
@@ -307,9 +328,18 @@ A subscription box company has fitted a BG/NBD + Gamma-Gamma model to their cust
 | $\alpha$ | 8.20 | Scale of Gamma for purchase rates; mean rate = $r/\alpha = 0.104$ per month |
 | $a$ | 0.55 | Beta shape parameter for dropout |
 | $b$ | 3.80 | Beta shape parameter; mean dropout prob per purchase = $a/(a+b) = 0.126$ |
-| $p$ | 6.25 | Gamma-Gamma shape |
-| $q$ | 3.74 | Gamma-Gamma shape |
-| $\gamma$ | 15.45 | Gamma-Gamma scale; population mean spend $= \gamma p/(q-1) = 15.45 \times 6.25/2.74 \approx \$35$ |
+| $p$ | 6.25 | Gamma-Gamma: shape of the Gamma for one customer's spend from order to order |
+| $q$ | 3.74 | Gamma-Gamma: shape of the Gamma for how customers' typical spend varies across the base |
+| $v$ | 15.45 | Gamma-Gamma: scale of that across-customer Gamma; population mean spend $= p\,v/(q-1) = 6.25 \times 15.45/2.74 \approx \$35$ |
+
+**Why "Gamma-Gamma":** it stacks two Gamma distributions. Each order a customer places is a draw from a Gamma
+distribution centred on that customer's own typical spend (shape $p$). Customers' typical spends in turn vary across
+the base according to a second Gamma (shape $q$, scale $v$). Two Gammas, one inside the other.
+
+⚠️ **This $p$ is not the dropout probability $p$** from the Deep Dive in Section 1.4C, which is a probability between
+0 and 1 and is drawn from Beta($a$, $b$). The two models were named separately and both use the letter. The table
+keeps the Gamma-Gamma letters $p, q, v$ because they are exactly what `lifetimes`' `GammaGammaFitter.params_`
+prints, and what the homework notebook calls them.
 
 Three customers are to be evaluated:
 
@@ -323,11 +353,15 @@ Three customers are to be evaluated:
 
 **Part B:** The model produces these estimates:
 
-| Customer | P(alive) | E[transactions, 12m] | E[spend/order] | CLV (12m) |
-|---|---|---|---|---|
-| Valentina | 0.94 | 4.8 | $38 | $182 |
-| Marcus | 0.11 | 0.5 | $38 | $19 |
-| Priya | 0.73 | 1.6 | $38 | $61 |
+| Customer | P(alive) | E[transactions, 12m] | E[transactions, 12m \| still active] | E[spend/order] | CLV if still active (12m) | Expected CLV (12m) |
+|---|---|---|---|---|---|---|
+| Valentina | 0.96 | 4.24 | 4.43 | $38 | $168 | $161 |
+| Marcus | 0.0007 | 0.0032 | 4.43 | $38 | $168 | $0.12 |
+| Priya | 0.86 | 0.86 | 1.00 | $38 | $38 | $33 |
+
+The last column is the model's CLV₁₂ (Section 1.4B), E[transactions] × E[spend/order]. The two transaction columns are
+linked by E[transactions] = P(alive) × E[transactions | still active], so Expected CLV = P(alive) × CLV if still
+active (0.96 × \$168 ≈ \$161).
 
 Does the ranking match your intuition from Part A? What explains each customer's position?
 
@@ -350,32 +384,38 @@ purchases in total, Priya 3.)
 
 **Part B: Model Output Analysis**
 
-The ranking matches the intuition: Valentina ($182) > Priya ($61) > Marcus ($19).
+The ranking matches the intuition: Valentina (\$161) > Priya (\$33) > Marcus (\$0.12).
 
-**Valentina** (P(alive)=0.94): Recent purchase confirms she is almost certainly active. High frequency means high expected future transactions (4.8 over 12 months). At roughly one purchase every two months historically (13 purchases in 24) and mostly still active, 4.8 over the next 12 months is consistent — one *per* month would imply about twice that.
+**Valentina** (P(alive)=0.96): Recent purchase confirms she is almost certainly active. High frequency means high expected future transactions (4.24 over 12 months). Her own history, 12 repeats in 24 months, is one every two months, or 6 a year. The model predicts fewer, 4.43 even if she is still active, because it pulls each customer's rate toward the population's much slower one ($r/\alpha$ = 0.10 a month) and allows for her dropping out during the year.
 
-**Marcus** (P(alive)=0.11): Despite identical purchase counts to Valentina, his 18-month silence is overwhelming evidence of dropout. Even if the model thinks there is an 11% chance he is still alive, that translates to only 0.5 expected purchases. Historical revenue = 13 purchases (x = 12 repeats **plus** the acquiring purchase) × $38 = $494; future CLV = $19. That is a 26:1 ratio — the past massively overstates his future value. Note which count each side uses: the model runs on the 12, the revenue you already banked runs on the 13.
+**Marcus** (P(alive)=0.0007): Despite identical purchase counts to Valentina, his 18-month silence is overwhelming evidence of dropout. He bought twice a month for six months and then not at all, and the model puts the chance he is still active at about 1 in 1,400. **Notice that his "if still active" columns equal Valentina's exactly** (4.43 transactions, \$168). Given that a customer is alive, the model's forecast depends only on x and T, which the two share. The entire gap between them is P(alive). Historical revenue = 13 purchases (x = 12 repeats **plus** the acquiring purchase) × \$38 = \$494; expected future CLV = \$0.12. The past overstates his future value about 4,000 to 1. Note which count each side uses: the model runs on the 12, the revenue you already banked runs on the 13.
 
-**Priya** (P(alive)=0.73): Low frequency (2 purchases in 24 months) but recent. The model estimates a 73% chance she is still active. With a low base rate, her expected 1.6 purchases in 12 months is reasonable. Her low CLV reflects low frequency, not imminent churn.
+**Priya** (P(alive)=0.86): Low frequency (x = 2 repeats, so 3 purchases in 24 months) but recent. The model estimates an 86% chance she is still active, below Valentina's 0.96 despite the similar recency, because two repeats are thin evidence either way. With a low base rate, her expected 0.86 purchases in 12 months (1.00 if still active) is reasonable. Her low CLV reflects low frequency, not imminent churn.
 
 **Part C: Retention Budget Justification**
 
-A $15 retention spend is justified if the expected return exceeds the cost. Since we only recover CLV if the customer stays, the expected return is approximately P(alive) × CLV.
+A \$15 retention spend is justified if the expected return exceeds the cost. You only recover a customer's value if they are still active, so the expected return is P(alive) × (CLV if still active). That product is the Expected CLV column.
 
 For each customer, compute expected return from retention spending:
-- **Valentina:** Expected return = 0.94 × $182 = $171. Cost = $15. Net = +$156 ✓
-- **Marcus:** Expected return = 0.11 × $19 = $2.09. Cost = $15. Net = −$13 ✗ — **do not spend**
-- **Priya:** Expected return = 0.73 × $61 = $44.5. Cost = $15. Net = +$30 ✓
+- **Valentina:** Expected return = 0.96 × \$168 = \$161. Cost = \$15. Net = +\$146 ✓
+- **Marcus:** Expected return = 0.0007 × \$168 = \$0.12. Cost = \$15. Net = −\$14.88 ✗ — **do not spend**
+- **Priya:** Expected return = 0.86 × \$38 = \$33. Cost = \$15. Net = +\$18 ✓
+
+⚠️ **Multiply P(alive) by the *if-still-active* CLV, never by the model's CLV.** `lifetimes`'
+`conditional_expected_number_of_purchases_up_to_time` already averages over whether the customer is alive, so the
+CLV built on it is already an expected value. Multiplying it by P(alive) again counts dropout twice. For Valentina
+that shaves a few dollars (0.96 × \$161 = \$155). For a customer near the threshold, it can flip the decision. If all
+you have is the model's CLV, the if-active value is CLV ÷ P(alive).
 
 **Minimum P(alive) to justify $15 retention:**
 
 If we assume the retention budget, if effective, captures the full CLV:
-$\text{P(alive)} \times \text{CLV} > 15$
-$\text{P(alive)} > 15 / \text{CLV}$
+$\text{P(alive)} \times \text{CLV if still active} > 15$
+$\text{P(alive)} > 15 / \text{CLV if still active}$
 
-For Valentina: threshold = 15/182 = 0.082 (easily exceeded)
-For Priya: threshold = 15/61 = 0.246 (easily exceeded)
-For Marcus: threshold = 15/19 = 0.789 (not exceeded — P(alive) = 0.11)
+For Valentina: threshold = 15/168 = 0.089 (easily exceeded, P(alive) = 0.96)
+For Priya: threshold = 15/38 = 0.395 (exceeded, P(alive) = 0.86)
+For Marcus: threshold = 15/168 = 0.089, the same as Valentina's, because his if-active value is the same (not exceeded: P(alive) = 0.0007)
 
 ---
 
@@ -386,7 +426,7 @@ For Marcus: threshold = 15/19 = 0.789 (not exceeded — P(alive) = 0.11)
 
 **CLV decile analysis:** Sort customers by predicted CLV and examine the top decile (top 10%) vs. the bottom decile. The ratio of top-to-bottom CLV is a measure of customer heterogeneity. Ratios above 10× are common in e-commerce.
 
-**Mean vs median CLV:** Report both, and read the gap the way Part B's table does. A base with a
+**Mean vs median CLV:** Report both, and read the gap the way Section 1.4B's diagnostic table does. A base with a
 long upper tail has mean above median, so quoting the mean alone systematically overstates what a
 typical customer is worth — and the ratio between the two is itself a compact measure of how
 concentrated value is in the top customers.
@@ -397,7 +437,7 @@ concentrated value is in the top customers.
 
 **Before trusting the agent output:**
 1. Do BG/NBD parameters fall in plausible ranges? ($r$ typically 0.1–3, $\alpha$ typically 1–30 — the same band as the pre-flight checklist at the end of this lecture)
-2. Are P(alive) estimates intuitive? Long-silent buyers should have P(alive) < 0.2. Recent buyers should be *high*, but how high depends on their purchase rate — a low-frequency customer who bought recently can sit around 0.7 (Priya, above) and be perfectly well estimated, because the model has little evidence either way
+2. Are P(alive) estimates intuitive? Long-silent buyers should have P(alive) < 0.2. Recent buyers should be *high*, but how high depends on their purchase rate — a low-frequency customer who bought recently can sit noticeably lower (Priya, above, at 0.86 against Valentina's 0.96) and be perfectly well estimated, because the model has little evidence either way
 3. Does mean predicted CLV across all customers seem reasonable relative to average historical order value?
 4. Is the Gamma-Gamma independence assumption approximately satisfied? (Plot order value vs. frequency)
 
@@ -432,8 +472,8 @@ P(alive) = 0.10 means there is a 10% chance they are still active — they may s
 **3. "The BG/NBD model only works for frequent buyers."**
 It also works for customers with 1 or 2 repeat purchases. ⚠️ **And it treats a customer with x = 0 in a way that surprises everyone the first time:** their P(alive) is **exactly 1.0**, not low. Dropout in BG/NBD can only happen *after* a repeat purchase, so a customer who never repeated cannot have dropped out — there was no opportunity. Their *expected future transactions* are still low, because the model infers a low purchase rate; low future value and certain-alive are not the same statement. Verify this yourself: `bgf.conditional_probability_alive(0, 0, T)` returns 1.0 for any T.
 
-**4. "Predicted CLV decreases as we observe more purchases."**
-More purchases generally increase predicted CLV, because they provide stronger evidence the customer is alive and indicate a higher purchase rate. The recency of the most recent purchase matters enormously.
+**4. "More purchases always mean a higher predicted CLV."**
+Only when the last purchase is recent. More purchases raise the estimated purchase rate, and if the customer bought lately they also confirm the customer is alive. But a higher rate also makes a long silence more suspicious. At the worked example's parameters, with the last purchase at month 6 of 24, P(alive) falls from 0.60 at x = 1 to 0.19 at x = 4 and 0.0007 at x = 12 (Marcus). Expected purchases fall with it, from 0.40 to 0.003. Frequency and recency are read together, never one at a time.
 
 **5. "We should maximize predicted CLV for every customer."**
 CLV is an expected value — the cost of interventions must be weighed against the expected CLV improvement. Not every high-CLV customer needs retention spending (some will remain loyal without it).
@@ -445,8 +485,8 @@ CLV is an expected value — the cost of interventions must be weighed against t
 | Agent step | Corresponds to |
 |---|---|
 | Prepares RFM summary (x, t_x, T, m) per customer | Section 1.4A — the BG/NBD inputs (x, t_x, T) |
-| Fits BG/NBD via MLE, reports r, α, a, b | Section 1.4A — likelihood structure |
-| Computes P(alive) per customer | Section 1.4A — reading P(alive) |
+| Fits BG/NBD via MLE, reports r, α, a, b | Section 1.4C Deep Dive — likelihood structure |
+| Computes P(alive) per customer | Section 1.4A — reading P(alive), and its closed form |
 | Computes E[transactions] per customer | Section 1.4B — E[transactions] as the CLV input |
 | Fits Gamma-Gamma, computes E[spend] | Section 1.3 + 1.4C — Gamma-Gamma model |
 | Multiplies E[transactions] × E[spend] × discount | Section 1.4B — CLV formula and discount factor |
@@ -455,6 +495,6 @@ CLV is an expected value — the cost of interventions must be weighed against t
 
 **What to verify:**
 1. BG/NBD parameters in plausible ranges: $r \in [0.1, 3]$, $\alpha \in [1, 30]$, $a \in [0.1, 2]$, $b \in [1, 10]$
-2. Recent buyers have P(alive) > 0.80; long-silent customers have P(alive) < 0.20
+2. Recent buyers have high P(alive), typically > 0.80, though a recent low-frequency buyer can sit lower (Section 2.2); long-silent customers have P(alive) < 0.20
 3. Mean predicted CLV is a plausible multiple of the average order value
 4. |correlation(spend, frequency)| < 0.2 for Gamma-Gamma assumption to hold
