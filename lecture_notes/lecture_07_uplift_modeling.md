@@ -142,7 +142,11 @@ Customers with 0 < τ̂(X) < 0.133 generate positive incremental conversions but
 
 #### Part C: The Qini Curve and the Qini Coefficient
 
-The Qini curve answers one question. If you contact customers in order of predicted uplift, highest τ̂ first, how many extra conversions have you bought by the time you have contacted the top k?
+The Qini curve answers one question. If you contacted customers in order of predicted uplift, highest τ̂ first, how many extra conversions would you have bought by the time you reached the top k?
+
+**Where the treated and control groups come from.** The curve is computed on the randomized experiment's data, ideally the held-out part. Every customer already has a treatment label from the coin flip, and nobody was contacted according to τ̂. The model's only job here is to sort them. Because assignment ignored X, every top-k slice holds both treated and control customers with similar τ̂. Each slice is a small experiment of its own.
+
+**What a good ranking looks like.** A high τ̂ predicts a large gap between a customer's outcome with the offer and without it. It does not predict a high chance of converting. In a slice of high-τ̂ customers, the treated ones should convert well above the control ones. In a slice of sure things, the two convert at the same rate. A good ranking puts the slices with the largest gaps first, so Q(k) climbs fastest at the start.
 
 **Building the curve.** Sort the customers by τ̂, highest first. Among the top k, count:
 - N_T(k) and N_C(k): how many were in the treated group and how many in the control group
