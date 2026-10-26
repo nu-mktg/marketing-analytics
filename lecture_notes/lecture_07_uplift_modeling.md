@@ -28,7 +28,9 @@
 
 Expected value = probability × outcome, summed across all scenarios.
 
-**Example:** Campaign profit per customer = uplift × conversion_value − campaign_cost
+**Example:** Incremental profit per contacted customer = uplift × conversion_value − campaign_cost
+
+Uplift τ(X) is how much the offer raises a customer's probability of converting (defined in Section 1.4A). With the offer, a customer converts with probability p₁ and is worth p₁ × value − cost, because the cost is paid on every contact. Without it, the customer is worth p₀ × value. The difference is (p₁ − p₀) × value − cost = τ(X) × value − cost.
 > If τ(X) = 0.15, value = $30, cost = $4: Expected profit = 0.15 × 30 − 4 = 4.50 − 4 = **$0.50**
 >
 > If τ(X) = 0.08, value = $30, cost = $4: Expected profit = 0.08 × 30 − 4 = 2.40 − 4 = **−$1.60** (negative!)
