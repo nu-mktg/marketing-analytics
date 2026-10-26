@@ -153,6 +153,32 @@ A high removal effect means many of the chain's converting journeys pass through
 
 ⚠️ **"Removed" here means deleted from the fitted model, not switched off in the world.** The construction assumes that every journey through C would have ended without converting. A real customer who never saw C might still have converted through another channel. So the removal effect is not an incrementality estimate either (Part C).
 
+**Worked example.** A three-channel chain (PS = Paid Search, S = Social, E = Email). Each row is where a journey goes next from that state, and each row sums to 1:
+
+| From \\ To | PS | S | E | Conversion | Null |
+|---|---|---|---|---|---|
+| Start | 0.3 | 0.5 | 0.2 | 0 | 0 |
+| S | 0.5 | 0 | 0 | 0.1 | 0.4 |
+| E | 0.5 | 0 | 0 | 0.2 | 0.3 |
+| PS | 0 | 0 | 0 | 0.4 | 0.6 |
+
+*Full model.* This chain has no loops, so work back from the last touch. Each state's chance of converting is its direct move to Conversion plus, for every channel it can move to, that move's probability times the next channel's chance:
+
+- From PS: 0.4
+- From S: 0.5 × 0.4 + 0.1 = 0.30
+- From E: 0.5 × 0.4 + 0.2 = 0.40
+- From Start: 0.3 × 0.4 + 0.5 × 0.30 + 0.2 × 0.40 = **0.35**
+
+*Remove each channel in turn.* Every move into the removed channel now goes to Null, so that channel's chance of converting counts as 0:
+
+| Removed | P(convert from Start) | RE |
+|---|---|---|
+| PS | S falls to 0.1 and E to 0.2, so 0.3 × 0 + 0.5 × 0.1 + 0.2 × 0.2 = 0.09 | 1 − 0.09/0.35 = **0.74** |
+| S | 0.3 × 0.4 + 0.2 × 0.40 = 0.20 | 1 − 0.20/0.35 = **0.43** |
+| E | 0.3 × 0.4 + 0.5 × 0.30 = 0.27 | 1 − 0.27/0.35 = **0.23** |
+
+Two things to read off it. First, the three removal effects sum to 1.40, not 1: they are not shares of credit, and nothing like Shapley's efficiency axiom holds for them. Second, PS's 0.74 says most of the chain's conversions run through PS, because S and E both hand off to it. It does not say that cutting PS would lose 74% of sales (the warning above). A chain built from real paths usually has loops (Email → Social → Email), and then the same equations have to be solved together rather than back to front; that is what attribution code does.
+
 > ### 🔍 Deep Dive: Why Shapley Values Are Uniquely Fair
 > Shapley values are the unique attribution that satisfies four axioms simultaneously:
 > 1. **Efficiency:** Values sum to the total outcome
