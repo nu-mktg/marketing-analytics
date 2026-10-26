@@ -112,11 +112,11 @@ The T-Learner estimates the CATE by training two separate models:
 
 #### Reading the four types off the models
 
-The four types in Section 1.3 describe one customer's two potential outcomes, and no one ever observes both. A model only sees groups of similar customers, so τ(x) measures a **mix**. Y(1) − Y(0) is +1 for a Persuadable, −1 for a Sleeping Dog and 0 for the other two types, so among customers with features x:
+The four types in Section 1.3 describe one customer's two potential outcomes, and no one ever observes both. A model only sees groups of similar customers, so τ(x) measures a **mix**. Because the outcome here is binary (Y = 1 if the customer converts, 0 if not), Y(1) − Y(0) is +1 for a Persuadable, −1 for a Sleeping Dog and 0 for the other two types, so among customers with features x:
 
 > τ(x) = (share of Persuadables) − (share of Sleeping Dogs)
 
-Sure Things and Lost Causes add nothing to τ(x), because they do the same thing either way.
+This is the same difference in probabilities as before. Customers with x convert with the offer at rate (Sure Things + Persuadables) and without it at rate (Sure Things + Sleeping Dogs). The Sure Things cancel, and Lost Causes never convert, so neither adds anything to τ(x).
 
 | What the model says at x | What it means about customers like x | Action |
 |---|---|---|
