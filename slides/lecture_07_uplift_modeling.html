@@ -1225,7 +1225,7 @@ margin-right: 0; }
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p><strong>Setting:</strong> A firm conducts a randomized experiment to estimate heterogeneous treatment effects. You have a $4 retention campaign. Not every at-risk customer will renew because of it. Some would renew anyway. Some will react negatively. <strong>Who should you actually target?</strong></p>
+<p><strong>Setting:</strong> A firm runs an A/B test (a randomized experiment) to estimate heterogeneous treatment effects: how the campaign’s effect differs from one kind of customer to another. You have a $4 retention campaign. Not every at-risk customer will renew because of it. Some would renew anyway. Some will react negatively. <strong>Who should you actually target?</strong></p>
 </div>
 </div>
 </div>
@@ -1359,7 +1359,7 @@ If <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics>
 <ul>
 <li>Qini = 0: no better than random · Qini = 1: perfect · Qini &lt; 0: worse than random</li>
 </ul>
-<p>⚠️ <strong>Always say which split.</strong> The same model scores ~20× higher in-sample than held out.</p>
+<p>⚠️ <strong>Always say which split.</strong> The same model scores ~20× higher in-sample than held out. Report held-out; compare models on the same held-out customers.</p>
 </div>
 <div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklift.metrics <span class="im">import</span> qini_auc_score</span>
