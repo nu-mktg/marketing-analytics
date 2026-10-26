@@ -1168,6 +1168,7 @@ margin-right: 0; }
 <ul>
 <li>Compute Shapley values for any set of channels</li>
 <li>Apply the efficiency axiom to verify your results</li>
+<li>Compute a Markov removal effect from a transition matrix</li>
 <li>Explain why Shapley ≠ causal incrementality</li>
 <li>Identify channels that are overcredited by last-touch</li>
 <li>Compute <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mi>!</mi></mrow><annotation encoding="application/x-tex">n!</annotation></semantics></math> orderings for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> channels</li>
@@ -1335,6 +1336,120 @@ Both ignore the actual marginal contribution of each channel.</p>
 </div>
 <div class="callout-content">
 <p>Use this as a sanity check in code: if the sum doesn’t match the overall rate <strong>within a small tolerance</strong> (say 1e-9), there’s a bug. Test with <code>abs(sum - v_N) &lt; tol</code>, never <code>==</code> — floating point and rounded intermediates will defeat exact equality.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Markov Removal Effect: The Idea</h2>
+<p>Read each journey as moves through a Lecture 5 chain: <strong>Start</strong> → channels → one of two absorbing states, <strong>Conversion</strong> or <strong>Null</strong>. Start → Social → Email → Conversion is three moves. Count the moves to get P; every row sums to 1.</p>
+<p><strong>To remove channel C:</strong> send every transition <em>into</em> C to Null, then recompute P(reach Conversion from Start).</p>
+<div class="formula-box">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>E</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>C</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">convert</mtext><mo>∣</mo><mi>C</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> removed</mtext></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">convert</mtext><mo>∣</mo><mtext mathvariant="normal">full model</mtext><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">RE(C) = 1 - \frac{P(\text{convert} \mid C \text{ removed})}{P(\text{convert} \mid \text{full model})}</annotation></semantics></math></p>
+</div>
+<p>A <strong>relative</strong> drop, so always between 0 and 1. High RE: many of the chain’s converting journeys pass through C. Unlike Shapley, it uses the <strong>order</strong> of touches.</p>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>“Removed” means deleted from the fitted model, not switched off in the world. The chain assumes every journey through C would have ended in Null, but a real customer who never saw C might still have converted through another channel.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Worked Example: Removing a Channel</h2>
+<div class="two-col">
+<div>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>From \ To</th>
+<th>PS</th>
+<th>S</th>
+<th>E</th>
+<th>Conv</th>
+<th>Null</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Start</td>
+<td>0.3</td>
+<td>0.5</td>
+<td>0.2</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>S</td>
+<td>0.5</td>
+<td>0</td>
+<td>0</td>
+<td>0.1</td>
+<td>0.4</td>
+</tr>
+<tr class="odd">
+<td>E</td>
+<td>0.5</td>
+<td>0</td>
+<td>0</td>
+<td>0.2</td>
+<td>0.3</td>
+</tr>
+<tr class="even">
+<td>PS</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0.4</td>
+<td>0.6</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Full model</strong>, working back from the last touch:</p>
+<ul>
+<li>From PS: 0.4</li>
+<li>From S: 0.5 × 0.4 + 0.1 = 0.30</li>
+<li>From E: 0.5 × 0.4 + 0.2 = 0.40</li>
+<li>From Start: 0.3 × 0.4 + 0.5 × 0.30 + 0.2 × 0.40 = <strong>0.35</strong></li>
+</ul>
+</div>
+<div>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>Remove</th>
+<th>P(convert)</th>
+<th>RE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PS</td>
+<td>0.5 × 0.1 + 0.2 × 0.2 = 0.09</td>
+<td>1 − 0.09/0.35 = <strong>0.74</strong></td>
+</tr>
+<tr class="even">
+<td>S</td>
+<td>0.3 × 0.4 + 0.2 × 0.40 = 0.20</td>
+<td>1 − 0.20/0.35 = <strong>0.43</strong></td>
+</tr>
+<tr class="odd">
+<td>E</td>
+<td>0.3 × 0.4 + 0.5 × 0.30 = 0.27</td>
+<td>1 − 0.27/0.35 = <strong>0.23</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Removing PS zeroes its own route and the “via PS” part of S and E: S falls to 0.1, E to 0.2.</p>
+<div class="muted">
+<p>The three REs sum to 1.40, not 1. They are not shares of credit, and no efficiency axiom holds. PS’s 0.74 says most of the chain’s conversions run through PS; it does not say cutting PS loses 74% of sales.</p>
 </div>
 </div>
 </div>
