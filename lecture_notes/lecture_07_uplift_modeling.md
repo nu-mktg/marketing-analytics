@@ -84,6 +84,8 @@ Sleeping Dogs are real and surprisingly common in subscription renewal campaigns
 
 ---
 
+> **Uplift modeling starts with an A/B test.** An A/B test is a **randomized experiment**: a coin flip decides which version each customer gets. In uplift terms, version A is no campaign (the **control** group) and version B is the campaign (the **treated** group). This lecture uses "A/B test" and "randomized experiment" for the same thing. Everything below assumes the data come from one. The T-learner needs it to estimate τ(x) (Part A), and the Qini needs it to evaluate the ranking (Part C). In practice, a firm runs the campaign as an A/B test on a sample of customers, fits the uplift model on that sample, and uses it to choose whom to target among the rest.
+
 #### Part A: Treatment Effects and the T-Learner
 
 **Notation.** **X** is the list of features we observe about a customer before the campaign: in the worked example below, age and tenure; in `homework_07`, tenure, workouts per week, streak, support tickets and plan. **T** = 1 if the customer was treated, 0 if control. **Y** = 1 if they converted. Y(1) and Y(0) are the customer's two potential outcomes, with and without the campaign (Deep Dive below).
@@ -92,6 +94,7 @@ Sleeping Dogs are real and surprisingly common in subscription renewal campaigns
 - The **conditional average treatment effect** (CATE) at features x is τ(x) = E[Y(1) − Y(0) | X = x]: the average uplift among customers who look like x. "Uplift" in this lecture always means τ(x).
 - The **average treatment effect** (ATE) is the same average taken over everyone: ATE = E[Y(1) − Y(0)].
 - Averaging the CATE over the customer base gives the ATE: **ATE = E[τ(X)]**. Under random assignment the ATE needs no model. It is estimated by the treated conversion rate minus the control conversion rate. This identity is the reason the **ATE check** in Section 2.1 works: the mean of a model's τ̂ over a sample should land near that sample's treated-minus-control rate.
+- When τ(x) differs from one kind of customer to another, the treatment effect is **heterogeneous** (a *heterogeneous treatment effect*, or HTE). Uplift modeling exists because of heterogeneity. If τ(x) were the same for everyone, it would equal the ATE, and the A/B test alone would settle targeting: everyone or no one.
 
 **A hat marks an estimate.** τ(x) is the true uplift, which no one observes. τ̂(x) is a model's estimate of it from data. Likewise μ and μ̂.
 
@@ -176,7 +179,9 @@ $$\text{Qini} = \frac{\text{area between the model's curve and the random line}}
 
 **On the worked example (Section 2.1, Part B).** Sorted by τ̂, the top 3 customers are three treated converters, so Q(3) = 3 − 0 = 3. The next three are control customers, one of whom converted, so Q(6) = 3 − 1 × 3/3 = 2. Over all 12, Q(12) = 3 − 2 × 6/6 = 1, which is ATE × N_T = (1/6) × 6.
 
-⚠️ **A Qini number means nothing until you say which customers it was computed on.** Scored on the rows the models were trained on (**in-sample**), a fully grown random forest has memorised those rows, and its Qini looks strong. Scored on **held-out** customers that the models never saw, the same forest's Qini can be about one-twentieth as large. That is `homework_07`'s situation, shown below. The held-out number is the one to report, because it is the only one that says how the ranking would do on the next campaign's customers. A small held-out Qini is not a bug in your code. It is the honest finding that this model ranks new customers only a little better than random. Compare Qini values only when they were computed on the same kind of split.
+⚠️ **A Qini number means nothing until you say which customers it was computed on.** Scored on the rows the models were trained on (**in-sample**), a fully grown random forest has memorised those rows, and its Qini looks strong. Scored on **held-out** customers that the models never saw, the same forest's Qini can be about one-twentieth as large. That is `homework_07`'s situation, shown below. The held-out number is the one to report, because it is the only one that says how the ranking would do on the next campaign's customers. A small held-out Qini is not a bug in your code. It is the honest finding that this model ranks new customers no better than random.
+
+**What the two panels are, and are not.** They show one T-learner, fitted once on 80% of the experiment, scored on two sets of customers: the 3,200 it was trained on and the 800 it never saw. The gap between them shows how much the forest memorized. It is not a comparison you would report. When you do compare Qini values, for example to choose between two models, score both on the same held-out customers. Holding customers out needs no second experiment. They are part of the same A/B test, set aside before fitting, so they still carry the coin-flip labels the Qini needs.
 
 ![Two panels from homework_07's own T-learner: two random forests of 100 trees each, seed 42, trained on an 80 percent split. Each panel plots incremental conversions Q(k) against the share of customers targeted in order of predicted uplift, with three lines: the model's Qini curve, the straight random-targeting line from zero to the curve's end point, and the perfect-ranking curve. The area between the model's curve and the random line is shaded. Panel (a), labelled held-out, uses the 800 test customers the models never saw: the model's curve stays close to the random line and the shaded area is a thin sliver. Panel (b), labelled in-sample, uses the 3,200 training customers the forests were fitted on: the model's curve rises steeply above the random line, then comes back down to the same end point, and the shaded area is about twenty times larger relative to the perfect curve.](figures/lecture_07_qini_curve.png)
 
@@ -332,12 +337,12 @@ Note: C7 (T=0, Y=1, $\hat{\tau}=0.07$) converted in the control group with low p
 - Roughly diagonal: model barely outperforms random targeting — poor model
 - Below diagonal initially: model ranks sleeping dogs (negative uplift) near the top — dangerous
 
-**Feature importances from the T-learner:** The features that matter in $\hat{\mu}_1$ but not $\hat{\mu}_0$ (or vice versa) drive the uplift model. If age is important in $\hat{\mu}_1$ but not $\hat{\mu}_0$, then age moderates the treatment effect — some age groups respond while others do not.
+**Feature importances from the T-learner:** $\hat{\mu}_1$'s importances show what predicts conversion among treated customers, and $\hat{\mu}_0$'s show the same among control customers. Neither shows what drives the uplift. A feature that ranks high in both models predicts conversion whether or not the customer is treated, which says nothing about who responds to the campaign. A feature that matters in one model but not the other is a hint that it moderates the effect. Check the hint by comparing τ̂ across that feature's values before acting on it.
 
 **What to verify before trusting the agent output:**
 1. Is mean predicted uplift close to observed ATE?
 2. Is the Qini coefficient positive? If negative, the model is inverting the ranking
-3. Do feature importances make business sense? High-tenure customers might be more persuadable if they are already loyal but need a push
+3. Do feature importances make business sense? Remember that they show what predicts conversion, not who is persuadable. To see who is persuadable, compare τ̂ across a feature's values
 4. Which split is the Qini from? Report the **test-set** Qini. Expect it to be much lower than the training-set Qini, because a fully grown forest scores far higher in-sample. If the test-set Qini is near 0, say so plainly: the ranking does not carry over to new customers. Quoting the in-sample number instead would hide that
 
 ---
@@ -363,7 +368,7 @@ Note: C7 (T=0, Y=1, $\hat{\tau}=0.07$) converted in the control group with low p
 ### Common Misconceptions
 
 **1. "If the A/B test was big enough to measure the ATE, it is big enough for uplift modeling."**
-It usually is not. The ATE is one number estimated from everyone. Uplift modeling estimates a different effect for every kind of customer, and each arm's model must be fitted well enough that the *difference* between two noisy predictions still carries signal. In `homework_07` the experiment is large enough to measure the ATE clearly, yet the forest's held-out ranking is only slightly better than random (Section 1.4C). Plan the sample for the heterogeneity you want to find, not for the ATE.
+It usually is not. The ATE is one number estimated from everyone. Uplift modeling estimates a different effect for every kind of customer, and each arm's model must be fitted well enough that the *difference* between two noisy predictions still carries signal. In `homework_07` the experiment is large enough to measure the ATE clearly, yet the forest's held-out ranking is no better than random (Section 1.4C). Plan the sample for the heterogeneity you want to find, not for the ATE.
 
 **2. "A customer with Y=1 in the treatment group is definitely a persuadable."**
 They might be a Sure Thing — someone who would have converted anyway. Without observing their counterfactual, we cannot know for certain. The T-learner does not estimate any one customer's type. At best, τ̂(X) estimates the share of Persuadables minus the share of Sleeping Dogs among customers like them (Section 1.4A).
@@ -372,7 +377,7 @@ They might be a Sure Thing — someone who would have converted anyway. Without 
 The correct threshold is τ̂(X) > cost/value, not τ̂(X) > 0. A customer with predicted uplift of 0.01 (1 percentage point) does not justify a \$4 campaign cost unless the conversion value is over \$400.
 
 **4. "The T-learner works without an experiment if the data is rich enough."**
-Without random assignment, the T-learner is biased. Observational data (where treatment assignment is not random) requires more sophisticated methods (instrumental variables, difference-in-differences, propensity score matching) to estimate causal effects. The T-learner's validity relies entirely on random assignment.
+Without random assignment, the T-learner is biased unless X contains every variable that drove both who was treated and who converted, and that can never be checked from the data. Methods built for observational data (propensity scores, instrumental variables, difference-in-differences) rest on their own assumptions that cannot be fully tested. In this course, uplift modeling means an A/B test first.
 
 **5. "A high Qini coefficient means the campaign is profitable."**
 The Qini coefficient measures ranking quality, not profitability. A model that perfectly ranks customers by uplift would have a Qini of 1.0, but if the ATE is near zero, targeting anyone may not be profitable regardless of the ranking quality.
