@@ -19,7 +19,7 @@ probability. The Gamma distribution is used only through its mean, which is give
 appears. ⚠️ **Letters carry over with new meanings.** **α** was a Beta shape in Lecture 1 and the
 Hill exponent in Lecture 3. Here it is the *scale* of the Gamma distribution of purchase rates,
 unrelated to either. **p** means two different things inside this lecture, flagged where the
-second one appears (Section 2.1's parameter table).
+second one appears (Section 1.4C, and again in Section 2.1's parameter table).
 
 ---
 
@@ -140,7 +140,8 @@ Recency enters through $(\alpha + T)/(\alpha + t_x)$. It equals 1 when the last 
 
 #### Part B: Simple CLV Calculation
 
-Once the agent provides E[purchases in next 12 months] and E[order value], CLV is:
+Once the agent provides E[purchases in next 12 months] (from BG/NBD) and E[order value] (from the
+Gamma-Gamma model; Part C shows where it comes from), CLV is:
 
 > CLV₁₂ = E[transactions] × E[order value]
 
@@ -188,9 +189,55 @@ value and median × count is not.
 
 ---
 
-#### Part C: The Gamma-Gamma Independence Assumption
+#### Part C: Gamma-Gamma — Where E[Order Value] Comes From, and Its Independence Assumption
 
-The Gamma-Gamma model for spend assumes that a customer's average order value is independent of their purchase frequency. If high-frequency buyers tend to make smaller purchases (as often happens in grocery retail), this assumption is violated.
+Part B multiplies two numbers. BG/NBD supplies E[transactions]. **E[order value] comes from a second,
+separate model, Gamma-Gamma**, fitted to the same customer summary. This part shows what goes in and
+how one customer's number comes out.
+
+**The inputs.** Per customer, two numbers:
+- **x** — repeat purchases, the same x as Part A.
+- **$m_x$** — the customer's average order value **over their repeat orders only**. With the default
+  `include_first_transaction=False` (Part A), `lifetimes`' `summary_data_from_transaction_data()`
+  drops the acquiring order before it averages, and reports the result as `monetary_value`. A
+  customer who spent \$100, then \$20, then \$40 has x = 2 and $m_x$ = (20 + 40)/2 = **\$30**, not \$53.33.
+
+Three population-level parameters, $p$, $q$ and $v$, are then fitted by maximum likelihood **across
+repeat customers only** (x ≥ 1). A customer with x = 0 has no repeat order to average: the summary
+records their `monetary_value` as 0, and `GammaGammaFitter.fit()` stops with a `ValueError` on any
+value ≤ 0. So the fit is run on `rfm[rfm.frequency > 0]`. ⚠️ This $p$ is not the dropout probability
+$p$ in the Deep Dive at the end of this part (Section 2.1 flags the clash again).
+
+**The prediction.** For one customer, the model's expected spend per order is a weighted average of
+the customer's own $m_x$ and the population mean spend $p\,v/(q-1)$:
+
+$$E[\text{spend per order} \mid x, m_x] = w\,m_x + (1-w)\,\frac{p\,v}{q-1}, \qquad w = \frac{p\,x}{p\,x + q - 1}$$
+
+Multiplied out, this is the same thing as $p\,(v + x\,m_x)/(p\,x + q - 1)$, a form you will also
+see it written in. `lifetimes` computes it in the weighted form above, in
+`conditional_expected_average_profit()`.
+
+**Worked numbers**, at Section 2.1's fitted $p$ = 6.25, $q$ = 3.74, $v$ = 15.45, so $q - 1$ = 2.74
+and the population mean is 6.25 × 15.45 / 2.74 ≈ **\$35.24**:
+- x = 2: $w$ = 12.5 / (12.5 + 2.74) = 12.5 / 15.24 ≈ **0.82**
+- x = 12: $w$ = 75 / (75 + 2.74) = 75 / 77.74 ≈ **0.96**
+
+Take a customer whose repeat orders average $m_x$ = \$80. With x = 2 the model predicts
+0.82 × \$80 + 0.18 × \$35.24 ≈ **\$72**. With x = 12, 0.96 × \$80 + 0.04 × \$35.24 ≈ **\$78**. Same
+average, different evidence: **two orders are weak evidence of what a customer typically spends** (either
+one could be a one-off splurge or a small top-up), so the model leans on the population mean until the
+customer's own orders pile up. At x = 0 the weight is exactly 0 and the formula returns the population mean
+itself, which is the value `lifetimes`' `customer_lifetime_value()` uses for every one-time buyer.
+
+**What Gamma-Gamma does not use.** No recency ($t_x$), no $T$, no P(alive). It answers only "*given* this
+customer buys, how much per order?" How many purchases to expect, and whether the customer is still
+there to make them, is BG/NBD's job, already inside E[transactions] (Part B). That is why Section 2.1's
+Marcus gets the same E[spend/order] as Valentina: the same x, the same $m_x$, and Gamma-Gamma cannot see
+his 18 months of silence.
+
+**The independence assumption.** Multiplying the two models' outputs treats spend and frequency as
+unrelated, and the blend pulls every customer toward one population mean whatever their frequency.
+Neither is trustworthy unless spend and frequency are in fact independent. The Gamma-Gamma model for spend assumes that a customer's average order value is independent of their purchase frequency. If high-frequency buyers tend to make smaller purchases (as often happens in grocery retail), this assumption is violated.
 
 **How to check:** Compute the Pearson correlation between each customer's purchase frequency and their average order value, and read it against one scale — the same one the pre-flight checklist at the end of this lecture uses:
 
@@ -403,7 +450,7 @@ The last column is the model's CLV₁₂ (Section 1.4B), E[transactions] × E[sp
 linked by E[transactions] = P(alive) × E[transactions | still active], so Expected CLV = P(alive) × CLV if still
 active (0.96 × \$168 ≈ \$161).
 
-**Why every E[spend/order] is \$38.** Gamma-Gamma's estimate for one customer blends their own average order
+**Why every E[spend/order] is \$38.** Gamma-Gamma's estimate for one customer (Section 1.4C) blends their own average order
 with the population's \$35, leaning on their own average more the more orders they have. With these parameters
 the weight on their own average is $p\,x/(p\,x + q - 1)$: 0.96 for Valentina and Marcus (x = 12) and 0.82 for Priya
 (x = 2). A customer whose own average is \$38 comes out at about \$38 either way. The example gives all three
@@ -531,11 +578,11 @@ CLV is an expected value — the cost of interventions must be weighed against t
 
 | Agent step | Corresponds to |
 |---|---|
-| Prepares RFM summary (x, t_x, T, m) per customer | Section 1.4A — the BG/NBD inputs (x, t_x, T) |
+| Prepares RFM summary (x, t_x, T, m) per customer | Section 1.4A — the BG/NBD inputs (x, t_x, T); Section 1.4C — m, the repeat-order average |
 | Fits BG/NBD via MLE, reports r, α, a, b | Section 1.4C Deep Dive — likelihood structure |
 | Computes P(alive) per customer | Section 1.4A — reading P(alive), and its closed form |
 | Computes E[transactions] per customer | Section 1.4B — E[transactions] as the CLV input |
-| Fits Gamma-Gamma, computes E[spend] | Section 1.3 + 1.4C — Gamma-Gamma model |
+| Fits Gamma-Gamma on repeat buyers, computes E[spend] | Section 1.4C — Gamma-Gamma's inputs (x, $m_x$) and the blended prediction |
 | Multiplies E[transactions] × E[spend] × discount | Section 1.4B — CLV formula and discount factor |
 | Plots spend vs. frequency (assumption check) | Section 2.2 — Gamma-Gamma independence |
 | Summarises CLV by acquisition channel against channel CAC | Section 1.4D — CAC and the CLV:CAC ratio |
