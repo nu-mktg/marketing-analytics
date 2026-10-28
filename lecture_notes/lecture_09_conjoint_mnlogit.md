@@ -73,7 +73,7 @@ The counterpart to his first insight comes from Naomi Ionita, who led growth at 
 
 If you ask a customer "how much would you pay for an ad-free version?", they will consistently overstate their WTP. Social desirability bias makes customers feel they should value things highly; hypothetical bias means there is no real cost to saying "$20/month!"
 
-Conjoint analysis avoids this by never asking about price directly. Instead, respondents choose between complete product configurations: "Would you prefer Plan A ($12, standard content, no ads) or Plan B ($18, premium content, limited ads)?" The price sensitivity is revealed through the trade-offs they make, not through a direct question.
+Conjoint analysis reduces this by never asking about price directly. Instead, respondents choose between complete product configurations: "Would you prefer Plan A ($12, standard content, no ads) or Plan B ($18, premium content, limited ads)?" The price sensitivity is revealed through the trade-offs they make, not through a direct question.
 
 ---
 
@@ -163,7 +163,7 @@ The multinomial logit model assumes IIA: **Independence of Irrelevant Alternativ
 Share A = 0.223/1.872 = **11.9%**. Share B = 1.649/1.872 = **88.1%**.
 *Common wrong answer:* Sharing proportional to utility values directly (−1.5 and 0.5), ignoring the softmax transformation.
 
-**Q3.** Conjoint WTP of $12 is an **average** — individual WTP varies. Some customers have WTP below $12 and would not pay $22. Raising to $22 (= $10 + $12 = current price + average WTP) would lose customers whose individual WTP falls between $12 and $22. Raising to $22 may be profitable if the revenue from those who stay exceeds revenue from those who churn, but this requires demand curve analysis — not just the average WTP estimate.
+**Q3.** Conjoint WTP of $12 is an **average** — individual WTP varies. Some customers have WTP below $12 and would not pay $22. Raising to $22 (= $10 + $12 = current price + average WTP) would lose every customer whose individual WTP for no ads is below the $12 premium: about half of them, if individual WTP is spread symmetrically around the average. Raising to $22 may be profitable if the revenue from those who stay exceeds revenue from those who churn, but this requires demand curve analysis — not just the average WTP estimate.
 *Common wrong answer:* The PM is correct — WTP is $12 so the tier should cost current price + $12 = $22. Average WTP is not the price at which everyone buys; it is the average maximum each person would pay.
 
 **Q4.** **False.** WTP is the **maximum** price a customer would accept, not the minimum. The correct statement: WTP is the maximum price at which a customer would still choose this option over the alternative.
@@ -185,6 +185,45 @@ Numbered to match the Checkpoint slide in this lecture's deck. Where the slide a
 **Slide Q4.** *"WTP for "no ads" = \$10. Current base price = \$8. Optimal premium tier price = \$18? Defend or critique."* — Same reasoning as Q3 above, which uses WTP = \$12, a \$10 tier and a \$22 proposal; the slide uses \$10, \$8 and \$18.
 
 **Slide Q5.** *"$\beta_{\text{price}} = +0.05$ from the MNL fit. What went wrong — and how do you fix it?"* — Not answered in these notes. Bring your answer to class.
+
+### Slide Practice Answers
+
+Numbered to match the two "Practice: work in pairs" slides in this lecture's deck.
+
+**P1. True.** A \$2 cut raises every plan's utility by the same amount (0.15 × 2 = 0.30 at
+β_price = −0.15). Softmax shares depend only on the *differences* between utilities, since
+P(i)/P(k) = e^(U_i − U_k) (Section 1.4C, Deep Dive), so the split does not move. That is a limit of
+the simulation, not a claim about the market: it compares only the plans in the choice set, so it
+cannot say whether the cut brings in more subscribers overall (Common Misconception 4).
+
+**P2. B, A 48% and B 32%.** Under IIA, C draws from A and B in proportion to their current shares,
+so the remaining 80% keeps the 60:40 split: A = 0.60 × 80% = 48% and B = 0.40 × 80% = 32%
+(Section 1.4C).
+*Common wrong answer:* A, which has C taking everything from B. That is what you would expect in
+reality, and it is exactly what MNL cannot produce: IIA underestimates how much a near-copy
+cannibalizes the product it copies (Section 1.4C, "Practical implication").
+
+**P3. B, \$5.33.** Coefficients are measured against the reference level, here no ads, which
+contributes 0. Going from limited ads to no ads gains 0 − (−0.80) = 0.80 of utility, and
+WTP = 0.80 / 0.15 = \$5.33 (Section 1.1, Tool 2; the coding in Section 2.1).
+*Common wrong answers:* A, \$13.33 = 2.00 / 0.15, is the WTP to go from *full* ads to no ads. C,
+\$8.00 = (2.00 − 0.80) / 0.15, is the WTP to go from full ads to limited ads. D, \$0.19, inverts the
+formula.
+
+**P4. False.** A part-worth is an average across respondents. +1.20 says the average respondent
+prefers premium content; some segments may prefer standard (Common Misconception 2; Section 2.2,
+"Market simulation").
+
+**P5. B.** A direct price question invites hypothetical and social-desirability bias, so \$20 is
+likely inflated. Conjoint reveals price sensitivity through trade-offs instead (Section 1.3). The
+choices are still hypothetical, though, so treat \$11 as an upper bound and validate it against
+revealed-preference data (Common Misconception 1).
+*Common wrong answer:* A. Stating a number costs the respondent nothing, which is the problem
+conjoint is designed around.
+
+**P6. False.** Simulated shares are relative choice shares among the alternatives presented. They
+say nothing about how many households buy at all, which depends on market size, awareness,
+distribution and other factors outside the model (Common Misconception 4).
 
 ## PART 2: Application
 ### (~1 hour 40 minutes)
