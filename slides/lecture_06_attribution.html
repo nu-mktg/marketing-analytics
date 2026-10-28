@@ -1422,6 +1422,11 @@ Both ignore the actual marginal contribution of each channel.</p>
 </div>
 <div>
 <table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Remove</th>
@@ -1432,22 +1437,22 @@ Both ignore the actual marginal contribution of each channel.</p>
 <tbody>
 <tr class="odd">
 <td>PS</td>
-<td>0.5 × 0.1 + 0.2 × 0.2 = 0.09</td>
+<td>0.3 × 0 + 0.5 × 0.1 + 0.2 × 0.2 = 0.09</td>
 <td>1 − 0.09/0.35 = <strong>0.74</strong></td>
 </tr>
 <tr class="even">
 <td>S</td>
-<td>0.3 × 0.4 + 0.2 × 0.40 = 0.20</td>
+<td>0.3 × 0.4 + 0.5 × 0 + 0.2 × 0.40 = 0.20</td>
 <td>1 − 0.20/0.35 = <strong>0.43</strong></td>
 </tr>
 <tr class="odd">
 <td>E</td>
-<td>0.3 × 0.4 + 0.5 × 0.30 = 0.27</td>
+<td>0.3 × 0.4 + 0.5 × 0.30 + 0.2 × 0 = 0.27</td>
 <td>1 − 0.27/0.35 = <strong>0.23</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Removing PS zeroes its own route and the “via PS” part of S and E: S falls to 0.1, E to 0.2.</p>
+<p>Removing C changes only the states that can <strong>reach</strong> C: read down C’s column, then repeat for each state you find. PS is fed by Start, S and E, so S falls to 0.1 and E to 0.2. S and E are fed only by Start, so only the Start line changes.</p>
 <div class="muted">
 <p>The three REs sum to 1.40, not 1. They are not shares of credit, and no efficiency axiom holds. PS’s 0.74 says most of the chain’s conversions run through PS; it does not say cutting PS loses 74% of sales.</p>
 </div>
