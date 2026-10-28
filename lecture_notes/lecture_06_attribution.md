@@ -169,13 +169,13 @@ A high removal effect means many of the chain's converting journeys pass through
 - From E: 0.5 × 0.4 + 0.2 = 0.40
 - From Start: 0.3 × 0.4 + 0.5 × 0.30 + 0.2 × 0.40 = **0.35**
 
-*Remove each channel in turn.* Every move into the removed channel now goes to Null, so that channel's chance of converting counts as 0:
+*Remove each channel in turn.* Every move into the removed channel now goes to Null, so that channel's chance of converting counts as 0. That changes every state that can reach it and nothing else. Find them by reading down its column, then down the column of each state you find, until you reach Start: the PS column has entries from Start, S and E, so removing PS changes all three; the S and E columns have an entry only from Start, so removing S or E changes only the Start line.
 
 | Removed | P(convert from Start) | RE |
 |---|---|---|
-| PS | S falls to 0.1 and E to 0.2, so 0.3 × 0 + 0.5 × 0.1 + 0.2 × 0.2 = 0.09 | 1 − 0.09/0.35 = **0.74** |
-| S | 0.3 × 0.4 + 0.2 × 0.40 = 0.20 | 1 − 0.20/0.35 = **0.43** |
-| E | 0.3 × 0.4 + 0.5 × 0.30 = 0.27 | 1 − 0.27/0.35 = **0.23** |
+| PS | S falls to 0.5 × 0 + 0.1 = 0.1 and E to 0.5 × 0 + 0.2 = 0.2, so 0.3 × 0 + 0.5 × 0.1 + 0.2 × 0.2 = 0.09 | 1 − 0.09/0.35 = **0.74** |
+| S | PS and E unchanged, so 0.3 × 0.4 + 0.5 × 0 + 0.2 × 0.40 = 0.20 | 1 − 0.20/0.35 = **0.43** |
+| E | PS and S unchanged, so 0.3 × 0.4 + 0.5 × 0.30 + 0.2 × 0 = 0.27 | 1 − 0.27/0.35 = **0.23** |
 
 Two things to read off it. First, the three removal effects sum to 1.40, not 1: they are not shares of credit, and nothing like Shapley's efficiency axiom holds for them. Second, PS's 0.74 says most of the chain's conversions run through PS, because S and E both hand off to it. It does not say that cutting PS would lose 74% of sales (the warning above). A chain built from real paths usually has loops (Email → Social → Email), and then the same equations have to be solved together rather than back to front; that is what attribution code does.
 
