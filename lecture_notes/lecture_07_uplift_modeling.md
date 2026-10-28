@@ -239,6 +239,22 @@ Numbered to match the Checkpoint slide in this lecture's deck. Where the slide a
 
 **Slide Q5.** *"Campaign reaches 10,000 customers. 12% are sleeping dogs. Campaign cost = \$4 each. What is the direct cost of targeting sleeping dogs?"* — 10,000 × 12% = 1,200 sleeping dogs, at \$4 each = **\$4,800** of campaign spend that should never have been sent. Note what "direct cost" does and does not cover: it is only the \$4 per contact. Sleeping Dogs are the segment that converts without the campaign and does **not** convert with it (Section 1.3), so the real damage is the *lost conversions* their negative uplift causes — at v = \$25 a sleeping dog with τ̂ = −0.05 destroys a further 0.05 × \$25 = \$1.25 of expected value each, on top of the \$4. The \$4,800 is therefore a floor, not the full cost.
 
+### Slide Practice Answers
+
+Numbered to match the two "Practice: work in pairs" slides in this lecture's deck. Commit to an answer, and to Sure or Unsure, before you read these.
+
+**P1. False.** A propensity model ranks the customers most likely to renew at the top, and many of those would renew without the campaign: they are Sure Things. Uplift ranks customers by how much the campaign *changes* the outcome (Section 1.3).
+
+**P2. D, 0.15.** Among customers like x, τ(x) = share of Persuadables − share of Sleeping Dogs = 0.20 − 0.05 = 0.15 (Section 1.4A, "Reading the four types off the models"). Sure Things convert either way and Lost Causes never do, so neither moves τ(x). *Common wrong answer:* A, 0.50, which is the conversion rate *with* the campaign (Sure Things + Persuadables), not the change it causes.
+
+**P3. C, −\$1.00.** Expected incremental profit = τ̂ × v − c = 0.10 × 40 − 5 = −1.00 (Section 1.1, Tool 1). The uplift is positive but below the break-even c/v = 5/40 = 0.125. *Common wrong answer:* A, +\$4.00, which forgets that the \$5 is paid on every contact.
+
+**P4. True.** τ̂ alone cannot separate a Sure Thing from a Lost Cause, because both sit near 0. μ̂₀, the conversion probability without the campaign, can: high μ̂₀ points to Sure Things and low μ̂₀ to Lost Causes (Section 1.4A).
+
+**P5. B, 0.09.** Only the held-out Qini says how the ranking does on customers the model has not seen. The in-sample number is inflated because the forest memorized its training rows (Section 1.4C). *Common wrong answer:* D. Held-out customers are part of the same A/B test, set aside before fitting, so they keep their coin-flip labels and no second experiment is needed.
+
+**P6. False.** Each arm's importances show what predicts *conversion* in that arm. A feature that ranks high in both predicts conversion with or without the campaign, which says nothing about who responds to it. A feature that matters in one model but not the other is the hint, to be checked by comparing τ̂ across its values (Section 2.2).
+
 ## PART 2: Application
 ### (~1 hour 40 minutes)
 
