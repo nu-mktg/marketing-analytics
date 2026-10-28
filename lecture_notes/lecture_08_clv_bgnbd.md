@@ -309,6 +309,44 @@ Numbered to match the Checkpoint slide in this lecture's deck. Where the slide a
 
 **Slide Q5.** *""Our average CLV is \$280, so we can spend \$280 to acquire anyone." What's wrong?"* — Same reasoning as Q5 above, which uses an average CLV of \$210; the slide's is \$280.
 
+### Slide Practice Answers
+
+Numbered to match the two "Practice: work in pairs" slides in this lecture's deck.
+
+**P1. True.** A customer who has bought exactly once has x = 0 repeat purchases (Section 1.4A: the
+first purchase defines acquisition and is not counted). BG/NBD's dropout coin is flipped only after a
+repeat purchase, so this customer has had no chance to drop out, and P(alive) is exactly 1. Their
+expected future purchases are still low. Certain-alive is not the same as valuable (Common
+Misconception 3).
+
+**P2. A, \$120.** The model's CLV₁₂ is already an expected value: E[transactions] is averaged over
+whether the customer is still active, so it already includes P(alive) (Section 1.4B; Section 2.1,
+Part C).
+*Common wrong answer:* B, \$72 = 0.60 × \$120, which counts dropout twice. C, \$200 = \$120 ÷ 0.60,
+is the customer's value *if still active*, the figure to compare with a retention cost.
+
+**P3. B.** CLV:CAC puts CLV on top: 100/50 = 2.0 for X and 90/20 = 4.5 for Y. Y returns \$4.50 of
+12-month value per acquisition dollar against X's \$2.00 (Section 1.4D). Before moving budget, check
+that Y can absorb more spend; a ratio ranks efficiency, not headroom.
+*Common wrong answer:* C, which inverts the ratio and so reverses the ranking. A compares CLV alone
+and ignores what each customer costs to acquire.
+
+**P4. False.** At the worked example's parameters, the customer with 1 repeat purchase has
+P(alive) ≈ 0.60 and the one with 12 has ≈ 0.0007 (the latter is Marcus, Section 2.1). A frequent
+buyer's 18 months of silence is far stronger evidence of dropout than an infrequent buyer's.
+Frequency and recency are read together (Common Misconception 4; the exponent r + x in Section 1.4A).
+
+**P5. C.** Quote the median, \$70, for the typical customer, and mean × count = \$180 × 10,000 =
+\$1,800,000 for the whole base. Median × count is not the portfolio value (Section 1.4B, "Reading
+the gap between them").
+*Common wrong answer:* B, which quotes the mean as the typical customer. With mean well above median
+the distribution is right-skewed, and \$180 overstates what most customers are worth.
+
+**P6. False.** A *positive* correlation means frequent buyers spend more per order. Gamma-Gamma
+assumes no relationship, so it *underestimates* CLV for high-frequency customers. Overestimation is
+the negative-correlation case (Section 1.4C, "What to do if violated"). At |0.40| the violation is
+material on the course's scale.
+
 ## PART 2: Application
 ### (~1 hour 40 minutes)
 
