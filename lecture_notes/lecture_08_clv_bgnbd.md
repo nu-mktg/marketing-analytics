@@ -136,6 +136,40 @@ Recency enters through $(\alpha + T)/(\alpha + t_x)$. It equals 1 when the last 
 
 ![P(alive) on the vertical axis against the month of the customer's last purchase on the horizontal axis, from 0 to 24, for customers observed for 24 months, at the worked example's fitted parameters. A solid curve for a customer with 11 repeat purchases stays flat at zero until about month 10, then rises steeply in an S-shape through 0.5 near month 16 to about 0.96 at month 24. Customer B sits on it at month 5 with P(alive) about 0.0006, and Customer A at month 23 with about 0.95. A dashed curve for a customer with only 2 repeat purchases rises gently from about 0.16 to about 0.90, and Priya sits on it at month 20 with about 0.86. The two curves cross near month 20: below that, the same silence costs the frequent buyer far more P(alive) than the infrequent one.](figures/lecture_08_palive_recency.png)
 
+**Where E[transactions] comes from.** P(alive) says whether the customer is still there. The 3.86
+and 0.003 above say how many purchases to expect, and the model builds them in two steps:
+
+> E[transactions in next t] = P(alive) × E[transactions in next t | still active]
+
+The second factor is the forecast for a customer you know is still active. It starts from the
+customer's **updated purchase rate**. The population buys at r/α ≈ 0.10 a month, and the
+customer's own record moves that to (r + x)/(α + T): their x repeat purchases over the T months
+you have watched them, blended with the population. Multiply by the horizon, then take a little
+off, because every future purchase is another chance to drop out. For Customers A and B (x = 11,
+T = 24) the updated rate is (0.85 + 11)/(8.20 + 24) = 11.85/32.2 ≈ 0.37 a month, or 4.42 over 12
+months, and the allowance for dropping out later brings it down to **4.09**.
+
+That factor is the same for A and B. Once you know a customer is still active, a quiet spell is
+just a quiet spell, so the forecast depends on x and T but not on when the last purchase was (this
+is why Marcus and Valentina in Section 2.1 share their "if still active" columns). The whole
+difference between A and B is the first factor (both shown unrounded, so the products check):
+- A: P(alive) 0.9452 × 4.0888 ≈ **3.86**
+- B: P(alive) 0.000646 × 4.0888 ≈ **0.003**
+
+**Background: why it works, not on quizzes.** The second factor has a closed form, and it is what
+`lifetimes`' `conditional_expected_number_of_purchases_up_to_time()` evaluates:
+
+$$E[\text{transactions in next } t \mid \text{still active}] = \frac{a + b + x - 1}{a - 1}\left[1 - \left(\frac{\alpha + T}{\alpha + T + t}\right)^{r + x} {}_2F_1\!\left(r + x,\ b + x;\ a + b + x - 1;\ \frac{t}{\alpha + T + t}\right)\right]$$
+
+${}_2F_1$ is the Gaussian hypergeometric function, an infinite series that `scipy.special.hyp2f1`
+computes; nobody evaluates it by hand. The library then divides this by
+$1 + \frac{a}{b + x - 1}\left(\frac{\alpha + T}{\alpha + t_x}\right)^{r + x}$, which is the same as
+multiplying by P(alive) from the closed form above: the two-step decomposition is literally how the
+number is computed. With a < 1, as here (a = 0.55), the fraction in front is negative; the bracket
+is then negative too, so the product comes out positive. The formula has no $t_x$ in it, which is
+the "quiet spell" point in symbols. It holds at x = 0 as well, where P(alive) is 1 and this factor
+is the whole forecast (Part C, "Customers who bought only once").
+
 ---
 
 #### Part B: Simple CLV Calculation
@@ -234,6 +268,37 @@ customer buys, how much per order?" How many purchases to expect, and whether th
 there to make them, is BG/NBD's job, already inside E[transactions] (Part B). That is why Section 2.1's
 Marcus gets the same E[spend/order] as Valentina: the same x, the same $m_x$, and Gamma-Gamma cannot see
 his 18 months of silence.
+
+![Predicted spend per order on the vertical axis against the customer's own average over their repeat orders, m_x, on the horizontal axis, both from \$0 to \$100, at the worked example's fitted Gamma-Gamma parameters p = 6.25, q = 3.74, v = 15.45. A dashed grey 45-degree line marks no pull at all, where the prediction equals the customer's own average. Three straight lines, one for each number of repeat orders, all cross the 45-degree line at the same marked point, the population mean of \$35.24. The line for x = 12 repeat orders (weight 0.96 on the customer's own average) lies almost on the 45-degree line. The dashed line for x = 2 (weight 0.82) is flatter, and the line for x = 1 (weight 0.70) flatter still. Customers whose own average is above \$35.24 are predicted to spend less than their average, and customers below it more. Part C's customer whose repeat orders average \$80 is marked twice: at x = 2 the prediction is \$72, and at x = 12 it is \$78.](figures/lecture_08_gg_shrinkage.png)
+
+**Customers who bought only once.** They can be a large share of a customer base, and they
+still get a CLV. "Across repeat customers only," above, restricts which customers are used to
+**fit** Gamma-Gamma's $p$, $q$ and $v$; it does not restrict who gets a prediction. Take a customer
+who bought once, at the start of Section 2.1's 24-month window, and never again: x = 0, $t_x$ = 0,
+T = 24. At the worked example's parameters:
+- **P(alive) = 1**, exactly (Part A; Common Misconception 3).
+- **E[transactions, 12m] = 0.30.** With P(alive) = 1 this is all second factor (Part A, "Where
+  E[transactions] comes from"). Here the 24 quiet months lower the updated rate, to
+  0.85/32.2 ≈ 0.026 a month, instead of lowering P(alive).
+- **E[spend/order] = \$35.24**, the population mean, because w = 0 at x = 0.
+- **CLV₁₂** = 0.30 × \$35.24 ≈ **\$11**.
+
+The same customer with only 3 months of history (first purchase 3 months ago, T = 3) has the same
+P(alive) and the same \$35.24, but 0.82 expected purchases and a CLV₁₂ of about **\$29**. For a
+one-time buyer, the time since their only purchase does the work that recency does for everyone else.
+
+Two caveats before trusting either number:
+1. **P(alive) = 1 is a modelling choice, not evidence.** BG/NBD flips its dropout coin only after a
+   repeat purchase, so it cannot let a one-time buyer drop out; it says nothing about whether they
+   actually did. A customer who tried once and never came back may well be the customer who left.
+   `lifetimes` also ships `ModifiedBetaGeoFitter` (the MBG/NBD model), which takes the same
+   (x, $t_x$, T) inputs but flips the coin at the first purchase too, so a one-time buyer's P(alive)
+   is below 1 and keeps falling the longer they stay silent.
+2. **The spend estimate ignores the one order you saw.** A one-time buyer's $m_x$ is 0 by
+   construction (only repeat orders are averaged), so Gamma-Gamma gives them repeat buyers'
+   population mean whatever their first order was. If first orders run systematically smaller or
+   larger than repeat orders (a trial-size first box, say), every one-time buyer's CLV inherits the
+   gap. When one-time buyers are a large share of the base, so does the total.
 
 **The independence assumption.** Multiplying the two models' outputs treats spend and frequency as
 unrelated, and the blend pulls every customer toward one population mean whatever their frequency.
@@ -581,7 +646,7 @@ CLV is an expected value — the cost of interventions must be weighed against t
 | Prepares RFM summary (x, t_x, T, m) per customer | Section 1.4A — the BG/NBD inputs (x, t_x, T); Section 1.4C — m, the repeat-order average |
 | Fits BG/NBD via MLE, reports r, α, a, b | Section 1.4C Deep Dive — likelihood structure |
 | Computes P(alive) per customer | Section 1.4A — reading P(alive), and its closed form |
-| Computes E[transactions] per customer | Section 1.4B — E[transactions] as the CLV input |
+| Computes E[transactions] per customer | Section 1.4A — where E[transactions] comes from; Section 1.4B — E[transactions] as the CLV input |
 | Fits Gamma-Gamma on repeat buyers, computes E[spend] | Section 1.4C — Gamma-Gamma's inputs (x, $m_x$) and the blended prediction |
 | Multiplies E[transactions] × E[spend] × discount | Section 1.4B — CLV formula and discount factor |
 | Plots spend vs. frequency (assumption check) | Section 2.2 — Gamma-Gamma independence |
