@@ -163,7 +163,7 @@ $$E[\text{transactions in next } t \mid \text{still active}] = \frac{a + b + x -
 
 ${}_2F_1$ is the Gaussian hypergeometric function, an infinite series that `scipy.special.hyp2f1`
 computes; nobody evaluates it by hand. The library then divides this by
-$1 + \frac{a}{b + x - 1}\left(\frac{\alpha + T}{\alpha + t_x}\right)^{r + x}$, which is the same as
+${1} + \frac{a}{b + x - 1}\left(\frac{\alpha + T}{\alpha + t_x}\right)^{r + x}$, which is the same as
 multiplying by P(alive) from the closed form above: the two-step decomposition is literally how the
 number is computed. With a < 1, as here (a = 0.55), the fraction in front is negative; the bracket
 is then negative too, so the product comes out positive. The formula has no $t_x$ in it, which is
@@ -186,6 +186,13 @@ common error.
 (For more precision, apply a monthly discount rate: CLV = Σ (E[purchases in month t] × E[order value]) / (1 + discount_rate)^t)
 
 **Example:** E[transactions] = 2.4, E[order value] = $55 → CLV = 2.4 × $55 = **$132**
+
+**CLV₁₂ is the first 12 months of lifetime value.** Strictly, customer *lifetime* value is the
+discounted value of everything a customer will buy for as long as they remain a customer. CLV₁₂ is
+its first 12 months, and it is the CLV this course uses everywhere: in the homework, on quizzes and
+in CLV:CAC (Part D). Twelve months is a deliberate choice. A 12-month forecast can be checked against
+a hold-out year, it matches an annual budget, and it barely depends on the discount rate. Whenever
+you quote a CLV, say which window it covers (Part D's first trap).
 
 **The mean is not the typical customer.** CLV₁₂ above is an *average*, and a CLV distribution is
 almost never symmetric — so "the average customer" and "the typical customer" are two different
@@ -220,6 +227,19 @@ for CLV, the normal state of affairs — a budget set against the mean overpays 
 are actually typical. Report both: quote the **median** when someone asks what "a customer" is
 worth, and the **mean** when you need a total, because mean × customer count is the portfolio
 value and median × count is not.
+
+**Optional: a full lifetime CLV.** *Background, not on quizzes or homework.* Run the monthly discounted sum
+at the start of Part B past 12 months until the total stops growing. In `lifetimes` that is the same
+`customer_lifetime_value()` call with a long horizon (`time=600` months) and a monthly
+`discount_rate`. Here the discount is required, not a refinement. At this lecture's fitted a = 0.55,
+below 1 (Section 2.1), the model expects some customers never to drop out, so undiscounted expected
+purchases never settle: Customer A expects 3.86 in the next 12 months, 7.25 in 24 and 15.7 in 60. At
+1% a month, A's CLV is \$138 over 12 months (not \$147, because it is discounted), \$628 over 10
+years, \$740 over 20 and about \$776 in total. Two cautions before using a lifetime figure. It
+depends heavily on the discount rate: A's total is about \$1,250 at 0.5% a month and \$461 at 2%,
+while A's 12-month figure only moves between \$142 and \$129. And about 40% of it arrives after
+year 5, where nothing in your data can check the model. A full CLV would also use profit (spend ×
+margin) rather than revenue.
 
 ---
 
@@ -287,7 +307,7 @@ The same customer with only 3 months of history (first purchase 3 months ago, T 
 P(alive) and the same \$35.24, but 0.82 expected purchases and a CLV₁₂ of about **\$29**. For a
 one-time buyer, the time since their only purchase does the work that recency does for everyone else.
 
-Two caveats before trusting either number:
+Three caveats before trusting either number:
 1. **P(alive) = 1 is a modelling choice, not evidence.** BG/NBD flips its dropout coin only after a
    repeat purchase, so it cannot let a one-time buyer drop out; it says nothing about whether they
    actually did. A customer who tried once and never came back may well be the customer who left.
@@ -299,6 +319,10 @@ Two caveats before trusting either number:
    population mean whatever their first order was. If first orders run systematically smaller or
    larger than repeat orders (a trial-size first box, say), every one-time buyer's CLV inherits the
    gap. When one-time buyers are a large share of the base, so does the total.
+3. **The \$35.24 comes only from customers who came back.** Gamma-Gamma is fitted on repeat
+   buyers, so the population mean is *their* average. Giving it to a one-time buyer assumes they would
+   spend like the customers who returned. That is the independence assumption below, applied where it
+   is weakest: if the customers who never return are the smaller spenders, \$35.24 overstates them.
 
 **The independence assumption.** Multiplying the two models' outputs treats spend and frequency as
 unrelated, and the blend pulls every customer toward one population mean whatever their frequency.
