@@ -115,28 +115,24 @@ The T-Learner estimates the CATE by training two separate models:
 
 #### Reading the four types off the models
 
-The four types in Section 1.3 describe one customer's two potential outcomes, and no one ever observes both. A model only sees groups of similar customers, so τ(x) measures a **mix**. Because the outcome here is binary (Y = 1 if the customer converts, 0 if not), Y(1) − Y(0) is +1 for a Persuadable, −1 for a Sleeping Dog and 0 for the other two types, so among customers with features x:
+**The intuitive reading: μ̂₁ and μ̂₀ fill in the two columns of the four-types table.** The table in Section 1.3 describes each type by two things: what it does *with* the campaign and what it does *without* it. The T-learner's two models estimate exactly those two columns for customers who look like this one. μ̂₁ is the "with campaign" column and μ̂₀ is the "without campaign" column. Read them side by side:
+
+| μ̂₁ (with campaign) | μ̂₀ (without campaign) | The customer looks like a… |
+|---|---|---|
+| High, e.g. 0.90 | Low, e.g. 0.10 | Persuadable |
+| High, e.g. 0.90 | High, e.g. 0.90 | Sure Thing |
+| Low, e.g. 0.10 | Low, e.g. 0.10 | Lost Cause |
+| Low, e.g. 0.10 | High, e.g. 0.90 | Sleeping Dog |
+
+Say **"looks like"**, never **"is"**. At the values in the table the label is safe: at least 80% of customers like this one are that type. The closer both numbers are to 0.5, the more the group is a real mix and the weaker the label. The box at the end of this subsection explains why it can never be more than "looks like".
+
+τ̂ = μ̂₁ − μ̂₀ keeps only the difference between the two columns, so it loses their level. A Sure Thing (0.90 − 0.90) and a Lost Cause (0.10 − 0.10) both give τ̂ = 0. That is why a type is read from μ̂₁ and μ̂₀ together, while τ̂ is used for what it does measure, below.
+
+**What τ̂ measures.** Because the outcome here is binary (Y = 1 if the customer converts, 0 if not), one customer's Y(1) − Y(0) is +1 for a Persuadable, −1 for a Sleeping Dog and 0 for the other two types. Averaged over the customers with features x:
 
 > τ(x) = (share of Persuadables) − (share of Sleeping Dogs)
 
 This is the same difference in probabilities as before. Customers with x convert with the offer at rate (Sure Things + Persuadables) and without it at rate (Sure Things + Sleeping Dogs). The Sure Things cancel, and Lost Causes never convert, so neither adds anything to τ(x).
-
-> **One customer's effect, τ(x) and τ̂(x) are three different numbers.**
->
-> **Customers with the same x can be any of the four types.** X records only what you observe, such as tenure, plan and workouts per week. Whether someone is a Persuadable also depends on things X does not record, such as their budget or whether they had already decided to cancel. So every group of customers with the same x is a mix, and τ(x) sums up the mix in one number.
->
-> | | One customer | All customers with features x |
-> |---|---|---|
-> | **The truth** | The customer's **effect**, Y(1) − Y(0): only +1, 0 or −1, set by their type. Never observed. | **τ(x)** = share of Persuadables − share of Sleeping Dogs. Any number from −1 to 1. Real, but unknown. |
-> | **A model's estimate** | None. The data cannot pin down one person. | **τ̂(x)**: the T-learner's estimate of τ(x). Any number from −1 to 1. |
->
-> The hat separates an estimate from the truth. One customer versus a group separates a difference of two *outcomes* (only +1, 0 or −1) from a difference of two *conversion rates* (anything in between).
->
-> **Example.** 100 customers share the same x: 20 Persuadables, 7 Sleeping Dogs, 40 Sure Things and 33 Lost Causes. With the offer, 40 + 20 = 60% of them would convert. Without it, 40 + 7 = 47% would. So τ(x) = 0.60 − 0.47 = **0.13**, the same as (20 − 7)/100. A T-learner fitted on a sample of such customers might return τ̂(x) = 0.16, missing 0.13 because of noise. If one particular customer is among the 20 Persuadables, all three numbers hold at once: their effect is 1, τ(x) is 0.13 and τ̂(x) is 0.16. The 1 is what they are. The 0.13 is the truth about customers like them, which no one sees directly. The 0.16 is what we can know, and it is our bet on them, because we never learn a customer's type before deciding whether to contact them. That is why the targeting rule in Part B uses τ̂(x).
->
-> So when this lecture says a customer "has τ̂ = 0.13", read it as "customers who look like this one have an estimated uplift of 0.13".
->
-> The better X describes customers, the more each group fills up with a single type. If X captured everything that matters, everyone with the same x would be the same type, and τ(x) would be +1, 0 or −1, like one customer's effect. Real data never get there.
 
 | What the model says at x | What it means about customers like x | Action |
 |---|---|---|
@@ -144,7 +140,22 @@ This is the same difference in probabilities as before. Customers with x convert
 | 0 < τ̂(x) < c/v | Persuadables outnumber Sleeping Dogs, but not by enough to pay | Don't target |
 | τ̂(x) < 0 | Sleeping Dogs outnumber Persuadables: the campaign does net harm here | Never target |
 
-τ̂ alone cannot tell a Sure Thing from a Lost Cause, since both sit at τ̂ ≈ 0. μ̂₀, the conversion probability without the campaign, can: high μ̂₀ means Sure Things and low μ̂₀ means Lost Causes. When this course labels customers "sleeping dogs" from data, for example everyone with τ̂ < 0, it means the last row: a group in which the campaign is estimated to do net harm, not a group made up only of Sleeping Dogs.
+When this course labels customers "sleeping dogs" from data, for example everyone with τ̂ < 0, it means the last row: a group in which the campaign is estimated to do net harm, not a group made up only of Sleeping Dogs.
+
+> **Why "looks like" and not "is".**
+>
+> **Customers with the same x can be any of the four types.** X records only what you observe, such as tenure, plan and workouts per week. Whether someone is a Persuadable also depends on things X does not record, such as their budget or whether they had already decided to cancel. So every group of customers with the same x is a mix, and three different numbers are in play:
+>
+> | | One customer | All customers with features x |
+> |---|---|---|
+> | **The truth** | The customer's **effect**, Y(1) − Y(0): only +1, 0 or −1, set by their type. Never observed. | **τ(x)** = share of Persuadables − share of Sleeping Dogs. Any number from −1 to 1. Real, but unknown. |
+> | **A model's estimate** | None. The data cannot pin down one person. | **τ̂(x)**: the T-learner's estimate of τ(x). Any number from −1 to 1. |
+>
+> **Example.** 100 customers share the same x: 20 Persuadables, 7 Sleeping Dogs, 40 Sure Things and 33 Lost Causes. With the offer, 40 + 20 = 60% of them would convert. Without it, 40 + 7 = 47% would. So τ(x) = 0.60 − 0.47 = **0.13**, the same as (20 − 7)/100. A T-learner fitted on a sample of such customers might return τ̂(x) = 0.16, missing 0.13 because of noise. If one particular customer is among the 20 Persuadables, all three numbers hold at once: their effect is 1, τ(x) is 0.13 and τ̂(x) is 0.16. The 1 is what they are, and no one sees it. The 0.16 is what we can know, and it is our bet on them, because we never learn a customer's type before deciding whether to contact them. That is why the targeting rule in Part B uses τ̂(x).
+>
+> So when this lecture says a customer "has τ̂ = 0.13", read it as "customers who look like this one have an estimated uplift of 0.13". The same goes for μ̂₁ and μ̂₀, and for "looks like a Persuadable".
+>
+> The better X describes customers, the more each group fills up with a single type. If X captured everything that matters, everyone with the same x would be the same type, and "looks like" would become "is". Real data never get there.
 
 ---
 
@@ -376,7 +387,7 @@ A treated customer's Y is their Y(1), what they do with the offer. That rules ou
 | C5 | 1 | 0 | 0.06 | Lost Cause or Sleeping Dog | Slightly more Persuadables than Sleeping Dogs among customers like C5 |
 | C6 | 1 | 0 | −0.08 | Lost Cause or Sleeping Dog | Sleeping Dogs outnumber Persuadables among customers like C6: the campaign does net harm there |
 
-None of these τ̂ values says which type the customer is. τ̂ counts Persuadables against Sleeping Dogs, and it says nothing about how many Sure Things or Lost Causes are in the group (Section 1.4A).
+None of these τ̂ values says which type the customer is. τ̂ counts Persuadables against Sleeping Dogs, and it says nothing about how many Sure Things or Lost Causes are in the group (Section 1.4A). A best guess at a type needs μ̂₁ and μ̂₀, read as in Section 1.4A ("Reading the four types off the models"), and this example gives only τ̂.
 - A high τ̂ does not make C1 a Persuadable. If customers like C1 include many Sure Things, C1 could easily be one of them. μ̂₀ would put a ceiling on that, because the conversion rate without the campaign is the share of Sure Things plus the share of Sleeping Dogs.
 - A negative τ̂ does not make C6 a Sleeping Dog. A group can be mostly Lost Causes and still hold a few more Sleeping Dogs than Persuadables, so C6 may well be a Lost Cause.
 
