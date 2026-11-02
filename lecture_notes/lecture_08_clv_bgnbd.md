@@ -336,8 +336,6 @@ Neither is trustworthy unless spend and frequency are in fact independent. The G
 | 0.2 – 0.3 | grey zone — usable, but say so and check whether the CLV ranking changes if you drop the highest-frequency decile |
 | ≥ 0.3 | material violation — CLV for high-frequency customers is systematically biased |
 
-Two numbers used to appear in this lecture for this one decision (a −0.30 "material violation" line here and a 0.2 line in the checklist), which left the 0.2–0.3 range with two different answers depending on which passage you read. They are one scale, above.
-
 **What to do if violated:** With a *negative* correlation (frequent buyers spend less per order, the usual case), CLV for high-frequency customers is systematically overestimated. With a positive one it is underestimated. Either way, add a note of caution to any recommendation based on CLV for high-frequency customer segments.
 
 > ### 🔍 Deep Dive: The Full BG/NBD Likelihood
