@@ -560,6 +560,14 @@ If paid search shows $\lambda = 0.85$, investigate — this likely reflects a da
 
 **Budget recommendation:** Always check: is the recommended reallocation extreme? A recommendation to shift 80% of budget to one channel should trigger scrutiny. Verify that the predicted revenue improvement is meaningful and that the model fit is good before acting on it.
 
+**Is it causal? No.** MMM is fitted on observational spend: the firm chose when and where to spend,
+often in response to demand, so a β can carry some of that demand. A marginal ROI is the model's best
+estimate of what the next dollar buys, not a measured effect. The causal check is a geo-holdout
+experiment: withhold or raise a channel in randomly chosen regions and compare. Attribution
+(Lecture 6) is observational too, so agreement with Shapley is a consistency check, not causal
+validation. Marginal ROI is also in *revenue* within the model's window. It says nothing about
+whether the customers the spend brings in last; that is CLV (Lecture 8).
+
 ---
 
 ### Section 2.3 — Homework Assignment

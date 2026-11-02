@@ -397,6 +397,13 @@ effect.
 3. C-index is above 0.6
 4. Engagement predictors (login frequency, spend) have HR < 1; friction predictors (tickets, complaints) have HR > 1
 
+> **The retention rule (stated the same way in Lectures 4, 5, 7 and 8).** Spend on keeping a customer
+> when *(the change the offer causes) × (what the customer is worth if kept) > the offer's cost*.
+> Survival analysis (Lecture 4) and Markov chains (Lecture 5) say who is at risk and how soon. CLV
+> (Lecture 8) says what a customer is worth. Only an A/B test, or an uplift model fitted on one
+> (Lecture 7), says whether the offer changes anything. A high churn risk, a low P(alive) or a high
+> CLV is a reason to look, not a reason to spend.
+
 ---
 
 ### Section 2.3 — Homework Assignment

@@ -213,8 +213,9 @@ $$t_R = 1 + 0.20\,t_A + 0.40\,t_R \qquad\Longrightarrow\qquad -0.20\,t_A + 0.60\
 
 Solving: $t_A = 0.68 / 0.044 \approx \mathbf{15.5}$ months, $t_R = 0.30 / 0.044 \approx \mathbf{6.8}$
 months. **A currently-Active customer is worth about 15.5 more months; an At-Risk one about 6.8.**
-The gap is the whole argument for triaging retention effort toward the declining-engagement
-state — there is less time left in which to act.
+The gap says At-Risk customers have less time left, so an offer that works has to reach them sooner.
+It does not say the offer works on them, or that it pays: that is the retention rule in Section 2.2,
+and only an experiment answers it.
 
 **Sanity check it every time:** every $t_i$ must be **positive**, and a healthier state must have the
 **larger** $t_i$. If At-Risk comes out above Active, the fitted matrix is letting At-Risk customers
@@ -492,6 +493,13 @@ This is the survival function $S(t)$ from Lecture 4 for a cohort that starts Act
 2. Verify the steady-state vector satisfies $\pi P \approx \pi$ (multiply it out and check)
 3. If Churned is absorbing, verify $(P)_{Churned, j} = 0$ for all $j \neq$ Churned and $(P)_{Churned, Churned} = 1$
 4. Do the transition probabilities make business sense? Active → Churned should be lower than At-Risk → Churned
+
+> **The retention rule (stated the same way in Lectures 4, 5, 7 and 8).** Spend on keeping a customer
+> when *(the change the offer causes) × (what the customer is worth if kept) > the offer's cost*.
+> Survival analysis (Lecture 4) and Markov chains (Lecture 5) say who is at risk and how soon. CLV
+> (Lecture 8) says what a customer is worth. Only an A/B test, or an uplift model fitted on one
+> (Lecture 7), says whether the offer changes anything. A high churn risk, a low P(alive) or a high
+> CLV is a reason to look, not a reason to spend.
 
 ---
 
