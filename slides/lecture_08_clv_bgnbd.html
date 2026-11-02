@@ -1344,20 +1344,21 @@ The model infers activity status purely from purchase timing.</p>
 <tr class="odd">
 <td>&gt; 0.80</td>
 <td>Almost certainly still active</td>
-<td>High-value retention priority</td>
+<td>May not need an offer (Sure Thing?)</td>
 </tr>
 <tr class="even">
 <td>0.20 – 0.80</td>
 <td>Uncertain — could be in long gap</td>
-<td>Monitor; light re-engagement</td>
+<td>Something to save: test an offer here first</td>
 </tr>
 <tr class="odd">
 <td>&lt; 0.20</td>
 <td>Likely churned</td>
-<td>Low expected return on intervention cost</td>
+<td>Little left to save</td>
 </tr>
 </tbody>
 </table>
+<p>P(alive) says who is still <strong>there</strong>, not who an offer <strong>changes</strong>. That is uplift (L07).</p>
 <div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
