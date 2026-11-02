@@ -346,7 +346,9 @@ Neither is trustworthy unless spend and frequency are in fact independent. The G
 #### Part D: CLV:CAC — Turning CLV Into an Acquisition Decision
 
 A CLV number on its own does not tell you whether to spend. The Overview promised you would use CLV
-by channel to set channel-specific acquisition budgets; this is the arithmetic that does it.
+by channel to set channel-specific CAC targets: the most it is worth paying for a customer from each
+channel. This is the arithmetic. How much to spend in each channel is a different question, and the
+end of this part says which tool answers it.
 
 **Customer Acquisition Cost (CAC)** for a channel is the total spend on that channel over a period
 divided by the number of customers it acquired in that period:
@@ -388,6 +390,25 @@ period, and treat 3 as the default only when you have nothing better."
 Organic channels routinely show CLV:CAC above 20 and cannot simply be bought more of; a paid channel
 at 3:1 that absorbs another \$500k of budget may create more total value than an organic one at 26:1
 that is already saturated. Ratio ranks efficiency; it does not measure headroom.
+
+**CLV:CAC or MMM: which one moves the budget?** Two tools in this course speak to acquisition
+budgets, and they answer different questions.
+
+- **CLV:CAC is an average.** Is the typical customer from this channel worth what we paid for them?
+  Use it to check that a channel pays for itself and to set its CAC target.
+- **MMM's marginal ROI is marginal** (Lecture 3, Section 1.4C). What does the *next* dollar in this
+  channel buy? Moving budget is a question about the next dollar, so this is the number that moves
+  money.
+- **Put together:** keep adding spend to a channel while the *next* customer it brings costs less
+  than that customer is worth. Average CAC hides this. A saturated channel can keep a low average CAC
+  while its next customer costs far more.
+- **When they disagree.** High CLV:CAC with low marginal ROI means efficient but saturated (organic,
+  brand search): do not add money. Low CLV:CAC with high marginal ROI means room to grow, but
+  possibly low-value customers: MMM counts their purchases inside its time window as revenue, and CLV
+  says whether they last.
+- **Neither is an experiment.** CAC per channel depends on how customers were credited to channels
+  (Lecture 6), and MMM is fitted on observational spend. When the two genuinely conflict and the
+  money matters, a holdout test settles it.
 
 ---
 
