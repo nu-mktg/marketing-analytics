@@ -343,7 +343,7 @@ A subscription company ran a randomized experiment: 50% of customers received a 
 
 What is the mean predicted uplift across all 12 customers? How does this compare to the ATE from Part A?
 
-**Part C:** Identify each treated customer (T=1) by type: persuadable (Y=1, would have been 0 without treatment), sure thing (Y=1 regardless), sleeping dog (Y=0, would have been 1 without), or lost cause (Y=0 regardless). Note: since we cannot observe the counterfactual, use the predicted uplift as a guide.
+**Part C:** For each treated customer (T=1), which **two** of the four types could they be? What does their τ̂ tell you, and what can it not tell you? (Section 1.4A: a customer's τ̂ describes the customers who look like them.)
 
 ---
 
@@ -363,20 +363,26 @@ $$\bar{\hat{\tau}} = \frac{0.55+0.48+0.42+0.35+0.28+0.08+0.07+0.06+0.02+(-0.05)+
 
 This is close to the observed ATE of 0.17 (1/6 ≈ 0.167 before rounding). This is the **ATE check**, a key validation of the model, and it works because the ATE is the average of the CATE over customers (Section 1.4A). The small difference is sampling variation with only 12 customers. On real data, expect the two to agree in sign and order of magnitude, not to be equal (Section 2.2).
 
-**Part C: Customer Type Classification**
+**Part C: Which types are possible**
 
-Using predicted uplift as a guide:
+A treated customer's Y is their Y(1), what they do with the offer. That rules out two of the four types. Their Y(0) is never observed, so nothing in the data decides between the other two.
 
-| Customer | T | Y | $\hat{\tau}$ | Probable Type | Reasoning |
+| Customer | T | Y | $\hat{\tau}$ | Could be | What $\hat{\tau}$ adds |
 |---|---|---|---|---|---|
-| C1 | 1 | 1 | 0.42 | Persuadable | High uplift + converted |
-| C2 | 1 | 1 | 0.55 | Persuadable | Highest uplift + converted |
-| C3 | 1 | 0 | 0.02 | Lost Cause | Near-zero uplift, no conversion |
-| C4 | 1 | 1 | 0.48 | Persuadable | High uplift + converted |
-| C5 | 1 | 0 | 0.06 | Lost Cause | Low uplift, no conversion |
-| C6 | 1 | 0 | −0.08 | Sleeping Dog | Negative uplift, no conversion (might have converted without offer) |
+| C1 | 1 | 1 | 0.42 | Persuadable or Sure Thing | Among customers like C1, Persuadables outnumber Sleeping Dogs by about 42 points |
+| C2 | 1 | 1 | 0.55 | Persuadable or Sure Thing | The same, by about 55 points |
+| C4 | 1 | 1 | 0.48 | Persuadable or Sure Thing | The same, by about 48 points |
+| C3 | 1 | 0 | 0.02 | Lost Cause or Sleeping Dog | Near zero: the campaign barely changes customers like C3, taken together |
+| C5 | 1 | 0 | 0.06 | Lost Cause or Sleeping Dog | Slightly more Persuadables than Sleeping Dogs among customers like C5 |
+| C6 | 1 | 0 | −0.08 | Lost Cause or Sleeping Dog | Sleeping Dogs outnumber Persuadables among customers like C6: the campaign does net harm there |
 
-Note: C7 (T=0, Y=1, $\hat{\tau}=0.07$) converted in the control group with low predicted uplift. This is consistent with being a Sure Thing who would convert regardless. As Section 1.4A notes, τ̂ alone cannot separate a Sure Thing from a Lost Cause; C7's conversion without the offer is what points to Sure Thing.
+None of these τ̂ values says which type the customer is. τ̂ counts Persuadables against Sleeping Dogs, and it says nothing about how many Sure Things or Lost Causes are in the group (Section 1.4A).
+- A high τ̂ does not make C1 a Persuadable. If customers like C1 include many Sure Things, C1 could easily be one of them. μ̂₀ would put a ceiling on that, because the conversion rate without the campaign is the share of Sure Things plus the share of Sleeping Dogs.
+- A negative τ̂ does not make C6 a Sleeping Dog. A group can be mostly Lost Causes and still hold a few more Sleeping Dogs than Persuadables, so C6 may well be a Lost Cause.
+
+*Common wrong answer:* "C1, C2 and C4 are Persuadables because their τ̂ is high and they converted." Converting only rules out Lost Cause and Sleeping Dog. τ̂ describes customers like them, not the customer.
+
+Control customers work the same way, with Y(0) observed instead. C7 (T=0, Y=1, $\hat{\tau}=0.07$) converted without the offer, so C7 is a Sure Thing or a Sleeping Dog, never a Persuadable or a Lost Cause.
 
 ---
 
