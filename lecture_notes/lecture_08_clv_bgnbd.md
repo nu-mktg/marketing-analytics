@@ -567,7 +567,7 @@ customer to customer.
 
 Does the ranking match your intuition from Part A? What explains each customer's position?
 
-**Part C:** A marketing manager proposes spending $15 in retention budget per customer to prevent churn. For which customers is this spending justified? What is the minimum P(alive) that makes retention spending worthwhile, assuming that successful retention captures the full predicted CLV?
+**Part C:** A marketing manager proposes spending $15 in retention budget per customer to prevent churn. For which customers *could* this spending pay off, and for which can it not? What is the minimum P(alive) for it to have any chance of paying off, assuming that successful retention captures the full predicted CLV?
 
 ---
 
@@ -596,12 +596,14 @@ The ranking matches the intuition: Valentina (\$161) > Priya (\$33) > Marcus (\$
 
 **Part C: Retention Budget Justification**
 
-A \$15 retention spend is justified if the expected return exceeds the cost. You only recover a customer's value if they are still active, so the expected return is P(alive) × (CLV if still active). That product is the Expected CLV column.
+You only recover a customer's value if they are still active, so P(alive) × (CLV if still active) is all the value the customer has left. That product is the Expected CLV column. It is the **most** a retention offer could recover: the best case, where the offer is the only reason the customer stays.
 
-For each customer, compute expected return from retention spending:
-- **Valentina:** Expected return = 0.96 × \$168 = \$161. Cost = \$15. Net = +\$146 ✓
-- **Marcus:** Expected return = 0.0007 × \$168 = \$0.12. Cost = \$15. Net = −\$14.88 ✗ — **do not spend**
-- **Priya:** Expected return = 0.86 × \$38 = \$33. Cost = \$15. Net = +\$18 ✓
+For each customer, compare that ceiling with the \$15 cost:
+- **Valentina:** Ceiling = 0.96 × \$168 = \$161. Cost = \$15. Net at best = +\$146 ✓ *could* pay off
+- **Marcus:** Ceiling = 0.0007 × \$168 = \$0.12. Cost = \$15. Net at best = −\$14.88 ✗ — **do not spend**: even the best case loses money
+- **Priya:** Ceiling = 0.86 × \$38 = \$33. Cost = \$15. Net at best = +\$18 ✓ *could* pay off
+
+**A ✗ is a decision; a ✓ is not.** Marcus fails even in the best case, so the answer is settled. Valentina and Priya pass only the money test. Whether the \$15 actually buys anything depends on whether the offer changes what they do: the uplift question of Lecture 7. Valentina, recent and frequent at P(alive) = 0.96, is the likeliest **Sure Thing** of the three. She will probably keep buying without the offer, so most of her \$161 is not the offer's to claim. Before spending on customers like her, test the offer on a random half and compare (Lecture 7).
 
 ⚠️ **Multiply P(alive) by the *if-still-active* CLV, never by the model's CLV.** `lifetimes`'
 `conditional_expected_number_of_purchases_up_to_time` already averages over whether the customer is alive, so the
@@ -611,7 +613,7 @@ you have is the model's CLV, the if-active value is CLV ÷ P(alive).
 
 **Minimum P(alive) to justify $15 retention:**
 
-If we assume the retention budget, if effective, captures the full CLV:
+In the best case, where the retention spend captures the full CLV:
 $\text{P(alive)} \times \text{CLV if still active} > 15$
 $\text{P(alive)} > 15 / \text{CLV if still active}$
 
