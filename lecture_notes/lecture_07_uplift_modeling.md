@@ -30,7 +30,7 @@ Expected value = probability × outcome, summed across all scenarios.
 
 **Example:** Incremental profit per contacted customer = uplift × conversion_value − campaign_cost
 
-Uplift τ(X) is how much the offer raises a customer's probability of converting (defined in Section 1.4A). With the offer, a customer converts with probability p₁ and is worth p₁ × value − cost, because the cost is paid on every contact. Without it, the customer is worth p₀ × value. The difference is (p₁ − p₀) × value − cost = τ(X) × value − cost.
+Uplift τ(X) is how much the offer raises the conversion rate among customers with features X (defined in Section 1.4A, which also explains why it describes a group of customers, not one person). With the offer, customers like this one convert at rate p₁, so contacting one is worth p₁ × value − cost on average, because the cost is paid on every contact. Without the offer, they convert at rate p₀ and are worth p₀ × value. The difference is (p₁ − p₀) × value − cost = τ(X) × value − cost.
 > If τ(X) = 0.15, value = $30, cost = $4: Expected profit = 0.15 × 30 − 4 = 4.50 − 4 = **$0.50**
 >
 > If τ(X) = 0.08, value = $30, cost = $4: Expected profit = 0.08 × 30 − 4 = 2.40 − 4 = **−$1.60** (negative!)
@@ -74,7 +74,7 @@ In any campaign, customers fall into four segments based on how they would respo
 | **Lost Cause** | Does not convert | Does not convert | No — cannot be helped |
 | **Sleeping Dog** | Converts | Does NOT convert | Definitely no — makes things worse |
 
-Standard propensity models (predict conversion probability) identify Sure Things as "high priority" customers. Uplift models identify Persuadables — customers whose behavior actually changes because of your intervention.
+Standard propensity models (predict conversion probability) identify Sure Things as "high priority" customers. Uplift models identify Persuadables — customers whose behavior actually changes because of your intervention. The T-learner (Section 1.4A) is built from two propensity models of this kind: μ̂₁ fitted on treated customers and μ̂₀ fitted on control customers. Uplift is the difference between them. (Causal inference uses "propensity score" for something else: the probability of being treated. In an A/B test the coin flip sets it, so nothing has to estimate it.)
 
 Sleeping Dogs are real and surprisingly common in subscription renewal campaigns. Sending a "we'll miss you" message sometimes reminds customers they wanted to cancel.
 
@@ -104,7 +104,7 @@ The T-Learner estimates the CATE by training two separate models:
 
 **CATE estimate for customer i:** τ̂(Xᵢ) = μ̂₁(Xᵢ) − μ̂₀(Xᵢ)
 
-**Example:** the treated-arm model gives a customer μ̂₁ = 0.30 and the control-arm model gives the same customer μ̂₀ = 0.12. Then τ̂ = 0.30 − 0.12 = **0.18**: the campaign is estimated to raise this customer's conversion probability by 18 percentage points.
+**Example:** the treated-arm model gives a customer μ̂₁ = 0.30 and the control-arm model gives the same customer μ̂₀ = 0.12. Then τ̂ = 0.30 − 0.12 = **0.18**: among customers who look like this one, the campaign is estimated to raise the conversion rate by 18 percentage points. Per 100 such customers, that is about 18 more Persuadables than Sleeping Dogs (see "Reading the four types off the models" below).
 
 **Critical requirement:** Treatment must be randomly assigned. Without randomization, treated customers systematically differ from control customers in unobserved ways. The difference μ̂₁(X) − μ̂₀(X) would capture both the treatment effect and the selection bias — confounding the estimate.
 
@@ -120,6 +120,23 @@ The four types in Section 1.3 describe one customer's two potential outcomes, an
 > τ(x) = (share of Persuadables) − (share of Sleeping Dogs)
 
 This is the same difference in probabilities as before. Customers with x convert with the offer at rate (Sure Things + Persuadables) and without it at rate (Sure Things + Sleeping Dogs). The Sure Things cancel, and Lost Causes never convert, so neither adds anything to τ(x).
+
+> **One customer's effect, τ(x) and τ̂(x) are three different numbers.**
+>
+> **Customers with the same x can be any of the four types.** X records only what you observe, such as tenure, plan and workouts per week. Whether someone is a Persuadable also depends on things X does not record, such as their budget or whether they had already decided to cancel. So every group of customers with the same x is a mix, and τ(x) sums up the mix in one number.
+>
+> | | One customer | All customers with features x |
+> |---|---|---|
+> | **The truth** | The customer's **effect**, Y(1) − Y(0): only +1, 0 or −1, set by their type. Never observed. | **τ(x)** = share of Persuadables − share of Sleeping Dogs. Any number from −1 to 1. Real, but unknown. |
+> | **A model's estimate** | None. The data cannot pin down one person. | **τ̂(x)**: the T-learner's estimate of τ(x). Any number from −1 to 1. |
+>
+> The hat separates an estimate from the truth. One customer versus a group separates a difference of two *outcomes* (only +1, 0 or −1) from a difference of two *conversion rates* (anything in between).
+>
+> **Example.** 100 customers share the same x: 20 Persuadables, 7 Sleeping Dogs, 40 Sure Things and 33 Lost Causes. With the offer, 40 + 20 = 60% of them would convert. Without it, 40 + 7 = 47% would. So τ(x) = 0.60 − 0.47 = **0.13**, the same as (20 − 7)/100. A T-learner fitted on a sample of such customers might return τ̂(x) = 0.16, missing 0.13 because of noise. If one particular customer is among the 20 Persuadables, all three numbers hold at once: their effect is 1, τ(x) is 0.13 and τ̂(x) is 0.16. The 1 is what they are. The 0.13 is the truth about customers like them, which no one sees directly. The 0.16 is what we can know, and it is our bet on them, because we never learn a customer's type before deciding whether to contact them. That is why the targeting rule in Part B uses τ̂(x).
+>
+> So when this lecture says a customer "has τ̂ = 0.13", read it as "customers who look like this one have an estimated uplift of 0.13".
+>
+> The better X describes customers, the more each group fills up with a single type. If X captured everything that matters, everyone with the same x would be the same type, and τ(x) would be +1, 0 or −1, like one customer's effect. Real data never get there.
 
 | What the model says at x | What it means about customers like x | Action |
 |---|---|---|
@@ -169,6 +186,26 @@ This is the treated conversions minus the conversions the same number of treated
 - **Random targeting:** the straight line from (0, 0) to the curve's end point. Contacting customers in random order buys incremental conversions at a constant rate.
 - **Perfect ranking:** the curve you get by sorting on the outcomes themselves, with treated converters first and control converters last. It is the yardstick for the best ranking possible on these customers.
 
+**Who moves Q, and why the perfect curve rises, levels off and falls.** Start with a thought experiment in which you know every customer's type and contact the top k. The extra conversions you buy are (Persuadables in the top k) − (Sleeping Dogs in the top k). Each Persuadable adds +1, each Sleeping Dog −1, and Sure Things and Lost Causes add 0, because the campaign does not change what they do. Take 10 customers: 3 Persuadables (P), 3 Sure Things (ST), 2 Lost Causes (LC) and 2 Sleeping Dogs (SD).
+
+| Contact order | Extra conversions after contacting k = 1, 2, …, 10 |
+|---|---|
+| Perfect: P P P, then ST ST ST LC LC, then SD SD | 1, 2, 3, 3, 3, 3, 3, 3, 2, 1 |
+| Random | 0.1, 0.2, 0.3, …, 1.0 on average: a straight line |
+| Most likely to renew without the campaign first: ST ST ST SD SD P P P LC LC | 0, 0, 0, −1, −2, −1, 0, 1, 1, 1 |
+
+- The perfect curve climbs one step per Persuadable, stays flat through the customers the campaign does not move, and falls one step per Sleeping Dog. Its peak, right after the last Persuadable, is where you would stop contacting.
+- Every order ends at the same height, 3 − 2 = 1, because once everyone has been contacted, the order no longer matters.
+- The last row is a standard propensity model (Section 1.3). Sure Things and Sleeping Dogs both renew without the campaign, so it puts them first, and its curve sinks below the random line.
+
+**What the data show instead.** Real data never show a customer's type, only whether the coin flip treated them and whether they converted. In the Q(k) formula, a treated converter adds +1, a control converter subtracts N_T(k)/N_C(k), which is about 1 when the slice holds similar numbers of treated and control customers, and a non-converter adds nothing directly. So:
+
+- A Persuadable shows up as +1 only if they were treated. In the control group they do not convert and add nothing.
+- A Sleeping Dog shows up as about −1 only if they were in the control group.
+- A Sure Thing adds +1 if treated and about −1 if in control, so Sure Things cancel only on average. That is what random assignment buys.
+
+With about half of each slice treated, the observed Q(k) is about half of the thought experiment's count: it counts extra conversions among the treated customers only, which is why it ends at ATE × N_T. The shape is the same, and the Qini coefficient is a ratio of two areas, so the halving cancels out of it. The perfect curve above is the same shape written in what the data can show: treated converters (+1) first, non-converters (0) in the middle, control converters (about −1) last. The steps are exact only on average. N_T(k)/N_C(k) is recomputed at every k, so with few customers the curve moves unevenly. In the worked example below, Q is 3, 3, 1.5 and 2 for k = 3 to 6, as C9, C10 (a control converter) and C12 join.
+
 **The coefficient.** This is the definition `sklift.metrics.qini_auc_score` computes, and the one `homework_07` asks for:
 
 $$\text{Qini} = \frac{\text{area between the model's curve and the random line}}{\text{area between the perfect curve and the random line}}$$
@@ -214,7 +251,7 @@ $$\text{Qini} = \frac{\text{area between the model's curve and the random line}}
 *Common wrong answer:* 0.24/0.16 = 1.5 (this is the lift ratio, not the ATE). ATE is an absolute difference in rates, not a ratio.
 
 **Q2.** Threshold = 4/25 = **0.16** (16 percentage points of incremental conversion needed to break even).
-*Common wrong answer:* reading 0.16 as a **16% relative lift** in conversions rather than **16 percentage points** of *incremental* conversion probability. A customer converting 12% of the time without the offer needs to reach 28%, not 13.9%.
+*Common wrong answer:* reading 0.16 as a **16% relative lift** in conversions rather than **16 percentage points** of *incremental* conversion probability. Customers who convert at 12% without the offer need to reach 28%, not 13.9%.
 
 **Q3.** **No.** Expected profit = 0.05 × $25 − $4 = $1.25 − $4 = **−$2.75**. The customer has positive predicted uplift but insufficient uplift to justify the cost. The threshold is 0.16; τ̂ = 0.05 < 0.16.
 *Common wrong answer:* Yes, because τ̂ > 0 means the campaign helps them. Positive τ̂ is necessary but not sufficient for profitable targeting.
