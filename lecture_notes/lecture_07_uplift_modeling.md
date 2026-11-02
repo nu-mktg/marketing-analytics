@@ -177,9 +177,37 @@ Customers with 0 < τ̂(X) < 0.133 generate positive incremental conversions but
 
 The Qini curve answers one question. If you contacted customers in order of predicted uplift, highest τ̂ first, how many extra conversions would you have bought by the time you reached the top k?
 
-**Where the treated and control groups come from.** The curve is computed on the randomized experiment's data, ideally the held-out part. Every customer already has a treatment label from the coin flip, and nobody was contacted according to τ̂. The model's only job here is to sort them. Because assignment ignored X, every top-k slice holds both treated and control customers with similar τ̂. Each slice is a small experiment of its own.
+In practice the software draws the curve and computes the coefficient for you (`sklift` in `homework_07`). What you need is how to read them. How the curve is computed from the A/B test is optional background, at the end of this part.
 
 **What a good ranking looks like.** A high τ̂ predicts a large gap between a customer's outcome with the offer and without it. It does not predict a high chance of converting. In a slice of high-τ̂ customers, the treated ones should convert well above the control ones. In a slice of sure things, the two convert at the same rate. A good ranking puts the slices with the largest gaps first, so Q(k) climbs fastest at the start.
+
+**Axes.** The x-axis is k, the number (or share) of customers targeted, from 0 up to everyone. The y-axis is Q(k), the extra conversions bought among the top k. Every model's curve ends at the same height, because once everyone has been contacted the order no longer matters. Only the path to that point depends on the ranking.
+
+**Two reference lines.**
+- **Random targeting:** the straight line from (0, 0) to the curve's end point. Contacting customers in random order buys incremental conversions at a constant rate.
+- **Perfect ranking:** the curve you get by sorting on the outcomes themselves, with treated converters first and control converters last. It is the yardstick for the best ranking possible on these customers.
+
+**Where to stop.** The curve's peak is where extra conversions stop growing. That is the place to stop only if contacting customers were free. With a cost per contact, stop where τ̂ falls below cost/value (Part B), which, for a ranking that works, comes at or before the peak.
+
+**The coefficient.** This is the definition `sklift.metrics.qini_auc_score` computes, and the one `homework_07` asks for:
+
+$$\text{Qini} = \frac{\text{area between the model's curve and the random line}}{\text{area between the perfect curve and the random line}}$$
+
+- **Qini = 0:** the ranking is no better than random targeting.
+- **Qini = 1:** the ranking is as good as sorting on the outcomes themselves.
+- **Qini < 0:** the ranking is worse than random. It puts the customers the campaign harms near the top.
+
+**Important:** The Qini coefficient is NOT the fraction of Persuadables the model correctly identifies. It is a ratio of two areas, a measure of ranking quality similar to AUC but for uplift.
+
+⚠️ **A Qini number means nothing until you say which customers it was computed on.** Scored on the rows the models were trained on (**in-sample**), a fully grown random forest has memorised those rows, and its Qini looks strong. Scored on **held-out** customers that the models never saw, the same forest's Qini can be about one-twentieth as large. That is `homework_07`'s situation, shown below. The held-out number is the one to report, because it is the only one that says how the ranking would do on the next campaign's customers. A small held-out Qini is not a bug in your code. It is the honest finding that this model ranks new customers no better than random.
+
+**What the two panels are, and are not.** They show one T-learner, fitted once on 80% of the experiment, scored on two sets of customers: the 3,200 it was trained on and the 800 it never saw. The gap between them shows how much the forest memorized. It is not a comparison you would report. When you do compare Qini values, for example to choose between two models, score both on the same held-out customers. Holding customers out needs no second experiment. They are part of the same A/B test, set aside before fitting, so they still carry the coin-flip labels the Qini needs.
+
+![Two panels from homework_07's own T-learner: two random forests of 100 trees each, seed 42, trained on an 80 percent split. Each panel plots incremental conversions Q(k) against the share of customers targeted in order of predicted uplift, with three lines: the model's Qini curve, the straight random-targeting line from zero to the curve's end point, and the perfect-ranking curve. The area between the model's curve and the random line is shaded. Panel (a), labelled held-out, uses the 800 test customers the models never saw: the model's curve stays close to the random line and the shaded area is a thin sliver. Panel (b), labelled in-sample, uses the 3,200 training customers the forests were fitted on: the model's curve rises steeply above the random line, then comes back down to the same end point, and the shaded area is about twenty times larger relative to the perfect curve.](figures/lecture_07_qini_curve.png)
+
+**Optional: how the Qini curve is computed.** *Background: why it works, not on quizzes. `sklift` does this for you in `homework_07`.*
+
+**Where the treated and control groups come from.** The curve is computed on the randomized experiment's data, ideally the held-out part. Every customer already has a treatment label from the coin flip, and nobody was contacted according to τ̂. The model's only job here is to sort them. Because assignment ignored X, every top-k slice holds both treated and control customers with similar τ̂. Each slice is a small experiment of its own.
 
 **Building the curve.** Sort the customers by τ̂, highest first. Among the top k, count:
 - N_T(k) and N_C(k): how many were in the treated group and how many in the control group
@@ -191,11 +219,7 @@ $$Q(k) = Y_T(k) - Y_C(k) \times \frac{N_T(k)}{N_C(k)}$$
 
 This is the treated conversions minus the conversions the same number of treated customers would have produced at the control rate. While the top k hold no control customers, the second term is taken as 0.
 
-**Axes.** The x-axis is k, the number (or share) of customers targeted, from 0 up to everyone. The y-axis is Q(k). At k = everyone, Q equals ATE × N_T, so every model's curve ends at the same height. Only the path to that point depends on the ranking.
-
-**Two reference lines.**
-- **Random targeting:** the straight line from (0, 0) to the curve's end point. Contacting customers in random order buys incremental conversions at a constant rate.
-- **Perfect ranking:** the curve you get by sorting on the outcomes themselves, with treated converters first and control converters last. It is the yardstick for the best ranking possible on these customers.
+Once everyone is included, Q equals ATE × N_T: the end height every model's curve shares.
 
 **Who moves Q, and why the perfect curve rises, levels off and falls.** Start with a thought experiment in which you know every customer's type and contact the top k. The extra conversions you buy are (Persuadables in the top k) − (Sleeping Dogs in the top k). Each Persuadable adds +1, each Sleeping Dog −1, and Sure Things and Lost Causes add 0, because the campaign does not change what they do. Take 10 customers: 3 Persuadables (P), 3 Sure Things (ST), 2 Lost Causes (LC) and 2 Sleeping Dogs (SD).
 
@@ -205,7 +229,7 @@ This is the treated conversions minus the conversions the same number of treated
 | Random | 0.1, 0.2, 0.3, …, 1.0 on average: a straight line |
 | Most likely to renew without the campaign first: ST ST ST SD SD P P P LC LC | 0, 0, 0, −1, −2, −1, 0, 1, 1, 1 |
 
-- The perfect curve climbs one step per Persuadable, stays flat through the customers the campaign does not move, and falls one step per Sleeping Dog. Its peak, right after the last Persuadable, is where you would stop contacting.
+- The perfect curve climbs one step per Persuadable, stays flat through the customers the campaign does not move, and falls one step per Sleeping Dog. Its peak, right after the last Persuadable, is where you would stop contacting *if contacting were free*. With a cost per contact, stop where τ̂ falls below cost/value instead (see "Where to stop" above).
 - Every order ends at the same height, 3 − 2 = 1, because once everyone has been contacted, the order no longer matters.
 - The last row is a standard propensity model (Section 1.3). Sure Things and Sleeping Dogs both renew without the campaign, so it puts them first, and its curve sinks below the random line.
 
@@ -217,23 +241,7 @@ This is the treated conversions minus the conversions the same number of treated
 
 With about half of each slice treated, the observed Q(k) is about half of the thought experiment's count: it counts extra conversions among the treated customers only, which is why it ends at ATE × N_T. The shape is the same, and the Qini coefficient is a ratio of two areas, so the halving cancels out of it. The perfect curve above is the same shape written in what the data can show: treated converters (+1) first, non-converters (0) in the middle, control converters (about −1) last. The steps are exact only on average. N_T(k)/N_C(k) is recomputed at every k, so with few customers the curve moves unevenly. In the worked example below, Q is 3, 3, 1.5 and 2 for k = 3 to 6, as C9, C10 (a control converter) and C12 join.
 
-**The coefficient.** This is the definition `sklift.metrics.qini_auc_score` computes, and the one `homework_07` asks for:
-
-$$\text{Qini} = \frac{\text{area between the model's curve and the random line}}{\text{area between the perfect curve and the random line}}$$
-
-- **Qini = 0:** the ranking is no better than random targeting.
-- **Qini = 1:** the ranking is as good as sorting on the outcomes themselves.
-- **Qini < 0:** the ranking is worse than random. It puts the customers the campaign harms near the top.
-
 **On the worked example (Section 2.1, Part B).** Sorted by τ̂, the top 3 customers are three treated converters, so Q(3) = 3 − 0 = 3. The next three are control customers, one of whom converted, so Q(6) = 3 − 1 × 3/3 = 2. Over all 12, Q(12) = 3 − 2 × 6/6 = 1, which is ATE × N_T = (1/6) × 6.
-
-⚠️ **A Qini number means nothing until you say which customers it was computed on.** Scored on the rows the models were trained on (**in-sample**), a fully grown random forest has memorised those rows, and its Qini looks strong. Scored on **held-out** customers that the models never saw, the same forest's Qini can be about one-twentieth as large. That is `homework_07`'s situation, shown below. The held-out number is the one to report, because it is the only one that says how the ranking would do on the next campaign's customers. A small held-out Qini is not a bug in your code. It is the honest finding that this model ranks new customers no better than random.
-
-**What the two panels are, and are not.** They show one T-learner, fitted once on 80% of the experiment, scored on two sets of customers: the 3,200 it was trained on and the 800 it never saw. The gap between them shows how much the forest memorized. It is not a comparison you would report. When you do compare Qini values, for example to choose between two models, score both on the same held-out customers. Holding customers out needs no second experiment. They are part of the same A/B test, set aside before fitting, so they still carry the coin-flip labels the Qini needs.
-
-![Two panels from homework_07's own T-learner: two random forests of 100 trees each, seed 42, trained on an 80 percent split. Each panel plots incremental conversions Q(k) against the share of customers targeted in order of predicted uplift, with three lines: the model's Qini curve, the straight random-targeting line from zero to the curve's end point, and the perfect-ranking curve. The area between the model's curve and the random line is shaded. Panel (a), labelled held-out, uses the 800 test customers the models never saw: the model's curve stays close to the random line and the shaded area is a thin sliver. Panel (b), labelled in-sample, uses the 3,200 training customers the forests were fitted on: the model's curve rises steeply above the random line, then comes back down to the same end point, and the shaded area is about twenty times larger relative to the perfect curve.](figures/lecture_07_qini_curve.png)
-
-**Important:** The Qini coefficient is NOT the fraction of Persuadables the model correctly identifies. It is a ratio of two areas, a measure of ranking quality similar to AUC but for uplift.
 
 ---
 
