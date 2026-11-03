@@ -1242,6 +1242,19 @@ BG/NBD predicts <em>future</em> transaction frequency — that’s the upgrade.<
 </div>
 </div>
 </div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>BG/NBD’s E[transactions] = P(alive) × E[transactions | still active], so it <strong>already includes P(alive)</strong>. The CLV₁₂ built on it is already an expected value: never multiply it by P(alive) again. Multiply P(alive) only by a value <em>if still active</em>.</p>
+</div>
+</div>
+</div>
 </section>
 <section class="slide level2">
 <h2>Mean CLV vs Median CLV</h2>
@@ -1359,6 +1372,7 @@ The model infers activity status purely from purchase timing.</p>
 </tbody>
 </table>
 <p>P(alive) says who is still <strong>there</strong>, not who an offer <strong>changes</strong>. That is uplift (L07).</p>
+<p><strong>One-time buyers (x = 0) get P(alive) = 1</strong> because the model can’t let them drop out before a repeat purchase, not because they are still active. Don’t put them in the top row; read their E[transactions] instead (≈ 0.30 after 24 quiet months).</p>
 <div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
