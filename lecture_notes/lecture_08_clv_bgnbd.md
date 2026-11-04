@@ -74,17 +74,19 @@ This lecture's two models split the "still retained" question (P(alive), from BG
 
 ---
 
-#### The Two-Stage Model
+#### Two Models, Multiplied
 
-BG/NBD estimates CLV in two stages:
+CLV is how many purchases × how much per purchase, and each factor comes from its own model. Gamma-Gamma is not part of BG/NBD: the two are fitted separately, on different customers, and only their outputs are multiplied.
 
-**Stage 1 — P(alive) via BG/NBD:** Given a customer's (x, t_x, T) — purchase count, time of last purchase, observation period — what is the probability they are still an active customer?
+**Model 1 — BG/NBD: how many purchases?** From (x, t_x, T), it predicts E[transactions in the next 12 months]. That forecast already accounts for the chance the customer has left: E[transactions] = P(alive) × E[transactions | still active]. BG/NBD is itself two processes in one model: a purchase rate while active (the "NBD") and a chance of dropping out after each repeat purchase (the "BG"). It is fitted on every customer, including those who bought only once.
 
-**Stage 2 — Expected spend via Gamma-Gamma:** Given that a customer makes a future purchase, how much will they spend?
+**Model 2 — Gamma-Gamma: how much per purchase?** From x and m_x (the customer's average over their repeat orders), it predicts E[spend per order]. It is fitted on repeat buyers only (x ≥ 1) and uses no recency and no P(alive) (Section 1.4C).
 
-**Combined:** CLV = E[future purchases] × E[spend per purchase | makes a purchase]
+**Combined:** CLV₁₂ = E[transactions] × E[spend per order]. P(alive) is already inside the first factor, so never multiply by it again.
 
-The model only needs three numbers per customer: x (how many times they bought), t_x (when they last bought), and T (how long you have been observing them). No demographics, no browsing data — just transaction history.
+![Diagram of two boxes side by side joined by a multiplication sign, above a combined formula. Left box, Model 1, BG/NBD, how many purchases: inputs x, t_x and T, fitted on every customer including x = 0; two processes in one model, buying while active (NBD) and a chance of dropping out after each repeat purchase (BG); parameters r, alpha, a, b; P(alive) uses recency t_x; E[transactions given still active] uses x and T only; output E[transactions, 12 months] = P(alive) times E[transactions given still active]. Right box, Model 2, Gamma-Gamma, how much per order: inputs x and m_x, fitted on repeat buyers only; blends the customer's own average with the population mean of \$35.24, with more weight on the own average as x grows; parameters p, q, v; x = 0 gives the population mean; no recency, no P(alive), and it assumes spend per order is unrelated to purchase frequency; output E[spend per order]. Below: CLV₁₂ = E[transactions, 12 months] × E[spend per order], with the note that P(alive) is already inside the first factor, so never multiply by it again, and that P(alive) times CLV if still active is the same number.](figures/lecture_08_two_models.png)
+
+Four numbers per customer: x, t_x and T for BG/NBD, plus m_x for Gamma-Gamma (which uses x too). No demographics, no browsing data, just transaction history.
 
 ---
 
