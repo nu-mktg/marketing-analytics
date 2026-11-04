@@ -1396,6 +1396,20 @@ D. Average the two: $15.50</p>
 <div class="muted">
 <p>Answers in the lecture notes, under “Slide Checkpoint Answers” (numbered to match this slide).</p>
 </div>
+</section>
+<section class="slide level2">
+<h2>On your own data: conjoint for real</h2>
+<p><strong>Data:</strong> one row per alternative shown, exactly one <code>chosen = 1</code> per task, and price varies within tasks.</p>
+<p><strong>Tool:</strong> <code>statsmodels</code> <code>ConditionalLogit</code>, with <code>groups</code> = one id per (respondent, task). A pooled binary Logit ignores the choice set.</p>
+<p><strong>Prompt (excerpt):</strong></p>
+<pre class="text"><code>Fit a multinomial logit with statsmodels ConditionalLogit, groups = one id per
+(respondent, task). Reference levels: &lt;attribute: level&gt;, ...
+Market simulation: softmax shares among exactly these products: &lt;...&gt;</code></pre>
+<p><strong>Before you trust it:</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mtext mathvariant="normal">price</mtext></msub><annotation encoding="application/x-tex">\beta_{\text{price}}</annotation></semantics></math> is negative and significant · recompute one WTP and one share by hand · near-copies in the simulation mean an IIA warning · WTP from hypothetical choices is an upper bound.</p>
+<p><strong>Don’t copy from HW09:</strong> <code>seed=42</code>, products A/B/C, its reference levels. Those are pinned for grading.</p>
+<div class="muted">
+<p>Full card (data, tools, the complete prompt, all checks): <a href="https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/agentic_prompts_14_models.md">Agentic Prompts → L09</a>. Not quiz material.</p>
+</div>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
