@@ -398,3 +398,9 @@ A negative coefficient means customers prefer the reference level over the coded
 3. WTP is in a plausible range relative to actual prices
 4. Market shares sum to 100%
 5. Price coefficient is statistically significant (p < 0.05)
+
+**On your own data:** the homework prompt pins its products, reference levels and seed so that
+it can be graded. The version for your own survey is in the
+[Agentic Prompts page, section L09](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/agentic_prompts_14_models.md):
+the data it needs, the package and functions, a general prompt, and the checks to run before you
+trust the output. It is not quiz material.

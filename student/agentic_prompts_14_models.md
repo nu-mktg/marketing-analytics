@@ -13,6 +13,12 @@ critically evaluate the output before trusting it. Designed for GitHub Codespace
 **How to use:** Paste the Context Prompt first. Confirm the agent understands the setup.
 Then paste the Build Prompt. Then run the Validation Prompt before accepting any output.
 
+**On your own data.** Sections marked "On your own data" (L09 so far) use a six-part
+format instead: the question it answers · data needed and deal-breakers · tools (package,
+function, maintained status) · a general prompt with `<placeholders>` · what you get back ·
+checks before trusting it. Each also lists the values the homework prompt pins for
+grading that you should not copy to real data. This material is not assessed.
+
 ---
 
 ## L01 — Bayesian A/B Testing
@@ -465,58 +471,139 @@ Three validation checks:
 
 ## L09 — Conjoint Analysis (MNL)
 
-### Context Prompt
+> **On your own data.** This section is the real-world version of Homework 9's agent
+> prompt. The homework prompt is a *grading* prompt: it fixes the dataset, the products
+> and the reference levels so every student gets the same checkable number. Use the
+> prompt below for your own survey, and read "What not to copy from the homework" first.
+
+### 1. The question it answers
+Which product features do customers trade off against price, how many dollars is each
+feature worth to them (willingness to pay, WTP), and what share would each product in a
+set of competing products win?
+
+### 2. Data you need, and deal-breakers
+What the model needs and assumes is in the
+[Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
+row 9. In practice your file must be in **long format**: one row per alternative shown,
+with a respondent id, a choice-task id, a 0/1 `chosen` column, price as a number, and one
+column per attribute.
+
+Stop before fitting if any of these is true:
+- **Not exactly one `chosen = 1` per task.** Multi-select answers, or a dropped "none of
+  these" option, break the model's choice-set structure.
+- **Price does not vary within tasks**, or moves in lockstep with another attribute
+  (premium is always the expensive one). Then β_price is not identified separately and
+  every WTP is meaningless.
+- **The data are real purchases at prices the firm set**, not survey choices. That is
+  revealed-preference data, and prices set in response to demand bring back the
+  endogeneity problem from L02.
+- **You want WTP or shares outside the tested range** (prices or levels the survey never
+  showed). That is extrapolation the data cannot support.
+
+### 3. Tools
+Checked against PyPI and GitHub on **2026-11-04**.
+
+| Step | Package and function | In the course Codespace? | Maintained? |
+|---|---|---|---|
+| Fit the MNL | `statsmodels`: `statsmodels.discrete.conditional_models.ConditionalLogit`, with `groups=` one id per (respondent, task) | Yes (0.14.2) | Yes: 0.15.0 released 2026-08-27 |
+| Build the design matrix | `patsy.dmatrix(...)`, then drop the `Intercept` column | Yes | Yes (ships with statsmodels) |
+| WTP, market simulation | No package: arithmetic on the fitted coefficients (softmax) | n/a | n/a |
+| Different preferences per customer (mixed logit, not covered in this course) | `biogeme` | No: needs Python 3.12 or newer | Yes: 3.3.5 released 2026-08-28 |
+
+Two things an agent may reach for that you should not use: `pylogit` (last release
+December 2020) and `xlogit` (last release July 2023, no commits since January 2024).
+
+Two errors you will hit with `ConditionalLogit`, both confirmed on the course env:
+- A formula with an intercept is **refused** ("Conditional models should not have an
+  intercept"). Each choice task is its own comparison, so a constant cancels out.
+- Writing `0 +` in the formula does **not** fix it: patsy then codes the first categorical
+  attribute with *all* its levels, and the fit fails because the Hessian cannot be inverted.
+  Build the matrix with the intercept and drop that column instead.
+
+### 4. A general prompt
+Fill in every `<placeholder>`. Paste it as one message.
+
 ```
-I am a product strategy analyst. I have stated-preference conjoint survey data
-where respondents chose between subscription plan alternatives with varying attributes:
-price, content tier (standard/premium), and ad experience (ads/no ads). Each row
-is one choice task. I want to estimate a Multinomial Logit model, compute willingness
-to pay for each attribute, and simulate market shares under different pricing scenarios.
+I have stated-preference (conjoint) choice data in <file.csv>, in long format: one row
+per alternative shown. Columns: <respondent_id>, <task_id>, <chosen> (0/1), <price>
+(numeric, in <currency> per <unit, e.g. month>), and attributes <attribute_1>,
+<attribute_2>, ... Each task showed <J> alternatives. Each respondent answered <K> tasks.
+
+1. Check the data BEFORE fitting, and stop and tell me if any check fails:
+   - every (respondent, task) has exactly one row with chosen = 1;
+   - price varies within tasks;
+   - list every attribute's levels and how often each level appears.
+2. Fit a multinomial logit with statsmodels ConditionalLogit, with groups = one id per
+   (respondent, task). Do NOT use a pooled binary Logit. Build the design matrix with
+   patsy and drop the Intercept column. Price enters as a number, not a category.
+   Reference levels: <attribute_1: level>, <attribute_2: level>, ...
+3. Report every coefficient with its standard error and p-value.
+4. WTP for each non-price level = beta_level / |beta_price|, in <currency> per <unit>.
+5. Market simulation: compute softmax shares among exactly these products:
+   <product 1: levels, price>
+   <product 2: levels, price>
+   <...>
+   Then repeat with <one change, e.g. product 2's price + 2>.
+6. Attribute importance: for each attribute, the range of its part-worths across the
+   levels tested (for price: |beta_price| x (highest tested price - lowest)).
+
+Show the code, then one results table per step. Do not invent any number. If a step
+fails, say so instead of working around it.
 ```
 
-### Build Prompt
-```
-Using the conjoint survey dataset:
+### 5. What you get back
+- A coefficient table: one row for price and one per non-reference level, each with a
+  standard error and p-value. Every coefficient is relative to its attribute's reference
+  level.
+- A WTP for each non-price level, in your currency per unit.
+- A share table for your products that sums to 100%, plus the same table after your change.
+- An importance ranking of the attributes.
 
-1. Fit a Multinomial Logit model:
-   U_j = β_price · price + β_premium · I(premium) + β_no_ads · I(no_ads) + ε
-   Use maximum likelihood estimation. Report all coefficients and standard errors.
+What it does **not** give you: each customer's preferences (the shares assume everyone
+has the average part-worths), predicted sales volume (shares are among the listed products
+only), or a price recommendation (WTP is an average; see "WTP is Not a Price
+Recommendation" in the L09 slides).
 
-2. Verify: β_price must be negative (higher price = lower utility for a normal good).
-   If positive, the model is misspecified or data is incorrectly structured.
+### 6. Checks before trusting it
+The first five are the L09 note's "What to verify before trusting the output".
+1. β_price is **negative**. If it is positive, check how price was coded before anything else.
+2. β_price is **statistically significant** (p < 0.05).
+3. Levels customers should want (e.g. no ads, premium content) have **positive**
+   coefficients against their reference. A sign is only meaningful relative to its reference level.
+4. WTP is **plausible** next to the prices you tested. WTP holds only inside that range.
+5. Market shares **sum to 100%**.
+6. **Recompute one WTP and one share by hand** from the coefficient table
+   (L09 Section 1.1 Tool 2, and the softmax in Section 1.4B). If yours and the agent's
+   disagree, the agent is wrong until shown otherwise.
+7. **Close substitutes?** If two products in your simulation are near-copies, the model
+   spreads the new one's share across all products in proportion (IIA, Section 1.4C), so
+   it understates cannibalisation of the near-twin. Say so in your write-up.
+8. **The standard errors treat every task as independent**, although each respondent
+   answered several. `ConditionalLogit` silently ignores `cov_type="cluster"`. When
+   respondents genuinely differ, these SEs can be too small, so do not rest a decision on
+   a borderline p-value. Bootstrap by respondent if it matters. (On the course dataset
+   the respondent bootstrap matches the reported SEs, because its simulated respondents
+   share one set of preferences.)
+9. **Hypothetical choices.** People overstate what they would pay when no money changes
+   hands. Treat WTP as an upper bound and check it against real purchases where you can.
 
-3. Compute willingness to pay (WTP) for each non-price attribute:
-   WTP_k = β_k / |β_price|
-   Report: WTP for premium content and WTP for no-ads.
+### What not to copy from the homework
+The HW09 prompt pins these so the autograder can check one number. **Do not carry them
+over** to your own data:
+- **`Use seed=42`.** The fit is deterministic maximum likelihood, so the seed changes
+  nothing. Its presence does not mean your analysis is reproducible.
+- **Products A, B, C and their prices.** They are the graded scenario. Simulate your own
+  products and your competitors' actual offers.
+- **The column names, levels and reference levels** (standard, full_ads, monthly). Pick
+  the reference that matches your decision, usually your current offer. Coefficients
+  change with the reference, but WTP *differences* between levels do not.
+- **"Rank by |coefficient|."** It compares price's per-dollar slope with whole-level
+  jumps, so the ranking depends on the price unit (dollars or cents). Use the range-based
+  importance in step 6 of the prompt.
 
-4. Simulate market shares for three plan configurations using the softmax rule:
-   P(j) = exp(U_j) / Σ exp(U_k)
-   Verify shares sum to 1.0.
-
-5. What happens to Premium's market share if the price is raised by $2?
-
-Print all values clearly labelled.
-```
-
-### Validation Prompt
-```
-Three validation checks:
-
-1. SIGN CHECK: Is β_price negative? This is non-negotiable for a correctly specified
-   model. Report: PASS or FAIL. If FAIL, check whether the price variable was
-   accidentally coded as negative or inverted.
-
-2. WTP FORMULA: Verify WTP_premium = β_premium / |β_price|. Compute it manually
-   from the coefficients and confirm it matches the reported value.
-   Report: PASS or FAIL.
-
-3. IIA WARNING: The MNL model assumes the ratio of choice probabilities between
-   any two plans is unaffected by the presence of other plans (Independence of
-   Irrelevant Alternatives). If you are simulating the introduction of a new plan
-   that is very similar to an existing one, note that MNL will draw proportional
-   share from ALL plans — which may not reflect reality. Flag this limitation if
-   the simulation involves a close substitute.
-```
+**Do keep** `ConditionalLogit` grouped by (respondent, task). That is the method, not a
+grading pin: a pooled binary Logit on the same rows ignores the choice set and shifts
+every coefficient.
 
 ---
 
