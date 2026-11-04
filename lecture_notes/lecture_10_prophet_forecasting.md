@@ -427,6 +427,12 @@ Training MAPE measures fit, not forecast accuracy. A model that memorizes the tr
 4. MAPE from cross-validation is within acceptable range for your decision horizon
 5. The changepoints the fit kept sit near known business events, not in otherwise stable stretches
 
+**On your own data:** the homework prompt pins its train/test split, interval level, holidays and
+seed so that it can be graded. The version for your own series is in the
+[Agentic Prompts page, section L10](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/agentic_prompts_14_models.md):
+the data it needs, the package and functions, a general prompt, and the checks to run before you
+trust the output. It is not quiz material.
+
 ---
 
 ### Course Capstone Note

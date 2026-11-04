@@ -13,7 +13,7 @@ critically evaluate the output before trusting it. Designed for GitHub Codespace
 **How to use:** Paste the Context Prompt first. Confirm the agent understands the setup.
 Then paste the Build Prompt. Then run the Validation Prompt before accepting any output.
 
-**On your own data.** Sections marked "On your own data" (L09 so far) use a six-part
+**On your own data.** Sections marked "On your own data" (L09 and L10 so far) use a six-part
 format instead: the question it answers · data needed and deal-breakers · tools (package,
 function, maintained status) · a general prompt with `<placeholders>` · what you get back ·
 checks before trusting it. Each also lists the values the homework prompt pins for
@@ -609,57 +609,142 @@ every coefficient.
 
 ## L10 — Demand Forecasting (Prophet)
 
-### Context Prompt
+> **On your own data.** This section is the real-world version of Homework 10's agent
+> prompt. The homework prompt is a *grading* prompt: it fixes the dataset, the split, the
+> interval level and the seed so every student gets the same checkable number. Use the
+> prompt below for your own series, and read "What not to copy from the homework" first.
+
+### 1. The question it answers
+How much demand should you plan for over the next weeks or months, and how uncertain is
+that number? Also: how much of the history is trend, how much is the yearly season, and
+how much is holidays?
+
+### 2. Data you need, and deal-breakers
+What the model needs and assumes is in the
+[Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
+row 10. In practice: two columns, `ds` (a date) and `y` (the number to forecast), one row
+per day or per week, with the same frequency throughout.
+
+Stop, or change plan, if any of these is true:
+- **Less than two full years** of history. One year cannot separate the yearly season from
+  the trend.
+- **A known break you cannot explain to the model**: a competitor's entry, a pricing
+  change, a lost channel, a campaign that has ended. Add a changepoint at that date (L10
+  Section 1.4B) or the trend absorbs it and carries it forward.
+- **The break is recent.** Prophet places no changepoints in the last 20% of the history
+  (`changepoint_range=0.8`), so a shift in that stretch is not picked up by default.
+- **You want to forecast the effect of your own planned action** (a price cut, a new
+  campaign). Prophet extrapolates the past. It does not know about actions that never
+  happened in the history.
+- **`y` has zeros or near-zeros** (intermittent demand). MAPE is undefined there, and
+  Prophet's `performance_metrics` **drops the MAPE column** when any `y` is close to 0,
+  with only an info-level log line. Use MAE, or a method built for intermittent demand.
+
+### 3. Tools
+Checked against PyPI and GitHub on **2026-11-04**.
+
+| Step | Package and function | In the course Codespace? | Maintained? |
+|---|---|---|---|
+| Fit and forecast | `prophet`: `Prophet(...)`, `.fit(df)`, `.make_future_dataframe(periods=, freq=)`, `.predict(future)` | Yes (1.1.5) | Yes: 1.5.0 released 2026-10-05, commits through 2026-10-22 |
+| Components and changepoints | `m.plot_components(forecast)`, `prophet.plot.add_changepoints_to_plot(...)` | Yes | Yes |
+| Holdout accuracy | `prophet.diagnostics.cross_validation(m, initial=, period=, horizon=)`, then `performance_metrics(...)` | Yes | Yes |
+| Simple baseline to beat | `statsmodels`: `ExponentialSmoothing`, or a seasonal-naive forecast (same week last year, no package) | Yes | Yes (statsmodels 0.15.0, 2026-08-27) |
+| More forecasting models (ETS, ARIMA, many series at once) | `statsforecast` (Nixtla) | No | Yes: 2.1.1 released 2026-07-16 |
+
+`neuralprophet` exists, but its last release was 0.9.0 in June 2024 and it supports Python
+3.12 at most. Do not start a project on it.
+
+Three things to know about `prophet`, all confirmed on the course env:
+- **On weekly data, a holiday only counts if it lands exactly on a `ds` date.**
+  `add_country_holidays(country_name="US")` on the course's Monday-stamped weeks gives
+  Thanksgiving, New Year's Day and Veterans Day **zero** rows in four years. Only the
+  Monday holidays register. Fix: build the holidays table yourself and give each holiday a
+  window that covers its week (for weeks stamped on the Monday: `lower_window=-6`,
+  `upper_window=0`). With that, every holiday registers in every year.
+- **`m.changepoints` lists all 25 *potential* changepoints**, not the ones the fit kept.
+  An agent that prints it will report 25 "detected" changepoints. Look at the slope changes
+  (`m.params["delta"]`) or at `add_changepoints_to_plot`, which shows only the large ones.
+- **The intervals are simulated**, from 1,000 random draws by default. A different seed
+  moves the interval width slightly (a few percent on the course data). It does not move
+  the forecast line.
+
+### 4. A general prompt
+Fill in every `<placeholder>`. Paste it as one message.
+
 ```
-I am a demand planning analyst. I have weekly revenue time series data with a date
-column (ds) and revenue column (y) in thousands of dollars. The series has 3–4 years
-of history, clear seasonality, some promotional spikes, and a visible upward trend.
-I want to decompose the series, forecast the next 26 weeks, and evaluate model
-accuracy using cross-validation.
+I have a <weekly | daily> time series in <file.csv> with columns ds (date) and y
+(<what y is, in what unit>), from <start date> to <end date>. I need a forecast
+<H> <weeks | days> ahead to decide <the decision, e.g. how much stock to order>.
+Known events in the history: <date: what happened>, ... (or "none").
+
+1. Check the data before fitting, and stop and tell me if any check fails: one row per
+   <week | day> with no duplicate dates, the number of missing periods, the number of
+   y values at or near zero, and how many full years of history there are.
+2. Fit Prophet with yearly_seasonality=True,
+   weekly_seasonality=<False for weekly data, True for daily data>,
+   interval_width=<level that matches the decision, e.g. 0.90>.
+   Holidays: <country, or "none">. If the data are weekly, build the holidays table with a
+   window so each holiday falls inside its week (do not rely on add_country_holidays to
+   match dates). Add a changepoint at each known event date listed above.
+3. Accuracy: run prophet.diagnostics.cross_validation with horizon = <H> <weeks | days>,
+   several cutoffs, and at least two years before the first cutoff. Report MAPE (or MAE
+   if y has zeros) and interval coverage, by horizon.
+4. Fit a seasonal-naive baseline (same period last year) on the same cutoffs and report
+   its MAPE next to Prophet's.
+5. Refit on all the data. Forecast <H> <weeks | days> ahead. Plot history, forecast and
+   interval. Plot the components.
+6. List the changepoints the fit actually kept (large slope change), with dates and
+   direction. Do not list all the potential ones.
+
+Set numpy's seed so the intervals can be reproduced. Show the code, then one results
+table per step. Do not invent any number. If a step fails, say so instead of working
+around it.
 ```
 
-### Build Prompt
-```
-Using the revenue time series dataset:
+### 5. What you get back
+- A forecast table: `yhat` with its lower and upper bounds for each future period.
+- A components plot: trend, yearly season and holidays, with the size of each.
+- Accuracy by horizon from the holdout cutoffs: MAPE (or MAE) and the share of actuals that
+  fell inside the interval (coverage), next to a simple baseline's MAPE.
+- The changepoints the fit kept, with dates.
 
-1. Fit a Prophet model with:
-   - Yearly seasonality: enabled
-   - Weekly seasonality: disabled (weekly data, not daily)
-   - Changepoint prior scale: 0.05 (default)
+What it does **not** give you: the effect of something that has never happened in the
+history, a guaranteed coverage (the interval covers only the uncertainty the model knows
+about, L10 Common Misconception 3), or a reason *why* the trend changed.
 
-2. Plot the component decomposition: trend, yearly seasonality.
-   Report: the peak seasonal week of the year and the trough.
+### 6. Checks before trusting it
+The first five are the L10 note's "What to verify before trusting the output".
+1. The **trend direction** matches what you know about the business.
+2. The **yearly season** matches *this* series' own history and this business's calendar.
+   Do not check it against retail's Q4 peak unless this is a retailer.
+3. **Holiday effects** have sensible signs. On weekly data, first confirm the holidays
+   matched any rows at all (see the gotcha in Tools).
+4. **Holdout MAPE** is acceptable for the decision, at the horizon you actually need
+   (L10 Section 1.4C).
+5. The **changepoints the fit kept** sit near known business events, not in stable stretches.
+6. **It beats a simple baseline.** If seasonal-naive is as accurate, Prophet adds nothing
+   for this decision (L10 Common Misconception 1).
+7. **Coverage is near the interval level you asked for.** If a 90% interval covers only 70%
+   of the holdout actuals, treat the bounds as too narrow before using them for safety stock.
+8. **The intervals widen with the horizon.** Constant-width intervals are a warning (L10
+   Section 2.2).
+9. **Training fit is not accuracy.** Ignore any in-sample MAPE the agent reports
+   (L10 Common Misconception 5).
 
-3. Forecast the next 26 weeks. Plot: actual history + forecast + 80% and 95%
-   prediction intervals.
+### What not to copy from the homework
+The HW10 prompt pins these so the autograder can check one number. **Do not carry them
+over** to your own data:
+- **Train on 182 weeks, test on the last 26.** One split, sized for the course dataset.
+  Use your own decision's horizon and several cutoffs (step 3 of the prompt).
+- **`interval_width=0.95`.** The homework pins it because its questions ask about 95%
+  intervals. Pick the level your decision needs.
+- **"Add US holidays."** Only add holidays that move *your* series (L10 Common
+  Misconception 4), and on weekly data use the window fix above.
+- **"Top 3 weeks with the widest interval" and "peak seasonal week".** These are graded
+  outputs, not the questions your planning decision asks.
 
-4. Run time-series cross-validation with initial=104 weeks, horizon=26 weeks,
-   period=13 weeks. Report MAPE across all forecast horizons.
-
-5. Identify any changepoints in the trend. Report: dates and direction (up/down).
-
-Print all values clearly labelled.
-```
-
-### Validation Prompt
-```
-Three validation checks:
-
-1. INTERVAL WIDENING: Do the 95% prediction intervals widen as the horizon increases?
-   The interval at week 26 should be wider than at week 4. If the intervals are
-   constant width, the model is not properly propagating uncertainty.
-   Report: PASS or FAIL.
-
-2. SEASONAL PEAK DIRECTION: Does the seasonal component peak in a period that makes
-   business sense (e.g., Q4 for consumer goods, summer for fitness)? If the peak
-   is at a counterintuitive time, check whether the data has unusual patterns.
-   Report the peak week and whether it is plausible.
-
-3. MAPE CONTEXT: A MAPE of X% is not good or bad in isolation. Report the MAPE
-   alongside the decision it informs (e.g., safety stock planning, staffing, budget
-   allocation) and a brief statement of whether X% is operationally acceptable
-   for that use case.
-```
+**Do keep** `weekly_seasonality=False` if your data are weekly (a weekly series has no
+within-week pattern to fit), and a fixed seed, so you can reproduce the interval you report.
 
 ---
 
