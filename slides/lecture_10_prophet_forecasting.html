@@ -1201,6 +1201,32 @@ display: block;
 margin-left: auto;
 margin-right: 0; }
 </style>
+  <style>
+.cmap { display: grid; grid-template-columns: 1fr 190px 1fr; gap: 34px; align-items: center; margin-top: 4px; }
+.cmap .side { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.cmap .branch { position: relative; border: 1px solid #d9d6cc; background: #fff; padding: 9px 14px 10px; }
+.cmap .left .branch::after, .cmap .right .branch::before { content: ""; position: absolute; top: 50%; width: 34px; border-top: 2px solid #d9d6cc; }
+.cmap .left .branch::after { right: -35px; }
+.cmap .right .branch::before { left: -35px; }
+.cmap .stage { font-weight: 600; font-size: 17px; letter-spacing: .07em; text-transform: uppercase; }
+.cmap .ask { font-style: italic; color: #5b6573; font-size: 16px; line-height: 1.3; margin: 2px 0 7px; }
+.cmap ul { list-style: none; margin: 0 !important; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.cmap li { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: baseline; font-size: 19px; line-height: 1.25; padding: 1px 4px; }
+.cmap li::marker { content: none; }
+.cmap li.ahead > span:nth-child(-n+2) { color: #9aa1aa; }
+.cmap li.now { background: #e7f0f8; outline: 2px solid #1a1a1a; font-weight: 600; }
+.cmap .code { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: #5b6573; }
+.cmap .hub { aspect-ratio: 1; width: 100%; border-radius: 50%; background: #1a1a1a; color: #fafaf7; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 16px; gap: 6px; }
+.cmap .hub span { font-family: 'Lora', Georgia, serif; font-weight: 600; font-size: 22px; line-height: 1.15; }
+.cmap .hub small { font-size: 14px; line-height: 1.25; opacity: .85; }
+.cmap-tag { font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 400; padding: 1px 7px; border-radius: 3px; white-space: nowrap; }
+.cmap-tag.t-work { background: #e7f0f8; color: #1d5a8c; }
+.cmap-tag.t-much { background: #f8ede3; color: #a4561d; }
+.cmap-tag.t-want { background: #efe9f6; color: #6a4c93; }
+.cmap-tag.t-next { background: #e6f3ec; color: #2f7a5b; }
+.cmap-legend { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: baseline; font-size: 16px; color: #5b6573; }
+.cmap-legend b { color: #1a1a1a; }
+</style>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -1213,6 +1239,23 @@ margin-right: 0; }
 <div class="quarto-title-authors">
 </div>
 
+</section>
+<section class="slide level2">
+<h2>Every model serves a marketing decision</h2>
+<div class="cmap"><div class="side left"><div class="branch"><div class="stage">Win customers</div><div class="ask">CMO: “Which channels and touchpoints are actually bringing customers in?”</div><ul><li class="done"><span class="code">L01</span><span>A/B testing</span><span class="cmap-tag t-work">Did it work?</span></li><li class="done"><span class="code">L03</span><span>Marketing mix modeling</span><span class="cmap-tag t-much">How much?</span></li><li class="done"><span class="code">L06</span><span>Multi-touch attribution</span><span class="cmap-tag t-much">How much?</span></li></ul></div><div class="branch"><div class="stage">Set the offer</div><div class="ask">Head of pricing: “What should we charge, and which features matter?”</div><ul><li class="done"><span class="code">L02</span><span>Price elasticity</span><span class="cmap-tag t-much">How much?</span></li><li class="done"><span class="code">L09</span><span>Conjoint analysis</span><span class="cmap-tag t-want">What do they want?</span></li></ul></div></div><div class="hub"><span>The marketing decision</span><small>Start from what the business is asking</small></div><div class="side right"><div class="branch"><div class="stage">Keep customers</div><div class="ask">Head of retention: “Who is leaving, when, and who should get the save offer?”</div><ul><li class="done"><span class="code">L04</span><span>Survival analysis</span><span class="cmap-tag t-next">What next?</span></li><li class="done"><span class="code">L05</span><span>Markov chains</span><span class="cmap-tag t-next">What next?</span></li><li class="done"><span class="code">L07</span><span>Uplift modeling</span><span class="cmap-tag t-work">Did it work?</span></li></ul></div><div class="branch"><div class="stage">Value customers</div><div class="ask">CFO: “What is a customer worth to us?”</div><ul><li class="done"><span class="code">L08</span><span>Customer lifetime value</span><span class="cmap-tag t-next">What next?</span></li></ul></div><div class="branch"><div class="stage">Plan ahead</div><div class="ask">Operations: “What will next quarter look like?”</div><ul><li class="now"><span class="code">L10</span><span>Demand forecasting · today</span><span class="cmap-tag t-next">What next?</span></li></ul></div></div></div><div class="cmap-legend"><b>Question type:</b><span><span class="cmap-tag t-work">Did it work?</span> causal effect</span><span><span class="cmap-tag t-much">How much?</span> how much X moves Y</span><span><span class="cmap-tag t-want">What do they want?</span> preferences</span><span><span class="cmap-tag t-next">What next?</span> prediction</span></div>
+<aside class="notes">
+<p>Each branch is a request a stakeholder brings to the analyst. Today’s model, Prophet, serves operations’ question: what will next quarter look like? It is a “What next?” model, like survival, Markov and CLV, but it predicts a whole series, not one customer.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
 </section>
 <section class="slide level2">
 <h2>Motivating Problem</h2>
@@ -1240,6 +1283,9 @@ margin-right: 0; }
 </section>
 <section class="slide level2">
 <h2>Prophet Decomposition</h2>
+<div class="math-tag need">
+<p>You need this</p>
+</div>
 <div class="formula-box">
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>g</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>s</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>h</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>ε</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">y(t) = g(t) + s(t) + h(t) + \varepsilon_t</annotation></semantics></math></p>
 </div>
@@ -1283,7 +1329,7 @@ margin-right: 0; }
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>Each component is estimated separately and additively combined, <strong>in the units of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math></strong> — <code>s(t) = +$180k</code> means “$180k above trend this week”. This makes the model <strong>interpretable</strong>.</p>
+<p>All components are fitted <strong>jointly, in one fit</strong>, and added together <strong>in the units of <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math></strong> — <code>s(t) = +$180k</code> means “$180k above trend this week”. This makes the model <strong>interpretable</strong>.</p>
 </div>
 </div>
 </div>
@@ -1303,11 +1349,14 @@ margin-right: 0; }
 </section>
 <section class="slide level2">
 <h2>Seasonality: Fourier Series</h2>
+<div class="math-tag bg">
+<p>Background: why it works, not on quizzes</p>
+</div>
 <div class="formula-box">
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><munderover><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>a</mi><mi>n</mi></msub><mo>cos</mo><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mn>2</mn><mi>π</mi><mi>n</mi><mi>t</mi></mrow><mi>P</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>b</mi><mi>n</mi></msub><mo>sin</mo><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mn>2</mn><mi>π</mi><mi>n</mi><mi>t</mi></mrow><mi>P</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">s(t) = \sum_{n=1}^{N} \left[ a_n \cos\!\left(\frac{2\pi n t}{P}\right) + b_n \sin\!\left(\frac{2\pi n t}{P}\right) \right]</annotation></semantics></math></p>
 </div>
 <p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math> = seasonal period (365.25 for yearly, 7 for weekly)<br>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math> = number of Fourier terms (controls smoothness)</p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math> = Fourier order: the number of sine–cosine pairs (controls smoothness)</p>
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1317,8 +1366,8 @@ margin-right: 0; }
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>More terms → more flexible seasonality → risk of overfitting.<br>
-Default in Prophet: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">N=10</annotation></semantics></math> for yearly, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">N=3</annotation></semantics></math> for weekly.</p>
+<p>Higher order → more flexible seasonality → risk of overfitting.<br>
+Default in Prophet: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">N=10</annotation></semantics></math> for yearly (20 terms), <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">N=3</annotation></semantics></math> for weekly.</p>
 </div>
 </div>
 </div>
@@ -1339,12 +1388,16 @@ Low value → model is smooth, resists noise</p>
 <span id="cb1-2"><a aria-hidden="true" tabindex="-1"></a>  changepoints<span class="op">=</span>[<span class="st">&#39;2023-08-01&#39;</span>],</span>
 <span id="cb1-3"><a aria-hidden="true" tabindex="-1"></a>  changepoint_prior_scale<span class="op">=</span><span class="fl">0.3</span></span>
 <span id="cb1-4"><a aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Use for known events: competitor launches, COVID, product pivots.</p>
+<p>Use when the <strong>growth rate</strong> changed at a known date. <code>changepoints=</code> <strong>replaces</strong> the 25 candidates with your list.</p>
+<p>A permanent <strong>level</strong> drop (a competitor takes 15%) is not a slope change: add a 0/1 step column with <code>m.add_regressor()</code>.</p>
 </div>
 </div>
 </section>
 <section class="slide level2">
 <h2>Worked Example: Seasonal Multipliers</h2>
+<div class="math-tag need">
+<p>You need this</p>
+</div>
 <p>Base trend: 100,000 units/week, growing +2%/week.</p>
 <p><strong>After 4 weeks:</strong></p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mo>,</mo><mn>000</mn><mo>×</mo><msup><mn>1.02</mn><mn>4</mn></msup><mo>=</mo><mn>100</mn><mo>,</mo><mn>000</mn><mo>×</mo><mn>1.0824</mn><mo>=</mo><mrow><mn>𝟏𝟎𝟖</mn><mo mathvariant="bold">,</mo><mn>𝟐𝟒𝟑</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="bold"> 𝐮𝐧𝐢𝐭𝐬</mtext></mrow></mrow></mrow><annotation encoding="application/x-tex">100{,}000 \times 1.02^4 = 100{,}000 \times 1.0824 = \mathbf{108{,}243 \text{ units}}</annotation></semantics></math></p>
@@ -1368,6 +1421,9 @@ Low value → model is smooth, resists noise</p>
 </section>
 <section class="slide level2">
 <h2>Measuring Forecast Accuracy: MAPE</h2>
+<div class="math-tag need">
+<p>You need this</p>
+</div>
 <div class="formula-box">
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">MAPE</mtext><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mfrac><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>y</mi><mi>t</mi></msub><mo>−</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>y</mi><mi>t</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow></mfrac><mo>×</mo><mn>100</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">\text{MAPE} = \frac{1}{n}\sum_{t=1}^{n} \frac{|y_t - \hat{y}_t|}{|y_t|} \times 100\%</annotation></semantics></math></p>
 </div>
@@ -1378,9 +1434,7 @@ Low value → model is smooth, resists noise</p>
 <li>&lt; 10%: excellent (tight forecasting needs)</li>
 <li>10–20%: good (typical operational planning)</li>
 <li>20–30%: acceptable (rough guidance only)</li>
-<li><blockquote>
-<p>30%: reconsider the model</p>
-</blockquote></li>
+<li>above 30%: reconsider the model</li>
 </ul>
 </div>
 <div>
@@ -1390,9 +1444,16 @@ Low value → model is smooth, resists noise</p>
 <p>Context determines adequacy, not the number alone.</p>
 </div>
 </div>
+<p><strong>Rough 95% range from a holdout MAPE:</strong> level × (1 ± 2 × MAPE). $200k at 10% → $160k to $240k. Back-of-envelope only (closer to 90% coverage); use Prophet’s own interval when you have the model.</p>
 </section>
 <section class="slide level2">
 <h2>Forecast Uncertainty and Interval Width</h2>
+<p>Prophet’s default interval has two parts:</p>
+<ol type="1">
+<li><strong>Noise</strong>: the week-to-week scatter the fit measured in the history. Same width at every horizon.</li>
+<li><strong>Trend uncertainty</strong>: simulated future trend changes, as often and as large as those in the history. Grows with the horizon.</li>
+</ol>
+<p>Not included by default: uncertainty in the seasonal shape (needs <code>mcmc_samples &gt; 0</code>).</p>
 <div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1402,17 +1463,35 @@ Low value → model is smooth, resists noise</p>
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p><strong>Theoretical basis:</strong> Under any reasonable model of future uncertainty, forecast variance is non-decreasing in horizon. Constant-width intervals imply zero uncertainty growth, which is inconsistent with the presence of future changepoints and parameter uncertainty.</p>
+<p>So intervals widen with the horizon, but on a steady series they can stay <strong>almost constant</strong> for months, and that is not a defect. The real warning: an interval much narrower than the errors you see on held-out data. Check how often holdout actuals fall inside it.</p>
 </div>
 </div>
 </div>
-<p>Prophet’s uncertainty comes from:</p>
-<ol type="1">
-<li>Future changepoints (model doesn’t know when/if they occur)</li>
-<li>Trend uncertainty compounding over time</li>
-<li>Seasonal coefficient variance</li>
-</ol>
-<p>A model that produces constant-width prediction intervals is misspecified: it fails to account for compounding trend uncertainty and the possibility of unobserved future structural breaks.</p>
+</section>
+<section class="slide level2">
+<h2>Practice: work in pairs (1 of 2)</h2>
+<p>Answer each one, then mark <strong>Sure</strong> or <strong>Unsure</strong> as you would on the quiz.</p>
+<p><strong>1. True or false?</strong> A Prophet forecast’s 95% interval is about the same width at week 1 and week 26. That shows the model is misspecified.</p>
+<p><strong>2.</strong> Running out of stock costs about twice as much as overstock. Where should you plan inventory?</p>
+<p>A. At the point forecast (yhat)    B. A little above yhat    C. At the upper end of the 95% interval    D. At the lower end of the 95% interval</p>
+<p><strong>3.</strong> Weekly revenue level $300k, holdout MAPE 10%. What approximate 95% range does the course’s rough MAPE rule give?</p>
+<p>A. $270k to $330k    B. $290k to $310k    C. $240k to $360k    D. $300k to $360k</p>
+<div class="muted">
+<p>Answers in the lecture notes, under “Slide Practice Answers” (numbered to match these slides).</p>
+</div>
+</section>
+<section class="slide level2">
+<h2>Practice: work in pairs (2 of 2)</h2>
+<p><strong>4. True or false?</strong> You fit <code>Prophet(changepoints=[&#39;2023-08-01&#39;])</code>. The model still has its 25 default candidate changepoints, plus this one.</p>
+<p><strong>5.</strong> Your data has one row per week, dated on Mondays. You add US holidays with Prophet’s default settings. Which is true?</p>
+<p>A. Every holiday gets an effect estimated<br>
+B. Prophet moves each holiday to the nearest row<br>
+C. Weekly data cannot use holidays at all<br>
+D. Only holidays whose date matches a row get an effect; Thanksgiving (a Thursday) gets none</p>
+<p><strong>6. True or false?</strong> <code>cross_validation()</code> refits the model at several cutoff dates and scores each forecast by how far ahead it was.</p>
+<div class="muted">
+<p>Answers in the lecture notes, under “Slide Practice Answers” (numbered to match these slides).</p>
+</div>
 </section>
 <section class="slide level2">
 <h2>Checkpoint</h2>
@@ -1436,7 +1515,7 @@ Low value → model is smooth, resists noise</p>
 each known event: &lt;date: event&gt;. Run cross_validation with horizon = &lt;H&gt;, several
 cutoffs. Report MAPE and interval coverage by horizon, next to a seasonal-naive baseline.</code></pre>
 <p><strong>Before you trust it:</strong> does it beat “same week last year”? · is coverage near the level you asked for? · weekly data: did the holidays match any rows?</p>
-<p><strong>Don’t copy from HW10:</strong> the 182/26 split, <code>interval_width=0.95</code>, “add US holidays”. Those are pinned for grading.</p>
+<p><strong>Don’t copy from HW10:</strong> the 182/26 split, <code>interval_width=0.95</code>, “every US holiday”. Those are pinned for grading (keep the holiday window).</p>
 <div class="muted">
 <p>Full card (data, tools, the complete prompt, all checks): <a href="https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/agentic_prompts_14_models.md">Agentic Prompts → L10</a>. Not quiz material.</p>
 </div>
