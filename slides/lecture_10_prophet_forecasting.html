@@ -1426,6 +1426,20 @@ Low value → model is smooth, resists noise</p>
 <div class="muted">
 <p>Answers in the lecture notes, under “Slide Checkpoint Answers” (numbered to match this slide).</p>
 </div>
+</section>
+<section class="slide level2">
+<h2>On your own data: forecasting for real</h2>
+<p><strong>Data:</strong> two columns, <code>ds</code> (date) and <code>y</code>, one row per week or day, and at least two full years of history.</p>
+<p><strong>Tool:</strong> <code>prophet</code>: <code>fit</code>, <code>predict</code>, then <code>cross_validation</code> + <code>performance_metrics</code> for accuracy by horizon.</p>
+<p><strong>Prompt (excerpt):</strong></p>
+<pre class="text"><code>Fit Prophet with interval_width=&lt;level the decision needs&gt;. Add a changepoint at
+each known event: &lt;date: event&gt;. Run cross_validation with horizon = &lt;H&gt;, several
+cutoffs. Report MAPE and interval coverage by horizon, next to a seasonal-naive baseline.</code></pre>
+<p><strong>Before you trust it:</strong> does it beat “same week last year”? · is coverage near the level you asked for? · weekly data: did the holidays match any rows?</p>
+<p><strong>Don’t copy from HW10:</strong> the 182/26 split, <code>interval_width=0.95</code>, “add US holidays”. Those are pinned for grading.</p>
+<div class="muted">
+<p>Full card (data, tools, the complete prompt, all checks): <a href="https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/agentic_prompts_14_models.md">Agentic Prompts → L10</a>. Not quiz material.</p>
+</div>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
