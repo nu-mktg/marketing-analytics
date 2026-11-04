@@ -946,8 +946,10 @@ Stop, or change plan, if any of these is true:
 - **Less than two full years** of history. One year cannot separate the yearly season from
   the trend.
 - **A known break you cannot explain to the model**: a competitor's entry, a pricing
-  change, a lost channel, a campaign that has ended. Add a changepoint at that date (L10
-  Section 1.4B) or the trend absorbs it and carries it forward.
+  change, a lost channel, a campaign that has ended. Tell the model the dates, or the trend
+  absorbs the break and bends around it (L10 Section 1.4B): a permanent level shift goes in as
+  a 0/1 step regressor (`add_regressor`), and a campaign that ended goes in as a holiday
+  spanning its dates. A changepoint changes only the slope, so it does not fix a level jump.
 - **The break is recent.** Prophet places no changepoints in the last 20% of the history
   (`changepoint_range=0.8`), so a shift in that stretch is not picked up by default.
 - **You want to forecast the effect of your own planned action** (a price cut, a new
@@ -1043,8 +1045,10 @@ The first five are the L10 note's "What to verify before trusting the output".
    for this decision (L10 Common Misconception 1).
 7. **Coverage is near the interval level you asked for.** If a 90% interval covers only 70%
    of the holdout actuals, treat the bounds as too narrow before using them for safety stock.
-8. **The intervals widen with the horizon.** Constant-width intervals are a warning (L10
-   Section 2.2).
+8. **Read the width, don't judge it.** The interval has a noise part (the same at every
+   horizon) and a trend part (grows with the horizon), so on a steady series it can stay almost
+   constant for months, and that is fine. Coverage (check 7) is the test, not the shape
+   (L10 Section 1.4A).
 9. **Training fit is not accuracy.** Ignore any in-sample MAPE the agent reports
    (L10 Common Misconception 5).
 
@@ -1055,8 +1059,9 @@ over** to your own data:
   Use your own decision's horizon and several cutoffs (step 3 of the prompt).
 - **`interval_width=0.95`.** The homework pins it because its questions ask about 95%
   intervals. Pick the level your decision needs.
-- **"Add US holidays."** Only add holidays that move *your* series (L10 Common
-  Misconception 4), and on weekly data use the window fix above.
+- **"US holidays."** The homework adds every US holiday. Only add holidays that move *your*
+  series (L10 Common Misconception 4). The week-long window the homework uses is method, not a
+  pin: keep it for any weekly data.
 - **"Top 3 weeks with the widest interval" and "peak seasonal week".** These are graded
   outputs, not the questions your planning decision asks.
 

@@ -138,7 +138,7 @@ check, it is an assumption.
 **Why decomposition matters:** The component plot is often more valuable than the point forecast. A business that knows *its own* peak quarter (+38%), its own trough quarter (−15%), and its own event spikes (+45% on top of the peak-quarter level) can plan inventory, staffing, and marketing budgets with far more precision than one that has only a quarterly revenue estimate. Which quarter is which is the thing the model tells you.
 
 > ### 🔍 Deep Dive: How Prophet Models Seasonality Internally
-> Internally, Prophet represents seasonal patterns using Fourier series — sums of sine and cosine curves at different frequencies. A full-year seasonal pattern might use 10 Fourier terms (5 sine + 5 cosine curves at harmonics 1/year, 2/year, 3/year, 4/year, 5/year). The coefficients on these terms are fit from the data. The resulting curve can capture any smooth repeating pattern without you specifying its shape in advance. This is why you do not see "seasonality = sin(2πt/52)" in your model output — Prophet shows you the resulting seasonal curve, not the internal Fourier components.
+> Internally, Prophet represents seasonal patterns using Fourier series — sums of sine and cosine curves at different frequencies. Prophet's default for yearly seasonality is a Fourier **order** of 10: 10 sine and 10 cosine curves at harmonics 1/year through 10/year, so 20 terms. The coefficients on these terms are fit from the data. The resulting curve can capture any smooth repeating pattern without you specifying its shape in advance. This is why you do not see "seasonality = sin(2πt/52)" in your model output — Prophet shows you the resulting seasonal curve, not the internal Fourier components.
 
 ---
 
@@ -161,9 +161,21 @@ Prophet produces three key outputs per time period:
 >
 > Week 26: yhat = $1,050k, interval = [$800k, $1,300k]
 
-Uncertainty grows with forecast horizon because errors compound over time. A wide week-26 interval is not a model failure — it is the model being honest about irreducible uncertainty.
+**Where the width comes from.** Prophet builds the interval from two parts. The first is the
+week-to-week **noise** the fit measured in the history, and it is the same width at every horizon.
+The second is **trend uncertainty**: Prophet simulates future trend changes, as often and as large
+as the changes it saw in the history, and this part grows the further ahead you look. So an
+interval that widens with the horizon is expected, and a wide week-26 interval is not a model
+failure: it is the model being honest. How *much* it widens depends on the history, though. On a
+steady series the noise part dominates, and over a few months the interval can look almost
+constant. By default the interval leaves out uncertainty in the seasonal shape (that needs
+`mcmc_samples > 0`).
 
-**Using the interval for decisions:** If ordering too little costs 2× as much as ordering too much (asymmetric cost), plan to the upper end of the interval. If the costs are symmetric, plan to the midpoint (yhat).
+**Using the interval for decisions:** If ordering too little and ordering too much cost about the
+same, plan to the point forecast (yhat). If running short costs more, plan above yhat: the more
+lopsided the costs, the further toward the upper end. A 2-to-1 ratio puts you only a little above
+yhat. The upper end of a 95% interval is the right plan only when running short costs far more
+than overstock.
 
 ---
 
@@ -189,9 +201,29 @@ number it **laid down** — the fixed 25 — not a number of shifts it went look
 the useful diagnostic is not "did it find the right dates?" but "of the dates it was *offered*, are
 the ones it kept the ones I can explain?"
 
-**When to add manual changepoints:** If you know the data-generating process changed at a specific moment (e.g., a competitor launched aggressively, a major promotional campaign ran), you should add a changepoint at that date. A model trained without this changepoint will misattribute the trend shift and produce biased forecasts.
+**When to add manual changepoints:** If you know the *growth rate* changed at a specific date (a
+new channel opened, a market started to saturate), add a changepoint at that date. Two things to
+know. Passing `changepoints=[...]` **replaces** the 25 evenly spaced candidates with your list; it
+does not add to them. And a changepoint changes the trend's **slope**, not its **level**: Prophet's
+trend is one continuous line, so it cannot drop overnight.
 
-**The promotional campaign trap:** A model trained on 3 years of data that includes a major promotional campaign will try to extrapolate that campaign's growth forward — even if the campaign has ended. Adding a changepoint at the end of the campaign tells the model "the growth from that campaign is not part of the long-run trend."
+**When the level shifts: a step regressor.** If an event moved demand by a fixed amount and it
+stays there (a competitor took 15% of the market for good), add a **regressor**: a column that is 0
+before the event and 1 from its date on, passed with `m.add_regressor('step')` and included in the
+future dataframe too. Prophet estimates the size of the shift, and because the column stays at 1 in
+the future, the forecast keeps it. A regressor is any extra column you give the model to help
+explain y; this 0/1 step is the simplest one.
+
+**The promotional campaign trap:** A big temporary campaign that the model is not told about gets
+absorbed into the trend, and the trend bends around it. *Which way* the forecast then goes wrong
+depends on where the campaign sits. If it runs up to the end of the training data, the trend
+carries the lift forward and the forecast **overestimates**. If it ended a year or more before the
+cutoff, the trend's bend back down can leave the forecast too **low** instead. (In a simulated
+weekly series with a +70% campaign in Year 2 and a model trained on Years 1–3, the Year 4 forecast
+came out 37% low.) A changepoint at the campaign's end does not reliably fix either case, because it
+changes slope, not level (in the same simulation it was still 23% low). The reliable fix is to give
+the model the dates: enter the campaign as a **holiday** spanning its start and end dates, so its
+lift is estimated as a one-off and kept out of the trend (in the simulation, 2% off).
 
 ---
 
@@ -210,6 +242,18 @@ Always validate on a held-out period before using a forecast for decisions.
 - MAPE = 45%+: The model is not reliable. Something structural is missing (probably a changepoint or missing regressor).
 
 **MAPE usefulness depends on context:** A 20% MAPE on weekly demand for a fashion product may be excellent (fashion is inherently unpredictable). A 5% MAPE on electricity demand for a power plant may be dangerously imprecise (utilities need < 2% accuracy).
+
+**A rough 95% range from MAPE.** When all you have is a holdout MAPE, the course's back-of-envelope
+rule for an approximate 95% range around a revenue level is
+
+> level × (1 − 2 × MAPE) to level × (1 + 2 × MAPE)
+>
+> Level $200k, holdout MAPE 10% → $200k × 0.80 to $200k × 1.20 = $160k to **$240k**.
+
+It doubles the typical percentage error, the way a 95% interval spans about two standard errors on
+each side. It is rough: use the **holdout** MAPE, never the training MAPE (Common Misconception 5),
+and if the errors are roughly normal, MAPE understates the standard error, so this range covers
+closer to 90% than 95%. When you have the fitted model, use Prophet's own interval.
 
 ---
 
@@ -234,17 +278,18 @@ Always validate on a held-out period before using a forecast for decisions.
 
 ### Checkpoint Answer Key
 
-**Q1.** Q4 baseline = $1,200k × 1.42 = $1,704k. Black Friday = $1,704k × 1.38 = **$2,351k**.
-*Common wrong answer:* $1,200k × (1.42 + 1.38) = $1,200k × 2.80 = $3,360k. Seasonal lifts apply multiplicatively (each multiplied onto the previous result), not additively.
+**Q1.** Q4 baseline = $1,200k × 1.42 = $1,704k. Black Friday = $1,704k × 1.38 = **$2,352k** (2,351.5, rounded).
+*Common wrong answer:* $1,200k × (1 + 0.42 + 0.38) = $1,200k × 1.80 = $2,160k. That treats both lifts as quoted off the same $1,200k base. "On top of Q4" makes the Q4 level the second lift's base, so the multipliers chain (Section 1.1, Tool 1).
 
 **Q2.** **Not always.** MAPE usefulness depends on context. 18% may be excellent for rough planning (staffing, marketing budgets) where decisions have significant uncertainty anyway. It may be unacceptable for just-in-time inventory or financial commitments with tight margins. The manager's statement ignores that the alternative to an 18% MAPE model may be gut feel (no model), which typically has much higher effective error.
 *Common wrong answer:* The manager is correct — any MAPE above some threshold (like 10%) makes a model useless. There is no universal threshold; it depends on decision stakes.
 
-**Q3.** **No.** Wider uncertainty at longer forecast horizons is mathematically expected: each period's uncertainty compounds. A week-26 interval that is wider than week-1 indicates the model is being appropriately honest about the limits of long-range forecasting — not that the model is broken.
+**Q3.** **No.** A wider interval further out is expected: the trend-uncertainty part of the interval grows with the horizon (Section 1.4A). A week-26 interval that is wider than week 1's is the model being honest about the limits of long-range forecasting, not a sign that it is broken.
 *Common wrong answer:* Yes, because a good model should be equally accurate at all time horizons. Forecast accuracy degrades with horizon in virtually all forecasting models.
 
-**Q4.** The model will likely **extrapolate the promotional growth as part of the long-run trend** — forecasting Year 3 and beyond as if the campaign's 70% lift continues indefinitely. This will cause systematic overestimates. The fix: add a changepoint at the end of the promotional campaign, or add the campaign as a holiday regressor with specific dates.
-*Common wrong answer:* Prophet detects the campaign as a holiday effect automatically. Prophet's holiday component only works for events you specify explicitly. It cannot automatically detect that a boost in Year 2 was a one-time promotion vs. a structural change.
+**Q4.** It will **absorb the campaign into the trend**. The model was not told the lift was temporary, so the trend climbs through Year 2 and bends back after it, and the forecast is biased. Here the campaign ended a full year before the end of training, so the bend back down tends to push the forecast **too low**, not too high (Section 1.4B, "The promotional campaign trap"). The fix is to enter the campaign as a **holiday spanning its dates**. A changepoint at the campaign's end changes only the slope, so it does not reliably remove the bias.
+*Common wrong answer:* Prophet detects the campaign as a holiday effect automatically. Prophet's holiday component only works for events you specify explicitly. It cannot tell on its own that a boost in Year 2 was a one-time promotion rather than a structural change.
+*Also wrong:* "It will always overestimate." That happens when the campaign runs up to the end of the training data, not when it ended a year earlier.
 
 **Q5.** **Not necessarily for rough annual planning.** For annual budget planning, you aggregate weekly forecasts into a full-year estimate. Aggregation reduces percentage error (some weeks' overestimates offset underestimates). Both 8% and 22% MAPE may produce similar annual totals. Model B may be preferable if it is simpler to explain, update, or maintain — and the accuracy difference does not change any annual budget decision materially.
 *Common wrong answer:* Yes, lower MAPE is always better. Lower MAPE is better for granular decisions (weekly inventory orders) but may not matter for aggregate annual planning.
@@ -253,15 +298,50 @@ Always validate on a held-out period before using a forecast for decisions.
 
 Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
 
-**Slide Q1.** *"Trend = +2.5%/week, base = 80,000 units. Forecast after 3 weeks."* — Trend compounds the same way the seasonal lifts do: 80,000 × 1.025³ = 80,000 × 1.0769 = **86,151 units**. *Common wrong answer:* 80,000 × (1 + 3 × 0.025) = 86,000 — adding three weeks of growth instead of compounding them. The gap is only 151 units over three weeks, which is the point worth making: additive and multiplicative growth are nearly indistinguishable over a short horizon and diverge sharply over a long one (at 26 weeks the same rate gives 152,023 compounded versus 132,000 added).
+**Slide Q1.** *"Trend = +2.5%/week, base = 80,000 units. Forecast after 3 weeks."* — Trend compounds the same way the seasonal lifts do: 80,000 × 1.025³ = 80,000 × 1.0769 = **86,151 units**. *Common wrong answer:* 80,000 × (1 + 3 × 0.025) = 86,000 — adding three weeks of growth instead of compounding them. The gap is only 151 units over three weeks, which is the point worth making: additive and multiplicative growth are nearly indistinguishable over a short horizon and diverge sharply over a long one (at 26 weeks the same rate gives 152,023 compounded versus 132,000 added). Note what this is and is not: a growth rate quoted in % per week compounds, but Prophet's own trend is a line in the units of y, so its slope is a number of units per week, and Prophet's output should be read that way (Section 1.3).
 
 **Slide Q2.** *"Baseline weekly revenue = \$1,200k. Q4 seasonal = +42%. Black Friday adds another +38% on top of Q4. Estimate Black Friday week revenue."* — Same question as Q1 above — see that answer.
 
 **Slide Q3.** *"MAPE = 22%. Manager says "useless." What's your response, and what additional context do you need?"* — Same reasoning as Q2 above, which uses MAPE = 18%; the slide's is 22%.
 
-**Slide Q4.** *"The model missed a competitor launch in month 6 that caused a permanent 15% demand drop. What should you do to the model?"* — Closest answer: Q4 above, which covers a temporary promotion that ended; the slide's competitor drop is permanent.
+**Slide Q4.** *"The model missed a competitor launch in month 6 that caused a permanent 15% demand drop. What should you do to the model?"* — Add a **step regressor**: a column that is 0 before the launch date and 1 from it on (`m.add_regressor`), kept at 1 in the future dataframe. Prophet then estimates the size of the drop and carries it into the forecast (Section 1.4B, "When the level shifts"). *Common wrong answer:* "Add a changepoint at month 6." A changepoint changes the trend's slope, not its level, so it can only approximate an overnight drop, and passing `changepoints=` replaces Prophet's 25 candidate dates with yours. Contrast Q4 above: a promotion that *ended* is entered as a dated holiday, because its effect should not continue.
 
 **Slide Q5.** *"The week-20 prediction interval is 4× wider than the week-1 interval. Is this a model defect?"* — Same reasoning as Q3 above, which compares week 26 with week 1; the slide compares week 20 with week 1.
+
+### Slide Practice Answers
+
+Numbered to match the two "Practice: work in pairs" slides in this lecture's deck.
+
+**P1. False.** The interval has a noise part that is the same width at every horizon and a trend
+part that grows (Section 1.4A). On a steady series the noise part dominates, so an almost constant
+width over 26 weeks is normal. The warning sign is an interval much narrower than the errors you
+see on held-out data (Section 2.2, "Interpreting uncertainty intervals").
+*Common wrong answer:* True, because "intervals must widen". They do widen in the trend part; how
+much depends on how much the trend moved in the history.
+
+**P2. B, a little above yhat.** Running short costs more, so plan above the point forecast, but a
+2-to-1 cost ratio only moves you a little (Section 1.4A, "Using the interval for decisions").
+*Common wrong answer:* C. The upper end of a 95% interval is the plan only when running short costs
+far more than overstock.
+
+**P3. C, \$240k to \$360k.** The rough rule is level × (1 ± 2 × MAPE) = \$300k × 0.80 to
+\$300k × 1.20 (Section 1.4C, "A rough 95% range from MAPE").
+*Common wrong answers:* A uses 1 × MAPE instead of 2 × MAPE. D moves only the upper end. B adds
+and subtracts \$10k, reading 10% as \$10k.
+
+**P4. False.** Passing `changepoints=[...]` **replaces** the 25 evenly spaced candidates with your
+list, so this model has exactly one candidate changepoint (Section 1.4B, "When to add manual
+changepoints").
+
+**P5. D.** On weekly data a holiday registers only on a row whose date it covers, and a Thursday
+holiday never lands on a Monday. A window (`lower_window=-6, upper_window=0`) fixes it
+(Section 2.2, "Holiday panel").
+*Common wrong answer:* A. Prophet does not move holidays to the nearest row; check which holidays
+actually have rows.
+
+**P6. True.** `cross_validation()` repeats the single holdout of Section 1.4C at several cutoffs,
+each time forecasting `horizon` ahead, and `performance_metrics()` averages the errors by horizon
+(Section 2.2, "MAPE from cross-validation").
 
 ## PART 2: Application
 ### (~1 hour 40 minutes)
@@ -289,11 +369,11 @@ A consumer goods company has quarterly sales data for 2022 and 2023:
 | Q3 | 2023 | 7 | 120 |
 | Q4 | 2023 | 8 | 200 |
 
-**Part A:** Compute the seasonal indices by averaging each quarter across both years. Then compute the overall mean. Do the seasonal indices sum to approximately 0? (For additive seasonality, they should.)
+**Part A:** Compute the seasonal indices by averaging each quarter across both years. Then compute the overall mean. Do the seasonal indices sum to 0?
 
 **Part B:** A naive seasonal forecast uses last year's same quarter as the forecast. Compute MAPE for 2023 using 2022 actuals as the forecast.
 
-**Part C:** A trend-adjusted forecast adds an estimated trend of +10 units per year (= +2.5 units per quarter) to last year's same quarter. Compute MAPE for 2023 under the trend-adjusted forecast. Compare with Part B.
+**Part C:** Suppose the company's earlier sales history (not shown) puts the trend at +10 units per year (= +2.5 units per quarter). A trend-adjusted forecast adds that +10 to last year's same quarter. Compute MAPE for 2023 under the trend-adjusted forecast. Compare with Part B.
 
 ---
 
@@ -315,7 +395,7 @@ $$s_{Q2} = 97.5 - 131.9 = \mathbf{-34.4}$$
 $$s_{Q3} = 115.0 - 131.9 = \mathbf{-16.9}$$
 $$s_{Q4} = 190.0 - 131.9 = \mathbf{+58.1}$$
 
-Sum check: $-6.9 - 34.4 - 16.9 + 58.1 = -0.1 \approx 0$ ✓
+Sum check: $-6.9 - 34.4 - 16.9 + 58.1 = -0.1$, which is 0 up to rounding. They must sum to 0: each index is a quarter's deviation from the overall mean, and with every quarter observed equally often those deviations cancel exactly. So the check catches an arithmetic slip; it does not test whether the seasonality is additive.
 
 Interpretation: Q4 is 58 units above average (+44%), Q2 is 34 units below average (−26%). This is a strong seasonal pattern — inventory planning must account for this.
 
@@ -345,7 +425,7 @@ Forecast = last year's same quarter + 10 units (one year of trend):
 
 $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 
-**Comparison:** Adding the trend reduces MAPE from 7.75% to 2.5% — a 68% improvement. This demonstrates the value of even a simple trend adjustment. Prophet's full model would further improve on this by using the Fourier series to more precisely model the seasonal pattern and detecting any changepoints in the trend.
+**Comparison:** Adding the trend reduces MAPE from 7.75% to 2.5%, a 68% improvement, which shows the value of even a simple trend adjustment. One caution: the comparison is fair only because the +10 came from data *before* 2023. A trend fitted on 2023 itself would make the 2.5% an in-sample number (Common Misconception 5). Prophet estimates both the trend and the seasonal shape from the data instead of by hand; whether that beats 2.5% has to be checked on held-out data (Section 1.4C).
 
 ---
 
@@ -353,15 +433,15 @@ $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 #### (~10 minutes)
 
 **The `plot_components()` output:** Prophet automatically generates a 3-panel plot:
-- **Trend panel:** Shows the fitted trend line with changepoints marked as vertical dashed lines. Only the ones the data paid for are visible as an actual kink — the other potential changepoints are still there, shrunk to a zero slope change (Section 1.4B). A visible kink means the data supported a shift in growth rate at one of the dates Prophet offered.
+- **Trend panel:** Shows the fitted trend line. `plot_components()` does not mark changepoints. To see them, draw the forecast with `fig = m.plot(forecast)` and call `add_changepoints_to_plot(fig.gca(), m, forecast)` (from `prophet.plot`): it adds a dashed red line only at changepoints whose slope change is at least 0.01, the ones the data kept. The other candidates are still in the model, shrunk to (almost) no slope change (Section 1.4B). A visible kink means the data supported a shift in growth rate at one of the dates Prophet offered.
 - **Yearly seasonality panel:** Shows the estimated seasonal effect for each day/week of the year. **Read the peak off this panel rather than assuming it.** A holiday-driven retailer peaks in Q4; a January-renewal, tax-season or budget-cycle business peaks in Q1 with Q4 as its trough. Both are ordinary.
-- **Holiday panel:** Shows the estimated effect of each specified holiday. Positive values indicate sales lift; negative values indicate drag.
+- **Holiday panel:** Shows the combined effect of the holidays you specified, as a spike at each holiday date. Positive values indicate sales lift; negative values indicate drag. **On weekly data, a holiday registers only on a row whose date it covers.** Thanksgiving is always a Thursday, so on Monday-stamped weekly data it gets no rows unless you give it a window: `lower_window=-6, upper_window=0` stretches each holiday over the six days before it, which always includes the Monday that starts its week. Check which holidays actually have rows before reading the panel.
 
-**Interpreting changepoints:** Each vertical line in the trend panel marks one of the evenly spaced dates Prophet offered (Section 1.4B); the ones with a visible slope change are the ones the data kept. Because the candidate dates were placed on a calendar grid *before* the fit, a kept changepoint will rarely land exactly on a known business event — read "within a few periods of a real event" as the reassuring case. If large slope changes survive in the middle of otherwise stable periods, the prior is too loose (lower `changepoint_prior_scale`); if a shift you know happened shows no kink at all, it is too tight.
+**Interpreting changepoints:** Each dashed line from `add_changepoints_to_plot` marks one of the evenly spaced dates Prophet offered (Section 1.4B) where the data kept a slope change; `m.changepoints` lists all 25 candidates. Because the candidate dates were placed on a calendar grid *before* the fit, a kept changepoint will rarely land exactly on a known business event — read "within a few periods of a real event" as the reassuring case. If large slope changes survive in the middle of otherwise stable periods, the prior is too loose (lower `changepoint_prior_scale`); if a shift you know happened shows no kink at all, it is too tight.
 
-**Interpreting uncertainty intervals:** Uncertainty intervals in the forecast plot should widen as you forecast further ahead. A constant-width interval is a warning — the model may be underestimating long-run uncertainty. Intervals that are very narrow (much less than the historical variation) are also suspect.
+**Interpreting uncertainty intervals:** The interval's noise part has the same width at every horizon and its trend part grows (Section 1.4A), so expect it to widen, by an amount that depends on how much the trend moved in the history. On a steady series it can stay almost constant for months, and that is not by itself a defect. The real warning is an interval much narrower than the errors you actually see on held-out data: check how often the holdout actuals fall inside it (about 95% of them should, for a 95% interval).
 
-**MAPE from cross-validation:** Run `performance_metrics()` after `cross_validation()`. Pay attention to how MAPE varies by forecast horizon. MAPE at horizon = 1 week is typically much lower than MAPE at horizon = 26 weeks. For inventory planning, use the MAPE at the specific horizon you care about (e.g., 8 weeks for 8-week lead times).
+**MAPE from cross-validation:** The single holdout in Section 1.4C scores one forecast. `cross_validation(m, initial=..., period=..., horizon=...)` repeats it: it refits the model at several cutoff dates, each time forecasting `horizon` ahead, and `performance_metrics()` then averages the errors by how far ahead each forecast was. Pay attention to how MAPE varies by forecast horizon. MAPE at horizon = 1 week is typically much lower than MAPE at horizon = 26 weeks. For inventory planning, use the MAPE at the specific horizon you care about (e.g., 8 weeks for 8-week lead times).
 
 **Before trusting the agent output:**
 1. Does the trend direction match your business knowledge? If Prophet shows a declining trend when you know the market is growing, the model is wrong.
@@ -394,11 +474,11 @@ $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 **1. "Prophet is always better than simple forecasting methods."**
 Prophet performs best with several years of data, clear seasonal patterns, and known holidays. For very short series (less than 2 years), or highly irregular data with no seasonal pattern, simpler methods (exponential smoothing, ARIMA) often perform comparably or better.
 
-**2. "More Fourier terms (larger N) always improves forecasts."**
+**2. "More Fourier terms (a higher Fourier order) always improves forecasts."**
 Larger N increases flexibility, which improves fit on training data but may worsen out-of-sample accuracy (overfitting). Always validate with temporal cross-validation, not training error.
 
 **3. "The 95% uncertainty interval means 95% of future observations will fall within it."**
-This would be true if the model were perfectly specified. In practice, the intervals are model-based — they reflect parameter uncertainty under the model's assumptions. Real-world uncertainty (structural breaks, unexpected events) is not captured, so actual coverage may be lower.
+This would be true only if the model were right. Prophet's default interval is built from the noise it measured and from simulated future trend changes like the ones in the history (Section 1.4A). It leaves out uncertainty in the seasonal shape and anything the history never showed (a new competitor, a pandemic), so actual coverage is often lower. Check it on a holdout.
 
 **4. "You should always include all known holidays."**
 Only include holidays that systematically affect your specific variable. Including holidays that have no effect on your product adds noise and reduces model accuracy. If Mother's Day does not affect your B2B product, do not include it.
@@ -412,12 +492,13 @@ Training MAPE measures fit, not forecast accuracy. A model that memorizes the tr
 
 | Agent step | Corresponds to |
 |---|---|
-| Decomposes $y(t) = g(t) + s(t) + h(t) + \varepsilon$ | Section 1.3 — additive decomposition |
+| Decomposes $y(t) = g(t) + s(t) + h(t) + \varepsilon$ (g = trend, s = seasonality, h = holidays) | Section 1.3 — additive decomposition |
 | Fits piecewise linear trend with changepoints | Section 1.3 — trend model |
 | Fits Fourier series for seasonality | Section 1.3 Deep Dive — how Prophet models seasonality internally |
-| Adds holiday indicators | Section 1.3 — holiday effects |
+| Adds holiday indicators | Section 1.3 — holiday effects; Section 2.2 — holiday windows on weekly data |
+| `add_regressor()` | Section 1.4B — a 0/1 step regressor for a permanent level shift |
 | `plot_components()` | Section 2.2 — interpreting trend/seasonality panels |
-| `cross_validation()` | Section 1.4C — evaluating forecast accuracy on a held-out period |
+| `cross_validation()` | Section 1.4C — one held-out period; Section 2.2 — repeated at several cutoffs |
 | `performance_metrics()` → MAPE | Section 1.1, Tool 2 — the MAPE formula |
 
 **What to verify before trusting the output:**
