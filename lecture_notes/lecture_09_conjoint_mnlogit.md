@@ -45,7 +45,11 @@ Willingness-to-pay for a feature = (feature coefficient) / |price coefficient|
 
 > WTP = β_feature / |β_price|
 
-This is derived by asking: how much higher price makes the premium version equally attractive as the standard version?
+This is derived by asking: how much higher a price makes the premium version exactly as attractive as the standard version? Start from two versions that are identical except for the feature, at the same price. The premium version is ahead by β_feature in utility. Now raise its price by Δ dollars: its lead becomes β_feature + β_price × Δ. The customer is indifferent when that lead is zero:
+
+> β_feature + β_price × Δ = 0  ⇒  Δ = β_feature / (−β_price) = β_feature / |β_price|
+
+(β_price is negative, so −β_price = |β_price|.) That Δ is the WTP: the largest price premium at which the average customer still weakly prefers the premium version.
 
 ---
 
@@ -118,7 +122,7 @@ To predict market shares for a set of competing products, compute utility for ea
 
 > e^(−2.16) = 0.115, e^(+0.02) = 1.020, e^(−1.25) = 0.287. Sum = 1.422
 >
-> Shares: A = 8.1%, B = 71.7%, C = 20.2%
+> Shares: A = 8.1%, B = 71.7%, C = 20.1%
 
 ---
 
@@ -126,9 +130,11 @@ To predict market shares for a set of competing products, compute utility for ea
 
 The multinomial logit model assumes IIA: **Independence of Irrelevant Alternatives**. Adding a new product draws share from all existing products proportionally to their current shares — regardless of how similar the new product is to existing ones.
 
-**Why this is often wrong:** If you add Plan C' (very similar to Plan C, but $1 cheaper), IIA predicts it draws from A and B proportionally. In reality, it would draw mostly from C (the similar product). IIA cannot model this substitution pattern.
+**Why this is often wrong:** If you add Plan C' (identical to Plan C, but $1 cheaper, so U_C' = −1.07), IIA predicts it draws from A, B **and C** in proportion to their current shares. Every plan loses the same fraction of its share (19.4%): the new shares are A 6.5%, B 57.8%, C 16.2%, C' 19.4%. So IIA has C' taking 13.9 points from B (premium, no ads) and only 3.9 from C, its near-twin. In reality, it would draw mostly from C (the similar product). IIA cannot model this substitution pattern.
 
 **Practical implication:** Market simulation results are more reliable when the products being compared are genuinely different. When testing very similar variants, IIA leads to overestimation of share for the new variant and underestimation of cannibalization from the most similar existing product.
+
+The standard fix is **nested logit**: the analyst groups close substitutes into a "nest" (here C and C'), so a new product draws more heavily from its own nest than from products outside it. It is not covered in this course; know that it exists and what problem it solves.
 
 > ### 🔍 Deep Dive: Why Logit Implies IIA
 > The multinomial logit model arises from the assumption that unobserved utility components follow an independent Gumbel distribution. Under this assumption, P(choose i) = e^(U_i) / Σⱼ e^(U_j). For any two alternatives i and k: P(i)/P(k) = e^(U_i − U_k). This ratio depends only on i and k, not on any other alternative in the choice set. That is the IIA property: adding or removing any third option does not change the ratio of probabilities for any pair of options.
@@ -184,7 +190,15 @@ Numbered to match the Checkpoint slide in this lecture's deck. Where the slide a
 
 **Slide Q4.** *"WTP for "no ads" = \$10. Current base price = \$8. Optimal premium tier price = \$18? Defend or critique."* — Same reasoning as Q3 above, which uses WTP = \$12, a \$10 tier and a \$22 proposal; the slide uses \$10, \$8 and \$18.
 
-**Slide Q5.** *"$\beta_{\text{price}} = +0.05$ from the MNL fit. What went wrong — and how do you fix it?"* — Not answered in these notes. Bring your answer to class.
+**Slide Q5.** *"$\beta_{\text{price}} = +0.05$ from the MNL fit. What went wrong — and how do you fix it?"* — Start from what a conjoint rules out. In Lecture 2 (its Slide Q4), a positive price coefficient in sales data can be a real finding: prices respond to demand (endogeneity), so high prices and high sales move together. In a conjoint, **price is randomised by design**, so that explanation is ruled out by construction. Suspect a defect first, and check in this order:
+
+1. **Look at the standard error first.** It is the cheapest check. If the confidence interval spans zero, +0.05 is noise: the design did not identify price sensitivity (for example, prices varied too little), and the fix is the design, not the model.
+2. **Check the coding.** Two different mistakes leave different fingerprints. If price was entered as a discount or a reversed index, *only* β_price flips sign; premium content and no ads still come out positive. If the `chosen` column is flipped (1 for the options *not* picked), *every* coefficient flips: premium content and no ads come out negative too. Fix: read the design matrix and confirm price rises in dollars and `chosen` marks the pick.
+3. **Check the choice sets.** The model must be fitted per choice task (ConditionalLogit grouped by respondent × task), not on pooled rows. Verify one respondent's rows by hand against the raw responses.
+4. **Coded correctly and still significantly positive:** respondents are likely reading price as a signal of quality, which means the profiles leave out an attribute they care about. That is a survey-design problem; add the missing attribute and re-field.
+
+Whichever it is, do **not** compute WTP from this fit: β_feature / |β_price| assumes a negative price coefficient, so the dollar figures it produces mean nothing (Section 2.2, "Before trusting the agent output", check 1).
+*Common wrong answer:* "Customers like paying more, so raise prices." With randomised prices, a positive coefficient is almost always a data or design problem, not a discovery.
 
 ### Slide Practice Answers
 
@@ -304,9 +318,9 @@ Market shares:
 
 $$P_1 = \frac{0.1423}{0.4062} \approx \mathbf{35.0\%}, \quad P_2 = \frac{0.2231}{0.4062} \approx \mathbf{54.9\%}, \quad P_3 = \frac{0.0408}{0.4062} \approx \mathbf{10.1\%}$$
 
-**Interpretation:** Product 2 (premium, no ads, \$18) dominates with 54.9% market share, capturing the segment that values a clean viewing experience highly. Product 3 (cheapest but full ads) captures only 10% — strong ad aversion makes the price advantage insufficient to compensate. Product 1 is squeezed in the middle.
+**Interpretation:** Product 2 (\$18, premium, no ads) leads with 54.9%. Its only difference from Product 1 is premium content at \$5 more, and premium content is worth \$8 (Part B), so the average respondent prefers it. Product 3 (cheapest, full ads) gets only 10%: its \$5 discount against Product 1 is worth 0.15 × 5 = 0.75 of utility, and full ads cost 2.00. Product 1 is squeezed in the middle.
 
-**Business implication:** The company currently running Product 1 should seriously consider switching to Product 2 pricing — the data shows most consumers prefer premium content enough to pay \$5 more per month, and the premium position is strongly differentiated from the cheap-but-ads option.
+**Business implication:** The simulation says premium content at \$18 beats standard content at \$13 for the average respondent. It does not say that switching Product 1 to premium would pay. Premium content costs money to license, and 54.9% is an average respondent's choice probability, not "55% of customers prefer premium" (Section 2.2). And if Product 1 became an exact copy of Product 2, MNL would treat the two twins as unrelated products, which is the near-copy case IIA gets wrong (Section 1.4C). Compare margin × share for each configuration before switching.
 
 ---
 
@@ -374,7 +388,7 @@ A negative coefficient means customers prefer the reference level over the coded
 |---|---|
 | Fits MNLogit via MLE | Sections 1.1 and 1.4A — the softmax choice probability and the utility model being fitted (the lecture does not derive the MLE itself) |
 | Reports β coefficients + standard errors | Section 1.4A — part-worth utilities; Section 2.2 — standard errors |
-| Computes WTP = β_attr / \|β_price\| | Section 1.4A — indifference derivation |
+| Computes WTP = β_attr / \|β_price\| | Section 1.1, Tool 2 — indifference derivation; Section 1.4A — worked WTP |
 | Runs market simulation using softmax | Section 1.4B — softmax formula |
 | Reports significance (p-values) | Section 2.2 — standard errors and statistical significance |
 
