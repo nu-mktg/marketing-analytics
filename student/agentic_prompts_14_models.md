@@ -5,467 +5,784 @@
 > Segmentation, CausalImpact) are not taught this term and carry no homework; their
 > prompts are kept here as reference.
 
-Each section contains: (1) a **Context Prompt** to orient the agent before any analysis,
-(2) a **Build Prompt** to generate the analysis, and (3) a **Validation Prompt** to
-critically evaluate the output before trusting it. Designed for GitHub Codespaces
-(Copilot Agent or Claude Projects).
+**L01–L10 (every taught model): "On your own data".** Each section is the real-world
+version of that homework's agent prompt, in six parts: the question it answers · data
+needed and deal-breakers · tools (package, functions, maintained status, checked
+2026-11-04) · a general prompt with `<placeholders>` to fill in · what you get back · checks
+before trusting it. Each ends with the values the homework prompt pins for grading that you
+should **not** copy to real data. The homework prompt is still the one to use for the
+homework. This page is for your own data, and it is not assessed.
 
-**How to use:** Paste the Context Prompt first. Confirm the agent understands the setup.
-Then paste the Build Prompt. Then run the Validation Prompt before accepting any output.
-
-**On your own data.** Sections marked "On your own data" (L09 and L10 so far) use a six-part
-format instead: the question it answers · data needed and deal-breakers · tools (package,
-function, maintained status) · a general prompt with `<placeholders>` · what you get back ·
-checks before trusting it. Each also lists the values the homework prompt pins for
-grading that you should not copy to real data. This material is not assessed.
+**L12–L14 (reference only)** keep the older three-prompt format: a Context Prompt to orient
+the agent, a Build Prompt to generate the analysis, and a Validation Prompt to check the
+output before trusting it.
 
 ---
 
 ## L01 — Bayesian A/B Testing
 
-### Context Prompt
+> **On your own data.** This section is the real-world version of Homework 1's agent
+> prompt. The homework prompt is a *grading* prompt: it fixes the counts, the prior, the
+> number of draws and the seed so every answer can be checked. Use the prompt below for
+> your own test, and read "What not to copy from the homework" first.
+
+### 1. The question it answers
+Given what you saw in a test, how likely is it that variant B really converts better
+than A, and by how much (as a percentage lift), with an honest range around that?
+
+### 2. Data you need, and deal-breakers
+See the
+[Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
+row 1. In practice: visitors and conversions for each variant, from the same period,
+with each visitor counted once.
+
+Stop before running if any of these is true:
+- **Users were not randomly split**, or one variant ran at a different time. Then the
+  difference may be the period, not the variant.
+- **Visitors are counted more than once** (sessions rather than people), or conversions
+  are not 0/1 per visitor. The Beta-Binomial model assumes independent 0/1 outcomes.
+- **The conversion rate drifted during the test** (a promotion started half way). The
+  posterior then averages two different rates.
+- **Very little data.** The prior then decides the answer (L01 Section 1.3). Say so, or
+  wait for more data.
+
+### 3. Tools
+Checked against PyPI on **2026-11-04**.
+
+| Step | Package and function | In the course Codespace? | Maintained? |
+|---|---|---|---|
+| Posterior (conjugate update) | No package: Beta(α + conversions, β + non-conversions) | n/a | n/a |
+| Posterior draws | `numpy`: `rng = np.random.default_rng(seed)`, then `rng.beta(a, b, size)` for each arm | Yes (1.26.4) | Yes |
+| Or | `scipy.stats.beta(a, b).rvs(size, random_state=rng)` | Yes (1.13.0) | Yes: 1.18.1 released 2026-08-21 |
+
+One thing to know, confirmed on the course env: **if you give each arm its own
+`random_state=42`, the two arms reuse the same random stream**, so their draws are
+correlated (0.11 in a test case) and P(B > A) moves. Create **one** generator and draw both
+arms from it.
+
+### 4. A general prompt
+Fill in every `<placeholder>`. Paste it as one message.
+
 ```
-I am a growth analyst running a website conversion experiment. Variant A is the
-current homepage design. Variant B is a redesigned version. I have visitor counts
-and conversion counts for each variant. I want to use Bayesian analysis to estimate
-the probability that Variant B has a higher true conversion rate than Variant A,
-and to compute a credible interval on the expected lift.
+I ran an A/B test. Variant A: <n_A> visitors, <k_A> conversions. Variant B: <n_B>
+visitors, <k_B> conversions. Visitors were randomly assigned, over <dates>.
+Prior for both variants: Beta(<alpha>, <beta>), chosen because <reason, e.g. past
+conversion rates around 4%>.
 
-My prior belief (before this experiment) is that conversion rates are typically around
-4–6% for this type of product page, based on historical data.
+1. Posterior for each variant: Beta(alpha + conversions, beta + non-conversions).
+   Print both, with their means.
+2. Draw <S, e.g. 100,000> samples from each posterior using ONE numpy Generator
+   (np.random.default_rng(<seed>)) for both arms. Do not reseed per arm, and do not
+   sort the draws.
+3. From the paired draws report: P(theta_B > theta_A); the expected relative lift
+   E[(theta_B - theta_A) / theta_A] as a %; and its 95% interval (2.5th and 97.5th
+   percentiles of the same ratio).
+4. Plot both posteriors on one chart.
+
+Show the code, then a results table. Do not invent any number.
 ```
 
-### Build Prompt
-```
-Using the experimental data I will provide:
+### 5. What you get back
+- Two posterior distributions, with their means.
+- P(B > A): a probability, not a p-value.
+- The expected percentage lift and a 95% interval for it.
 
-1. Encode the prior as a Beta distribution with parameters that reflect a prior mean
-   of approximately 5% and the equivalent of ~50 prior observations (enough to anchor
-   the prior without overwhelming the data).
+What it does **not** give you: a decision. Whether 0.90 or 0.99 is enough depends on how
+costly and reversible the change is (L01 Section 1.5).
 
-2. Compute the posterior Beta distribution for each variant by adding observed
-   conversions and non-conversions to the prior parameters. Report the posterior
-   alpha, beta, and mean for each variant.
+### 6. Checks before trusting it
+The L01 note has no "What to verify" list. These follow its "What to watch for" and Section 2.2.
+1. Each **posterior mean sits between the prior mean and the observed rate**, closer to
+   the observed rate when there is more data.
+2. **P(A > B) + P(B > A) ≈ 1.**
+3. **Mean of the ratio is not the ratio of the means.** The expected lift is the average
+   of (θ_B − θ_A)/θ_A over the draws. It is not (mean θ_B − mean θ_A) / mean θ_A. If the
+   agent computed the second, ask for the first.
+4. **The interval and the probability agree.** The 95% interval excludes 0 exactly when
+   P(B > A) is above 0.975 or below 0.025.
+5. **A wide interval is not a failed test.** It measures how sure you are, which is a
+   separate question from which way the lift goes.
+6. **Read the result as a probability statement** ("there is a 95% probability that B's
+   rate is higher"), not as a claim about repeated experiments.
 
-3. Use Monte Carlo simulation (100,000 samples) to estimate:
-   a) P(B > A): the probability that Variant B's true rate exceeds Variant A's
-   b) Expected lift: E[(θ_B - θ_A) / θ_A] expressed as a percentage
-   c) 95% credible interval on the absolute lift (θ_B - θ_A)
+### What not to copy from the homework
+- **The prior.** The homework gives it to you. On your own test, set it from past
+  conversion rates, and keep it weak unless you have a reason not to.
+- **`random_state=42`.** Any fixed seed makes the numbers reproducible. The value 42 has
+  no meaning, and seeding each arm separately is the mistake above.
+- **The visitor and conversion counts.** They are the graded scenario.
 
-4. Plot the posterior distributions for both variants on the same axis.
-   Mark the posterior means with vertical lines.
-
-Print all key values clearly labelled.
-```
-
-### Validation Prompt
-```
-Before I trust these results, run three checks:
-
-1. PARAMETER CHECK: Does posterior_alpha_B = prior_alpha + conversions_B?
-   Does posterior_beta_B = prior_beta + (visitors_B - conversions_B)?
-   Report: PASS or FAIL with the actual numbers.
-
-2. EFFICIENCY CHECK: Do the posterior means fall between the prior mean (5%) and
-   the raw observed conversion rates? They should — the posterior is a weighted
-   average of prior and data.
-   Report: PASS or FAIL.
-
-3. INTERPRETATION CHECK: Confirm that P(B > A) is a Bayesian posterior probability
-   (a statement about the current state of knowledge given data and prior),
-   NOT a long-run frequency ("B would win X% of repeated experiments").
-   If your output description uses frequentist language, correct it.
-```
+**Do keep** the same prior for both arms, the relative lift as the estimand, and around
+100,000 draws, which is enough for the second decimal to be stable.
 
 ---
 
 ## L02 — Price Elasticity and OLS
 
-### Context Prompt
+> **On your own data.** This section is the real-world version of Homework 2's agent
+> prompt. The homework prompt is a *grading* prompt: it fixes the dataset and the model
+> so every answer can be checked. Use the prompt below for your own data, and read "What
+> not to copy from the homework" first.
+
+### 1. The question it answers
+By what percentage do units sold change when the price changes by 1% (the elasticity),
+holding other things fixed?
+
+### 2. Data you need, and deal-breakers
+See the
+[Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
+row 2. In practice: units and price per store (or product) per period, plus anything else
+that moves demand (competitor price, promotions or displays, season).
+
+Stop, or change plan, if any of these is true:
+- **The firm set prices in response to demand** (raise when busy, discount when slow).
+  That is endogeneity, and it biases the elasticity, usually toward zero. More data does
+  not fix it. An instrument does (L02 Section 1.4C).
+- **Prices barely vary.** A narrow price range cannot identify the slope, let alone curvature.
+- **Units are zero in some periods.** log(0) is undefined. Decide how to handle zeros
+  before fitting; do not let the agent silently drop them.
+- **You want a price far outside the observed range.** A constant elasticity is a local
+  approximation, so do not extrapolate it.
+
+### 3. Tools
+Checked against PyPI on **2026-11-04**.
+
+| Step | Package and function | In the course Codespace? | Maintained? |
+|---|---|---|---|
+| Log-log regression with fixed effects | `statsmodels`: `smf.ols("log_units ~ log_price + ... + C(store_id)", data).fit()` | Yes (0.14.2) | Yes: 0.15.0 released 2026-08-27 |
+| Standard errors clustered by store | `.fit(cov_type="cluster", cov_kwds={"groups": df["store_id"]})` | Yes | Yes |
+| Instrumental variables (if you have an instrument) | `linearmodels`: `IV2SLS` | No | Yes: 7.1 released 2026-10-16 |
+
+### 4. A general prompt
+Fill in every `<placeholder>`. Paste it as one message.
+
 ```
-I am a pricing analyst at a consumer goods company. I have weekly sales data at
-the product-store level. Each row is one store-week observation. Columns include:
-units_sold, price (the focal product), competitor_price, display_flag (1 if the
-product was on a promotional display), and store_id.
+I have <weekly | daily> sales data in <file.csv>: columns <unit>, <time>, <units>,
+<price>, and these demand shifters: <competitor_price, promo_flag, ...>. Prices were set
+by <how prices were set, e.g. a national price list changed quarterly>.
 
-I want to estimate the price elasticity of demand using a log-log OLS regression,
-controlling for competitor price and display effects. The elasticity coefficient
-will inform a pricing recommendation.
+1. Check before fitting: how many rows have units = 0 or price <= 0 (stop and ask me if
+   any); how much price varies within each <unit>; how many levels each fixed-effect
+   column has.
+2. Create log_units = log(units) and log_price = log(price) (and log of any other price).
+3. Fit OLS with statsmodels:
+   log_units ~ log_price + <other regressors> + C(<unit>) [+ C(<time>)]
+   with standard errors clustered by <unit>. Report the full summary table.
+4. State the own-price elasticity (the log_price coefficient) with its 95% CI.
+5. Plot predicted vs actual log_units with a 45-degree line.
+
+Show the code, then the results. Do not invent any number.
 ```
 
-### Build Prompt
-```
-Using the pricing dataset:
+### 5. What you get back
+- An elasticity with a standard error, and the coefficients on the other regressors.
+- A predicted-vs-actual plot.
 
-1. Fit a log-log OLS regression:
-   ln(units_sold) = β₀ + β₁·ln(price) + β₂·ln(competitor_price) + β₃·display_flag + ε
+What it does **not** give you: proof that the elasticity is causal (that depends on how
+prices were set), or a revenue-maximising price. Under a constant elasticity, revenue is
+monotone in price. Finding a peak needs a model whose elasticity changes with price,
+fitted inside the observed range (L02 Section 1.4B).
 
-2. Report: all coefficients, standard errors, p-values, and R-squared.
-   Interpret β₁ as the own-price elasticity and β₂ as the cross-price elasticity.
+### 6. Checks before trusting it
+The first four are the L02 note's "What to verify before trusting the agent's elasticity estimate".
+1. The **sign is negative**.
+2. The **magnitude is plausible**: most consumer goods sit between −0.3 and −4.0. Outside
+   that, look for a data problem.
+3. **Fixed effects are in** if you have panel data. Without them, store-level differences bias the estimate.
+4. **Predicted vs actual** clusters around the 45-degree line.
+5. **R² is not the test.** A very high R² (above 0.99) is suspicious, and a high R² says
+   nothing about bias.
+6. **Ask how prices were set.** No regression output can show endogeneity. If prices
+   followed demand, say the estimate is likely biased toward zero.
 
-3. Compute the predicted units sold at the current mean price and at a 10% price increase.
+### What not to copy from the homework
+- **"Use random seed 42."** OLS has no randomness, so the seed does nothing.
+- **`C(product_id)`** in a file with one product. With one level it drops out. Use the
+  fixed effects your data actually has.
+- **Default (non-clustered) standard errors.** On panel data, cluster by store.
 
-4. Determine whether the current price is above or below the revenue-maximising price.
-   The revenue-maximising condition is |own-price elasticity| = 1. Report whether
-   a price increase would increase or decrease revenue.
-
-5. Plot log(price) vs. log(units_sold) as a scatter with the OLS line overlaid.
-
-Print all values clearly labelled.
-```
-
-### Validation Prompt
-```
-Three validation checks:
-
-1. SIGN CHECK: Is β₁ (own-price elasticity) negative? A positive own-price
-   elasticity would indicate demand increases with price — unlikely for a normal good
-   and a signal of endogeneity or specification error. Report: PASS or FAIL.
-
-2. ELASTICITY INTERPRETATION: Does your output correctly state that |β₁| > 1 means
-   elastic demand (price increase reduces revenue) and |β₁| < 1 means inelastic
-   (price increase raises revenue)? Confirm the direction of your revenue recommendation
-   is consistent with this.
-
-3. ENDOGENEITY WARNING: If prices in this dataset were set by store managers in
-   response to expected demand (lower prices during slow periods), the OLS estimate
-   is biased toward zero. Does the regression setup use any instrument or fixed effects
-   to address this? If not, flag this as a limitation.
-```
+**Do keep** the log-log form (so the coefficient is the elasticity), the competitor price
+and promotion controls, and store fixed effects.
 
 ---
 
 ## L03 — Marketing Mix Modelling
 
-### Context Prompt
+> **On your own data.** This section is the real-world version of Homework 3's agent
+> prompt. The homework prompt is a *grading* prompt: it fixes the dataset, the parameter
+> bounds and the optimiser's seed so every answer can be checked. Use the prompt below for
+> your own data, and read "What not to copy from the homework" first.
+
+### 1. The question it answers
+How much revenue does each channel's spend bring in, counting carry-over (adstock) and
+diminishing returns (saturation)? And how should a fixed total budget be split across channels?
+
+### 2. Data you need, and deal-breakers
+See the
+[Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
+row 3. In practice: weekly spend per channel and weekly revenue, ideally two years or
+more, plus the other things that move revenue (season, price, promotions, distribution).
+
+Stop, or change plan, if any of these is true:
+- **Channel spends move together** (always raised and cut at the same time). The model
+  cannot separate them.
+- **No controls for season or promotions.** Their effect is then credited to whatever
+  channel happens to spend at the same time (L03 Section 1.4C).
+- **Less than about two years of weekly data.** There are too few points for nine curve
+  parameters plus the regression.
+- **You need a causal answer for one channel.** An MMM is observational. A geo-holdout
+  test answers that (L03 Section 2.2).
+
+### 3. Tools
+Checked against PyPI and GitHub on **2026-11-04**.
+
+| Step | Package and function | In the course Codespace? | Maintained? |
+|---|---|---|---|
+| Joint fit of adstock + Hill + regression | `scipy.optimize.differential_evolution` over all curve parameters, with the betas by `numpy.linalg.lstsq` inside each evaluation | Yes (scipy 1.13.0) | Yes: scipy 1.18.1 released 2026-08-21 |
+| Budget split at a fixed total | `scipy.optimize.minimize(method="SLSQP")` with an equality constraint, **started from several points including the corners** | Yes | Yes |
+| Bayesian MMM with priors and uncertainty | `pymc-marketing`: `MMM` with `GeometricAdstock`, `HillSaturation` | No: needs Python 3.12 or newer | Yes: 1.3.0 released 2026-10-22 |
+| Or | Google's `google-meridian` | No | Yes: 2.1.0 released 2026-09-25 |
+
+### 4. A general prompt
+Fill in every `<placeholder>`. Paste it as one message.
+
 ```
-I am a marketing analyst at a consumer brand with weekly data on advertising spend
-across TV, digital, and social channels and the corresponding weekly revenue. I want
-to fit a Marketing Mix Model that accounts for adstock (advertising carry-over) and
-diminishing returns (Hill function), then use the model to optimise budget allocation
-across channels.
+I have <N> weeks of data in <file.csv>: <week>, spend columns <channel_1>, <channel_2>,
+... (in <unit>), revenue (in <unit>), and controls <season / price / promo columns, or
+"none">.
+
+1. Check before fitting: the correlation between every pair of spend columns (warn me
+   above 0.8), the weeks with zero spend per channel, and the number of weeks.
+2. Model: adstock A_t = S_t + lambda * A_{t-1} per channel; Hill
+   H(A) = A^alpha / (EC50^alpha + A^alpha) per channel; revenue = beta_0 +
+   sum_c beta_c * H(A_c) + <controls> + error.
+3. Fit everything JOINTLY: minimise the total squared error over all lambdas, EC50s and
+   alphas at once with scipy.optimize.differential_evolution, solving the betas by least
+   squares inside each evaluation. Bounds: lambda in [0, 0.95], EC50 within the range of
+   each channel's ADSTOCK, alpha in [0.3, 3]. Report every parameter and the in-sample R^2.
+4. Marginal ROI per channel at current spend, using steady-state adstock A = S/(1 - lambda):
+   MR = beta * H'(A) / (1 - lambda).
+5. Budget split: hold the total at <current average | a given amount>. Maximise predicted
+   revenue with SLSQP from several starting points, and also evaluate every corner
+   (all budget in one channel). Report the best, the current split, and both predicted revenues.
+
+Show the code, then one results table per step. Do not invent any number.
 ```
 
-### Build Prompt
-```
-Using the MMM dataset:
+### 5. What you get back
+- λ, EC50 and α for each channel, the betas, and an in-sample R².
+- The marginal return on the next unit of spend, per channel.
+- A recommended split at a fixed total, with predicted revenue at the current and recommended split.
 
-1. For each channel, transform spend into adstock using the recursion:
-   A_t = S_t + λ · A_{t-1}
-   Fit λ separately for each channel as a parameter.
+What it does **not** give you: causal effects (spend may follow demand), uncertainty on
+the parameters (this is a least-squares point fit), or a safe answer far outside the
+spend levels you observed.
 
-2. Apply the Hill transformation to each adstock series:
-   H(A) = A^α / (EC50^α + A^α)
-   Fit α and EC50 for each channel.
+### 6. Checks before trusting it
+The first four are the L03 note's "What to verify in the agent output".
+1. **Every λ is between 0 and 1.** λ = 0 (no carry-over) is allowed.
+2. **EC50 is plausible against the adstock series**, not against raw spend. Adstock is
+   larger than spend by about 1/(1 − λ).
+3. **Fitted weekly revenue tracks actual weekly revenue** (in-sample R²).
+4. **The budget moves toward the higher marginal ROI**, with MR = β × Hill slope ÷ (1 − λ).
+   It does not simply move toward the channel furthest below its EC50.
+5. **Equal marginal ROI is not proof of the best split.** With S-shaped curves (α > 1) an
+   equal-MR split can be a minimum. Compare against the corners (L03 Section 1.4C).
+6. **Large reallocations deserve suspicion.** Moving most of the budget is a reason to
+   test with a geo-holdout before acting.
 
-3. Fit OLS: revenue = β₀ + Σ βⱼ · H(Aⱼ) + ε
+### What not to copy from the homework
+- **`seed=42` and the exact bounds** (EC50 in [1, 300]). The bounds fit the course
+  dataset's scale. Set them from your own adstock range.
+- **A_0 = 0.** Fine for a toy. On real data, start the recursion before the period you fit (a burn-in).
+- **No control variables.** The homework has none. Real data almost always needs them.
 
-4. Report:
-   a) Fitted λ and EC50 for each channel
-   b) Marginal ROI at current spend for each channel (dRevenue/dSpend)
-   c) Current channel contribution (% of modelled revenue)
-
-5. Recommend a budget reallocation: which channel should receive more spend
-   and which less, based on marginal ROI equalisation?
-
-Print all results clearly labelled.
-```
-
-### Validation Prompt
-```
-Four validation checks:
-
-1. ADSTOCK DIRECTION: Verify A₂ > 0 when S₂ = 0 and A₁ > 0.
-   If adstock in a zero-spend week is zero, the recursion is wrong. Report: PASS/FAIL.
-
-2. HILL FUNCTION AT EC50: For each channel, verify H(EC50) ≈ 0.50.
-   This must hold for any value of α. Report: PASS/FAIL for each channel.
-
-3. MARGINAL ROI LOGIC: Is the channel with the highest marginal ROI NOT currently
-   receiving the most budget? If two channels have equal marginal ROI, the budget
-   is already optimal for those two. Confirm the reallocation recommendation is
-   consistent with this logic.
-
-4. DECAY INTERPRETATION: Confirm that a higher λ means SLOWER decay (effects
-   persist longer), not faster. If your output reverses this, correct it.
-```
+**Do keep** the joint fit (fitting channel by channel leaves EC50 unidentified), the
+steady-state adstock in the budget step, and the 1/(1 − λ) factor in marginal ROI.
 
 ---
 
 ## L04 — Survival Analysis
 
-### Context Prompt
+> **On your own data.** This section is the real-world version of Homework 4's agent
+> prompt. The homework prompt is a *grading* prompt: it fixes the dataset, the encoding
+> and the time points so every answer can be checked. Use the prompt below for your own
+> data, and read "What not to copy from the homework" first.
+
+### 1. The question it answers
+How long do customers stay? What share is still there at month 6, 12 or 24? And which
+customer traits go with a higher or lower churn hazard?
+
+### 2. Data you need, and deal-breakers
+See the
+[Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
+row 4. In practice: one row per customer, with time observed (start to churn, or start
+to today), a churned flag (1 = churned, 0 = still active, i.e. censored), and the traits
+you want to compare.
+
+Stop before fitting if any of these is true:
+- **You kept only the customers who churned**, or **treated still-active customers as
+  churned**. Both throw away what survival analysis exists to use (L04 Section 1.3).
+- **Censoring is informative**: customers leave your data *because* they were about to
+  churn (for example, accounts removed when a payment fails).
+- **Newer cohorts behave differently.** Their short histories then make the long-run tail
+  look better than it will be.
+- **The trait was chosen by the customer** (plan type, opt-in programme). The hazard ratio
+  is then an association, not the effect of moving someone to that group (L04 Section 2.2).
+
+### 3. Tools
+Checked against PyPI and GitHub on **2026-11-04**.
+
+| Step | Package and function | In the course Codespace? | Maintained? |
+|---|---|---|---|
+| Survival curves | `lifelines`: `KaplanMeierFitter().fit(durations, event_observed)`, `.survival_function_at_times([...])` | Yes (0.29.0) | Yes: 0.30.3 released 2026-03-05 |
+| Compare two groups | `lifelines.statistics.logrank_test` | Yes | Yes |
+| Hazard ratios | `CoxPHFitter().fit(df, duration_col=, event_col=)`, `.summary`, `.concordance_index_` | Yes | Yes |
+| Proportional-hazards check | `cph.check_assumptions(df, p_value_threshold=0.05)` | Yes | Yes |
+
+One thing to know, confirmed on the course env: **`check_assumptions` flags at p < 0.01
+by default**, not 0.05. Set `p_value_threshold` yourself, or the agent's "no violations"
+uses a different cutoff from the one you report.
+
+### 4. A general prompt
+Fill in every `<placeholder>`. Paste it as one message.
+
 ```
-I am a customer success analyst at a subscription SaaS company. I have a cohort
-dataset where each row is one customer. Columns include: customer_id, tenure_months
-(how long they have been a customer), churned (1 = churned, 0 = still active /
-censored), and several behavioral covariates (support tickets, logins, integrations).
+I have customer data in <file.csv>: <customer_id> (not a covariate), <duration> (in
+<months>), <churned> (1 = churned, 0 = still active), and covariates <list, with their
+units>. Group of interest: <e.g. plan_type>.
 
-I want to: (1) estimate the survival function non-parametrically, (2) fit a Cox
-proportional hazards model to identify churn predictors, and (3) use the model
-to identify customers most at risk in the next 90 days.
+1. Check before fitting: the share censored, durations <= 0 (stop if any), and churn
+   rate by start cohort (warn me if newer cohorts churn much faster).
+2. Kaplan-Meier curves for each level of <group>, on one chart. Report S(t) at
+   t = <6, 12, 24> for each group, and a log-rank test between groups.
+3. Cox model with <covariates>. Encode <categorical> as 0/1 with <reference level> = 0.
+   Report hazard ratios, 95% CIs, p-values and the concordance index.
+4. Proportional hazards: check_assumptions with p_value_threshold=0.05. Report which
+   covariates, if any, violate it.
+5. Conditional churn: P(churn between <t1> and <t2> | still active at <t1>) = 1 - S(t2)/S(t1).
+
+Show the code, then one results table per step. Do not invent any number.
 ```
 
-### Build Prompt
-```
-Using the survival dataset:
+### 5. What you get back
+- Survival curves, survival at your chosen months, and a log-rank p-value.
+- A hazard ratio per covariate, *per unit* of that covariate, with a CI.
+- A concordance index and a list of any proportional-hazards violations.
 
-1. Fit a Kaplan-Meier survival curve. Report Ŝ(t) at t = 6, 12, 18, 24 months.
-   Plot the KM curve with 95% confidence bands.
+What it does **not** give you: the probability that a given customer churns (a hazard
+ratio multiplies a rate, not a probability), or the effect of moving a customer to a
+different plan when customers chose their plan.
 
-2. Compute the conditional churn probability from month 12 to month 24 for
-   customers who survived to month 12. Use: 1 - Ŝ(24)/Ŝ(12).
+### 6. Checks before trusting it
+The first five are the L04 note's "What to verify before trusting the output".
+1. Each **KM curve starts at 1.0 and only steps down**.
+2. **Every hazard ratio is positive.**
+3. **C-index is above 0.6.**
+4. **Engagement traits have HR < 1, friction traits HR > 1.** If not, check the coding.
+5. **A group the customer chose is reported as an association**, not an effect.
+6. **Do not rank traits by their HR.** HRs are per unit, so a covariate measured in
+   different units gets a different HR. Compare effects for realistic changes (HR^k for k units).
+7. **A covariate that violates proportional hazards** has an HR that is only an average over time. Say so.
 
-3. Fit a Cox PH model with all available covariates. Report:
-   a) Hazard ratio and 95% CI for each covariate
-   b) Which covariate has the largest hazard ratio (greatest churn risk)
-   c) Which has the smallest (most protective)
-   d) Concordance index (C-index)
+### What not to copy from the homework
+- **`random_state=42`.** Kaplan-Meier and Cox are deterministic fits, so the seed does nothing.
+- **"No penalizer, original scale"** is a reproducibility pin. On many correlated
+  covariates a small penalizer is reasonable, but then report that you used one.
+- **t = 6, 12, 24 months.** Choose the time points your decision is about.
 
-4. Check the proportional hazards assumption using Schoenfeld residuals or
-   log-log survival plots. Flag any covariate that violates PH.
-
-Print all values clearly labelled.
-```
-
-### Validation Prompt
-```
-Three validation checks:
-
-1. CENSORING HANDLING: Confirm that customers who are still active (churned = 0)
-   are treated as censored, not as churned at their current tenure. If the model
-   drops them or treats them as events, the survival estimate is biased downward.
-   Report: PASS or FAIL.
-
-2. KM MONOTONICITY: Confirm that Ŝ(t) is non-increasing. Ŝ(6) ≥ Ŝ(12) ≥ Ŝ(18) ≥ Ŝ(24).
-   If this is violated, there is a data or implementation error.
-
-3. HAZARD RATIO INTERPRETATION: For a covariate with HR = 1.42, confirm your output
-   states the hazard is 42% HIGHER (not 42% lower, not 1.42x lower).
-   For HR = 0.68, confirm: 32% lower hazard (not 68% higher).
-```
+**Do keep** censored customers in the data, a single 0/1 coding with a named reference
+level, and an explicit p < 0.05 threshold for the PH test.
 
 ---
 
 ## L05 — Markov Chains
 
-### Context Prompt
+> **On your own data.** This section is the real-world version of Homework 5's agent
+> prompt. The homework prompt is a *grading* prompt: it fixes the dataset, the horizon and
+> the rounding so every answer can be checked. Use the prompt below for your own data, and
+> read "What not to copy from the homework" first.
+
+### 1. The question it answers
+Customers move between states (Active, At-Risk, Churned) from one period to the next.
+Where will the customer base be in k periods? And, when Churned is permanent, how long
+does a customer in each state last on average before churning?
+
+### 2. Data you need, and deal-breakers
+See the
+[Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
+row 5. In practice: one row per customer per period with that period's state, for at
+least two consecutive periods, using the same state definitions throughout.
+
+Stop, or change plan, if any of these is true:
+- **The states are fuzzy or were redefined part way.** Transition rates then mix two definitions.
+- **Dynamics change over time** (season, a product change, a campaign). One pooled matrix
+  then averages them, and projections can be far off.
+- **Too many states for your data.** Many cells get a handful of transitions, and those
+  probabilities are mostly noise.
+- **Churned customers come back in your data.** Either it is a data error, or there is a
+  win-back flow and Churned is not absorbing. Decide which before fitting.
+
+### 3. Tools
+No dedicated package is needed: `pandas` to count transitions and `numpy` for the matrix
+algebra (both in the course Codespace). The core operations are `v @ P` (one period
+ahead), repeated multiplication (k periods), and
+`np.linalg.solve(np.eye(m) - Q, np.ones(m))` for the expected time to absorption, where
+`Q` is P restricted to the non-absorbing states.
+
+### 4. A general prompt
+Fill in every `<placeholder>`. Paste it as one message.
+
 ```
-I am a retention analyst. I have monthly snapshots of customer engagement states
-for a subscription service. States are: Active, At-Risk, and Churned (absorbing).
-Each row represents a customer-month-state observation. I want to estimate the
-transition probability matrix and use it to project the customer state distribution
-forward and compute the steady state.
+I have <file.csv> with columns <customer_id>, <period>, <state>. States: <list>.
+<Absorbing state, e.g. Churned> is permanent: <yes | no, we run win-back>.
+
+Convention, used in every step: P[i, j] = P(next period = j | this period = i). Rows
+are the CURRENT state and every ROW sums to 1. A distribution is a ROW vector, so one
+period ahead is v @ P. Never P @ v, and never transpose P.
+
+1. Estimate P by counting transitions between consecutive periods for the same customer
+   and normalising each row. Print P with labels and the count behind each row.
+2. Check: every row sums to 1 (within 0.001); the absorbing state's row is [0, ..., 1];
+   report any customer who leaves the absorbing state.
+3. Project the current distribution <k> periods ahead deterministically (v @ P, k times).
+   Do not simulate individual customers. Plot each state's share over time.
+4. If there is an absorbing state: expected periods until absorption for each
+   non-absorbing state, t = (I - Q)^-1 * 1. If there is not: the steady state pi with
+   pi @ P = pi.
+5. Scenario: raise P[<from> -> <to>] by <x> points, taking it from P[<from> -> <which
+   entry gives way>], so the row still sums to 1. Report the change in step 4's answer.
+
+Show the code, then one results table per step. Do not invent any number.
 ```
 
-### Build Prompt
-```
-Using the engagement dataset:
+### 5. What you get back
+- A labelled transition matrix and the counts behind it.
+- The state mix k periods ahead.
+- Expected periods until churn from each state (absorbing chain), or the long-run mix
+  (chain with no absorbing state).
+- The change in that answer under your scenario.
 
-Convention, used in every step: P[i, j] = P(next month = j | this month = i).
-Rows are the CURRENT state, columns the NEXT state, and every ROW sums to 1.
-A distribution is a ROW vector, so one month ahead is v @ P -- never P @ v, and
-never transpose P.
+What it does **not** give you: proof that a campaign *would* change the transition rate.
+The scenario assumes the change, so measuring it needs a randomised holdout (L05 Section 1.4C).
 
-1. Compute the transition matrix P by counting transitions between consecutive months
-   and normalising each row to sum to 1. Report the full 3×3 matrix with row labels
-   (current state) and column labels (next state).
+### 6. Checks before trusting it
+The first five are the L05 note's "What to verify".
+1. **Every row of P sums to 1** (within 0.001). If the *columns* do, P has been transposed.
+2. **The steady state satisfies πP ≈ π.** Multiply it out.
+3. **An absorbing Churned row is exactly [0, 0, 1].**
+4. **The transitions make sense**: At-Risk → Churned is larger than Active → Churned.
+5. **Every expected time to absorption is positive, and the healthier state's is larger.**
+   If At-Risk outlasts Active, suspect a transposed P.
+6. **With one absorbing state, the steady state is always 100% in that state.** That is
+   expected and carries no planning information, so use expected time to absorption instead (L05 Section 1.4B).
 
-2. Starting from the current state distribution v₀ = [fraction Active, fraction At-Risk,
-   fraction Churned], compute v₁ and v₂ using vector-matrix multiplication
-   (row vector on the left): v_{t+1} = v_t @ P
+### What not to copy from the homework
+- **12 months, starting from "the current observed distribution", and the rounding.**
+  Use your own planning horizon and current mix.
+- **"All customers start Active in month 1."** Real data has customers joining at
+  different times. Count transitions, do not assume a common start.
 
-3. Compute the steady-state distribution π* by solving π @ P = π, Σπᵢ = 1
-   (π is a row vector: a LEFT eigenvector of P, i.e. an eigenvector of P.T).
-   Report what fraction of customers will eventually be in each state.
-
-4. Show what happens to the state distribution if P[At-Risk → Active] is increased
-   by 15 percentage points (a retention campaign effect). Recompute v₁ and v₂.
-   What is the change in the Active fraction at t = 2?
-
-Print all results clearly labelled. Rows of P must sum to 1.
-```
-
-### Validation Prompt
-```
-Three validation checks:
-
-1. ROW SUMS: Verify every row of P sums to exactly 1.00 (within floating-point tolerance).
-   Report: PASS or FAIL for each row.
-
-2. MULTIPLICATION DIRECTION: Confirm you computed v_{t+1} = v_t @ P (row vector times
-   matrix), NOT P @ v_t (matrix times column vector). These give different results.
-   Show the shape of the operation explicitly: (1×3) @ (3×3) -> (1×3). Confirm that
-   P's ROWS, not its columns, sum to 1 — if the columns do, P has been transposed.
-
-3. ABSORBING STATE: If Churned is an absorbing state, P[Churned → Churned] should equal
-   1.0 and P[Churned → Active] = P[Churned → At-Risk] = 0. Verify this holds.
-   If the steady state has all customers eventually Churned, confirm this is expected
-   (not a modelling error) for a chain with a single absorbing state.
-```
+**Do keep** the row-vector convention, deterministic projection (there is nothing to
+simulate), and computing from the unrounded matrix.
 
 ---
 
 ## L06 — Multi-Touch Attribution (Shapley Values)
 
-### Context Prompt
+> **On your own data.** This section is the real-world version of Homework 6's agent
+> prompt. The homework prompt is a *grading* prompt: it fixes the dataset, the channels
+> and the output format so every answer can be checked. Use the prompt below for your own
+> data, and read "What not to copy from the homework" first.
+
+### 1. The question it answers
+How should credit for conversions be shared among the channels a customer touched, and
+how different is that from giving all credit to the last touch?
+
+### 2. Data you need, and deal-breakers
+See the
+[Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
+row 6. In practice: one row per customer journey with the channels in touch order and a
+0/1 converted flag, **including journeys that did not convert**.
+
+Stop, or change plan, if any of these is true:
+- **You only have converting paths.** Neither Shapley nor removal effects can be computed.
+- **Most conversions come from single-channel paths.** Every method then gives the same
+  answer, so check the share of multi-channel paths first (L06 Section 2.1).
+- **You want to know what happens if you switch a channel off.** Neither method answers
+  that. It needs a holdout experiment (L06 Section 1.4C).
+- **Many channels.** Exact Shapley grows as n! orderings, so beyond about 10 channels it
+  needs sampling, and large coalitions become sparse.
+
+### 3. Tools
+Checked against PyPI on **2026-11-04**.
+
+| Step | Package and function | In the course Codespace? | Maintained? |
+|---|---|---|---|
+| Last touch, Shapley (exact) | No package: `pandas` plus `itertools.permutations` over the channels | Yes | n/a |
+| Markov removal effects | `numpy`: build the transition matrix (Start, channels, Conversion, Null) and solve for the conversion probability | Yes | n/a |
+| Or, packaged Markov attribution | `ChannelAttribution`: `markov_model(...)` | No | Yes: 2.2.5 released 2026-06-08 |
+
+### 4. A general prompt
+Fill in every `<placeholder>`. Paste it as one message.
+
 ```
-I am a marketing analyst at a DTC e-commerce brand. I have customer journey data
-where each row is one conversion path. Columns: conversion_id, channels (pipe-separated
-sequence of touchpoints), and converted (1/0). Channels include: paid_search, social,
-email, display, organic. I want to attribute conversion credit to each channel using
-Shapley values and compare to last-touch attribution.
+I have journey data in <file.csv>: <journey_id>, <path> (channels in touch order,
+separated by '<sep>'), <converted> (0/1). It includes non-converting journeys.
+Channels: <list>.
+
+1. Check first: number of journeys, conversion rate, and the share of conversions from
+   multi-channel paths. Stop and tell me if almost all are single-channel.
+2. Last touch: the percent of conversions where each channel was the final touch.
+3. Shapley: enumerate all channel orderings. Use the coalition value
+   v(S) = (conversions on paths whose channels all lie in S) / (all paths),
+   so v({}) = 0 and v is monotone in S. Do NOT use the conversion rate within the
+   paths confined to S. Average each channel's marginal contribution over orderings.
+4. Markov removal effects: build the first-order transition matrix with Start,
+   Conversion and Null states. For each channel, redirect every transition INTO it to
+   Null, and report the RELATIVE drop (p_full - p_removed) / p_full.
+5. One table: last touch %, Shapley value, Shapley %, removal effect, per channel.
+   One grouped bar chart.
+
+Show the code, then the results. Do not invent any number.
 ```
 
-### Build Prompt
-```
-Using the attribution dataset:
+### 5. What you get back
+- Three credit views per channel: last touch, Shapley and removal effect.
+- A chart showing where they disagree.
 
-1. Compute last-touch attribution: for each conversion, award 100% credit to the
-   final channel. Report each channel's share of total conversions.
+What it does **not** give you: incrementality. Shapley and removal effects describe how
+channels co-occur on converting paths. Removing a channel *from the model* is not
+switching it off *in the world*.
 
-2. Compute Shapley value attribution using marginal contribution averaging across
-   all possible coalitions. The Shapley value for channel c is:
-   φ_c = (1/n!) Σ [v(S ∪ {c}) - v(S)] averaged over all orderings.
-   Use the channel presence/absence in conversion paths to estimate v(S).
+### 6. Checks before trusting it
+The first four are the L06 note's "What to verify before trusting the output".
+1. **Shapley values sum to about the overall conversion rate.** This holds by
+   construction, so it checks the arithmetic, not the business story.
+2. **Every Shapley value is non-negative.** With the v(S) above it must be, so a negative
+   one means the code used a different v.
+3. **Every removal effect is between 0 and 1.**
+4. **A high Shapley value means "on many converting paths", not "needed".** A channel
+   that rides along everywhere still scores high.
+5. **Removal effects do not sum to 1.** They are not credit shares, so do not present them as one.
 
-3. Report: a comparison table of last-touch % vs. Shapley % for each channel.
-   Verify that Shapley values sum to the overall conversion rate (efficiency axiom).
+### What not to copy from the homework
+- **`seed=42`.** Nothing here is random, so the seed does nothing.
+- **"Percent, e.g. 12.3, not 0.123"** is a grading format. Report whatever your readers expect.
+- **Four named channels.** Use your own channel list, and decide how to treat repeated
+  touches of the same channel (the course counts them once).
 
-4. Plot: grouped bar chart comparing last-touch and Shapley attribution side by side.
-
-Print all values clearly labelled.
-```
-
-### Validation Prompt
-```
-Three validation checks:
-
-1. EFFICIENCY AXIOM: Do the Shapley values sum to the overall conversion rate?
-   Σ φ_c should equal the fraction of paths that converted.
-   Report the sum and whether it matches. Report: PASS or FAIL.
-
-2. LAST-TOUCH BIAS CHECK: Paid search and direct channels typically appear last in
-   conversion paths and therefore receive inflated last-touch credit. Does your output
-   show paid_search or direct with higher last-touch than Shapley share?
-   If not, verify the path data has multi-touch paths (single-touch paths make
-   last-touch and Shapley identical).
-
-3. CAUSATION WARNING: Confirm your output does NOT claim Shapley values represent
-   the causal incremental effect of each channel. Shapley values measure marginal
-   co-occurrence in observed paths, not whether removing the channel would cause
-   fewer conversions. Flag if this distinction is absent from the output.
-```
+**Do keep** the all-paths v(S), the redirect-to-Null construction, and the relative drop.
+These are the method, not grading pins.
 
 ---
 
 ## L07 — Uplift Modelling (T-learner)
 
-### Context Prompt
+> **On your own data.** This section is the real-world version of Homework 7's agent
+> prompt. The homework prompt is a *grading* prompt: it pins the forest size, the seed,
+> the exact split call and the scenario's cost and order value so every answer can be
+> checked. Use the prompt below for your own experiment, and read "What not to copy from
+> the homework" first.
+
+### 1. The question it answers
+In a randomised campaign, which customers does the treatment actually change? Who should
+you target so that the extra conversions are worth the cost, and whom should you leave alone?
+
+### 2. Data you need, and deal-breakers
+See the
+[Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
+row 7. In practice: one row per customer with a 0/1 treatment flag, a 0/1 outcome, and
+features measured **before** treatment.
+
+Stop, or change plan, if any of these is true:
+- **Treatment was not randomised** (for example, the team picked who got the coupon). The
+  two models then compare different kinds of customer, and τ̂ is biased.
+- **Features measured after treatment** (anything the treatment could have changed).
+- **Thin corners**: feature combinations where almost everyone was treated, or almost no
+  one. τ̂ there is mostly noise.
+- **An experiment sized only for the average effect.** It is usually too small to rank
+  customers reliably, so expect a small held-out Qini (the L07 note says the homework's held-out ranking is close to random).
+
+### 3. Tools
+Checked against PyPI and GitHub on **2026-11-04**.
+
+| Step | Package and function | In the course Codespace? | Maintained? |
+|---|---|---|---|
+| The two outcome models | `scikit-learn`: `RandomForestClassifier`, with `predict_proba(X)[:, 1]` | Yes (1.4.2) | Yes: 1.9.1 released 2026-09-10 |
+| Train/test split | `sklearn.model_selection.train_test_split(..., stratify=...)` | Yes | Yes |
+| Qini coefficient | `scikit-uplift`: `sklift.metrics.qini_auc_score`, `sklift.viz.plot_qini_curve` | Yes (0.5.1) | **Dormant**: last release August 2022, no commits since October 2023 |
+| Maintained alternative | `causalml`: `causalml.metrics.qini_score`, `plot_qini` (also ready-made T-, S- and X-learners) | No (installs on Python 3.11) | Yes: 0.18.0 released 2026-10-12 |
+
+`scikit-uplift` still works in the Codespace, but do not start a new project on it.
+Qini has several incompatible definitions, so **never compare a Qini from one package
+with a Qini from another**.
+
+### 4. A general prompt
+Fill in every `<placeholder>`. Paste it as one message.
+
 ```
-I am a growth analyst at a subscription service. I have data from a randomised
-retention campaign experiment. Each row is one customer. Columns: customer_id,
-treated (1 = received campaign, 0 = control), converted (1 = renewed, 0 = churned),
-and several behavioral covariates (tenure, usage frequency, plan type, support tickets).
-I want to estimate heterogeneous treatment effects (CATE) using a T-learner and
-identify which customers to target in the next campaign.
+I ran a randomised experiment. <file.csv> has <customer_id>, <treated> (0/1),
+<outcome> (0/1), and pre-treatment features <list>. Treatment = <what it was>. It costs
+<c> per treated customer, and a conversion is worth <v>.
+
+1. Balance: compare treated vs control means on every feature. Report the observed
+   ATE = treated outcome rate - control outcome rate, on all the data.
+2. Split 80/20 with train_test_split, stratified on treated x outcome, fixed seed.
+3. T-learner: fit mu1 (RandomForestClassifier) on treated training rows only and mu0 on
+   control training rows only. Use min_samples_leaf=<e.g. 50> so the forests do not
+   memorise the training rows. tau_hat = mu1(X) - mu0(X).
+4. On the TEST set: mean tau_hat (compare with step 1's ATE), the Qini curve, and the
+   Qini coefficient with <sklift.metrics.qini_auc_score | causalml qini_score>. Also
+   report the training-set Qini, labelled as in-sample.
+5. Targeting: the share of test customers with tau_hat > c / v, and with tau_hat < 0.
+6. For persuadability, compare mean tau_hat across values of the main features.
+   Do not read mu1's feature importances as drivers of uplift.
+
+Show the code, then one results table per step. Do not invent any number.
 ```
 
-### Build Prompt
-```
-Using the uplift experiment dataset:
+### 5. What you get back
+- The observed ATE and a balance table.
+- A τ̂ for every customer, and its average on the test set.
+- A held-out Qini curve and coefficient (and the in-sample one for comparison).
+- The share worth targeting at your cost and value, and the share the treatment may harm.
 
-1. Fit a T-learner: train a separate model (Random Forest, random_state=42) on
-   treated customers predicting converted, and a separate model on control customers.
-   The predicted CATE is: τ̂(x) = μ̂₁(x) - μ̂₀(x)
+What it does **not** give you: a profitable campaign. A good Qini says the ranking works,
+not that targeting pays. That is the c / v threshold's job.
 
-2. Report: ATE (mean of τ̂ across all customers), and the distribution of τ̂.
+### 6. Checks before trusting it
+The first four combine the L07 note's two "What to verify" lists.
+1. **Mean τ̂ agrees with the observed ATE in sign and order of magnitude.** It does not
+   need to match to a fixed tolerance. How close it gets depends on the forests' regularisation.
+2. **The test-set Qini is positive.** A negative Qini means the ranking is inverted.
+3. **Report the test-set Qini, not the in-sample one.** A fully grown forest's in-sample
+   Qini can be about 20 times larger (L07 Section 1.4C). A test-set Qini near 0 is an
+   honest finding: the ranking does not carry over to new customers.
+4. **No large imbalance between treated and control** on any feature. If there is one,
+   suspect the randomisation.
+5. **Feature importances show what predicts conversion, not who is persuadable.**
+6. **Customers with τ̂ < 0** are a group the treatment may harm. Do not treat them as
+   proof that the model works or that it fails.
 
-3. Given campaign cost c = $4 and subscription value v = $30, compute the
-   profit-maximising targeting threshold: c/v = 0.133.
-   Report: fraction of customers with τ̂ > 0.133 (should receive campaign)
-           fraction with τ̂ < 0 (sleeping dogs — should NOT receive campaign)
+### What not to copy from the homework
+- **`n_estimators=100, random_state=42`, fully grown trees.** These are reproducibility
+  pins. On your data, regularise (for example `min_samples_leaf`) and compare a few settings on held-out data.
+- **`train_test_split(..., random_state=42)` with no `stratify`.** The homework pins the
+  exact call because the test-set Qini is sensitive to which rows land in the test set.
+  On your data, stratify, and check the Qini across a few different splits.
+- **The cost and order value** (a fixed coupon and order value for everyone). Use your own.
 
-4. Plot: Qini curve (targeting by predicted uplift vs. random targeting).
-   Report the Qini coefficient.
-
-5. Plot: distribution of τ̂ values with the threshold marked.
-
-Print all values clearly labelled.
-```
-
-### Validation Prompt
-```
-Three validation checks:
-
-1. ATE vs OBSERVED: The ATE from the T-learner should be approximately equal to
-   the simple difference (mean converted in treated) - (mean converted in control).
-   If they differ by more than 0.02, there is likely a data leak or implementation error.
-   Report: both values and whether they agree within 0.02.
-
-2. SLEEPING DOGS: Are there customers with τ̂ < 0? There should be. If τ̂ is positive
-   for every customer, the model has likely overfit or the dataset has no sleeping dogs.
-   Report: fraction with τ̂ < 0.
-
-3. RANDOMISATION CHECK: Confirm that treatment assignment in the dataset appears random
-   by checking covariate balance: are the means of key covariates similar between
-   treated and control groups? A large imbalance (>10% difference in means) would
-   suggest non-random assignment, which would bias the T-learner estimates.
-```
+**Do keep** training each model on its own arm only, and scoring the Qini on held-out customers.
 
 ---
 
 ## L08 — Customer Lifetime Value (BG/NBD + Gamma-Gamma)
 
-### Context Prompt
+> **On your own data.** This section is the real-world version of Homework 8's agent
+> prompt. The homework prompt is a *grading* prompt: it fixes the dataset, the penalizers,
+> the horizon and the discount rate so every answer can be checked. Use the prompt below
+> for your own data, and read "What not to copy from the homework" first.
+
+### 1. The question it answers
+For each customer: how likely are they to still be a customer (P(alive)), how many more
+purchases will they make, how much will each be worth, and what is that worth over the
+next 12 months?
+
+### 2. Data you need, and deal-breakers
+See the
+[Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
+row 8. In practice: a transaction log with one row per order: customer id, order date,
+order value.
+
+Stop, or change plan, if any of these is true:
+- **It is a subscription (contractual) business**, where you see the moment a customer
+  leaves. BG/NBD is for settings where churn is never observed. Use a contractual model
+  instead, such as the survival analysis of L04, or a shifted-beta-geometric model
+  (`ShiftedBetaGeoModel` in PyMC-Marketing).
+- **Order value moves with purchase frequency** (frequent buyers spend more or less per
+  order). Gamma-Gamma assumes they are independent. Measure it first (check 4).
+- **Very short history.** With few repeat purchases, the parameters are poorly pinned down.
+- **Many one-time buyers.** BG/NBD gives every customer with no repeat purchase
+  P(alive) = 1 by construction, not by evidence (L08 Section 1.4C).
+
+### 3. Tools
+Checked against PyPI and GitHub on **2026-11-04**.
+
+| Step | Package and function | In the course Codespace? | Maintained? |
+|---|---|---|---|
+| RFM summary | `lifetimes.utils.summary_data_from_transaction_data(df, "customer_id", "order_date", monetary_value_col="order_value", freq="D")` | Yes (0.11.3) | **No: archived**. Last release July 2020, repo archived June 2024 |
+| BG/NBD, P(alive) | `lifetimes.BetaGeoFitter`, `.conditional_probability_alive(...)` | Yes | No (archived) |
+| Gamma-Gamma, CLV | `lifetimes.GammaGammaFitter`, `.customer_lifetime_value(bgf, ..., time=12, discount_rate=...)` | Yes | No (archived) |
+| The successor | `pymc-marketing`: `pymc_marketing.clv.BetaGeoModel`, `GammaGammaModel` (Bayesian, with uncertainty) | No: needs Python 3.12 or newer | Yes: 1.3.0 released 2026-10-22 |
+
+`lifetimes`' own README names PyMC-Marketing as its successor. `lifetimes` still runs in
+the Codespace, but do not start a new project on it.
+
+Two things to know about `lifetimes`, both confirmed on the course env:
+- **Gamma-Gamma refuses customers with no repeat purchase** (`ValueError` on a
+  `monetary_value` of 0). Fit it on `frequency > 0` only.
+- **`recency` (t_x) is the time from the first to the most recent purchase**, not the time
+  since the last purchase. The silent gap is `T - recency`.
+
+### 4. A general prompt
+Fill in every `<placeholder>`. Paste it as one message.
+
 ```
-I am a customer analytics manager at a non-contractual subscription service.
-I have transaction data with columns: customer_id, order_date, order_value.
-I want to use the BG/NBD model to estimate each customer's probability of still
-being alive (P(alive)) and expected future purchases, and the Gamma-Gamma model
-to estimate expected spend per transaction, then combine them into a 12-month CLV.
+I have a transaction log in <file.csv>: <customer_id>, <order_date>, <order_value>
+(in <currency>), from <start> to <end>. This is a non-contractual business: customers
+can stop buying without telling us.
+
+1. RFM summary with lifetimes.utils.summary_data_from_transaction_data, calibration
+   end = <date>, freq = "<D | W>", include_first_transaction=False. Report how many
+   customers have frequency = 0.
+2. Calibration check: refit on data before <holdout start>, predict purchases in the
+   holdout, and compare predicted vs actual by frequency group.
+3. BG/NBD (BetaGeoFitter, penalizer_coef=<small, e.g. 0.001>) on all data. Report r,
+   alpha, a, b, and P(alive) for every customer.
+4. Independence check, REPEAT buyers only (frequency > 0): correlation between frequency
+   and monetary_value, and a scatter plot.
+5. Gamma-Gamma (GammaGammaFitter, penalizer_coef=0) on frequency > 0 only.
+6. <H>-month CLV with discount_rate=<monthly rate>. Do NOT multiply by P(alive) again:
+   it is already inside the expected purchases. Report median, mean and 90th percentile
+   CLV, and the top 10 customers.
+
+Show the code, then one results table per step. Do not invent any number.
 ```
 
-### Build Prompt
-```
-Using the transactions dataset:
+### 5. What you get back
+- r, α, a and b, and a P(alive) for every customer.
+- A holdout check of predicted vs actual purchases.
+- The frequency–spend correlation among repeat buyers.
+- A CLV per customer over your horizon, with the distribution and the top customers.
 
-1. Compute the RFM summary: for each customer, calculate frequency (number of
-   repeat purchases), recency (time since last purchase), T (observation window),
-   and mean transaction value. Use the lifetimes library.
+What it does **not** give you: who will respond to a retention offer. Low P(alive) or high
+CLV is a reason to look, not a reason to spend. Who responds is an uplift question (L07).
 
-2. Fit the BG/NBD model. Report the fitted parameters (r, α, a, b).
-   For each customer, compute P(alive) and predicted purchases in the next 12 months.
+### 6. Checks before trusting it
+The first four are the L08 note's "What to verify before trusting the output".
+1. **Parameters are in plausible ranges**: r in [0.1, 3], α in [1, 30], a in [0.1, 2],
+   b in [1, 10]. α is a rate parameter, so it scales with the time unit you chose in step 1.
+2. **Recent buyers have high P(alive)**, typically above 0.8 (a recent low-frequency
+   buyer can sit lower), and long-silent buyers are below 0.2.
+3. **Mean CLV is a plausible multiple of the average order value.**
+4. **|correlation(spend, frequency)| < 0.2** among repeat buyers. Between 0.2 and 0.3 is a
+   grey zone, and 0.3 or more is a material violation (L08 Section 1.4C).
+5. **P(alive) was not applied twice.** CLV × P(alive) double-counts churn.
+6. **The holdout check** (prompt step 2): predicted purchases should track actual ones
+   for each frequency group, not just on average.
 
-3. Check the Gamma-Gamma independence assumption: compute the Pearson correlation
-   between customer frequency and mean transaction value. If |correlation| > 0.1,
-   flag a potential assumption violation.
+### What not to copy from the homework
+- **`penalizer_coef=0.01` for BG/NBD.** Some ridge is common, but the value is a pin.
+  Use the smallest that gives a stable fit, and report it.
+- **`discount_rate=0.01` per month and the 12-month horizon.** Use your own cost of
+  capital and the horizon your decision needs. Match it to the CAC horizon if you compare CLV with CAC.
+- **"Use max(order_date) as calibration end" with no holdout.** On your data, hold out a
+  period and check the predictions (prompt step 2).
+- **`seed=42`.** The fits are deterministic maximum likelihood, so the seed does nothing.
 
-4. Fit the Gamma-Gamma model. Combine with BG/NBD to compute CLV over 12 months
-   for each customer (use a 10% annual discount rate).
-
-5. Report: mean CLV, median CLV, P10 and P90, and the top-10 customers by CLV.
-
-Print all values clearly labelled.
-```
-
-### Validation Prompt
-```
-Three validation checks:
-
-1. P(ALIVE) RECENCY TEST: A customer with their last purchase 18+ months ago should
-   have substantially lower P(alive) than a customer with the same number of purchases
-   but a last purchase 1 month ago. Find two such customers and verify the direction
-   is correct. Report: PASS or FAIL.
-
-2. GAMMA-GAMMA ASSUMPTION: Report the frequency-spend correlation. If it is above 0.1
-   in absolute value, flag that the Gamma-Gamma CLV estimates are biased. A positive
-   correlation (heavy buyers also spend more) means CLV is underestimated by the model.
-
-3. BG/NBD APPLICABILITY: Confirm this product is non-contractual (customers can buy
-   at will, not on a fixed subscription with discrete renewal). If this is actually a
-   subscription product, flag that BG/NBD is not the right model (use BG/BB instead).
-```
+**Do keep** `include_first_transaction=False` (BG/NBD is defined on repeat purchases), an
+unpenalized Gamma-Gamma fit on repeat buyers only, and the independence check on repeat buyers only.
 
 ---
 
