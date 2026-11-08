@@ -1212,13 +1212,14 @@ display:block!important;
 <li>Estimate WTP for each product feature from conjoint data</li>
 <li>Run a market simulation using the softmax choice model</li>
 <li>Apply the IIA property (and know when it fails)</li>
-<li>Identify the revenue-maximizing feature bundle and price</li>
+<li>Describe how a choice experiment is designed and fielded</li>
+<li>Find the profit-maximizing price and compare feature bundles by profit</li>
 </ul>
 </section>
 <section class="slide level2">
 <h2>What Conjoint Measures</h2>
 <p>Stated-preference methods recover latent attribute valuations from discrete choice behaviour. Respondents reveal preferences through forced choices rather than direct self-report, mitigating hypothetical bias.</p>
-<p><strong>Experimental design:</strong> Each respondent evaluates paired alternatives differing on price and attributes. Randomisation of attribute levels across respondents identifies each coefficient.</p>
+<p><strong>Experimental design:</strong> Each respondent evaluates paired alternatives differing on price and attributes. Randomization of attribute levels across respondents identifies each coefficient.</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -1242,6 +1243,19 @@ display:block!important;
 </tbody>
 </table>
 <p>Repeat across many pairs → MNL regression extracts implicit attribute weights.</p>
+</section>
+<section class="slide level2">
+<h2>Running a Choice Experiment</h2>
+<ol type="1">
+<li><strong>Attributes and levels.</strong> HW09: price $10 / $14 / $18 / $22 · content · ads · plan. Keep prices inside the range you would charge.</li>
+<li><strong>Survey size.</strong> HW09: 400 respondents × 8 tasks × 3 profiles = 9,600 rows.</li>
+<li><strong>Random levels.</strong> Draw each attribute’s level independently for every profile, and redraw a task that shows two identical profiles. Price is then uncorrelated with the features.</li>
+<li><strong>“None of these”?</strong> Needed to price a whole product line: it lets the model observe customers leaving the market.</li>
+<li><strong>Field and save in long format.</strong> Qualtrics, Sawtooth or Conjointly build and field the tasks. One row per profile shown, <code>chosen</code> = 1 for the pick.</li>
+</ol>
+<div class="muted">
+<p>No package needed: a random design is a few lines of pandas (code in the notes, Section 1.3). In the HW09 data, every standard error is under a tenth of its coefficient.</p>
+</div>
 </section>
 <section class="slide level2">
 <h2>Multinomial Logit (MNL) Utility</h2>
@@ -1354,9 +1368,61 @@ An ad-free tier can command up to $12 more than the baseline.</p>
 <li>Setting at $12 above base captures only customers with above-average WTP.</li>
 <li>Setting at $8 above base captures more customers at lower margin each.</li>
 </ul>
-<p><strong>Optimal price:</strong> the premium that maximizes <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Price</mtext><mo>×</mo><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><mtext mathvariant="normal">upgrade</mtext><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\text{Price} \times P(\text{upgrade})</annotation></semantics></math>. It need not sit below mean WTP.</p>
+<p><strong>Optimal price:</strong> the price that maximizes profit, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo>−</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>×</mo><mi>s</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">(p - c) \times s(p)</annotation></semantics></math> (next slide). It need not sit below mean WTP.</p>
+</section>
+<section class="slide level2">
+<h2>Profit-Maximizing Price</h2>
+<div class="math-tag need">
+<p>You need this</p>
+</div>
+<div class="formula-box">
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo>−</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>×</mo><mi>s</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="2.0em"></mspace><mo>⇒</mo><mspace width="2.0em"></mspace><msup><mi>p</mi><mo>*</mo></msup><mo>−</mo><mi>c</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>β</mi><mtext mathvariant="normal">price</mtext></msub><mo stretchy="true" form="postfix">|</mo></mrow><mspace width="0.167em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>s</mi><mo>*</mo></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">\pi(p) = (p - c) \times s(p) \qquad\Longrightarrow\qquad p^* - c = \frac{1}{|\beta_{\text{price}}| \, (1 - s^*)}</annotation></semantics></math></p>
+</div>
+<div class="two-col">
+<div>
+<p><strong>Search:</strong> run the simulation at many prices. Notes example (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mtext mathvariant="normal">price</mtext></msub><mo>=</mo><mi>−</mi><mn>0.18</mn></mrow><annotation encoding="application/x-tex">\beta_{\text{price}} = -0.18</annotation></semantics></math>, cost <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>=</mo><mi>$</mi><mn>6</mn></mrow><annotation encoding="application/x-tex">c = \$6</annotation></semantics></math>, competitors’ prices fixed):</p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math></th>
+<th><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">s(p)</annotation></semantics></math></th>
+<th><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>p</mi><mo>−</mo><mn>6</mn><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><mi>s</mi></mrow><annotation encoding="application/x-tex">(p-6)\,s</annotation></semantics></math></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>$15</td>
+<td>81.3%</td>
+<td>$7.32</td>
+</tr>
+<tr class="even">
+<td>$18</td>
+<td>71.7%</td>
+<td>$8.61</td>
+</tr>
+<tr class="odd">
+<td>$21</td>
+<td>59.7%</td>
+<td>$8.95</td>
+</tr>
+<tr class="even">
+<td>$24</td>
+<td>46.3%</td>
+<td>$8.33</td>
+</tr>
+</tbody>
+</table>
+<p>Fine search: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>p</mi><mo>*</mo></msup><mo>=</mo><mi>$</mi><mn>20.52</mn></mrow><annotation encoding="application/x-tex">p^* = \$20.52</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mo>*</mo></msup><mo>=</mo><mn>61.7</mn><mi>%</mi></mrow><annotation encoding="application/x-tex">s^* = 61.7\%</annotation></semantics></math>.</p>
+</div>
+<div>
+<p><strong>Check with the formula:</strong></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mrow><mn>0.18</mn><mo>×</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>0.617</mn><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mo>=</mo><mi>$</mi><mn>14.51</mn></mrow><annotation encoding="application/x-tex">\frac{1}{0.18 \times (1 - 0.617)} = \$14.51</annotation></semantics></math></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>$</mi><mn>6</mn><mo>+</mo><mi>$</mi><mn>14.51</mn><mo>=</mo><mi>$</mi><mn>20.51</mn></mrow><annotation encoding="application/x-tex">\$6 + \$14.51 = \$20.51</annotation></semantics></math> ✓</p>
+<p>Markup <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≥</mo><mn>1</mn><mi>/</mi><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>β</mi><mtext mathvariant="normal">price</mtext></msub><mo stretchy="true" form="postfix">|</mo></mrow></mrow><annotation encoding="application/x-tex">\geq 1/|\beta_{\text{price}}|</annotation></semantics></math>, and it grows with share.</p>
+</div>
+</div>
 <div class="muted">
-<p>Run the softmax simulation at multiple price points to find the revenue-maximizing point.</p>
+<p>A finite <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>p</mi><mo>*</mo></msup><annotation encoding="application/x-tex">p^*</annotation></semantics></math> requires an alternative whose price stays fixed: a competitor’s product or a “none” option. To price a whole product line, include “none” in the survey. Notes: Section 1.4D.</p>
 </div>
 </section>
 <section class="slide level2">
