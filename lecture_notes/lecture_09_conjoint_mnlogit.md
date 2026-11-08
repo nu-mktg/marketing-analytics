@@ -216,6 +216,7 @@ Check: 1 / (0.18 × (1 − 0.617)) = \$14.51, and \$6 + \$14.51 = \$20.51, which
 4. True or False: WTP from conjoint represents the minimum price customers will pay.
 
 5. A new product identical to Product A but $1 cheaper is launched. Under IIA, what happens to Product A's market share?
+
 ---
 
 ### Checkpoint Answer Key
@@ -235,6 +236,7 @@ Share A = 0.223/1.872 = **11.9%**. Share B = 1.649/1.872 = **88.1%**.
 
 **Q5.** Under IIA, the new product draws share from A and B proportionally to their current shares. If A currently has 11.9% and B has 88.1%, the new product takes 11.9% of its share from A and 88.1% from B — even though the new product is identical to A. Product A's share decreases by its proportion of the total.
 *Common wrong answer:* All of the new product's share comes from A (since they are identical). This is the realistic prediction — but IIA gives the proportional answer, which is why IIA is often wrong in near-substitute scenarios.
+
 #### Slide Checkpoint Answers
 
 Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
