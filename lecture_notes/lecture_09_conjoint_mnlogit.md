@@ -13,6 +13,8 @@
 - Run a market simulation to predict share of a new product configuration
 - Explain the IIA property and when it misleads
 - Distinguish average WTP from individual WTP and price-setting implications
+- Describe how a choice experiment is designed and fielded
+- Find the profit-maximizing price from the market simulation and check it with the logit markup formula
 
 ---
 
@@ -79,6 +81,31 @@ If you ask a customer "how much would you pay for an ad-free version?", they wil
 
 Conjoint analysis reduces this by never asking about price directly. Instead, respondents choose between complete product configurations: "Would you prefer Plan A ($12, standard content, no ads) or Plan B ($18, premium content, limited ads)?" The price sensitivity is revealed through the trade-offs they make, not through a direct question.
 
+#### How a Choice Experiment Is Run
+
+A choice experiment is a survey in which each respondent answers several choice tasks. Each task shows a few product profiles, and the respondent picks one. The analyst designs the profiles in five steps.
+
+1. **Choose the attributes and their levels.** List the features the decision is about, plus price. The HW09 survey uses four attributes: price (\$10, \$14, \$18, \$22), content (standard, premium), ads (full, limited, none) and plan (monthly, annual). Set the price levels inside the range the firm would consider charging. The fitted model describes preferences only at the prices the survey showed.
+2. **Choose the size of the survey.** HW09 shows each of 400 respondents 8 tasks with 3 profiles each, which gives 9,600 rows. Each additional task adds data and also adds fatigue, and a tired respondent stops reading the profiles.
+3. **Draw the levels at random.** For each profile, draw the level of every attribute at random and independently of the others. Price is then uncorrelated with the features, and the model can estimate the effect of each attribute separately. Redraw any task in which two profiles are identical (about 7% of tasks in the design below).
+4. **Decide whether to offer "none of these."** A "none" option lets a respondent leave the market when every profile is too expensive. It is needed to set prices for a whole product line (Section 1.4D). If you include it, record it as its own row in each task, and the model gets one more coefficient: a constant for "none".
+5. **Field the survey and save the responses in long format.** Survey platforms such as Qualtrics, Sawtooth Software and Conjointly generate and field the tasks for you. The result is the file format used in the homework: one row per profile shown, with `chosen = 1` for the profile picked and 0 for the others.
+
+A random design of the HW09 size takes a few lines of Python; the `chosen` column is added once responses come back:
+
+```python
+import numpy as np, pandas as pd
+rng = np.random.default_rng(42)
+levels = {"price": [10, 14, 18, 22], "content": ["standard", "premium"],
+          "ads": ["full_ads", "limited_ads", "no_ads"], "plan": ["monthly", "annual"]}
+rows = [{"respondent_id": r, "task_id": t, "alternative": a,
+         **{attr: rng.choice(lv) for attr, lv in levels.items()}}
+        for r in range(1, 401) for t in range(1, 9) for a in range(1, 4)]
+design = pd.DataFrame(rows)   # 9,600 rows; redraw tasks with identical profiles
+```
+
+Specialized design software produces more efficient designs, which estimate the same coefficients with fewer respondents. For a survey of HW09's size a random design is sufficient: in the HW09 data, every coefficient's standard error is less than a tenth of the coefficient.
+
 ---
 
 ### Section 1.4 — Mathematical Framework
@@ -141,6 +168,38 @@ The standard fix is **nested logit**: the analyst groups close substitutes into 
 
 ---
 
+#### Part D: Setting the Price That Maximizes Profit
+
+WTP measures what a feature is worth to the average respondent. The price to charge comes from the market simulation. Suppose the firm sells Product B from Part B, and the competitors keep Products A and C at their current prices. Serving one customer on B costs the firm c dollars a month. The expected profit per customer in the market is
+
+$$\pi(p) = (p - c) \times s(p)$$
+
+where s(p) is B's simulated share at price p. A higher price raises the margin p − c and lowers the share s(p), and the profit-maximizing price p* balances the two.
+
+**Method 1: search over prices.** Run the Part B simulation at a range of prices for B and keep the price with the highest profit. With c = \$6:
+
+| Price of B | Share of B | Profit per customer, (p − 6) × s |
+|---|---|---|
+| \$15 | 81.3% | \$7.32 |
+| \$18 | 71.7% | \$8.61 |
+| \$21 | 59.7% | \$8.95 |
+| \$24 | 46.3% | \$8.33 |
+| \$27 | 33.4% | \$7.02 |
+
+A search in 1-cent steps gives **p\* = \$20.52**, with a 61.7% share and a profit of \$8.96 per customer. Multiply by the number of customers in the market for total profit.
+
+**Method 2: the markup formula, as a check.** Under the logit model, B's share responds to its own price at the rate ds/dp = β_price × s × (1 − s). Setting the derivative of profit to zero:
+
+> s + (p − c) × β_price × s × (1 − s) = 0  ⇒  p\* − c = 1 / (|β_price| × (1 − s\*))
+
+Check: 1 / (0.18 × (1 − 0.617)) = \$14.51, and \$6 + \$14.51 = \$20.51, which matches the search up to rounding. The right-hand side depends on s\*, which itself depends on p\*. The formula therefore checks a price found by search; it cannot be solved for p\* in one step. Two consequences follow from it. The markup is never below 1/|β_price| (\$5.56 here). It also rises with the product's share, because the logit price elasticity, β_price × p × (1 − s), is smaller in size when s is large. Written with the L02 elasticity, the formula says that the margin (p − c)/p equals 1/|elasticity| at the profit-maximizing price.
+
+**When the result is meaningful.** The search finds a finite p\* because customers can switch to products whose prices stay fixed, here A and C. If the firm owned all three products and raised every price by the same amount, the shares would not move (Slide Practice Answer P1), and the simulation would recommend raising prices without limit. To price a whole product line, the survey needs a "none of these" option (Section 1.3), so that the model observes customers leaving the market. The profit-maximizing price also has the limits of the simulation itself: it uses average part-worths (Section 2.2), it is reliable only inside the price range the survey tested, and it is too high when hypothetical choices understate respondents' price sensitivity (Common Misconception 1), because a smaller |β_price| raises the markup.
+
+**Choosing a feature bundle.** To compare configurations, repeat the search for each configuration with its own cost c (premium content costs more to license) and choose the configuration whose profit at its own p\* is highest.
+
+---
+
 ### Part 1 Checkpoint
 
 > **These questions are not submitted and not graded.** Attempt them before class; we
@@ -157,7 +216,6 @@ The standard fix is **nested logit**: the analyst groups close substitutes into 
 4. True or False: WTP from conjoint represents the minimum price customers will pay.
 
 5. A new product identical to Product A but $1 cheaper is launched. Under IIA, what happens to Product A's market share?
-
 ---
 
 ### Checkpoint Answer Key
@@ -169,7 +227,7 @@ The standard fix is **nested logit**: the analyst groups close substitutes into 
 Share A = 0.223/1.872 = **11.9%**. Share B = 1.649/1.872 = **88.1%**.
 *Common wrong answer:* Sharing proportional to utility values directly (−1.5 and 0.5), ignoring the softmax transformation.
 
-**Q3.** Conjoint WTP of $12 is an **average** — individual WTP varies. Some customers have WTP below $12 and would not pay $22. Raising to $22 (= $10 + $12 = current price + average WTP) would lose every customer whose individual WTP for no ads is below the $12 premium: about half of them, if individual WTP is spread symmetrically around the average. Raising to $22 may be profitable if the revenue from those who stay exceeds revenue from those who churn, but this requires demand curve analysis — not just the average WTP estimate.
+**Q3.** Conjoint WTP of $12 is an **average** — individual WTP varies. Some customers have WTP below $12 and would not pay $22. Raising to $22 (= $10 + $12 = current price + average WTP) would lose every customer whose individual WTP for no ads is below the $12 premium: about half of them, if individual WTP is spread symmetrically around the average. Raising to $22 may be profitable if the revenue from those who stay exceeds revenue from those who churn. The price search in Section 1.4D finds the price that maximizes profit.
 *Common wrong answer:* The PM is correct — WTP is $12 so the tier should cost current price + $12 = $22. Average WTP is not the price at which everyone buys; it is the average maximum each person would pay.
 
 **Q4.** **False.** WTP is the **maximum** price a customer would accept, not the minimum. The correct statement: WTP is the maximum price at which a customer would still choose this option over the alternative.
@@ -177,7 +235,6 @@ Share A = 0.223/1.872 = **11.9%**. Share B = 1.649/1.872 = **88.1%**.
 
 **Q5.** Under IIA, the new product draws share from A and B proportionally to their current shares. If A currently has 11.9% and B has 88.1%, the new product takes 11.9% of its share from A and 88.1% from B — even though the new product is identical to A. Product A's share decreases by its proportion of the total.
 *Common wrong answer:* All of the new product's share comes from A (since they are identical). This is the realistic prediction — but IIA gives the proportional answer, which is why IIA is often wrong in near-substitute scenarios.
-
 #### Slide Checkpoint Answers
 
 Numbered to match the Checkpoint slide in this lecture's deck. Where the slide asks a question above again, or the same idea on different numbers, the entry points to that answer.
@@ -391,6 +448,7 @@ A negative coefficient means customers prefer the reference level over the coded
 | Computes WTP = β_attr / \|β_price\| | Section 1.1, Tool 2 — indifference derivation; Section 1.4A — worked WTP |
 | Runs market simulation using softmax | Section 1.4B — softmax formula |
 | Reports significance (p-values) | Section 2.2 — standard errors and statistical significance |
+| Searches prices for the highest (p − c) × share | Section 1.4D — profit-maximizing price and the markup check |
 
 **What to verify before trusting the output:**
 1. Price coefficient is negative
