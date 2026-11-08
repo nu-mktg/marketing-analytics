@@ -799,6 +799,9 @@ feature worth to them (willingness to pay, WTP), and what share would each produ
 set of competing products win?
 
 ### 2. Data you need, and deal-breakers
+**No data yet?** Run the choice experiment first. The L09 note, Section 1.3, gives the five
+design steps, and the design prompt in part 4 builds the survey's choice tasks with an agent.
+
 What the model needs and assumes is in the
 [Model Reference Card](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/model_reference_card.md),
 row 9. In practice your file must be in **long format**: one row per alternative shown,
@@ -824,7 +827,8 @@ Checked against PyPI and GitHub on **2026-11-04**.
 |---|---|---|---|
 | Fit the MNL | `statsmodels`: `statsmodels.discrete.conditional_models.ConditionalLogit`, with `groups=` one id per (respondent, task) | Yes (0.14.2) | Yes: 0.15.0 released 2026-08-27 |
 | Build the design matrix | `patsy.dmatrix(...)`, then drop the `Intercept` column | Yes | Yes (ships with statsmodels) |
-| WTP, market simulation | No package: arithmetic on the fitted coefficients (softmax) | n/a | n/a |
+| Design the choice tasks | No package: random draws with `numpy`, saved with `pandas` | Yes | Yes |
+| WTP, market simulation, profit-maximizing price | No package: arithmetic on the fitted coefficients (softmax, then a price search) | n/a | n/a |
 | Different preferences per customer (mixed logit, not covered in this course) | `biogeme` | No: needs Python 3.12 or newer | Yes: 3.3.5 released 2026-08-28 |
 
 Two things an agent may reach for that you should not use: `pylogit` (last release
@@ -838,7 +842,34 @@ Two errors you will hit with `ConditionalLogit`, both confirmed on the course en
   Build the matrix with the intercept and drop that column instead.
 
 ### 4. A general prompt
-Fill in every `<placeholder>`. Paste it as one message.
+Fill in every `<placeholder>`. Paste each prompt as one message.
+
+**Design prompt (before you field the survey).** Survey platforms such as Qualtrics,
+Sawtooth Software and Conjointly can generate the design for you. Use this prompt when you
+build the tasks yourself, or to check the platform's design.
+
+```
+I am designing a choice-based conjoint survey. Attributes and levels:
+  price: <level_1, level_2, ...> (numeric, in <currency> per <unit>)
+  <attribute_1>: <level_a, level_b, ...>
+  <attribute_2>: <...>
+Each respondent sees <K> tasks with <J> profiles each. I plan <N> respondents.
+<Include / Do not include> a "none of these" option in every task.
+
+1. Generate a random design with numpy and pandas, no design package: for every profile,
+   draw each attribute's level independently and with equal probability. Use a fixed
+   random seed and save the design file; the responses must be matched back to it.
+2. Redraw any task in which two profiles are identical. Report how many you redrew.
+3. Check balance: how often each level appears, and the correlation between price and
+   every other attribute (the counts should be close to equal and the correlations
+   close to zero).
+4. Save in long format: respondent_id, task_id, alternative, one column per attribute,
+   and an empty chosen column.
+
+Show the code and the balance table. Do not invent any number.
+```
+
+**Analysis prompt (after the responses are in).**
 
 ```
 I have stated-preference (conjoint) choice data in <file.csv>, in long format: one row
@@ -854,6 +885,9 @@ per alternative shown. Columns: <respondent_id>, <task_id>, <chosen> (0/1), <pri
    (respondent, task). Do NOT use a pooled binary Logit. Build the design matrix with
    patsy and drop the Intercept column. Price enters as a number, not a category.
    Reference levels: <attribute_1: level>, <attribute_2: level>, ...
+   <If the survey had a "none" option: code each "none" row with price 0 and every
+   attribute at its reference level, add a 0/1 column none (1 only on those rows),
+   and include none as a regressor.>
 3. Report every coefficient with its standard error and p-value.
 4. WTP for each non-price level = beta_level / |beta_price|, in <currency> per <unit>.
 5. Market simulation: compute softmax shares among exactly these products:
@@ -863,6 +897,11 @@ per alternative shown. Columns: <respondent_id>, <task_id>, <chosen> (0/1), <pri
    Then repeat with <one change, e.g. product 2's price + 2>.
 6. Attribute importance: for each attribute, the range of its part-worths across the
    levels tested (for price: |beta_price| x (highest tested price - lowest)).
+7. <Optional, if you know unit costs> Profit-maximizing price for <product>, unit cost
+   <c>, all other products' prices held fixed: search prices from <low> to <high>
+   (inside the tested range) in steps of <0.10>, and report the price with the highest
+   (price - c) x share, its share and its profit per customer. Check the result against
+   price - c = 1 / (|beta_price| x (1 - share)).
 
 Show the code, then one results table per step. Do not invent any number. If a step
 fails, say so instead of working around it.
@@ -875,11 +914,14 @@ fails, say so instead of working around it.
 - A WTP for each non-price level, in your currency per unit.
 - A share table for your products that sums to 100%, plus the same table after your change.
 - An importance ranking of the attributes.
+- If you ran step 7: the profit-maximizing price for your product, with its share and
+  profit per customer. It is finite only because the other products keep their prices
+  (L09 note, Section 1.4D). To price a whole product line, the survey needs a "none" option.
 
 What it does **not** give you: each customer's preferences (the shares assume everyone
-has the average part-worths), predicted sales volume (shares are among the listed products
-only), or a price recommendation (WTP is an average; see "WTP is Not a Price
-Recommendation" in the L09 slides).
+has the average part-worths) or predicted sales volume (shares are among the listed
+products only). WTP alone sets no price: WTP is an average (see "WTP is Not a Price
+Recommendation" in the L09 slides), and the price comes from step 7.
 
 ### 6. Checks before trusting it
 The first five are the L09 note's "What to verify before trusting the output".
@@ -894,7 +936,7 @@ The first five are the L09 note's "What to verify before trusting the output".
    disagree, the agent is wrong until shown otherwise.
 7. **Close substitutes?** If two products in your simulation are near-copies, the model
    spreads the new one's share across all products in proportion (IIA, Section 1.4C), so
-   it understates cannibalisation of the near-twin. Say so in your write-up.
+   it understates cannibalization of the near-twin. Say so in your write-up.
 8. **The standard errors treat every task as independent**, although each respondent
    answered several. `ConditionalLogit` silently ignores `cov_type="cluster"`. When
    respondents genuinely differ, these SEs can be too small, so do not rest a decision on
@@ -903,10 +945,13 @@ The first five are the L09 note's "What to verify before trusting the output".
    share one set of preferences.)
 9. **Hypothetical choices.** People overstate what they would pay when no money changes
    hands. Treat WTP as an upper bound and check it against real purchases where you can.
+   The same bias raises the profit-maximizing price from step 7.
+10. **If you designed the survey yourself:** the design prompt's balance table shows every
+   level appearing about equally often and price uncorrelated with the other attributes.
 
 ### What not to copy from the homework
-The HW09 prompt pins these so the autograder can check one number. **Do not carry them
-over** to your own data:
+The HW09 prompt pins these so the autograder can check one number. **Do not reuse them**
+for your own data:
 - **`Use seed=42`.** The fit is deterministic maximum likelihood, so the seed changes
   nothing. Its presence does not mean your analysis is reproducible.
 - **Products A, B, C and their prices.** They are the graded scenario. Simulate your own
