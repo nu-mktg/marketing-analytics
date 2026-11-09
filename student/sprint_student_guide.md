@@ -71,8 +71,8 @@ knowing which models you would *not* use and why.
 The Sprint case (FitLoop) uses **six pre-run model outputs** chosen because they connect
 directly to the two business decisions in the scenario. The six outputs use Bayesian A/B testing (L01),
 price elasticity (L02), survival analysis (L04), Markov chains (L05), uplift modeling (L07) and
-BG/NBD CLV (L08). MMM (L03), Shapley attribution (L06), conjoint analysis (L09) and Prophet (L10)
-are tested in Quiz 2 and HW11. They enter the Sprint through the group presentation and write-up,
+BG/NBD CLV (L08). MMM (L03) is tested in Quiz 1, and Shapley attribution (L06), conjoint analysis (L09) and
+Prophet (L10) are tested in Quiz 2. These four models enter the Sprint through the group presentation and write-up,
 whose last rubric criterion asks for a follow-up analysis that uses one of them.
 
 The individual assessment is a 10-question multiple-choice quiz in Canvas (Respondus
@@ -115,10 +115,6 @@ group's specific output* mean in context.
 question (Q7) about model selection that asks you to evaluate which model applies to which
 decision and why a specific model *does not* apply in a given context. This means you need
 to have surveyed the entire toolkit and understood the scope of each model.
-
----
-
-## How to Prepare
 
 **Before 11/23 (before the briefing is released):**
 

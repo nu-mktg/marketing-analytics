@@ -190,9 +190,6 @@ from Y to Z") gives the decision-maker what they need to weigh the risk.
 
 #### Theme 5: From Model Output to an Answered Follow-Up Question
 
-Jess Lachs framed the goal as "Not just answering the why, but answering the 'What do we do now
-that we know this?'"
-
 A model output usually raises a follow-up question. Most of these questions can be answered with a
 model from this course, and the rest with a test whose result is analyzed with one. For three
 outputs from the lectures, the tables below list the follow-up questions, the model or test design
@@ -300,9 +297,9 @@ recommendation, and the Prophet forecast is an input to an inventory order.
 
 The Sprint case (FitLoop) includes six pre-run model outputs: Bayesian A/B testing (L01), price
 elasticity (L02), Kaplan-Meier and Cox survival analysis (L04), Markov chains (L05), T-learner uplift
-(L07) and BG/NBD CLV (L08). The individual quiz is built on these six outputs. MMM (L03), Shapley
-attribution (L06), conjoint analysis and the profit-maximizing price (L09), and Prophet forecasting
-(L10) are tested in Quiz 2 and HW11. They enter the Sprint through the group presentation and
+(L07) and BG/NBD CLV (L08). The individual quiz is built on these six outputs. MMM (L03) is tested in
+Quiz 1, and Shapley attribution (L06), conjoint analysis (L09) and Prophet forecasting (L10) are
+tested in Quiz 2. These four models enter the Sprint through the group presentation and
 write-up, whose last rubric criterion asks for a follow-up analysis that uses one of them
 (rubric below). Quiz Q7 (model selection) can ask about any model in the course.
 
@@ -315,7 +312,7 @@ write-up, whose last rubric criterion asks for a follow-up analysis that uses on
 | Wed 12/2 | Group work day | MKTG 3501 |
 | Mon 12/7 | Group presentations | both |
 | Wed 12/9 | Group presentations (continued) | MKTG 3501 |
-| Mon 12/14 | Group write-up due (PDF, online); HW11 due | both |
+| Mon 12/14 | Group write-up due (PDF, online) | both |
 
 Between 11/23 and 11/30 the preparation is conceptual. There are no numbers to analyze until the
 model outputs are released on 11/30. Read the briefing with your group, decide which models address
