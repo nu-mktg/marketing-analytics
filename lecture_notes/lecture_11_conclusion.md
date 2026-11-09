@@ -10,7 +10,7 @@ the course (L01–L10) fit into one framework, lists the assumptions and failure
 lectures taught, and shows how to answer the follow-up questions that a model output raises. Part 3
 describes the Sprint.
 
-About 15 minutes of class time go to this material: the decision map, one worked example that goes
+About 15 minutes of class time go to this material: the course map, one worked example that goes
 from a model output to a follow-up question and its answer, and the Sprint logistics. Read the full
 note before that session (MKTG 3501: Wed 11/18; MKTG 6434: Mon 11/23).
 
@@ -30,32 +30,59 @@ a point is unclear, the cited section explains it in full.
 
 ---
 
-### 1.1 Three Questions, Ten Models
+### 1.1 The Course Map
 
-Every model in this course answers one of three questions about customers:
+The course map that opens the L07–L10 slide decks places each model under the marketing decision it
+serves. Its center reads "The marketing decision: start from what the business is asking." Each
+branch is a request that a stakeholder brings to the analyst, and each model is tagged with the type of question
+it answers.
 
-**Question 1: Did something work?** (Causal inference)
-- Bayesian A/B Testing (L01): Did this product change improve conversion?
-- Uplift Modeling (L07): Will this campaign change behavior, and for which customers?
+**Win customers.** CMO: "Which channels and touchpoints are actually bringing customers in?"
 
-**Question 2: What will happen?** (Prediction)
-- Survival Analysis (L04): When will this customer churn?
-- Customer Lifetime Value, CLV (L08): How much will this customer be worth?
-- Markov Chains (L05): Where will the customer distribution be in 3 months?
-- Demand Forecasting with Prophet (L10): What will revenue look like next quarter?
+| Model | What it answers | Question type |
+|---|---|---|
+| L01 A/B testing | Did this product change improve conversion? | *Did it work?* |
+| L03 Marketing mix modeling | Which channels drove revenue, and how should the budget be reallocated? | *How much?* |
+| L06 Multi-touch attribution | Which touchpoints in the conversion path deserve credit? | *How much?* |
 
-**Question 3: Why did something happen, and how do we optimize?** (Attribution and optimization)
-- Price Elasticity (L02): How price-sensitive are customers, and how should the price move?
-- Marketing Mix Modeling, MMM (L03): Which channels drove revenue, and how should the budget be
-  reallocated?
-- Multi-Touch Attribution (L06): Which touchpoints in the conversion path deserve credit?
-- Conjoint Analysis (L09): Which features do customers value, how much will they pay, and which
-  price maximizes profit?
+**Set the offer.** Head of pricing: "What should we charge, and which features matter?"
 
-A frequent mistake is to answer one question with a model built for another. MMM informs budget
-allocation (Question 3). Whether marketing caused a sales increase is Question 1, and answering it
-requires an experiment. Survival analysis estimates when customers will churn (Question 2); deciding
-what to do about it requires CLV, an uplift model or an A/B test.
+| Model | What it answers | Question type |
+|---|---|---|
+| L02 Price elasticity | How price-sensitive are customers, and how should the price move? | *How much?* |
+| L09 Conjoint analysis | Which features do customers value, how much will they pay, and which price maximizes profit? | *What do they want?* |
+
+**Keep customers.** Head of retention: "Who is leaving, when, and who should get the save offer?"
+
+| Model | What it answers | Question type |
+|---|---|---|
+| L04 Survival analysis | When will this customer churn? | *What next?* |
+| L05 Markov chains | Where will the customer distribution be in 3 months? | *What next?* |
+| L07 Uplift modeling | Will this campaign change behavior, and for which customers? | *Did it work?* |
+
+**Value customers.** CFO: "What is a customer worth to us?"
+
+| Model | What it answers | Question type |
+|---|---|---|
+| L08 Customer lifetime value | How much will this customer be worth? | *What next?* |
+
+**Plan ahead.** Operations: "What will next quarter look like?"
+
+| Model | What it answers | Question type |
+|---|---|---|
+| L10 Demand forecasting | What will revenue look like next quarter? | *What next?* |
+
+The four question types:
+- *Did it work?* asks for a causal effect (L01; L07 fitted on a randomized experiment).
+- *How much?* asks how much X moves Y (L02, L03, L06).
+- *What do they want?* asks for preferences (L09).
+- *What next?* asks for a prediction (L04, L05, L08, L10).
+
+A frequent mistake is to answer one type of question with a model built for another. MMM estimates
+how much each channel moves revenue (*How much?*) and informs budget allocation. Whether marketing
+caused a sales increase is a *Did it work?* question, and answering it requires an experiment.
+Survival analysis predicts when customers will churn (*What next?*); deciding who should get the
+save offer requires CLV, an uplift model or an A/B test.
 
 ---
 
@@ -225,7 +252,7 @@ in it.
 
 1. **Write the follow-up as a decision.** "Paid Search is under-credited" becomes "Should we move
    budget from Email to Paid Search next quarter, and how much?"
-2. **Pick the model that answers that decision** (the three questions in Part 1 and the decision map in the slides).
+2. **Pick the model that answers that decision** (the course map in Part 1).
 3. **If no model answers it with the data in hand, design a test.** Randomize the change across
    customers, markets or regions, and analyze the result with a Bayesian A/B test (L01).
 4. **Report the answer with its uncertainty:** the estimate, its interval, and the assumption it
