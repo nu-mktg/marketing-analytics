@@ -1136,6 +1136,32 @@ display: block;
 margin-left: auto;
 margin-right: 0; }
 </style>
+  <style>
+.cmap { display: grid; grid-template-columns: 1fr 190px 1fr; gap: 34px; align-items: center; margin-top: 4px; }
+.cmap .side { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.cmap .branch { position: relative; border: 1px solid #d9d6cc; background: #fff; padding: 9px 14px 10px; }
+.cmap .left .branch::after, .cmap .right .branch::before { content: ""; position: absolute; top: 50%; width: 34px; border-top: 2px solid #d9d6cc; }
+.cmap .left .branch::after { right: -35px; }
+.cmap .right .branch::before { left: -35px; }
+.cmap .stage { font-weight: 600; font-size: 17px; letter-spacing: .07em; text-transform: uppercase; }
+.cmap .ask { font-style: italic; color: #5b6573; font-size: 16px; line-height: 1.3; margin: 2px 0 7px; }
+.cmap ul { list-style: none; margin: 0 !important; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.cmap li { display: grid; grid-template-columns: 44px 1fr auto; gap: 10px; align-items: baseline; font-size: 19px; line-height: 1.25; padding: 1px 4px; }
+.cmap li::marker { content: none; }
+.cmap li.ahead > span:nth-child(-n+2) { color: #9aa1aa; }
+.cmap li.now { background: #e7f0f8; outline: 2px solid #1a1a1a; font-weight: 600; }
+.cmap .code { font-family: 'IBM Plex Mono', monospace; font-size: 16px; color: #5b6573; }
+.cmap .hub { aspect-ratio: 1; width: 100%; border-radius: 50%; background: #1a1a1a; color: #fafaf7; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 16px; gap: 6px; }
+.cmap .hub span { font-family: 'Lora', Georgia, serif; font-weight: 600; font-size: 22px; line-height: 1.15; }
+.cmap .hub small { font-size: 14px; line-height: 1.25; opacity: .85; }
+.cmap-tag { font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 400; padding: 1px 7px; border-radius: 3px; white-space: nowrap; }
+.cmap-tag.t-work { background: #e7f0f8; color: #1d5a8c; }
+.cmap-tag.t-much { background: #f8ede3; color: #a4561d; }
+.cmap-tag.t-want { background: #efe9f6; color: #6a4c93; }
+.cmap-tag.t-next { background: #e6f3ec; color: #2f7a5b; }
+.cmap-legend { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px 22px; align-items: baseline; font-size: 16px; color: #5b6573; }
+.cmap-legend b { color: #1a1a1a; }
+</style>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -1150,51 +1176,24 @@ margin-right: 0; }
 
 </section>
 <section class="slide level2">
-<h2>Three Questions, Ten Models</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Question</th>
-<th>Models</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Did something work?</strong> (causal)</td>
-<td>L1 Bayesian A/B, L7 Uplift</td>
-</tr>
-<tr class="even">
-<td><strong>What will happen?</strong> (prediction)</td>
-<td>L4 Survival, L5 Markov, L8 CLV, L10 Prophet</td>
-</tr>
-<tr class="odd">
-<td><strong>Why did it happen, and how do we optimize?</strong></td>
-<td>L2 Price Elasticity, L3 MMM, L6 Attribution, L9 Conjoint</td>
-</tr>
-</tbody>
-</table>
-<div title="Causal claims">
-<div class="callout callout-warning callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Causal claims</strong></p>
-</div>
-<div class="callout-content">
-<p>Only L1, and L7 fitted on a randomized test, support causal claims. Every other model estimates an association; a randomized test (A/B, geo holdout) is the causal check.</p>
-</div>
-</div>
-</div>
-</div>
+<h2>Every model serves a marketing decision</h2>
+<div class="cmap"><div class="side left"><div class="branch"><div class="stage">Win customers</div><div class="ask">CMO: “Which channels and touchpoints are actually bringing customers in?”</div><ul><li class="done"><span class="code">L01</span><span>A/B testing</span><span class="cmap-tag t-work">Did it work?</span></li><li class="done"><span class="code">L03</span><span>Marketing mix modeling</span><span class="cmap-tag t-much">How much?</span></li><li class="done"><span class="code">L06</span><span>Multi-touch attribution</span><span class="cmap-tag t-much">How much?</span></li></ul></div><div class="branch"><div class="stage">Set the offer</div><div class="ask">Head of pricing: “What should we charge, and which features matter?”</div><ul><li class="done"><span class="code">L02</span><span>Price elasticity</span><span class="cmap-tag t-much">How much?</span></li><li class="done"><span class="code">L09</span><span>Conjoint analysis</span><span class="cmap-tag t-want">What do they want?</span></li></ul></div></div><div class="hub"><span>The marketing decision</span><small>Start from what the business is asking</small></div><div class="side right"><div class="branch"><div class="stage">Keep customers</div><div class="ask">Head of retention: “Who is leaving, when, and who should get the save offer?”</div><ul><li class="done"><span class="code">L04</span><span>Survival analysis</span><span class="cmap-tag t-next">What next?</span></li><li class="done"><span class="code">L05</span><span>Markov chains</span><span class="cmap-tag t-next">What next?</span></li><li class="done"><span class="code">L07</span><span>Uplift modeling</span><span class="cmap-tag t-work">Did it work?</span></li></ul></div><div class="branch"><div class="stage">Value customers</div><div class="ask">CFO: “What is a customer worth to us?”</div><ul><li class="done"><span class="code">L08</span><span>Customer lifetime value</span><span class="cmap-tag t-next">What next?</span></li></ul></div><div class="branch"><div class="stage">Plan ahead</div><div class="ask">Operations: “What will next quarter look like?”</div><ul><li class="done"><span class="code">L10</span><span>Demand forecasting</span><span class="cmap-tag t-next">What next?</span></li></ul></div></div></div><div class="cmap-legend"><b>Question type:</b><span><span class="cmap-tag t-work">Did it work?</span> causal effect</span><span><span class="cmap-tag t-much">How much?</span> how much X moves Y</span><span><span class="cmap-tag t-want">What do they want?</span> preferences</span><span><span class="cmap-tag t-next">What next?</span> prediction</span></div>
 <div class="muted">
-<p>Full reading: lecture notes, Lecture 11. Every assumption and check cites the lecture that taught it.</p>
+<p>Only the <em>Did it work?</em> models support causal claims: L01, and L07 fitted on a randomized test. Every other model estimates an association; a randomized test (A/B, geo holdout) is the causal check. Full reading: Lecture 11 notes.</p>
 </div>
+<aside class="notes">
+<p>The same map has opened every deck since L07, now with all ten models taught. The Sprint quiz asks students to match a model to a question, and the question-type tags are that match.</p>
+<style type="text/css">
+span.MJX_Assistive_MathML {
+position:absolute!important;
+clip: rect(1px, 1px, 1px, 1px);
+padding: 1px 0 0 0!important;
+border: 0!important;
+height: 1px!important;
+width: 1px!important;
+overflow: hidden!important;
+display:block!important;
+}</style></aside>
 </section>
 <section class="slide level2">
 <h2>One Chain: Output → Follow-Up → Answer</h2>
