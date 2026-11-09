@@ -900,8 +900,8 @@ per alternative shown. Columns: <respondent_id>, <task_id>, <chosen> (0/1), <pri
 7. <Optional, if you know unit costs> Profit-maximizing price for <product>, unit cost
    <c>, all other products' prices held fixed: search prices from <low> to <high>
    (inside the tested range) in steps of <0.10>, and report the price with the highest
-   (price - c) x share, its share and its profit per customer. Check the result against
-   price - c = 1 / (|beta_price| x (1 - share)).
+   (price - c) x share, its share and its profit per customer. Plot profit against
+   price and mark the best price, so I can see the peak.
 
 Show the code, then one results table per step. Do not invent any number. If a step
 fails, say so instead of working around it.

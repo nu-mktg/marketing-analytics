@@ -14,7 +14,7 @@
 - Explain the IIA property and when it misleads
 - Distinguish average WTP from individual WTP and price-setting implications
 - Describe how a choice experiment is designed and fielded
-- Find the profit-maximizing price from the market simulation and check it with the logit markup formula
+- Find the profit-maximizing price by running the market simulation at many prices
 
 ---
 
@@ -90,6 +90,10 @@ A choice experiment is a survey in which each respondent answers several choice 
 3. **Draw the levels at random.** For each profile, draw the level of every attribute at random and independently of the others. Price is then uncorrelated with the features, and the model can estimate the effect of each attribute separately. Redraw any task in which two profiles are identical (about 7% of tasks in the design below).
 4. **Decide whether to offer "none of these."** A "none" option lets a respondent leave the market when every profile is too expensive. It is needed to set prices for a whole product line (Section 1.4D). If you include it, record it as its own row in each task, and the model gets one more coefficient: a constant for "none".
 5. **Field the survey and save the responses in long format.** Survey platforms such as Qualtrics, Sawtooth Software and Conjointly generate and field the tasks for you. The result is the file format used in the homework: one row per profile shown, with `chosen = 1` for the profile picked and 0 for the others.
+
+The figure follows one real task from the HW09 data (respondent 1, task 1) from the survey screen to the rows of the data file, and then to the model and the decisions it supports.
+
+![Diagram in five panels. Top left, DESIGN, Levels to test: price \$10, \$14, \$18, \$22; content standard or premium; ads full, limited or none; plan monthly or annual; each profile has every level drawn at random. An arrow leads to the top middle panel, SURVEY, What the respondent sees: "Task 1 of 8: which plan would you choose?" above three plan cards. Plan 1: \$18 per month, premium content, full ads, monthly. Plan 2: \$10 per month, standard content, no ads, annual, highlighted and marked picked. Plan 3: \$18 per month, standard content, full ads, annual. An arrow leads to the top right panel, DATA, One row per plan shown: a three-row table with columns resp, task, alt, price, content, ads, plan and chosen; the rows are respondent 1, task 1, alternatives 1 to 3, with chosen equal to 0, 1 and 0, and the chosen row highlighted. Below the table: times 8 tasks times 400 respondents equals 9,600 rows; chosen = 1 marks the plan picked. An arrow leads down to the bottom right panel, MODEL, Fit the MNL: ConditionalLogit with one group per respondent and task, giving β_price and one part-worth per level. An arrow leads left to the bottom left panel, DECISIONS, Use the coefficients: WTP equals β_feature divided by the absolute value of β_price, market shares from the softmax, and the profit-maximizing price from a price search.](figures/lecture_09_conjoint_pipeline.png)
 
 A random design of the HW09 size takes a few lines of Python; the `chosen` column is added once responses come back:
 
@@ -176,7 +180,7 @@ $$\pi(p) = (p - c) \times s(p)$$
 
 where s(p) is B's simulated share at price p. A higher price raises the margin p − c and lowers the share s(p), and the profit-maximizing price p* balances the two.
 
-**Method 1: search over prices.** Run the Part B simulation at a range of prices for B and keep the price with the highest profit. With c = \$6:
+**Search over prices.** Run the Part B simulation at a range of prices for B and keep the price with the highest profit. With c = \$6:
 
 | Price of B | Share of B | Profit per customer, (p − 6) × s |
 |---|---|---|
@@ -188,15 +192,22 @@ where s(p) is B's simulated share at price p. A higher price raises the margin p
 
 A search in 1-cent steps gives **p\* = \$20.52**, with a 61.7% share and a profit of \$8.96 per customer. Multiply by the number of customers in the market for total profit.
 
-**Method 2: the markup formula, as a check.** Under the logit model, B's share responds to its own price at the rate ds/dp = β_price × s × (1 − s). Setting the derivative of profit to zero:
+The figure plots the same search at every price between \$6 and \$36. Profit rises while the gain in margin exceeds the loss in share, peaks at \$20.52, and falls after that. Reading the peak off this plot is all the profit-maximizing price requires; no calculus is needed.
 
-> s + (p − c) × β_price × s × (1 − s) = 0  ⇒  p\* − c = 1 / (|β_price| × (1 − s\*))
+![Line chart of profit per customer, (p − 6) × share, on the vertical axis from \$0 to \$10, against the monthly price of Product B on the horizontal axis from \$6 to \$36, for Section 1.4B's example with β_price = −0.18, unit cost \$6, and Products A and C at fixed prices. The curve starts at \$0 at a price of \$6, rises to a single peak, and declines slowly toward the right. The peak is marked with a dot and a dashed line down to the price axis: best price \$20.52, share 61.7%, profit \$8.96. A note at the low-price end reads "low price: high share, small margin", and a note at the high-price end reads "high price: large margin, few customers".](figures/lecture_09_profit_curve.png)
 
-Check: 1 / (0.18 × (1 − 0.617)) = \$14.51, and \$6 + \$14.51 = \$20.51, which matches the search up to rounding. The right-hand side depends on s\*, which itself depends on p\*. The formula therefore checks a price found by search; it cannot be solved for p\* in one step. Two consequences follow from it. The markup is never below 1/|β_price| (\$5.56 here). It also rises with the product's share, because the logit price elasticity, β_price × p × (1 − s), is smaller in size when s is large. Written with the L02 elasticity, the formula says that the margin (p − c)/p equals 1/|elasticity| at the profit-maximizing price.
-
-**When the result is meaningful.** The search finds a finite p\* because customers can switch to products whose prices stay fixed, here A and C. If the firm owned all three products and raised every price by the same amount, the shares would not move (Slide Practice Answer P1), and the simulation would recommend raising prices without limit. To price a whole product line, the survey needs a "none of these" option (Section 1.3), so that the model observes customers leaving the market. The profit-maximizing price also has the limits of the simulation itself: it uses average part-worths (Section 2.2), it is reliable only inside the price range the survey tested, and it is too high when hypothetical choices understate respondents' price sensitivity (Common Misconception 1), because a smaller |β_price| raises the markup.
+**When the result is meaningful.** The search finds a finite p\* because customers can switch to products whose prices stay fixed, here A and C. If the firm owned all three products and raised every price by the same amount, the shares would not move (Slide Practice Answer P1), and the simulation would recommend raising prices without limit. To price a whole product line, the survey needs a "none of these" option (Section 1.3), so that the model observes customers leaving the market. The profit-maximizing price also has the limits of the simulation itself: it uses average part-worths (Section 2.2), it is reliable only inside the price range the survey tested, and it is too high when hypothetical choices understate respondents' price sensitivity (Common Misconception 1).
 
 **Choosing a feature bundle.** To compare configurations, repeat the search for each configuration with its own cost c (premium content costs more to license) and choose the configuration whose profit at its own p\* is highest.
+
+> ### 🔍 Deep Dive (not required): A Formula That Checks the Price Search
+> The price search is the method you need. This box is for readers who want to see why the peak sits where it does; it uses a derivative and is not tested.
+>
+> Under the logit model, B's share responds to its own price at the rate ds/dp = β_price × s × (1 − s). Setting the derivative of profit (p − c) × s(p) to zero gives s + (p − c) × β_price × s × (1 − s) = 0, and therefore
+>
+> p\* − c = 1 / (|β_price| × (1 − s\*))
+>
+> Check: 1 / (0.18 × (1 − 0.617)) = \$14.51, and \$6 + \$14.51 = \$20.51, which matches the search up to rounding. The right-hand side depends on s\*, which itself depends on p\*, so the formula checks a price found by search and cannot be solved for p\* in one step. Two consequences follow from it. The markup is never below 1/|β_price| (\$5.56 here). It also rises with the product's share, because the logit price elasticity, β_price × p × (1 − s), is smaller in size when s is large. Written with the L02 elasticity, the formula says that the margin (p − c)/p equals 1/|elasticity| at the profit-maximizing price.
 
 ---
 
@@ -450,7 +461,7 @@ A negative coefficient means customers prefer the reference level over the coded
 | Computes WTP = β_attr / \|β_price\| | Section 1.1, Tool 2 — indifference derivation; Section 1.4A — worked WTP |
 | Runs market simulation using softmax | Section 1.4B — softmax formula |
 | Reports significance (p-values) | Section 2.2 — standard errors and statistical significance |
-| Searches prices for the highest (p − c) × share | Section 1.4D — profit-maximizing price and the markup check |
+| Searches prices for the highest (p − c) × share | Section 1.4D — profit-maximizing price by price search |
 
 **What to verify before trusting the output:**
 1. Price coefficient is negative
