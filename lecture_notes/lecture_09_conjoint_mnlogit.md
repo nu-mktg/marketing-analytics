@@ -429,7 +429,7 @@ $$P_1 = \frac{0.1423}{0.4062} \approx \mathbf{35.0\%}, \quad P_2 = \frac{0.2231}
 |---|---|
 | Notebook | `homework_notebooks/homework_09_conjoint_analysis.ipynb` |
 | Dataset | `homework_datasets/conjoint_survey.csv` |
-| Graded questions | **16** — Part A: 9 · Part B: 4 · Part C: 3 |
+| Graded questions | **18** — Part A: 9 · Part B: 4 · Part C: 5 |
 
 <!-- END GENERATED homework pointer -->
 
