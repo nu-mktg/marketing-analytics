@@ -119,6 +119,24 @@ Prophet can also be told to make the decomposition genuinely multiplicative,
 course never changes it** — the homework's agent prompt sets no `seasonality_mode`, so every model
 you fit here is the additive one, and the plus signs above are the model you are actually running.
 
+**The series in this lecture's figures.** Every figure in this lecture is drawn on one simulated
+series, so that what Prophet recovers can be checked against the truth. It is the weekly revenue of an
+online retailer, in thousands of dollars, for 208 weeks dated on Mondays from January 4, 2021. The
+trend starts at \$200k and grows \$0.6k a week until week 121, when growth slows to \$0.25k a
+week. The yearly pattern peaks in mid-December at \$42k above the trend and runs about \$21k
+below it from late April to early August. Three holiday weeks add a fixed amount each year: Black
+Friday week \$60k, the week of December 18 \$35k and July 4 week \$20k. Week-to-week noise is
+normal with a standard deviation of \$15k (seed 42). Unless a figure says otherwise, the model is
+trained on weeks 1–182 with the three holiday weeks entered as holidays and `interval_width=0.95`.
+The homework uses a different dataset.
+
+![Three stacked panels showing Prophet's components for the lecture's simulated series, each in dollars per week. Top panel, trend: a line rising from about \$202k in January 2021 to about \$300k at the end of 2024, with a slight bend in spring 2023 where growth slows; the last six months are shaded as the forecast. Middle panel, holidays: thin spikes at the three holiday weeks in each year, labeled with the fitted lifts, Black Friday week +\$70k, pre-Christmas week +\$41k and July 4 week +\$26k. Bottom panel, yearly seasonality from January to December: high in January, below zero from March to early October with small wiggles, rising through the autumn to a peak of +\$49k on December 23; the lowest point is −\$28k on August 9.](figures/lecture_10_components.png)
+
+Each panel is in the units of y. In the week of December 23 the yearly component adds about \$49k
+to the trend, and in Black Friday week the holiday component adds about \$70k more. The fitted
+holiday lifts are above the true ones (\$60k, \$35k, \$20k): each is estimated from the three
+holiday weeks in the training data.
+
 **Trend:** The underlying growth or decline direction. Prophet allows for changepoints — moments when the trend shifts. Section 1.4B says what Prophet actually does with them; the one-word summary "detects" is wrong in a way that matters.
 
 **Seasonality:** Recurring patterns within a year. Prophet models these patterns using a flexible curve that captures peaks and troughs without you specifying their exact shape. You do not need to know trigonometry — Prophet fits this automatically.
@@ -133,12 +151,25 @@ average is the lowest of the four, so a visible holiday spike is not evidence of
 season. Read the fitted component and let it tell you the shape; "it must peak in Q4" is not a
 check, it is an assumption.
 
+![Two bar charts side by side, each showing four quarterly seasonal indices in units above or below the annual average. Left, retail, using Section 2.1's indices: Q1 −6.9, Q2 −34.4, Q3 −16.9, Q4 +58.1, so the tallest bar is Q4. Right, an illustrative January-renewal business: Q1 +45.0, Q2 −5.0, Q3 −15.0, Q4 −25.0, so Q1 is the peak and Q4 is the lowest quarter.](figures/lecture_10_two_seasonal_shapes.png)
+
+The left panel is Section 2.1's worked example. The right panel is an illustrative January-renewal
+business whose indices also sum to zero: Q1 +45, Q2 −5, Q3 −15, Q4 −25.
+
 **Holidays:** Custom one-off effects for known events (Black Friday, Christmas, product launches). You specify the event dates; Prophet estimates the impact.
 
 **Why decomposition matters:** The component plot is often more valuable than the point forecast. A business that knows *its own* peak quarter (+38%), its own trough quarter (−15%), and its own event spikes (+45% on top of the peak-quarter level) can plan inventory, staffing, and marketing budgets with far more precision than one that has only a quarterly revenue estimate. Which quarter is which is the thing the model tells you.
 
 > ### 🔍 Deep Dive: How Prophet Models Seasonality Internally
 > Internally, Prophet represents seasonal patterns using Fourier series — sums of sine and cosine curves at different frequencies. Prophet's default for yearly seasonality is a Fourier **order** of 10: 10 sine and 10 cosine curves at harmonics 1/year through 10/year, so 20 terms. The coefficients on these terms are fit from the data. The resulting curve can capture any smooth repeating pattern without you specifying its shape in advance. This is why you do not see "seasonality = sin(2πt/52)" in your model output — Prophet shows you the resulting seasonal curve, not the internal Fourier components.
+>
+> ![Line chart of Prophet's yearly seasonal component from January to December, in dollars above or below the trend, fitted on weeks 1–182 of the lecture's series at three Fourier orders, with the simulation's true pattern as a dashed line. The true pattern is high in January, about \$20k below the trend from late April to early August, and peaks near \$42k in mid-December. Order 1 is a single smooth wave that is too low in December and too low in June; its label reads holdout MAPE 5.4%. Order 3 follows the dashed line closely; holdout MAPE 4.6%. Order 10 follows the dashed line with extra wiggles in spring, summer and autumn and overshoots the December peak; holdout MAPE 4.3%.](figures/lecture_10_fourier_orders.png)
+>
+> On this lecture's series, order 1 is a single wave and flattens the December peak. Order 3
+> follows the true pattern. Order 10, the default, follows it and also bends to some of the noise.
+> Here order 10 still has the lowest holdout MAPE (4.3%, against 5.4% for order 1). On a shorter or
+> noisier series the extra flexibility can cost accuracy, and only a holdout comparison shows which
+> order serves the series (Common Misconception 2).
 
 ---
 
@@ -171,6 +202,12 @@ steady series the noise part dominates, and over a few months the interval can l
 constant. By default the interval leaves out uncertainty in the seasonal shape (that needs
 `mcmc_samples > 0`).
 
+![Line chart of weekly revenue from 2021 to the end of 2024 for the lecture's simulated series. Small grey dots are the training weeks 1–182; a blue line is Prophet's forecast and a light blue band is its 95% interval, both drawn over all four years. A dashed vertical line marks where training ends, in July 2024. After it, the 26 holdout weeks are drawn as dots: 23 are solid black dots inside the band and 3 are open orange circles outside it, all three in December 2024. The band is about the same width before and after the line.](figures/lecture_10_forecast_band.png)
+
+On this lecture's series the 95% band is \$42k to \$50k wide over the 26 holdout weeks: the trend
+moved little in the history, and the noise part dominates. Of the 26 holdout actuals, 23 fall inside
+the band (88%), and the 3 outside are all in December. The holdout MAPE is 4.3%.
+
 **Using the interval for decisions:** If ordering too little and ordering too much cost about the
 same, plan to the point forecast (yhat). If running short costs more, plan above yhat: the more
 lopsided the costs, the further toward the upper end. A 2-to-1 ratio puts you only a little above
@@ -201,6 +238,12 @@ number it **laid down** — the fixed 25 — not a number of shifts it went look
 the useful diagnostic is not "did it find the right dates?" but "of the dates it was *offered*, are
 the ones it kept the ones I can explain?"
 
+![Two panels for the lecture's simulated series, training weeks 1–182. Top: grey dots for weekly revenue and a blue fitted trend line that bends slightly in spring 2023. A row of 25 short tick marks along the bottom shows the 25 candidate changepoint dates, evenly spaced from early 2021 to autumn 2023. Three dashed orange vertical lines mark the kept changepoints, in March, May and June 2023, and a note points to the trend at week 121 saying growth slows here. Bottom: a bar for each candidate's fitted slope change δ, with dotted lines at +0.01 and −0.01. Twenty-two bars are at or almost at zero; the three kept ones are orange and negative, reaching about −0.02, −0.04 and −0.02.](figures/lecture_10_changepoints.png)
+
+In this lecture's series, growth slows from \$0.6k to \$0.25k a week at week 121 (April 2023). No
+candidate falls on week 121; the fit keeps the three nearest, at weeks 116, 122 and 128, and spreads
+the slowdown over them. The other 22 slope changes shrink to almost zero.
+
 **When to add manual changepoints:** If you know the *growth rate* changed at a specific date (a
 new channel opened, a market started to saturate), add a changepoint at that date. Two things to
 know. Passing `changepoints=[...]` **replaces** the 25 evenly spaced candidates with your list; it
@@ -217,13 +260,16 @@ explain y; this 0/1 step is the simplest one.
 **The promotional campaign trap:** A big temporary campaign that the model is not told about gets
 absorbed into the trend, and the trend bends around it. *Which way* the forecast then goes wrong
 depends on where the campaign sits. If it runs up to the end of the training data, the trend
-carries the lift forward and the forecast **overestimates**. If it ended a year or more before the
-cutoff, the trend's bend back down can leave the forecast too **low** instead. (In a simulated
-weekly series with a +70% campaign in Year 2 and a model trained on Years 1–3, the Year 4 forecast
-came out 37% low.) A changepoint at the campaign's end does not reliably fix either case, because it
-changes slope, not level (in the same simulation it was still 23% low). The reliable fix is to give
-the model the dates: enter the campaign as a **holiday** spanning its start and end dates, so its
-lift is estimated as a one-off and kept out of the trend (in the simulation, 2% off).
+continues at the campaign's raised level and the forecast **overestimates**. If it ended a year or
+more before the cutoff, the trend's bend back down can leave the forecast too **low** instead. (On
+this lecture's series, with a campaign that adds 70% of the trend level through Year 2 and a model
+trained on Years 1–3, the Year 4 forecast came out 38% low.) A changepoint at the campaign's end
+does not reliably fix either case, because it changes slope, not level (on the same series it was
+41% low). The reliable fix is to give the model the dates: enter the campaign as a **holiday**
+spanning its start and end dates, so its lift is estimated as a one-off and kept out of the trend
+(on the same series, 1% low).
+
+![Line chart of weekly revenue from 2021 to 2024 for the lecture's series with a campaign added. Year 2 is shaded and labeled "campaign: +70% of the trend level, all of Year 2"; the grey training dots jump from about \$280k to about \$410k at the start of 2022, climb to about \$540k by December, and fall back to about \$290k in January 2023. A dashed orange line, the default fit's trend, rises through 2021, peaks in mid-2022 and falls steadily to about \$240k at the end of 2023. A dashed vertical line marks where training ends. In Year 4 a thin black line shows what revenue would be without the campaign, and three forecasts are drawn: the blue one, campaign entered as a holiday, lies on the black line and is labeled 1% low; the orange default forecast and the green forecast with a changepoint at the campaign's end both run far below it, labeled 38% low and 41% low.](figures/lecture_10_campaign_trap.png)
 
 ---
 
@@ -432,7 +478,7 @@ $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 ### Section 2.2 — Interpretation Guide
 #### (~10 minutes)
 
-**The `plot_components()` output:** Prophet automatically generates a 3-panel plot:
+**The `plot_components()` output:** Prophet automatically generates a 3-panel plot (the components figure in Section 1.3 draws it for this lecture's series):
 - **Trend panel:** Shows the fitted trend line. `plot_components()` does not mark changepoints. To see them, draw the forecast with `fig = m.plot(forecast)` and call `add_changepoints_to_plot(fig.gca(), m, forecast)` (from `prophet.plot`): it adds a dashed red line only at changepoints whose slope change is at least 0.01, the ones the data kept. The other candidates are still in the model, shrunk to (almost) no slope change (Section 1.4B). A visible kink means the data supported a shift in growth rate at one of the dates Prophet offered.
 - **Yearly seasonality panel:** Shows the estimated seasonal effect for each day/week of the year. **Read the peak off this panel rather than assuming it.** A holiday-driven retailer peaks in Q4; a January-renewal, tax-season or budget-cycle business peaks in Q1 with Q4 as its trough. Both are ordinary.
 - **Holiday panel:** Shows the combined effect of the holidays you specified, as a spike at each holiday date. Positive values indicate sales lift; negative values indicate drag. **On weekly data, a holiday registers only on a row whose date it covers.** Thanksgiving is always a Thursday, so on Monday-stamped weekly data it gets no rows unless you give it a window: `lower_window=-6, upper_window=0` stretches each holiday over the six days before it, which always includes the Monday that starts its week. Check which holidays actually have rows before reading the panel.
@@ -475,7 +521,7 @@ $$\text{MAPE}_{\text{trend}} = (0.0 + 5.0 + 0.0 + 5.0) / 4 = \mathbf{2.5\%}$$
 Prophet performs best with several years of data, clear seasonal patterns, and known holidays. For very short series (less than 2 years), or highly irregular data with no seasonal pattern, simpler methods (exponential smoothing, ARIMA) often perform comparably or better.
 
 **2. "More Fourier terms (a higher Fourier order) always improves forecasts."**
-Larger N increases flexibility, which improves fit on training data but may worsen out-of-sample accuracy (overfitting). Always validate with temporal cross-validation, not training error.
+Larger N increases flexibility, which improves fit on training data but may worsen out-of-sample accuracy (overfitting). Always validate with temporal cross-validation, not training error. The figure in the Section 1.3 Deep Dive shows orders 1, 3 and 10 fitted to one series.
 
 **3. "The 95% uncertainty interval means 95% of future observations will fall within it."**
 This would be true only if the model were right. Prophet's default interval is built from the noise it measured and from simulated future trend changes like the ones in the history (Section 1.4A). It leaves out uncertainty in the seasonal shape and anything the history never showed (a new competitor, a pandemic), so actual coverage is often lower. Check it on a holdout.
