@@ -120,7 +120,7 @@ Specialized design software produces more efficient designs, which estimate the 
 
 Each product is characterized by attributes (price, content tier, ad level, plan type). The utility of a product is a linear combination:
 
-$$U = \beta_{\text{price}} \times \text{price} + \beta_{\text{premium}} \times \mathbb{1}[\text{premium}] + \beta_{\text{no\_ads}} \times \mathbb{1}[\text{no\_ads}] + ...$$
+$$U = \beta_{\text{price}} \times \text{price} + \beta_{\text{premium}} \times \mathbb{1}[\text{premium}] + \beta_{\text{no_ads}} \times \mathbb{1}[\text{no_ads}] + ...$$
 
 where 𝟙[...] = 1 if the attribute level is present, 0 otherwise.
 
