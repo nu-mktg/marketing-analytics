@@ -16,9 +16,9 @@ reasoning and your group's presentation.
 
 | Part | When | Format | Canvas points | Weight |
 |---|---|---|---|---|
-| Individual scenario quiz | Week 14 (in class) | Timed Canvas quiz, 60 min | 100 | 15% |
-| Group presentation | Week 15 (in class) | 12–15 min per group | 40 | 15% |
-| Group write-up | Week 16 (online) | Written submission, 2 pages max | scored with the presentation | (included in the 15%) |
+| Individual scenario quiz | Mon 11/30 (in class) | Timed Canvas quiz, 60 min | 100 | 15% |
+| Group presentation | Mon 12/7 (in class; MKTG 3501 also Wed 12/9) | 12–15 min per group | 40 | 15% |
+| Group write-up | Due Mon 12/14 (online) | Written submission, 2 pages max | scored with the presentation | (included in the 15%) |
 
 **How the points map to your grade.** The two point totals are *separate Canvas scales*, not
 shares of one 140-point pot: your individual quiz score out of 100 becomes the Individual 15%,
@@ -27,7 +27,7 @@ on the quiz and whose group scores 30/40 earns (0.80 × 15) + (0.75 × 15) = **2
 course grade** out of the 30% the Sprint is worth. The larger quiz point total does **not** make
 the individual portion count for more than the group portion — the split is 50/50.
 
-*Note: the write-up is submitted as a PDF to Canvas by the end of Week 16 and is graded using the
+*Note: the write-up is submitted as a PDF to Canvas by Mon 12/14 and is graded using the
 same 40-point group scorecard as the presentation; the higher of your presentation and write-up
 score on each criterion is the one that counts.*
 
@@ -35,30 +35,31 @@ score on each criterion is the one that counts.*
 
 ## Timeline
 
-### Week 13 — Briefing released
+### Mon 11/23 — Briefing released
 One week before the Sprint work session, you receive the FitLoop company briefing (Part A
 of the case scenario). **Read it carefully. Discuss it with your group.**
 
 You will **not** receive model output data this week — that is released at the very start
-of the Week 14 in-class session. There is nothing to run, no numbers to analyze, and no
-model outputs to look at during Week 13. Your preparation this week is entirely conceptual:
+of the 11/30 in-class session. There is nothing to run, no numbers to analyze, and no
+model outputs to look at before 11/30. Your preparation this week is entirely conceptual:
 understanding the two business decisions, thinking about which models are relevant, and
 knowing which models you would *not* use and why.
 
-### Week 14 — Individual scenario quiz + group work (in class)
+### Mon 11/30 — Individual scenario quiz + group work (in class)
 - Model outputs are released at the start of class
 - You have **60 minutes** to analyze the data and complete the individual scenario quiz
 - The Canvas quiz closes automatically at the 60-minute mark — no extensions
 - After submitting your quiz, the remaining class time is dedicated group work: refine
   your analysis, prepare your presentation outline, and align on your recommendation
+- MKTG 3501 also has a group work day on Wed 12/2
 
-### Week 15 — Group presentations (in class)
+### Mon 12/7 (MKTG 3501: also Wed 12/9) — Group presentations (in class)
 - Each group presents for 12–15 minutes
 - No formal Q&A; the instructor and other students can ask questions freely
 - Presentation order is randomized and announced on the day
 - You can use any format: slides, whiteboard, verbal — whatever works for your group
 
-### Week 16 — Group write-up due (online)
+### Mon 12/14 — Group write-up due (online)
 - A 2-page written summary of your group's analysis and recommendation
 - Submitted as a PDF to Canvas by the deadline posted on the course site
 - This is a clean write-up of what you presented, not new analysis
@@ -68,9 +69,11 @@ knowing which models you would *not* use and why.
 ## The FitLoop Case and the Course Models
 
 The Sprint case (FitLoop) uses **six pre-run model outputs** chosen because they connect
-directly to the two business decisions in the scenario. The six outputs draw on models from
-the first half of the course (Bayesian A/B testing, price elasticity, BG/NBD CLV, survival
-analysis, uplift modelling, and Markov chains).
+directly to the two business decisions in the scenario. The six outputs use Bayesian A/B testing (L01),
+price elasticity (L02), survival analysis (L04), Markov chains (L05), uplift modeling (L07) and
+BG/NBD CLV (L08). MMM (L03), Shapley attribution (L06), conjoint analysis (L09) and Prophet (L10)
+are tested in Quiz 2 and HW11. They enter the Sprint through the group presentation and write-up,
+whose last rubric criterion asks for a follow-up analysis that uses one of them.
 
 The individual assessment is a 10-question multiple-choice quiz in Canvas (Respondus
 Lockdown Browser required). Each question presents a scenario with **specific numbers
@@ -96,7 +99,7 @@ group's specific output* mean in context.
 2. Price elasticity — using the elasticity coefficient alongside the A/B test for the same decision
 3. BG/NBD CLV — P(alive) interpretation and retention campaign targeting
 4. Survival analysis — Cox hazard ratios and the correct product intervention they imply
-5. Uplift model — profit-maximising targeting threshold and sleeping dog exclusion
+5. Uplift model — profit-maximizing targeting threshold and sleeping dog exclusion
 6. Markov chain — steady-state interpretation and identifying the highest-leverage bottleneck
 7. Model selection — which model applies to which decision (and which does not)
 8. Assumption identification — causal vs. observational inference in the Cox model
@@ -117,21 +120,21 @@ to have surveyed the entire toolkit and understood the scope of each model.
 
 ## How to Prepare
 
-**Before Week 13 (before the briefing is released):**
+**Before 11/23 (before the briefing is released):**
 
 - Review the Model Reference Card — make sure you can sketch the estimand and one key
   assumption for each model covered in the course
 - Know how to look up a specific model's output quickly in your group's analysis
 
-**During Week 13 (after receiving the company briefing):**
+**Between 11/23 and 11/30 (after receiving the company briefing):**
 
 - Read the briefing carefully — understand the two business decisions
 - Discuss with your group which models are most relevant to each decision
 - Think about which models you would *not* use and why (Q7 in the quiz covers model selection)
 - **No model outputs are available yet** — your preparation this week is conceptual, not
-  numerical. The numbers arrive at the start of Week 14.
+  numerical. The numbers arrive at the start of class on 11/30.
 
-**Week 14 (in-class):**
+**Mon 11/30 (in class):**
 
 - The model outputs are pre-generated and provided to you — no coding required during the
   individual quiz time
@@ -150,7 +153,7 @@ answer from four plausible options.
 
 ---
 
-## Group Presentation (Week 15)
+## Group Presentation (Mon 12/7; MKTG 3501 also Wed 12/9)
 
 **What we are looking for (40 points total):**
 
@@ -158,7 +161,7 @@ answer from four plausible options.
 |---|---|
 | Model selection — 2+ relevant models used, selection justified, at least one non-obvious exclusion reasoned | 15 |
 | Output connection — recommendation explicitly tied to at least one specific number | 15 |
-| Limitation identified — one genuine analytical gap named; not a data complaint but a specific unanswerable question | 10 |
+| Limitation and follow-up: one genuine analytical gap named, plus the follow-up analysis that would answer it, using a model from L03, L06, L09 or L10 (for example, conjoint willingness to pay for the price decision): what you would run, on which data, and how the result could change your recommendation | 10 |
 
 **Practical details:**
 
@@ -171,7 +174,7 @@ answer from four plausible options.
 
 ---
 
-## Group Write-Up (Week 16, due online)
+## Group Write-Up (due Mon 12/14, online)
 
 A 2-page maximum written summary (PDF, submitted to Canvas):
 
@@ -179,7 +182,7 @@ A 2-page maximum written summary (PDF, submitted to Canvas):
 - **Page 2:** Your recommendation(s), the key uncertainty, and what would change your advice
 
 The write-up is graded using the same three criteria as the presentation (model selection,
-output connection, limitation identified). The higher of your presentation and write-up
+output connection, limitation and follow-up). The higher of your presentation and write-up
 score on each criterion is used — the write-up gives your group a second chance to
 articulate any points that were unclear in the live presentation.
 
@@ -187,8 +190,8 @@ articulate any points that were unclear in the live presentation.
 
 ## Makeup Policy
 
-**Individual scenario quiz (Week 14 Canvas quiz):**
-If you cannot attend the in-class session in Week 14, you may request a makeup window
+**Individual scenario quiz (11/30 Canvas quiz):**
+If you cannot attend the in-class session on 11/30, you may request a makeup window
 by emailing the instructor at least 24 hours in advance (or as soon as possible for
 emergencies). The makeup quiz is **your own group's version** of the quiz (the Canvas quiz
 named `Sprint Individual Quiz — GROUP_N` for your group number), reopened for a different time
@@ -202,18 +205,18 @@ You can self-schedule the makeup by:
 2. The instructor will open the Canvas window for you
 3. You take the quiz using LDB at the agreed time
 
-**Group presentation (Week 15):**
+**Group presentation (12/7; MKTG 3501 also 12/9):**
 If you cannot attend the presentation day, contact your group and the instructor.
 Two options:
 - **Option A:** Present at the end of the presentation session if schedule allows
 - **Option B:** Record a 15-minute video of your group's presentation, submitted to
-  Canvas by the end of Week 15 — this option requires all group members who were
+  Canvas by the end of the presentation week — this option requires all group members who were
   present for the original session to agree
 
 If your entire group cannot present, schedule a makeup presentation during office hours
-or a mutually agreed time before the Week 16 write-up deadline.
+or a mutually agreed time before the write-up deadline (Mon 12/14).
 
-**Group write-up (Week 16):**
+**Group write-up (due Mon 12/14):**
 The course's single late policy applies, exactly as it does to homework:
 **on time = full credit · within 24 hours of the deadline = half credit** (half the score
 you earn) **· more than 24 hours late = not accepted.**
