@@ -174,13 +174,13 @@ The standard fix is **nested logit**: the analyst groups close substitutes into 
 
 #### Part D: Setting the Price That Maximizes Profit
 
-WTP measures what a feature is worth to the average respondent. The price to charge comes from the market simulation. Suppose the firm sells Product B from Part B, and the competitors keep Products A and C at their current prices. Serving one customer on B costs the firm c dollars a month. The expected profit per customer in the market is
+WTP measures what a feature is worth to the average respondent. The price to charge comes from the market simulation. Suppose the firm sells only Product B from Part B. Products A and C belong to competitors, so the firm cannot set their prices and takes them as given: A at \$12 and C at \$15. Serving one customer on B costs the firm c dollars a month. The expected profit per customer in the market is
 
 $$\pi(p) = (p - c) \times s(p)$$
 
 where s(p) is B's simulated share at price p. A higher price raises the margin p − c and lowers the share s(p), and the profit-maximizing price p* balances the two.
 
-**Search over prices.** Run the Part B simulation at a range of prices for B and keep the price with the highest profit. With c = \$6:
+**Search over prices.** Run the Part B simulation at a range of prices for B, with A and C at their current prices. At each trial price, recompute all three shares. A's and C's utilities stay the same, and their shares rise as B's share falls: the search counts every customer who switches away from B. Keep the price with the highest profit for B. With c = \$6:
 
 | Price of B | Share of B | Profit per customer, (p − 6) × s |
 |---|---|---|
@@ -196,7 +196,7 @@ The figure plots the same search at every price between \$6 and \$36. Profit ris
 
 ![Line chart of profit per customer, (p − 6) × share, on the vertical axis from \$0 to \$10, against the monthly price of Product B on the horizontal axis from \$6 to \$36, for Section 1.4B's example with β_price = −0.18, unit cost \$6, and Products A and C at fixed prices. The curve starts at \$0 at a price of \$6, rises to a single peak, and declines slowly toward the right. The peak is marked with a dot and a dashed line down to the price axis: best price \$20.52, share 61.7%, profit \$8.96. A note at the low-price end reads "low price: high share, small margin", and a note at the high-price end reads "high price: large margin, few customers".](figures/lecture_09_profit_curve.png)
 
-**When the result is meaningful.** The search finds a finite p\* because customers can switch to products whose prices stay fixed, here A and C. If the firm owned all three products and raised every price by the same amount, the shares would not move (Slide Practice Answer P1), and the simulation would recommend raising prices without limit. To price a whole product line, the survey needs a "none of these" option (Section 1.3), so that the model observes customers leaving the market. The profit-maximizing price also has the limits of the simulation itself: it uses average part-worths (Section 2.2), it is reliable only inside the price range the survey tested, and it is too high when hypothetical choices understate respondents' price sensitivity (Common Misconception 1).
+**When the result is meaningful.** The result is B's best price at the competitors' current prices. If a competitor changes its price, run the search again with the new price; predicting how competitors respond is beyond this course. The search finds a finite p\* because customers can switch to products whose prices stay fixed, here A and C. If the firm also sold A, for example as its basic tier, customers who move from B to A would still pay the firm, so the profit to maximize would be the sum of both products' (price − cost) × share. If the firm owned all three products and raised every price by the same amount, the shares would not move (Slide Practice Answer P1), and the simulation would recommend raising prices without limit. To price a whole product line, the survey needs a "none of these" option (Section 1.3), so that the model observes customers leaving the market. The profit-maximizing price also has the limits of the simulation itself: it uses average part-worths (Section 2.2), it is reliable only inside the price range the survey tested, and it is too high when hypothetical choices understate respondents' price sensitivity (Common Misconception 1).
 
 **Choosing a feature bundle.** To compare configurations, repeat the search for each configuration with its own cost c (premium content costs more to license) and choose the configuration whose profit at its own p\* is highest.
 
