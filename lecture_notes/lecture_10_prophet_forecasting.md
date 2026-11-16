@@ -289,6 +289,24 @@ Always validate on a held-out period before using a forecast for decisions.
 
 **MAPE usefulness depends on context:** A 20% MAPE on weekly demand for a fashion product may be excellent (fashion is inherently unpredictable). A 5% MAPE on electricity demand for a power plant may be dangerously imprecise (utilities need < 2% accuracy).
 
+**When the model with the higher MAPE is the better choice.** For two models of the same series, the
+model with the higher MAPE can be the better choice in situations like these:
+
+- *The two MAPEs measure different things.* An 8% training MAPE and a 22% holdout MAPE are not
+  comparable: only the holdout MAPE measures forecast accuracy (Common Misconception 5). The same
+  holds when the two MAPEs come from different holdout periods or different forecast horizons.
+- *The lower-MAPE model is biased.* MAPE averages the size of the errors and ignores their direction.
+  A model that under-forecasts every week by 8% gives a full-year total 8% too low. A model whose
+  weekly errors average 22%, but are as often too high as too low, can give a full-year total close
+  to the actual. For an annual budget, the second model is more useful. To check, compare each
+  model's summed forecast with the summed actuals over the holdout.
+- *The decision depends on a few weeks.* MAPE weights every week equally. For a Q4 inventory
+  decision, the model that is more accurate in weeks 40–52 is the better choice, even when its MAPE
+  over the whole holdout is higher. Compute MAPE on those weeks alone.
+- *Only one model answers the question asked.* A model with a promotion or price regressor can have
+  a higher MAPE than one without, and still be the only one that estimates what a planned promotion
+  will do.
+
 **A rough 95% range from MAPE.** When all you have is a holdout MAPE, the course's back-of-envelope
 rule for an approximate 95% range around a revenue level is
 
@@ -337,8 +355,8 @@ closer to 90% than 95%. When you have the fitted model, use Prophet's own interv
 *Common wrong answer:* Prophet detects the campaign as a holiday effect automatically. Prophet's holiday component only works for events you specify explicitly. It cannot tell on its own that a boost in Year 2 was a one-time promotion rather than a structural change.
 *Also wrong:* "It will always overestimate." That happens when the campaign runs up to the end of the training data, not when it ended a year earlier.
 
-**Q5.** **Not necessarily for rough annual planning.** For annual budget planning, you aggregate weekly forecasts into a full-year estimate. Aggregation reduces percentage error (some weeks' overestimates offset underestimates). Both 8% and 22% MAPE may produce similar annual totals. Model B may be preferable if it is simpler to explain, update, or maintain — and the accuracy difference does not change any annual budget decision materially.
-*Common wrong answer:* Yes, lower MAPE is always better. Lower MAPE is better for granular decisions (weekly inventory orders) but may not matter for aggregate annual planning.
+**Q5.** **Not necessarily.** An annual budget depends on the error in the full-year total. MAPE averages the size of the weekly errors and ignores their direction (Section 1.4C, "When the model with the higher MAPE is the better choice"). If Model A under-forecasts every week by about 8%, its annual total is about 8% too low. If Model B's weekly errors average 22% but are as often too high as too low, its annual total can be closer to the actual. Compare each model's summed forecast with the summed actuals over the holdout before choosing. When the two annual totals are similar, Model B may also be preferable if it is simpler to explain or update.
+*Common wrong answer:* Yes, lower MAPE is always better. Lower MAPE matters most for week-by-week decisions such as weekly inventory orders; for an annual total, a model's bias can matter more than its average weekly error.
 
 #### Slide Checkpoint Answers
 
