@@ -12,7 +12,7 @@ describes the Sprint.
 
 About 15 minutes of class time go to this material: the course map, one worked example that goes
 from a model output to a follow-up question and its answer, and the Sprint logistics. Read the full
-note before that session (MKTG 3501: Wed 11/18; MKTG 6434: Mon 11/23).
+note before that session.
 
 Every assumption, check and failure mode named below cites the lecture section that taught it. If
 a point is unclear, the cited section explains it in full.
@@ -98,7 +98,7 @@ Bayesian A/B (L01)
 OLS / Price Elasticity (L02)
     └── Regression as a framework
     └── Feeds into: MMM (L03), whose β's are a least-squares fit once the curves are set
-    └── Feeds into: Conjoint (L09), whose profit-maximizing margin equals 1/|elasticity|
+    └── Feeds into: Conjoint (L09), whose price search also finds the profit-maximizing price on an L02 demand curve
 
 Survival Analysis (L04)
     └── Conditional probability, censoring, hazard functions
@@ -218,7 +218,7 @@ from Y to Z") gives the decision-maker what they need to weigh the risk.
 #### Theme 5: From Model Output to an Answered Follow-Up Question
 
 A model output usually raises a follow-up question. Most of these questions can be answered with a
-model from this course, and the rest with a test whose result is analyzed with one. For three
+model from this course, and the rest with a randomized test. For three
 outputs from the lectures, the tables below list the follow-up questions, the model or test design
 that answers each one, and what a result looks like.
 
@@ -227,9 +227,9 @@ increase goes with a 1.84% decrease in units sold, and a small price cut would r
 
 | Follow-up question | Model or test that answers it | What a result looks like |
 |---|---|---|
-| How far should the price move? | For revenue, fit a demand curve whose elasticity varies with price (the levels model) and find its peak inside the observed price range (L02 §1.4B). For profit, use the condition that at the profit-maximizing price the margin (p − c)/p equals 1/\|elasticity\| (L09 §1.4D), where c is the unit cost. | With a constant elasticity of −1.84, the profit-maximizing margin is 1/1.84 ≈ 54% of price. Then p\* = c / (1 − 0.54) ≈ 2.19 × c. At an illustrative unit cost of \$10, p\* ≈ \$21.90. The result applies only if \$21.90 lies inside the range of prices observed in the data. |
+| How far should the price move? | For revenue, fit a demand curve whose elasticity varies with price (the levels model) and find its peak inside the observed price range (L02 §1.4B). For profit, run the price search of L09 §1.4D on the fitted demand curve: at each trial price p inside the observed range, compute (p − c) × predicted units, where c is the unit cost, and keep the price with the highest profit. | With a constant elasticity of −1.84 and an illustrative unit cost of \$10, the search finds the highest profit at about \$21.90. The result applies only if \$21.90 lies inside the range of prices observed in the data. When \|elasticity\| is below 1, profit rises at every price in the observed range, and the search returns the highest observed price. Going above that price requires a price test that randomizes customers between the current and the new price, analyzed with L01. |
 | Is the answer the same for every SKU? | Re-estimate the log-log regression separately for each SKU or customer segment (L02 §1.4B). | One elasticity per SKU, each with its standard error. The price changes for SKUs whose elasticity is estimated precisely enough for the decision. |
-| How will competitors respond? | No model in the course predicts a competitor's reaction from your own sales data. Design a test: change the price in a few randomly chosen markets, keep the other markets at the current price, and analyze the result as a Bayesian A/B test (L01). | P(test markets > control markets) on revenue per customer, and a 95% credible interval on the lift, measured over a period long enough for competitors to react. |
+| How will competitors respond? | No model in the course predicts a competitor's reaction from your own sales data. Design a test: change the price in a few randomly chosen markets and keep the other markets at the current price. Competitors react to a whole market, so the test randomizes markets, the markets are the units being compared, and the sample size is the number of markets. The analysis of a market-level test is beyond this course. | The difference in revenue per customer between test and control markets, measured over a period long enough for competitors to react. With a few markets in each group, the uncertainty in that difference is large. |
 
 **Output B: Paid Search receives 50% of Shapley credit and 8% of last-touch credit** (L06
 Checkpoint Q5). Last-touch under-credits Paid Search, and budgets set on last-touch may under-invest
@@ -238,7 +238,7 @@ in it.
 | Follow-up question | Model or test that answers it | What a result looks like |
 |---|---|---|
 | How much more should Paid Search get? | Shapley credit measures contribution within observed paths (L06 §1.4C). The budget question asks what the next dollar buys: compute each channel's MMM marginal ROI at current spend, MR = β · H′(A) / (1 − λ) (L03 §1.4C). | If Paid Search has the highest marginal ROI, the MMM predicts that shifting budget toward it raises revenue. The proposed allocation is judged by its predicted revenue (L03 Common Misconception 5). |
-| Will the extra spend cause more conversions? | MMM and Shapley are both fitted on observational data (L03 §2.2). Run a geo holdout: raise Paid Search spend in randomly chosen regions, keep the other regions unchanged, and analyze the result as an A/B test (L01; L03 §2.2; L06 §1.4C). | P(raised regions > control regions) on conversions, and a credible interval on the lift. |
+| Will the extra spend cause more conversions? | MMM and Shapley are both fitted on observational data (L03 §2.2). Run a geo holdout: raise Paid Search spend in randomly chosen regions and keep the other regions unchanged (L03 §2.2; L06 §1.4C). Spend changes by region, so the regions are the units being compared, and the sample size is the number of regions. The analysis of a region-level test is beyond this course. | The difference in conversions per customer between raised and control regions. With a few regions in each group, the uncertainty in that difference is large. An analysis that counts each customer as an independent trial, as L01's Beta-Binomial does, understates it. |
 
 **Output C: P(alive) = 0.09 for a customer who used to buy often** (an illustrative number).
 
@@ -253,8 +253,11 @@ in it.
 1. **Write the follow-up as a decision.** "Paid Search is under-credited" becomes "Should we move
    budget from Email to Paid Search next quarter, and how much?"
 2. **Pick the model that answers that decision** (the course map in Part 1).
-3. **If no model answers it with the data in hand, design a test.** Randomize the change across
-   customers, markets or regions, and analyze the result with a Bayesian A/B test (L01).
+3. **If no model answers it with the data in hand, design a test.** When the change can be shown
+   to individual customers (a price, an offer, an ad audience), randomize customers and analyze the
+   result with a Bayesian A/B test (L01). When the change can only vary by market or region
+   (competitor response, regional ad spend), the markets or regions are the units being compared,
+   and the analysis of such a test is beyond this course.
 4. **Report the answer with its uncertainty:** the estimate, its interval, and the assumption it
    depends on (Theme 2).
 
@@ -332,31 +335,33 @@ write-up, whose last rubric criterion asks for a follow-up analysis that uses on
 
 ### 3.2 Timeline
 
-| Date | What happens | Section |
-|---|---|---|
-| Mon 11/23 | FitLoop company briefing (Part A of the case) distributed. No model outputs yet. | both |
-| Mon 11/30 | Model outputs released at the start of class; 60-minute individual quiz; group work for the rest of class | both |
-| Wed 12/2 | Group work day | MKTG 3501 |
-| Mon 12/7 | Group presentations | both |
-| Wed 12/9 | Group presentations (continued) | MKTG 3501 |
-| Mon 12/14 | Group write-up due (PDF, online) | both |
+The Sprint has four steps, in this order. The dates for each step are in the Sprint schedule
+posted on Canvas.
 
-Between 11/23 and 11/30 the preparation is conceptual. There are no numbers to analyze until the
-model outputs are released on 11/30. Read the briefing with your group, decide which models address
-each of the two business decisions, and decide which models you would leave out and why.
+| Step | What happens |
+|---|---|
+| 1. Briefing | The FitLoop company briefing (Part A of the case) is distributed one week before the quiz session. It contains no model outputs. |
+| 2. Quiz session | Model outputs are released at the start of class; 60-minute individual quiz; group work for the rest of class |
+| 3. Presentations | Each group presents in class |
+| 4. Write-up | The group write-up (PDF) is due online after the presentations |
 
-**What to review before 11/30:**
+Between the briefing and the quiz session the preparation is conceptual. There are no numbers to
+analyze until the model outputs are released at the start of the quiz session. Read the briefing
+with your group, decide which models address each of the two business decisions, and decide which
+models you would leave out and why.
+
+**What to review before the quiz session:**
 - The model reference card (a one-page summary of all models)
-- The FitLoop company briefing distributed on 11/23
+- The FitLoop company briefing
 - Your own notes on any models you feel less confident about
 
-Nothing extra is needed on 11/30. The model outputs are provided at the start of class.
+Nothing extra is needed for the quiz session. The model outputs are provided at the start of class.
 
 ---
 
 ### 3.3 How the Individual Scenario Quiz Works
 
-On 11/30, after the model outputs are distributed, you complete a **10-question multiple-choice
+In the quiz session, after the model outputs are distributed, you complete a **10-question multiple-choice
 Canvas quiz** (60 minutes, closes automatically). Your group's model output packet is open in front
 of you: the quiz is open-book for the data, and communication with group members is not allowed.
 
