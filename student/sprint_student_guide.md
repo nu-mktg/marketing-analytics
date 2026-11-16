@@ -17,7 +17,7 @@ reasoning and your group's presentation.
 | Part | When | Format | Canvas points | Weight |
 |---|---|---|---|---|
 | Individual scenario quiz | Mon 11/30 (in class) | Timed Canvas quiz, 60 min | 100 | 15% |
-| Group presentation | Mon 12/7 (in class; MKTG 3501 also Wed 12/9) | 10–15 min per group | 40 | 15% |
+| Group presentation | In class, from Mon 12/7 | 10–15 min per group | 40 | 15% |
 | Group write-up | Due Mon 12/14 (online) | Written submission, 2 pages max | scored with the presentation | (included in the 15%) |
 
 **How the points map to your grade.** The two point totals are *separate Canvas scales*, not
@@ -35,6 +35,9 @@ score on each criterion is the one that counts.*
 
 ## Timeline
 
+Your section's exact dates, including any extra work or presentation days, are on its
+**Sprint Schedule** page in Canvas.
+
 ### Mon 11/23 — Briefing released
 One week before the Sprint work session, you receive the FitLoop company briefing (Part A
 of the case scenario). **Read it carefully. Discuss it with your group.**
@@ -51,9 +54,9 @@ knowing which models you would *not* use and why.
 - The Canvas quiz closes automatically at the 60-minute mark — no extensions
 - After submitting your quiz, the remaining class time is dedicated group work: refine
   your analysis, prepare your presentation outline, and align on your recommendation
-- MKTG 3501 also has a group work day on Wed 12/2
 
-### Mon 12/7 (MKTG 3501: also Wed 12/9) — Group presentations (in class)
+### From Mon 12/7 — Group presentations (in class)
+- Your section's presentation dates are on its Sprint Schedule page in Canvas
 - Each group presents for 10–15 minutes
 - No formal Q&A; the instructor and other students can ask questions freely
 - Presentation order is randomized and announced on the day
@@ -122,9 +125,8 @@ to have surveyed the entire toolkit and understood the scope of each model.
   assumption for each model covered in the course
 - Know how to look up a specific model's output quickly in your group's analysis
 - Work the Kibblewick practice case with your Sprint group. It is ungraded, uses the Sprint's
-  format, and its three pages are on Canvas. MKTG 6434 works it at home during the week of 11/16.
-  MKTG 3501 works it in class on 11/23 after Quiz 2, so read its briefing before then. Both
-  sections go over it in class on 11/23
+  format, and its three pages are on Canvas. Your section's Sprint Schedule page says when you
+  work it. We go over it in class on 11/23
 
 **Between 11/23 and 11/30 (after receiving the company briefing):**
 
@@ -153,7 +155,7 @@ answer from four plausible options.
 
 ---
 
-## Group Presentation (Mon 12/7; MKTG 3501 also Wed 12/9)
+## Group Presentation (in class, from Mon 12/7)
 
 **What we are looking for (40 points total):**
 
