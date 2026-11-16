@@ -163,6 +163,10 @@ answer from four plausible options.
 
 - 12–15 minutes per group
 - No strict structure — use whatever format communicates your analysis best
+- Where the briefing gives no information, you may state an assumption and use it, labeled as an
+  assumption. Every number behind your recommendation comes from the briefing or your group's packet.
+- For the follow-up, state which result would change your recommendation and how. A result for an
+  analysis your group has not run receives no credit.
 - The individual quiz is already submitted before any presentations begin,
   so what you say in the presentation does not affect your individual grade
 - If your presentation disagrees with your quiz answers, that is fine — the quiz reflects
