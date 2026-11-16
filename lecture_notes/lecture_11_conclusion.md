@@ -8,7 +8,7 @@
 This lecture is a take-home reading. It introduces no new models. It shows how the ten models of
 the course (L01–L10) fit into one framework, lists the assumptions and failure modes that those
 lectures taught, and shows how to answer the follow-up questions that a model output raises. Part 3
-describes the Sprint.
+shows how the Sprint uses the course models and where its details are.
 
 About 15 minutes of class time go to this material: the course map, one worked example that goes
 from a model output to a follow-up question and its answer, and the Sprint logistics. Read the full
@@ -262,7 +262,7 @@ in it.
    depends on (Theme 2).
 
 The last criterion of the Sprint group rubric asks for exactly this: a follow-up analysis, with the
-model, the data and how the result could change the recommendation (the rubric in Part 3).
+model, the data and how the result could change the recommendation (the rubric is in the Sprint Assessment Guide).
 
 ---
 
@@ -323,7 +323,7 @@ recommendation, and the Prophet forecast is an input to an inventory order.
 
 ---
 
-### 3.1 What the Sprint Covers
+### 3.1 How the Sprint Uses the Course Models
 
 The Sprint case (FitLoop) includes six pre-run model outputs: Bayesian A/B testing (L01), price
 elasticity (L02), Kaplan-Meier and Cox survival analysis (L04), Markov chains (L05), T-learner uplift
@@ -331,75 +331,15 @@ elasticity (L02), Kaplan-Meier and Cox survival analysis (L04), Markov chains (L
 Quiz 1, and Shapley attribution (L06), conjoint analysis (L09) and Prophet forecasting (L10) are
 tested in Quiz 2. These four models enter the Sprint through the group presentation and
 write-up, whose last rubric criterion asks for a follow-up analysis that uses one of them
-(rubric below). Quiz Q7 (model selection) can ask about any model in the course.
+(the rubric is in the Sprint Assessment Guide). Quiz Q7 (model selection) can ask about any model in the course.
 
-### 3.2 Timeline
+### 3.2 Where the Sprint Details Are
 
-The Sprint has four steps, in this order. The dates for each step are in the Sprint schedule
-posted on Canvas.
-
-| Step | What happens |
-|---|---|
-| 1. Briefing | The FitLoop company briefing (Part A of the case) is distributed one week before the quiz session. It contains no model outputs. |
-| 2. Quiz session | Model outputs are released at the start of class; 60-minute individual quiz; group work for the rest of class |
-| 3. Presentations | Each group presents in class |
-| 4. Write-up | The group write-up (PDF) is due online after the presentations |
-
-Between the briefing and the quiz session the preparation is conceptual. There are no numbers to
-analyze until the model outputs are released at the start of the quiz session. Read the briefing
-with your group, decide which models address each of the two business decisions, and decide which
-models you would leave out and why.
-
-**What to review before the quiz session:**
-- The model reference card (a one-page summary of all models)
-- The FitLoop company briefing
-- Your own notes on any models you feel less confident about
-
-Nothing extra is needed for the quiz session. The model outputs are provided at the start of class.
-
----
-
-### 3.3 How the Individual Scenario Quiz Works
-
-In the quiz session, after the model outputs are distributed, you complete a **10-question multiple-choice
-Canvas quiz** (60 minutes, closes automatically). Your group's model output packet is open in front
-of you: the quiz is open-book for the data, and communication with group members is not allowed.
-
-The quiz is scored out of **100 Canvas points** and is the **Sprint — Individual 15%** of your
-course grade (the group presentation and write-up are the other 15%). Canvas grades it immediately.
-
-**The 10 question topics (one per area):**
-1. **Bayesian A/B test**: interpreting posterior probability and credible intervals for a pricing decision
-2. **Price elasticity**: using the elasticity coefficient alongside the A/B test for the same decision
-3. **BG/NBD CLV**: P(alive) interpretation and retention campaign targeting
-4. **Survival analysis**: Cox hazard ratios and the product intervention they imply
-5. **Uplift model**: profit-maximizing targeting threshold and sleeping dog exclusion
-6. **Markov chain**: steady-state interpretation and identifying the highest-leverage bottleneck
-7. **Model selection**: which model applies to which decision (and which does not)
-8. **Assumption identification**: causal and observational inference in the Cox model
-9. **Integration**: identifying the most important analytical gap in a proposed recommendation
-10. **Recommendation**: selecting the recommendation that best integrates uncertainty with business constraints
-
-Each question has four answer choices, all correct or plausible statements about the FitLoop case.
-The task is to identify the *best* answer to what the specific question asks. The correct answer
-requires combining a specific number from your group's model outputs with the analytical reasoning
-being tested.
-
----
-
-### 3.4 Group Presentation and Write-Up
-
-The presentation (10–15 minutes) and the 2-page write-up are scored on the same 40-point scorecard,
-and the higher of the two scores on each criterion counts:
-
-| Criterion | Points |
-|---|---|
-| Model selection: 2+ relevant models used, selection justified, at least one non-obvious exclusion reasoned | 15 |
-| Output connection: recommendation explicitly tied to at least one specific number | 15 |
-| Limitation and follow-up: one genuine analytical gap named, plus the follow-up analysis that would answer it, using a model from L03, L06, L09 or L10 (for example, conjoint willingness to pay for the price decision): what you would run, on which data, and how the result could change your recommendation | 10 |
-
-The last criterion is the method of Theme 5 applied to FitLoop. The full guide is the Sprint Assessment
-Guide on the course site.
+The [Sprint Assessment Guide](https://nu-mktg.github.io/marketing-analytics/md-viewer.html?file=student/sprint_student_guide.md) on the course site holds everything else about the Sprint:
+the four steps, how the individual quiz works and its question topics, the presentation and
+write-up rubric, and the rules for absences and late work. Your section's dates are on its Sprint
+Schedule page in Canvas. The rubric's last criterion, the follow-up analysis, is the method of
+Theme 5 applied to FitLoop.
 
 ---
 
