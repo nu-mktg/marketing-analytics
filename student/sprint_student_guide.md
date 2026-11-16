@@ -121,6 +121,10 @@ to have surveyed the entire toolkit and understood the scope of each model.
 - Review the Model Reference Card — make sure you can sketch the estimand and one key
   assumption for each model covered in the course
 - Know how to look up a specific model's output quickly in your group's analysis
+- Work the Kibblewick practice case with your Sprint group. It is ungraded, uses the Sprint's
+  format, and its three pages are on Canvas. MKTG 6434 works it at home during the week of 11/16.
+  MKTG 3501 works it in class on 11/23 after Quiz 2, so read its briefing before then. Both
+  sections go over it in class on 11/23
 
 **Between 11/23 and 11/30 (after receiving the company briefing):**
 
