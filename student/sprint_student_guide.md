@@ -6,8 +6,8 @@
 ## What Is the Sprint?
 
 The Sprint is the capstone assessment of the course. It is a structured case analysis that
-brings together the course's analytical models. You will work as a group on a real business
-problem (a fictional company called FitLoop), and you will be graded on both your individual
+brings together the course's analytical models. You will work as a group on two business
+decisions at FitLoop, a fictional fitness-subscription company, and you will be graded on both your individual
 reasoning and your group's presentation.
 
 **Total weight:** 30% of your final grade (Sprint — Individual 15% + Sprint — Group 15%).
