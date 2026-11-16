@@ -389,7 +389,7 @@ being tested.
 
 ### 3.4 Group Presentation and Write-Up
 
-The presentation (12–15 minutes) and the 2-page write-up are scored on the same 40-point scorecard,
+The presentation (10–15 minutes) and the 2-page write-up are scored on the same 40-point scorecard,
 and the higher of the two scores on each criterion counts:
 
 | Criterion | Points |

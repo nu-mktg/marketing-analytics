@@ -17,7 +17,7 @@ reasoning and your group's presentation.
 | Part | When | Format | Canvas points | Weight |
 |---|---|---|---|---|
 | Individual scenario quiz | Mon 11/30 (in class) | Timed Canvas quiz, 60 min | 100 | 15% |
-| Group presentation | Mon 12/7 (in class; MKTG 3501 also Wed 12/9) | 12–15 min per group | 40 | 15% |
+| Group presentation | Mon 12/7 (in class; MKTG 3501 also Wed 12/9) | 10–15 min per group | 40 | 15% |
 | Group write-up | Due Mon 12/14 (online) | Written submission, 2 pages max | scored with the presentation | (included in the 15%) |
 
 **How the points map to your grade.** The two point totals are *separate Canvas scales*, not
@@ -54,7 +54,7 @@ knowing which models you would *not* use and why.
 - MKTG 3501 also has a group work day on Wed 12/2
 
 ### Mon 12/7 (MKTG 3501: also Wed 12/9) — Group presentations (in class)
-- Each group presents for 12–15 minutes
+- Each group presents for 10–15 minutes
 - No formal Q&A; the instructor and other students can ask questions freely
 - Presentation order is randomized and announced on the day
 - You can use any format: slides, whiteboard, verbal — whatever works for your group
@@ -161,7 +161,7 @@ answer from four plausible options.
 
 **Practical details:**
 
-- 12–15 minutes per group
+- 10–15 minutes per group; nothing after 15:00 is scored
 - No strict structure — use whatever format communicates your analysis best
 - Where the briefing gives no information, you may state an assumption and use it, labeled as an
   assumption. Every number behind your recommendation comes from the briefing or your group's packet.
