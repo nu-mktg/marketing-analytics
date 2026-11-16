@@ -184,33 +184,10 @@ articulate any points that were unclear in the live presentation.
 
 ---
 
-## Makeup Policy
+## Absences and Late Work
 
-**Individual scenario quiz (11/30 Canvas quiz):**
-If you cannot attend the in-class session on 11/30, you may request a makeup window
-by emailing the instructor at least 24 hours in advance (or as soon as possible for
-emergencies). The makeup quiz is **your own group's version** of the quiz (the Canvas quiz
-named `Sprint Individual Quiz — GROUP_N` for your group number), reopened for a different time
-window — the questions are keyed to your group's model output packet, so no other group's version
-will match your numbers. It is taken independently with Respondus Lockdown Browser — no Codespace
-access is required because no coding is needed during the quiz.
-
-You can self-schedule the makeup by:
-1. Emailing the instructor with your preferred 2-hour window (must be within 5 days
-   of the original date)
-2. The instructor will open the Canvas window for you
-3. You take the quiz using LDB at the agreed time
-
-**Group presentation (12/7; MKTG 3501 also 12/9):**
-If you cannot attend the presentation day, contact your group and the instructor.
-Two options:
-- **Option A:** Present at the end of the presentation session if schedule allows
-- **Option B:** Record a 15-minute video of your group's presentation, submitted to
-  Canvas by the end of the presentation week — this option requires all group members who were
-  present for the original session to agree
-
-If your entire group cannot present, schedule a makeup presentation during office hours
-or a mutually agreed time before the write-up deadline (Mon 12/14).
+**Quiz session and presentations:** If you cannot attend the quiz session or a presentation
+session, contact the instructor before the session.
 
 **Group write-up (due Mon 12/14):**
 The course's single late policy applies, exactly as it does to homework:

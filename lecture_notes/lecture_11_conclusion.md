@@ -398,8 +398,8 @@ and the higher of the two scores on each criterion counts:
 | Output connection: recommendation explicitly tied to at least one specific number | 15 |
 | Limitation and follow-up: one genuine analytical gap named, plus the follow-up analysis that would answer it, using a model from L03, L06, L09 or L10 (for example, conjoint willingness to pay for the price decision): what you would run, on which data, and how the result could change your recommendation | 10 |
 
-The last criterion is the method of Theme 5 applied to FitLoop. The full guide, including the makeup
-policy, is the Sprint Assessment Guide on the course site.
+The last criterion is the method of Theme 5 applied to FitLoop. The full guide is the Sprint Assessment
+Guide on the course site.
 
 ---
 
