@@ -44,18 +44,20 @@ Your section's exact dates, including any extra work or presentation days, are o
 One week before the Sprint work session, you receive the FitLoop company briefing (Part A
 of the case scenario). **Read it carefully. Discuss it with your group.**
 
-You will **not** receive model output data this week — that is released at the very start
-of the 11/30 in-class session. There is nothing to run, no numbers to analyze, and no
+You will **not** receive model output data this week. The outputs first appear inside the
+11/30 quiz. There is nothing to run, no numbers to analyze, and no
 model outputs to look at before 11/30. Your preparation this week is entirely conceptual:
 understanding the two business decisions, thinking about which models are relevant, and
 knowing which models you would *not* use and why.
 
 ### Mon 11/30 — Individual scenario quiz + group work (in class)
-- Model outputs are released at the start of class
+- The quiz is **closed book and closed notes**. Your group's model outputs appear inside the
+  quiz: each question shows the output it uses above the question text
 - You have **60 minutes** to analyze the data and complete the individual scenario quiz
 - The Canvas quiz closes automatically at the 60-minute mark — no extensions
-- After submitting your quiz, the remaining class time is dedicated group work: refine
-  your analysis, prepare your presentation outline, and align on your recommendation
+- When the quiz closes, your group's full output packet is posted on Canvas. The remaining
+  class time is group work: refine your analysis, prepare your presentation outline, and align
+  on your recommendation
 
 ### From Mon 12/7 — Group presentations (in class)
 - Your section's presentation dates are on its Sprint Schedule page in Canvas
@@ -86,8 +88,10 @@ Lockdown Browser required). Each question presents a scenario with **specific nu
 from your group's model outputs** and asks you to identify the best analytical
 interpretation or recommendation.
 
-**You may have your group's model output packet open during the quiz.** You may not
-communicate with group members while the quiz is open.
+**The quiz is closed book and closed notes.** Each question shows, above the question text,
+the output from your group's packet that it uses. The questions that ask you to compare models
+show all six outputs in a scroll box. You may not communicate with group members while the quiz
+is open.
 
 **The key feature of these questions:** All four answer choices are correct or plausible
 statements about the FitLoop case. Your task is to identify the *best* answer given what
@@ -137,17 +141,17 @@ to have surveyed the entire toolkit and understood the scope of each model.
 - Discuss with your group which models are most relevant to each decision
 - Think about which models you would *not* use and why (Q7 in the quiz covers model selection)
 - **No model outputs are available yet** — your preparation this week is conceptual, not
-  numerical. The numbers arrive at the start of class on 11/30.
+  numerical. The numbers first appear in the quiz on 11/30.
 
 **Mon 11/30 (in class):**
 
-- The model outputs are pre-generated and provided to you — no coding required during the
-  individual quiz time
+- The model outputs are pre-generated and appear inside the quiz; no coding is required
 - First 60 min: individual scenario quiz (Canvas MC, auto-closes)
-- Remaining class time: group work — review the outputs together, align on your analysis,
-  and prepare your presentation outline
-- You can reference your group's model output packet during the quiz — it is open-book for
-  the data, not for communication with group members while the quiz is open
+- Remaining class time: group work with your group's full packet, posted on Canvas when the
+  quiz closes. Review the outputs together, align on your analysis, and prepare your
+  presentation outline
+- The quiz is closed book and closed notes: the outputs shown inside the quiz are the only
+  material you use, and you may not communicate with group members while it is open
 
 **The best preparation:** Make sure you personally understand every number your group's
 analysis produces. You cannot answer these questions by producing a generic statement —
