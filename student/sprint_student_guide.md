@@ -204,9 +204,9 @@ was shared within each group. It is not a grade, and students do not grade one a
 
 **What you submit.** A short Canvas survey, "Sprint Peer Evaluation", under Quizzes. Your group
 has three members, so you distribute 30 points among the three of you, including yourself. If
-everyone contributed equally, give each member 10 points. Use whole numbers of 0 or more. For
-each teammate, write a comment on their contribution. If a teammate contributed less because of
-circumstances outside their control, such as an illness, say so in the comment.
+everyone contributed equally, give each member 10 points. Use whole numbers of 0 or more. Write
+a comment on your own contribution and one on each teammate's. If a teammate contributed less because of circumstances outside their control, such as an
+illness, say so in the comment.
 
 **How it is used.** Members of a group normally receive the group's score. The instructor reads
 the points and comments alongside the presentation and the write-up, and may adjust an
