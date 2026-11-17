@@ -12,17 +12,18 @@ reasoning and your group's presentation.
 
 **Total weight:** 30% of your final grade (Sprint — Individual 15% + Sprint — Group 15%).
 
-**The Sprint has three parts spread across the final weeks of the course:**
+**The Sprint has three graded parts and a peer evaluation, spread across the final weeks of the course:**
 
 | Part | When | Format | Canvas points | Weight |
 |---|---|---|---|---|
 | Individual scenario quiz | Mon 11/30 (in class) | Timed Canvas quiz, 60 min | 100 | 15% |
 | Group presentation | In class, from Mon 12/7 | 10–15 min per group | 40 | 15% |
 | Group write-up | Due Mon 12/14 (online) | Written submission, 2 pages max | scored with the presentation | (included in the 15%) |
+| Peer evaluation | Due Mon 12/14 (online) | Canvas survey | adjusts each member's Group score | (applied to the Group 15%) |
 
 **How the points map to your grade.** The two point totals are *separate Canvas scales*, not
 shares of one 140-point pot: your individual quiz score out of 100 becomes the Individual 15%,
-and your group's scorecard score out of 40 becomes the Group 15%. So a student who scores 80/100
+and your group's scorecard score out of 40, adjusted by the peer evaluation, becomes the Group 15%. So a student who scores 80/100
 on the quiz and whose group scores 30/40 earns (0.80 × 15) + (0.75 × 15) = **23.25% of the
 course grade** out of the 30% the Sprint is worth. The larger quiz point total does **not** make
 the individual portion count for more than the group portion — the split is 50/50.
@@ -66,6 +67,7 @@ knowing which models you would *not* use and why.
 - A 2-page written summary of your group's analysis and recommendation
 - Submitted as a PDF to Canvas by the deadline posted on the course site
 - This is a clean write-up of what you presented, not new analysis
+- Your peer evaluation is due at the same deadline (see Peer Evaluation below)
 
 ---
 
@@ -191,6 +193,42 @@ The write-up is graded using the same three criteria as the presentation (model 
 output connection, limitation and follow-up). The higher of your presentation and write-up
 score on each criterion is used — the write-up gives your group a second chance to
 articulate any points that were unclear in the live presentation.
+
+---
+
+## Peer Evaluation (due Mon 12/14, online)
+
+Every student completes a peer evaluation. It adjusts each member's Group score, so members of
+the same group can receive different Group scores.
+
+**What you submit.** A short Canvas survey, "Sprint Peer Evaluation", under Quizzes. Your group
+has three members, so you distribute 30 points among the three of you, including yourself. If
+everyone contributed equally, give each member 10 points. Use whole numbers of 0 or more. For
+each teammate, write a comment on their contribution. If a teammate contributed less because of
+circumstances outside their control, such as an illness, say so in the comment.
+
+**How it changes your Group score.** Your factor is the average of the points your two teammates
+gave you, divided by 10. Your Group score is your group's scorecard score times your factor. The
+factor is capped at 1.10, and no Group score goes above 40. The points you give yourself are not
+used.
+
+| Points from your two teammates | Factor | A group score of 32 becomes |
+|---|---|---|
+| 10 and 10 | 1.00 | 32.0 |
+| 12 and 11 | 1.10 (the cap; the average gives 1.15) | 35.2 |
+| 8 and 7 | 0.75 | 24.0 |
+
+Before applying any factor below 0.90, the instructor reads the comments and may keep the group's
+score instead. If your points do not total 30, they are rescaled to total 30. If one teammate does
+not submit, your factor uses the one rating you received. If neither teammate submits, your
+factor is 1.00.
+
+**Deadline.** Mon 12/14 at 23:59 ET, the same deadline as the write-up. Submit it once your
+group's work is finished. A student who has not submitted by the deadline loses 2 of the 40
+points on their own Group score.
+
+**Confidentiality.** Only the instructor sees the points and the comments. They are not shared
+with your teammates.
 
 ---
 
