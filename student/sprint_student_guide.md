@@ -19,11 +19,12 @@ reasoning and your group's presentation.
 | Individual scenario quiz | Mon 11/30 (in class) | Timed Canvas quiz, 60 min | 100 | 15% |
 | Group presentation | In class, from Mon 12/7 | 10–15 min per group | 40 | 15% |
 | Group write-up | Due Mon 12/14 (online) | Written submission, 2 pages max | scored with the presentation | (included in the 15%) |
-| Peer evaluation | Due Mon 12/14 (online) | Canvas survey | adjusts each member's Group score | (applied to the Group 15%) |
+| Peer evaluation | Due Mon 12/14 (online) | Canvas survey | none: information for the instructor | (no weight of its own) |
 
 **How the points map to your grade.** The two point totals are *separate Canvas scales*, not
 shares of one 140-point pot: your individual quiz score out of 100 becomes the Individual 15%,
-and your group's scorecard score out of 40, adjusted by the peer evaluation, becomes the Group 15%. So a student who scores 80/100
+and your group's scorecard score out of 40 becomes the Group 15% (the instructor may adjust an
+individual member's score; see Peer Evaluation). So a student who scores 80/100
 on the quiz and whose group scores 30/40 earns (0.80 × 15) + (0.75 × 15) = **23.25% of the
 course grade** out of the 30% the Sprint is worth. The larger quiz point total does **not** make
 the individual portion count for more than the group portion — the split is 50/50.
@@ -198,8 +199,8 @@ articulate any points that were unclear in the live presentation.
 
 ## Peer Evaluation (due Mon 12/14, online)
 
-Every student completes a peer evaluation. It adjusts each member's Group score, so members of
-the same group can receive different Group scores.
+Every student completes a peer evaluation. It gives the instructor information about how the work
+was shared within each group. It is not a grade, and students do not grade one another.
 
 **What you submit.** A short Canvas survey, "Sprint Peer Evaluation", under Quizzes. Your group
 has three members, so you distribute 30 points among the three of you, including yourself. If
@@ -207,21 +208,11 @@ everyone contributed equally, give each member 10 points. Use whole numbers of 0
 each teammate, write a comment on their contribution. If a teammate contributed less because of
 circumstances outside their control, such as an illness, say so in the comment.
 
-**How it changes your Group score.** Your factor is the average of the points your two teammates
-gave you, divided by 10. Your Group score is your group's scorecard score times your factor. The
-factor is capped at 1.10, and no Group score goes above 40. The points you give yourself are not
-used.
-
-| Points from your two teammates | Factor | A group score of 32 becomes |
-|---|---|---|
-| 10 and 10 | 1.00 | 32.0 |
-| 12 and 11 | 1.10 (the cap; the average gives 1.15) | 35.2 |
-| 8 and 7 | 0.75 | 24.0 |
-
-Before applying any factor below 0.90, the instructor reads the comments and may keep the group's
-score instead. If your points do not total 30, they are rescaled to total 30. If one teammate does
-not submit, your factor uses the one rating you received. If neither teammate submits, your
-factor is 1.00.
+**How it is used.** Members of a group normally receive the group's score. The instructor reads
+the points and comments alongside the presentation and the write-up, and may adjust an
+individual member's Group score where the evaluations and the group's work together show that
+the member contributed clearly more or clearly less than the others. No formula converts the
+points into a score.
 
 **Deadline.** Mon 12/14 at 23:59 ET, the same deadline as the write-up. Submit it once your
 group's work is finished. A student who has not submitted by the deadline loses 2 of the 40
